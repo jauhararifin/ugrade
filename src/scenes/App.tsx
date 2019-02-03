@@ -3,13 +3,17 @@ import { Route } from 'react-router-dom'
 
 import HomePage from './HomePage/HomePage'
 import LoginPage from './LoginPage/LoginPage'
+import SettingPage from './SettingPage/SettingPage'
+import { MuiThemeProvider } from '@material-ui/core'
+import theme from '../themes/theme'
 
 const App = () => (
-  <React.Fragment>
+  <MuiThemeProvider theme={theme}>
       <Route path='/' exact component={HomePage} />
       <Route path='/signin' component={LoginPage} />
       <Route path='/signup' component={HomePage} />
-  </React.Fragment>
+      <Route path='/setting' component={SettingPage} />
+  </MuiThemeProvider>
 )
 
 export default App

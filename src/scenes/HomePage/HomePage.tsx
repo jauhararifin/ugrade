@@ -1,8 +1,13 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
+import { Button, Typography, Grid, Divider } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { Path, LocationState } from 'history'
 import { push, CallHistoryMethodAction } from 'connected-react-router'
+import { Link } from 'react-router-dom'
+
+import pattern from '../../assets/images/pattern-light.svg'
+import logo from '../../assets/images/logo.svg'
+import BottomLink from '../../components/BottomLink/BottomLink'
 
 import './HomePage.css'
 
@@ -11,16 +16,36 @@ export interface HomePageProps {
 }
 
 const HomePage: React.SFC<HomePageProps> = ({ push }) => (
-  <div className='home-page'>
-    <h1>Welcome To UGrade</h1>
-    <h2>A Simple Online Judge Using Your PC As Grader</h2>
-    <Button size="large" variant="contained" color="primary" onClick={() => push('/signup')}>
-      Sign Up
-    </Button>
-    <Button size="large" variant="contained" onClick={() => push('/signin')}>
-      Sign In
-    </Button>
-  </div>
+  <React.Fragment>
+    <Grid container className='home-page' style={{ backgroundImage: `url(${pattern})`}} >
+      <Grid item md={4} />
+      <Grid item direction='column' className='home-page-content' md={4}>
+        <div className='home-page-logo'>
+          <img src={logo} alt='logo' width={100} />
+        </div>
+        <div className='home-page-title'>
+          <Typography variant='h3'>
+            Welcome To UGrade
+          </Typography>
+        </div>
+        <div className='home-page-signin'>
+          <Button size="large" variant="contained" fullWidth onClick={() => push('/signin')}>
+            Sign In
+          </Button>
+        </div>
+        <Divider />
+        <div className='home-page-signup'>
+          <Button size="large" variant="contained" color="primary" fullWidth onClick={() => push('/signup')}>
+            Sign Up
+          </Button>
+        </div>
+      </Grid>
+      <Grid item md={4} />
+    </Grid>
+    <BottomLink>
+      <Link to='/setting'><Typography variant='body1' color='secondary'>Setting</Typography></Link>
+    </BottomLink>
+  </React.Fragment>
 )
 
 export default connect(null, { push })(HomePage)

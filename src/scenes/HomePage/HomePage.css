@@ -1,5 +1,22 @@
 .home-page {
-    display: flex;
     width: 100%;
     height: 100%;
+    text-align: center;
+}
+
+.home-page-content {
+    padding-top: 70px;
+}
+
+.home-page-title {
+    margin-top: 30px;
+}
+
+.home-page-signin {
+    margin-top: 70px;
+    margin-bottom: 20px;
+}
+
+.home-page-signup {
+    margin-top: 20px;
 }
