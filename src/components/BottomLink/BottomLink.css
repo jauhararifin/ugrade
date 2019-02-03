@@ -1,0 +1,18 @@
+.bottom-link {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.bottom-link > span {
+    padding: 0 15px;
+}
+
+.bottom-link > span:not(:last-child) {
+    border-right: solid 1px;
+}
