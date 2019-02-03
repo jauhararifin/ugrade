@@ -1,12 +1,15 @@
 import React from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import HomePage from './HomePage/HomePage'
+import LoginPage from './LoginPage/LoginPage'
 
 const App = () => (
-  <BrowserRouter>
-    <Route path='/' exact component={HomePage} />
-  </BrowserRouter>
+  <React.Fragment>
+      <Route path='/' exact component={HomePage} />
+      <Route path='/signin' component={LoginPage} />
+      <Route path='/signup' component={HomePage} />
+  </React.Fragment>
 )
 
 export default App

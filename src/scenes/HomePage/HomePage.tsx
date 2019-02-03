@@ -1,24 +1,26 @@
 import React from 'react'
-import logo from '../../assets/images/logo.svg'
+import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
+import { Path, LocationState } from 'history'
+import { push, CallHistoryMethodAction } from 'connected-react-router'
+
 import './HomePage.css'
 
-const HomePage = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Edit <code>src/App.tsx</code> and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-    </header>
+export interface HomePageProps {
+  push(path: Path, state?: LocationState): CallHistoryMethodAction
+}
+
+const HomePage: React.SFC<HomePageProps> = ({ push }) => (
+  <div className='home-page'>
+    <h1>Welcome To UGrade</h1>
+    <h2>A Simple Online Judge Using Your PC As Grader</h2>
+    <Button size="large" variant="contained" color="primary" onClick={() => push('/signup')}>
+      Sign Up
+    </Button>
+    <Button size="large" variant="contained" onClick={() => push('/signin')}>
+      Sign In
+    </Button>
   </div>
 )
 
-export default HomePage
+export default connect(null, { push })(HomePage)

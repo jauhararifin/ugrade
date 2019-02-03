@@ -1,15 +1,32 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider} from 'react-redux'
+import logger from 'redux-logger'
+import { createBrowserHistory } from 'history'
 
 import './index.css'
 import App from './scenes/App'
-import store from './stores/store'
+import createReducer, { AppState } from './reducers/reducer'
 import * as serviceWorker from './serviceWorker'
+import { createStore, compose, applyMiddleware } from 'redux';
+import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
+
+const history = createBrowserHistory()
+const store = createStore(
+    createReducer(history),
+    compose(
+        applyMiddleware(
+            routerMiddleware(history)
+        ),
+        applyMiddleware(logger)
+    )
+)
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <ConnectedRouter history={history}>
+            <App />
+        </ConnectedRouter>
     </Provider>
 , document.getElementById('root'))
 
