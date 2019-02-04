@@ -9,10 +9,16 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 import './index.css'
 import App from './scenes/App'
-import createReducer, { AppState } from './reducers/reducer'
+import { createReducer } from './reducers'
 import * as serviceWorker from './serviceWorker'
 import { createStore, compose, applyMiddleware } from 'redux';
 import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
+
+declare global {
+    interface Window {
+      __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+    }
+}
 
 const history = createBrowserHistory()
 const store = createStore(
@@ -21,7 +27,8 @@ const store = createStore(
         applyMiddleware(
             routerMiddleware(history)
         ),
-        applyMiddleware(logger)
+        applyMiddleware(logger),
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() || compose,
     )
 )
 
