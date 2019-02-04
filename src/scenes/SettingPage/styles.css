@@ -1,0 +1,19 @@
+.setting-page {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+.setting-page-panel {
+    width: 600px;
+}
+
+.setting-page-content {
+    text-align: left;
+    margin-top: 50px;
+}
+
+.setting-page .right {
+    text-align: right;
+}
