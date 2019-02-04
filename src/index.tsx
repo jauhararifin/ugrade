@@ -4,6 +4,9 @@ import { Provider} from 'react-redux'
 import logger from 'redux-logger'
 import { createBrowserHistory } from 'history'
 
+import "@blueprintjs/core/lib/css/blueprint.css"
+import "@blueprintjs/icons/lib/css/blueprint-icons.css"
+
 import './index.css'
 import App from './scenes/App'
 import createReducer, { AppState } from './reducers/reducer'
