@@ -1,5 +1,5 @@
 import React from "react"
-import { FormGroup, InputGroup, Switch, Button, Intent, Divider, Card } from "@blueprintjs/core"
+import { FormGroup, InputGroup, Switch, Button, Intent, Divider, Card, Colors } from "@blueprintjs/core"
 import { FormikProps, withFormik } from 'formik'
 import { Link } from "react-router-dom"
 import * as yup from 'yup'
@@ -10,16 +10,16 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"
 
-export interface LoginFormValue {
+export interface SignInFormValue {
     username?: string
     password?: string
     rememberMe?: boolean
 }
 
-export interface LoginPageProps extends FormikProps<LoginFormValue>, LoginFormValue {
+export interface SignInPageProps extends FormikProps<SignInFormValue>, SignInFormValue {
 }
 
-const LoginPage: React.SFC<LoginPageProps> = ({
+const SignInPage: React.SFC<SignInPageProps> = ({
     handleSubmit,
     handleChange,
     handleBlur,
@@ -29,24 +29,25 @@ const LoginPage: React.SFC<LoginPageProps> = ({
     submitCount,
     isSubmitting
 }) => (
-  <div className="login-page">
+  <div className="signin-page">
     <Link to="/">
-    <img src={logo} width={100} alt="logo" />
+        <img src={logo} width={100} alt="logo" />
     </Link>
     <h1>Welcom To UGrade</h1>
     <Divider />
-    <Card className="login-panel">
+    <Card className="signin-panel">
       <h2>Sign In</h2>
       <form onSubmit={handleSubmit}>
+        { status && !status.success && <h5 style={{ color: Colors.RED2 }}>{status.message}</h5>}
         <FormGroup
             helperText={submitCount > 0 && errors && errors.username}
-            labelFor="login-input-username"
+            labelFor="signin-input-username"
             intent={submitCount && errors && errors.username ? Intent.DANGER : Intent.NONE}
         >
             <InputGroup
                 name="username"
                 large
-                id="login-input-username"
+                id="signin-input-username"
                 placeholder="Username"
                 value={values.username}
                 onChange={handleChange}
@@ -55,13 +56,13 @@ const LoginPage: React.SFC<LoginPageProps> = ({
         </FormGroup>
         <FormGroup
             helperText={submitCount > 0 && errors && errors.password}
-            labelFor="login-input-passowrd"
+            labelFor="signin-input-passowrd"
             intent={submitCount && errors && errors.password ? Intent.DANGER : Intent.NONE}
         >
             <InputGroup
                 name="password"
                 large
-                id="login-input-password"
+                id="signin-input-password"
                 placeholder="Password"
                 type="password"
                 value={values.password}
@@ -88,7 +89,7 @@ const LoginPage: React.SFC<LoginPageProps> = ({
   </div>
 );
 
-const formik = withFormik<LoginPageProps, LoginFormValue>({
+const formik = withFormik<SignInPageProps, SignInFormValue>({
     mapPropsToValues: ({username, password}) => ({
         username: username || '',
         password: password || '',
@@ -109,4 +110,4 @@ const formik = withFormik<LoginPageProps, LoginFormValue>({
     },
 })
 
-export default formik(LoginPage)
+export default formik(SignInPage)

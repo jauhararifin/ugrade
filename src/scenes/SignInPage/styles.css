@@ -1,4 +1,4 @@
-.login-page {
+.signin-page {
     text-align: center;
     display: flex;
     align-items: center;
@@ -6,11 +6,11 @@
     padding-top: 30px;
 }
 
-.login-panel {
+.signin-panel {
     width: 400px;
 }
 
-.login-panel .remember-me {
+.signin-panel .remember-me {
     display: flex;
     justify-content: space-between;
 }
