@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom'
 import { Provider} from 'react-redux'
 import logger from 'redux-logger'
 import { createBrowserHistory } from 'history'
+import { createStore, compose, applyMiddleware, Middleware } from 'redux'
+import { routerMiddleware, ConnectedRouter } from 'connected-react-router'
+import thunk from 'redux-thunk'
 
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
@@ -11,8 +14,9 @@ import './index.css'
 import App from './scenes/App'
 import { createReducer } from './reducers'
 import * as serviceWorker from './serviceWorker'
-import { createStore, compose, applyMiddleware } from 'redux';
-import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
+import { InMemoryLoginService as AuthService } from './services/auth'
+import createErrorToasterMiddleware from './middlewares/ErrorToaster/ErrorToaster';
+import ErrorToaster from './middlewares/ErrorToaster/ErrorToaster';
 
 declare global {
     interface Window {
@@ -25,9 +29,13 @@ const store = createStore(
     createReducer(history),
     compose(
         applyMiddleware(
-            routerMiddleware(history)
+            routerMiddleware(history),
+            ErrorToaster as Middleware,
+            logger,
+            thunk.withExtraArgument({
+                authService: new AuthService()
+            })
         ),
-        applyMiddleware(logger),
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() || compose,
     )
 )

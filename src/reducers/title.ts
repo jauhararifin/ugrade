@@ -2,6 +2,11 @@ import { Reducer } from "redux"
 
 const ACTION_TYPE_SET_REDUCER = 'ACTION_TYPE_SET_REDUCER'
 
+export interface TitleAction {
+    type: string
+    title: string
+}
+
 export function setTitle(title:string = "UGrade") {
     return {
         type: ACTION_TYPE_SET_REDUCER,
