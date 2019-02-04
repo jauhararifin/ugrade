@@ -1,95 +1,94 @@
-import React from 'react'
-import { TextField, Button, Typography, Grid } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import { withFormik, FormikProps } from 'formik'
+import React from "react"
+import { FormGroup, InputGroup, Switch, Button, Intent, Divider, Card } from "@blueprintjs/core"
+import { FormikProps, withFormik } from 'formik'
+import { Link } from "react-router-dom"
 import * as yup from 'yup'
 
-import BottomLink from '../../components/BottomLink/BottomLink'
-import logo from '../../assets/images/logo.svg'
+import "./styles.css"
+import "@blueprintjs/core/lib/css/blueprint.css"
 
-import './LoginPage.css'
+import BottomLink from "../../components/BottomLink"
+import logo from "../../assets/images/logo.svg"
 
-export interface LoginValue {
-    username?: string,
-    password?: string,
+export interface LoginFormValue {
+    username?: string
+    password?: string
+    rememberMe?: boolean
 }
 
-export interface LoginPageProps extends FormikProps<LoginValue>, LoginValue {
+export interface LoginPageProps extends FormikProps<LoginFormValue>, LoginFormValue {
 }
 
-const LoginPage: React.SFC<LoginPageProps> = ({ 
-    values,
-    handleBlur,
-    handleChange,
+const LoginPage: React.SFC<LoginPageProps> = ({
     handleSubmit,
+    handleChange,
+    handleBlur,
+    values,
     errors,
-    touched,
-    isSubmitting,
-    status
+    status,
+    submitCount,
+    isSubmitting
 }) => (
-    <form onSubmit={handleSubmit}>
-        <Grid container className="login-page-container">
-            <Grid item md={4} />
-            <Grid className="login-page-content" item md={4}>
-                <div className='login-page-logo'>
-                    <img src={logo} alt='logo' width={100} />
-                </div>
-                <div className='login-page-title'>
-                    <Typography variant='h4'>
-                        Sign In To UGrade
-                    </Typography>
-                </div>
-                <div className="login-page-username">
-                    { status && !status.success && (
-                        <Typography variant='subtitle1' align='center' style={{ color: 'red' }}>
-                            { status.message }
-                        </Typography>
-                    )}
-                    <TextField
-                        name="username"
-                        placeholder="Username"
-                        variant="outlined"
-                        fullWidth
-                        autoFocus
-                        value={values.username}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={touched.username && !!errors.username}
-                        helperText={touched.username && errors.username}
-                    />
-                </div>
-                <div className="login-page-password">
-                    <TextField
-                        name="password"
-                        placeholder="Password"
-                        variant="outlined"
-                        type="password"
-                        fullWidth
-                        autoComplete='off'
-                        value={values.password}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={touched.password && !!errors.password}
-                        helperText={touched.password && errors.password} 
-                    />
-                </div>
-                <div className="login-page-login">
-                    <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
-                        { isSubmitting ? `Signing In...` : `Sign In` }
-                    </Button>
-                </div>
-            </Grid>
-            <Grid item md={4} />
-        </Grid>
-        <BottomLink>
-            <Link to='/signup'><Typography variant='body1' color='secondary'>Sign Up</Typography></Link>
-            <Link to='/forgot-password'><Typography variant='body1' color='secondary'>Forgot Password</Typography></Link>
-            <Link to='/setting'><Typography variant='body1' color='secondary'>Setting</Typography></Link>
-        </BottomLink>
-    </form>
-)
+  <div className="login-page">
+    <Link to="/">
+    <img src={logo} width={100} alt="logo" />
+    </Link>
+    <h1>Welcom To UGrade</h1>
+    <Divider />
+    <Card className="login-panel">
+      <h2>Sign In</h2>
+      <form onSubmit={handleSubmit}>
+        <FormGroup
+            helperText={submitCount > 0 && errors && errors.username}
+            labelFor="login-input-username"
+            intent={submitCount && errors && errors.username ? Intent.DANGER : Intent.NONE}
+        >
+            <InputGroup
+                name="username"
+                large
+                id="login-input-username"
+                placeholder="Username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+        </FormGroup>
+        <FormGroup
+            helperText={submitCount > 0 && errors && errors.password}
+            labelFor="login-input-passowrd"
+            intent={submitCount && errors && errors.password ? Intent.DANGER : Intent.NONE}
+        >
+            <InputGroup
+                name="password"
+                large
+                id="login-input-password"
+                placeholder="Password"
+                type="password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
+        </FormGroup>
+        <div className="remember-me">
+            <div>Remember Me</div>
+            <div>
+                <Switch checked={values.rememberMe} />
+            </div>
+        </div>
+        <Button type="submit" disabled={isSubmitting} fill large intent={Intent.SUCCESS}>
+            { isSubmitting ? "Signing In..." : "Sign In" }
+        </Button>
+      </form>
+    </Card>
+    <BottomLink>
+        <Link to="/signup">Sign Up</Link>
+        <Link to="/forgot-password">Forgot Password</Link>
+        <Link to="/setting">Setting</Link>
+    </BottomLink>
+  </div>
+);
 
-const formik = withFormik<LoginPageProps, LoginValue>({
+const formik = withFormik<LoginPageProps, LoginFormValue>({
     mapPropsToValues: ({username, password}) => ({
         username: username || '',
         password: password || '',
@@ -97,8 +96,10 @@ const formik = withFormik<LoginPageProps, LoginValue>({
     validationSchema: yup.object().shape({
         username: yup.string().required(),
         password: yup.string().required(),
+        rememberMe: yup.boolean()
     }),
     handleSubmit: async (values, { props, setSubmitting, setStatus }) => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         const status = {
             success: false,
             message: 'Wrong username or password',
