@@ -7,7 +7,7 @@ export interface BottomLinkProps {
     dividerColor?: string
 }
 
-const BottomLink: React.SFC<BottomLinkProps> = ({ children, dividerColor }) => (
+export const BottomLink: React.SFC<BottomLinkProps> = ({ children, dividerColor }) => (
     <div className="bottom-link">
         {
             React.Children.map(children, item => <span style={{ borderRightColor: dividerColor }}>{item}</span>)
