@@ -1,0 +1,20 @@
+.home-page {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+.home-panel {
+    width: 400px;
+}
+
+.home-panel .home-actions {
+    margin-top: 50px;
+}
+
+.home-panel .home-actions .item {
+    margin-bottom: 10px;
+}
+  
