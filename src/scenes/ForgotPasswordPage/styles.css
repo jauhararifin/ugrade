@@ -1,0 +1,11 @@
+.forgot-password-page {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+.forgot-password-panel {
+    text-align: center;
+    width: 400px;
+}

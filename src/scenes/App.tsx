@@ -9,6 +9,7 @@ import HomePage from './HomePage'
 import SignInPage from './SignInPage'
 import SettingPage from './SettingPage'
 import SignUpPage from './SignUpPage'
+import ForgotPasswordPage from './ForgotPasswordPage'
 
 export interface AppProps {
   title?: string
@@ -21,6 +22,7 @@ const App: React.SFC<AppProps> = ({ title }) => (
       <Route path='/signin' component={SignInPage} />
       <Route path='/signup' component={SignUpPage} />
       <Route path='/setting' component={SettingPage} />
+      <Route path='/forgot-password' component={ForgotPasswordPage} />
     </React.Fragment>
   </DocumentTitle>
 )
