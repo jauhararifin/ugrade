@@ -1,15 +1,15 @@
-import Toaster, { ActionToaster } from "./Toaster"
-import { Middleware, MiddlewareAPI, Dispatch } from "redux"
+import Toaster, { ActionToaster } from "./ActionToaster"
+import { Middleware } from "redux"
 
-export function createErrorToasterMiddleware(toaster: ActionToaster) {
-    return (store: any) => (next: any) => async (action: any) => {
+export function createErrorToasterMiddleware(toaster: ActionToaster): Middleware {
+    return store => next => async action => {
         try {
             return await next(action)
         } catch (error) {
-            toaster.showErrorToast(error);
-            throw error;
+            toaster.showErrorToast(error)
+            throw error
         }
-    }
-} 
+    }      
+}
 
 export default createErrorToasterMiddleware(Toaster)

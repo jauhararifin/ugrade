@@ -47,26 +47,26 @@ export class InMemoryLoginService implements LoginService {
     async login(username: string, password: string): Promise<string> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (username[0] === '.') {
-            throw new Error("connection error")
+            throw new Error("Connection error")
         }
         if (this.usersPassword[username] && this.usersPassword[username] === password) {
             return this.usersToken[username]
         }
-        throw new AuthenticationError('wrong username or password')
+        throw new AuthenticationError('Wrong username or password')
     }
     
     async register(username: string, name: string, email: string, password: string): Promise<void> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (username[0] === '.') {
-            throw new Error("connection error")
+            throw new Error("Connection error")
         }
 
         for (const userUsername in this.users) {
             if (userUsername === username) {
-                throw new UserRegistrationError("username already taken")
+                throw new UserRegistrationError("Username already taken")
             }
             if (this.users[userUsername].email === email) {
-                throw new UserRegistrationError("email already taken")
+                throw new UserRegistrationError("Email already taken")
             }
         }
         this.users[username] = { username, name, email }
@@ -77,7 +77,7 @@ export class InMemoryLoginService implements LoginService {
     async getMyProfile(token: string): Promise<User> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (token[0] === '.') {
-            throw new Error("connection error")
+            throw new Error("Connection error")
         }
 
         const matches = token.match(/^([a-zA-Z0-9_]+)---(.+)$/)
