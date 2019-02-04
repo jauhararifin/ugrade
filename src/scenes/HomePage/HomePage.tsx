@@ -20,7 +20,7 @@ const HomePage: React.SFC<HomePageProps> = ({ push }) => (
       <Link to="/">
         <img src={logo} width={100} alt="logo" />
       </Link>
-      <h1>Welcom To UGrade</h1>
+      <h1>Welcome To UGrade</h1>
       <h4>
         There is no one who loves pain itself, who seeks after it and wants to
         have it, simply because it is pain...

@@ -33,7 +33,7 @@ const SignInPage: React.SFC<SignInPageProps> = ({
     <Link to="/">
         <img src={logo} width={100} alt="logo" />
     </Link>
-    <h1>Welcom To UGrade</h1>
+    <h1>Welcome To UGrade</h1>
     <Divider />
     <Card className="signin-panel">
       <h2>Sign In</h2>
