@@ -1,14 +1,19 @@
 import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 import { History } from 'history'
+import { Reducer } from 'redux'
 
-import TitleReducer from './title'
+import { TitleAction, TitleState, titleReducer } from './title'
 
 export interface AppState {
-    title: string
+    title: TitleState
 }
 
-export default (history: History) => combineReducers<AppState>({
+export type AppAction = TitleAction
+
+export type AppReducer = Reducer<AppState>
+
+export const createReducer = (history: History) => combineReducers<AppState>({
     router: connectRouter(history),
-    title: TitleReducer,
+    title: titleReducer,
 })

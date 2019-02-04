@@ -1,8 +1,3 @@
-import createReducer from './reducer'
-import { TitleAction } from './title'
-
-export { createReducer }
-
-export type AppAction = TitleAction
-
+export { createReducer } from './reducer'
 export * from './reducer'
+export * from './title'

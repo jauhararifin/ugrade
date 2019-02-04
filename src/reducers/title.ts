@@ -1,24 +1,28 @@
 import { Reducer } from "redux"
 
-const ACTION_TYPE_SET_REDUCER = 'ACTION_TYPE_SET_REDUCER'
+export type TitleState = string
+
+export const initialValue: TitleState = "UGrade"
+
+export enum TitleActionType {
+    SetReducer = "ACTION_TYPE_SET_REDUCER"
+}
 
 export interface TitleAction {
-    type: string
+    type: TitleActionType
     title: string
 }
 
 export function setTitle(title:string = "UGrade") {
     return {
-        type: ACTION_TYPE_SET_REDUCER,
+        type: TitleActionType,
         title
     }
 }
 
-const titleReducer: Reducer<string> = (state: string = "UGrade", action): string => {
-    if (action.type === ACTION_TYPE_SET_REDUCER) {
+export const titleReducer: Reducer<TitleState> = (state: TitleState = initialValue, action): TitleState => {
+    if (action.type === TitleActionType.SetReducer) {
         return action.title
     }
     return state
 }
-
-export default titleReducer
