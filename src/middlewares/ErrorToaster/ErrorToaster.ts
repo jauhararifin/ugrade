@@ -6,7 +6,6 @@ export function createErrorToasterMiddleware(toaster: ActionToaster): Middleware
         const result = next(action)
         const promise = Promise.resolve(result).catch(error => {
             toaster.showErrorToast(error)
-            throw error
         })
         return <A><unknown>promise
     }      
