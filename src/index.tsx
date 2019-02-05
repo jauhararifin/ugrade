@@ -1,44 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider} from 'react-redux'
-import logger from 'redux-logger'
 import { createBrowserHistory } from 'history'
-import { createStore, compose, applyMiddleware, Middleware } from 'redux'
-import { routerMiddleware, ConnectedRouter } from 'connected-react-router'
-import thunk from 'redux-thunk'
+import { ConnectedRouter } from 'connected-react-router'
 
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 import './index.css'
 import App from './scenes/App'
-import { createReducer } from './reducers'
+import { createStore } from './reducers'
 import * as serviceWorker from './serviceWorker'
-import { InMemoryLoginService as AuthService } from './services/auth'
-import createErrorToasterMiddleware from './middlewares/ErrorToaster/ErrorToaster';
-import ErrorToaster from './middlewares/ErrorToaster/ErrorToaster';
-
-declare global {
-    interface Window {
-      __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-    }
-}
+import { InMemoryAuthService } from './services/auth'
 
 const history = createBrowserHistory()
-const store = createStore(
-    createReducer(history),
-    compose(
-        applyMiddleware(
-            routerMiddleware(history),
-            ErrorToaster as Middleware,
-            logger,
-            thunk.withExtraArgument({
-                authService: new AuthService()
-            })
-        ),
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() || compose,
-    )
-)
+const store = createStore(history, {
+    authService: new InMemoryAuthService()
+})
 
 ReactDOM.render(
     <Provider store={store}>
@@ -48,7 +26,4 @@ ReactDOM.render(
     </Provider>
 , document.getElementById('root'))
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister()

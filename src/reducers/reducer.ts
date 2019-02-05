@@ -3,7 +3,7 @@ import { connectRouter } from 'connected-react-router'
 import { History } from 'history'
 import { Reducer } from 'redux'
 
-import { TitleAction, TitleState, titleReducer } from './title'
+import { TitleAction, TitleState, titleReducer } from './Title'
 
 export interface AppState {
     title: TitleState
