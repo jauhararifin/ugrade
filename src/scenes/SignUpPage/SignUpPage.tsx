@@ -1,22 +1,20 @@
 import React from "react"
-import { FormGroup, InputGroup, Button, Intent, Divider, Card, Colors } from "@blueprintjs/core"
-import { FormikProps, withFormik, Formik, FormikActions } from "formik"
+import { Divider } from "@blueprintjs/core"
+import { Formik, FormikActions } from "formik"
+import { push } from "connected-react-router"
+import { connect } from "react-redux"
+import { Link } from "react-router-dom"
 import * as yup from 'yup'
 
-import "@blueprintjs/core/lib/css/blueprint.css"
-
 import "./styles.css"
-import logo from "../../assets/images/logo.svg"
-import { Link } from "react-router-dom"
-import BottomLink from "../../components/BottomLink"
-import PublicOnlyPage from "../PublicOnlyPage";
-import { SignUpForm, SignUpFormValue } from "./SignUpForm";
-import { AppThunkDispatch } from "../../reducers";
-import { signUpAction } from "./actions";
-import { push } from "connected-react-router"
-import { connect } from "react-redux";
 
-import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster";
+import logo from "../../assets/images/logo.svg"
+import BottomLink from "../../components/BottomLink"
+import PublicOnlyPage from "../PublicOnlyPage"
+import { SignUpForm, SignUpFormValue } from "./SignUpForm"
+import { AppThunkDispatch } from "../../reducers"
+import { signUpAction } from "./actions"
+import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 
 export interface SignUpPageProps {
   dispatch: AppThunkDispatch

@@ -2,10 +2,10 @@ import React from "react"
 import { Divider, Card } from "@blueprintjs/core"
 import { Formik, FormikActions } from 'formik'
 import { Link } from "react-router-dom"
+import { connect } from "react-redux"
 import * as yup from 'yup'
 
 import "./styles.css"
-import "@blueprintjs/core/lib/css/blueprint.css"
 
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"
@@ -14,7 +14,6 @@ import { AppThunkDispatch } from "../../reducers"
 import { signInAction } from "./actions"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 import PublicOnlyPage from "../PublicOnlyPage"
-import { connect } from "react-redux";
 
 export interface SignInPageProps {
     dispatch: AppThunkDispatch
