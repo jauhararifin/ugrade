@@ -21,7 +21,7 @@ export interface ThunkExtraArguments {
 }
 
 export type AppThunkDispatch = ThunkDispatch<AppState, ThunkExtraArguments, AppAction>
-export type AppThunkAction = ThunkAction<Promise<void>, AppState, ThunkExtraArguments, AppAction>
+export type AppThunkAction<T = void> = ThunkAction<Promise<T>, AppState, ThunkExtraArguments, AppAction>
 
 export const createStore = (history: History, thunkExtraArguments: ThunkExtraArguments) => {
     const store = createReduxStore<AppState>(
