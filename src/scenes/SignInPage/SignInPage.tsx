@@ -1,8 +1,7 @@
 import React from "react"
 import { Divider, Card } from "@blueprintjs/core"
 import { Formik, FormikActions } from 'formik'
-import { connect } from "react-redux"
-import { Link, Redirect } from "react-router-dom"
+import { Link } from "react-router-dom"
 import * as yup from 'yup'
 
 import "./styles.css"
@@ -12,7 +11,7 @@ import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"
 import SignInForm, { SignInFormValue } from "./SignInForm"
 import { AppThunkDispatch } from "../../reducers"
-import { signInAction } from "./action"
+import { signInAction } from "./actions"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 import PublicOnlyPage from "../PublicOnlyPage"
 
