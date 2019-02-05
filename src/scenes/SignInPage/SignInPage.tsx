@@ -1,6 +1,6 @@
 import React from "react"
 import { Divider, Card } from "@blueprintjs/core"
-import { Formik } from 'formik'
+import { Formik, FormikActions } from 'formik'
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import * as yup from 'yup'
@@ -11,41 +11,31 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"
 import SignInForm, { SignInFormValue } from "./SignInForm"
-import { AuthenticationError } from "../../services/auth"
-import { setTitle } from "../../reducers/title"
+import { AppThunkDispatch } from "../../reducers"
+import { signInAction } from "./action"
 
-const initialValue: SignInFormValue = {
-    username: '',
-    password: '',
-    rememberMe: false,
+export interface SignInPageProps {
+    dispatch: AppThunkDispatch
 }
 
-const validationSchema = yup.object().shape({
-    username: yup.string().required(),
-    password: yup.string().required(),
-    rememberMe: yup.boolean()
-})
+class SignInPage extends React.Component<SignInPageProps, {}> {
 
-interface SignInPageProps {
-    dispatch: any
-}
+    initialValue: SignInFormValue = {
+        username: '',
+        password: '',
+        rememberMe: false,
+    }
 
-class SignInPage extends React.Component<SignInPageProps, any, any> {
+    validationSchema = yup.object().shape({
+        username: yup.string().required(),
+        password: yup.string().required(),
+        rememberMe: yup.boolean()
+    })
 
-    handleSubmit = (values: SignInFormValue, { setStatus, setSubmitting }: any) => {
-        this.props.dispatch(async (dispatch: any, getState: any, { authService }: any) => {
-            try {
-                const token = await authService.login(values.username, values.password)
-                dispatch(setTitle(token))
-            } catch (error) {
-                if (error instanceof AuthenticationError)
-                    setStatus({ success: false, message: 'Wrong username or password'})
-                else
-                    throw error
-            } finally {
-                setSubmitting(false)
-            }
-        })
+    handleSubmit = (values: SignInFormValue, { setStatus, setSubmitting }: FormikActions<SignInFormValue>) => {
+        this.props.dispatch(signInAction(values.username, values.password))
+            .then(setStatus)
+            .finally(() => setSubmitting(false))
     }
 
     render() {
@@ -60,8 +50,8 @@ class SignInPage extends React.Component<SignInPageProps, any, any> {
                 <Card className="signin-panel">
                     <h2>Sign In</h2>
                     <Formik
-                        initialValues={initialValue}
-                        validationSchema={validationSchema}
+                        initialValues={this.initialValue}
+                        validationSchema={this.validationSchema}
                         onSubmit={this.handleSubmit}
                         render={SignInForm}
                     />

@@ -1,17 +1,17 @@
 import React from "react"
 import { FormGroup, InputGroup, Switch, Button, Intent, Colors } from "@blueprintjs/core"
-import { FormikProps, withFormik } from 'formik'
+import { FormikProps } from 'formik'
 
 import "./styles.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
 
 export interface SignInFormValue {
-    username?: string
-    password?: string
-    rememberMe?: boolean
+    username: string
+    password: string
+    rememberMe: boolean
 }
 
-export interface SignInFormProps extends FormikProps<SignInFormValue>, SignInFormValue {
+export interface SignInFormProps extends FormikProps<SignInFormValue> {
 }
 
 const SignInForm: React.SFC<SignInFormProps> = ({
