@@ -1,5 +1,5 @@
 export enum TitleActionType {
-    SetReducer = "ACTION_TYPE_SET_REDUCER"
+    SetTitle = "ACTION_TYPE_SET_TITLE"
 }
 
 export interface TitleAction {
@@ -9,7 +9,7 @@ export interface TitleAction {
 
 export function setTitle(title:string = "UGrade"): TitleAction {
     return {
-        type: TitleActionType.SetReducer,
+        type: TitleActionType.SetTitle,
         title
     }
 }
