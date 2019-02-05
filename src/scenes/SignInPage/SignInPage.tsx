@@ -2,7 +2,7 @@ import React from "react"
 import { Divider, Card } from "@blueprintjs/core"
 import { Formik, FormikActions } from 'formik'
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 import * as yup from 'yup'
 
 import "./styles.css"
@@ -11,10 +11,12 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"
 import SignInForm, { SignInFormValue } from "./SignInForm"
-import { AppThunkDispatch } from "../../reducers"
+import { AppState, AppThunkDispatch } from "../../reducers"
 import { signInAction } from "./action"
+import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster";
 
 export interface SignInPageProps {
+    signedIn: boolean
     dispatch: AppThunkDispatch
 }
 
@@ -33,13 +35,20 @@ class SignInPage extends React.Component<SignInPageProps, {}> {
     })
 
     handleSubmit = (values: SignInFormValue, { setStatus, setSubmitting }: FormikActions<SignInFormValue>) => {
-        this.props.dispatch(signInAction(values.username, values.password))
-            .then(setStatus)
+        this.props.dispatch(signInAction(values.username, values.password, values.rememberMe))
+            .then(result => {
+                setStatus(result)
+                if (result.success)
+                    ActionToaster.showSuccessToast('You Are Signed In')
+            })
             .finally(() => setSubmitting(false))
     }
 
     render() {
-        console.log(this.props)
+        if (this.props.signedIn) {
+            return <Redirect to='/contest' />
+        }
+
         return (
             <div className="signin-page">
                 <Link to="/">
@@ -66,4 +75,8 @@ class SignInPage extends React.Component<SignInPageProps, {}> {
     }
 }
 
-export default connect()(SignInPage)
+const mapStateToProps = (state: AppState) => ({
+    signedIn: state.auth.isSignedIn
+})
+
+export default connect(mapStateToProps)(SignInPage)

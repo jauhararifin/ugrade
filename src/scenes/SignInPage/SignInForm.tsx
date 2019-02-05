@@ -60,7 +60,7 @@ const SignInForm: React.SFC<SignInFormProps> = ({
         <div className="remember-me">
             <div>Remember Me</div>
             <div>
-                <Switch checked={values.rememberMe} onChange={handleChange} onBlur={handleBlur} />
+                <Switch name='rememberMe' checked={values.rememberMe} onChange={handleChange} onBlur={handleBlur} />
             </div>
         </div>
         <Button type="submit" disabled={isSubmitting} fill large intent={Intent.SUCCESS}>
