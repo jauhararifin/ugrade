@@ -6,6 +6,7 @@ import { Reducer } from 'redux'
 import { titleReducer } from './Title'
 import { AppState } from './state'
 import { authReducer } from './Auth'
+import { settingReducer } from './Setting'
 
 export type AppReducer = Reducer<AppState>
 
@@ -13,4 +14,5 @@ export const createReducer = (history: History) => combineReducers<AppState>({
     router: connectRouter(history),
     title: titleReducer,
     auth: authReducer,
+    setting: settingReducer,
 })
