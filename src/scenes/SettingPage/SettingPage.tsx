@@ -69,4 +69,4 @@ const mapStateToProps = (state: AppState) => ({
   }
 })
 
-export default connect(mapStateToProps)(SettingPage)
+export default connect(mapStateToProps, null)(SettingPage)
