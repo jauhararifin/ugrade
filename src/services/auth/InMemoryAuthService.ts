@@ -9,9 +9,14 @@ export class InMemoryAuthService implements AuthService {
     private usersToken: { [username: string] : string }
 
     constructor() {
-        this.users = {}
-        this.usersPassword = {}
-        this.usersToken = {}
+        const defaultUser: User = {
+            username: 'test',
+            name: 'Test',
+            email: 'test@example.com',
+        }
+        this.users = { [defaultUser.username]: defaultUser }
+        this.usersPassword = { [defaultUser.username]: 'test' }
+        this.usersToken = { [defaultUser.username]: 'test---somefaketoken' }
     }
 
     async login(username: string, password: string): Promise<string> {
