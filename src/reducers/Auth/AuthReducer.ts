@@ -23,9 +23,15 @@ export const authReducer: Reducer<AuthState> = (state: AuthState = initialState,
             result.me = undefined
     }
 
-    localStorage.setItem(AUTH_TOKEN_KEY, result.token)
-    localStorage.setItem(AUTH_IS_SIGNED_IN_KEY, result.isSignedIn ? 'true' : 'false')
-    localStorage.setItem(AUTH_REMEMBER_ME_KEY, result.rememberMe ? 'true' : 'false')
+    sessionStorage.setItem(AUTH_TOKEN_KEY, result.token)
+    sessionStorage.setItem(AUTH_IS_SIGNED_IN_KEY, result.isSignedIn ? 'true' : 'false')
+    sessionStorage.setItem(AUTH_REMEMBER_ME_KEY, result.rememberMe ? 'true' : 'false')
+
+    if (result.rememberMe) {
+        localStorage.setItem(AUTH_TOKEN_KEY, result.token)
+        localStorage.setItem(AUTH_IS_SIGNED_IN_KEY, result.isSignedIn ? 'true' : 'false')
+        localStorage.setItem(AUTH_REMEMBER_ME_KEY, result.rememberMe ? 'true' : 'false')
+    }
 
     return result
 }

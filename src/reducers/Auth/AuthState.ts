@@ -16,7 +16,7 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
-    isSignedIn: localStorage.getItem(AUTH_IS_SIGNED_IN_KEY) === 'true',
-    token: localStorage.getItem(AUTH_TOKEN_KEY) || '',
-    rememberMe: localStorage.getItem(AUTH_REMEMBER_ME_KEY) === 'true',
+    isSignedIn: (sessionStorage.getItem(AUTH_IS_SIGNED_IN_KEY) || localStorage.getItem(AUTH_IS_SIGNED_IN_KEY)) === 'true',
+    token: sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY) || '',
+    rememberMe: (sessionStorage.getItem(AUTH_REMEMBER_ME_KEY) || localStorage.getItem(AUTH_REMEMBER_ME_KEY)) === 'true',
 }
