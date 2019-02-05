@@ -14,6 +14,7 @@ import { AppThunkDispatch } from "../../reducers"
 import { signInAction } from "./actions"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 import PublicOnlyPage from "../PublicOnlyPage"
+import { connect } from "react-redux";
 
 export interface SignInPageProps {
     dispatch: AppThunkDispatch
@@ -72,4 +73,4 @@ class SignInPage extends React.Component<SignInPageProps, {}> {
     }
 }
 
-export default SignInPage
+export default connect()(SignInPage)

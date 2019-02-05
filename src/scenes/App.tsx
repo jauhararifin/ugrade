@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, withRouter } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 import { connect } from 'react-redux'
 
@@ -30,4 +30,4 @@ const App: React.SFC<AppProps> = ({ title }) => (
 
 const mapStateToProps = (state: AppState) => ({ title: state.title, })
 
-export default connect(mapStateToProps)(App)
+export default withRouter(connect(mapStateToProps)(App) as any)
