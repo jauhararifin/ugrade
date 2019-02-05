@@ -23,10 +23,11 @@ const App: React.SFC<AppProps> = ({ title }) => (
       <Route path='/signup' component={SignUpPage} />
       <Route path='/setting' component={SettingPage} />
       <Route path='/forgot-password' component={ForgotPasswordPage} />
+      <Route path='/contest' exact component={HomePage} />
     </React.Fragment>
   </DocumentTitle>
 )
 
-const mapStateToProps = (state: AppState) => ({ title: state.title })
+const mapStateToProps = (state: AppState) => ({ title: state.title, })
 
 export default connect(mapStateToProps)(App)

@@ -11,12 +11,12 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"
 import SignInForm, { SignInFormValue } from "./SignInForm"
-import { AppState, AppThunkDispatch } from "../../reducers"
+import { AppThunkDispatch } from "../../reducers"
 import { signInAction } from "./action"
-import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster";
+import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
+import PublicOnlyPage from "../PublicOnlyPage"
 
 export interface SignInPageProps {
-    signedIn: boolean
     dispatch: AppThunkDispatch
 }
 
@@ -45,38 +45,32 @@ class SignInPage extends React.Component<SignInPageProps, {}> {
     }
 
     render() {
-        if (this.props.signedIn) {
-            return <Redirect to='/contest' />
-        }
-
         return (
-            <div className="signin-page">
-                <Link to="/">
-                    <img src={logo} width={100} alt="logo" />
-                </Link>
-                <h1>Welcome To UGrade</h1>
-                <Divider />
-                <Card className="signin-panel">
-                    <h2>Sign In</h2>
-                    <Formik
-                        initialValues={this.initialValue}
-                        validationSchema={this.validationSchema}
-                        onSubmit={this.handleSubmit}
-                        render={SignInForm}
-                    />
-                </Card>
-                <BottomLink>
-                    <Link to="/signup">Sign Up</Link>
-                    <Link to="/forgot-password">Forgot Password</Link>
-                    <Link to="/setting">Setting</Link>
-                </BottomLink>
-            </div>
+            <PublicOnlyPage>
+                <div className="signin-page">
+                    <Link to="/">
+                        <img src={logo} width={100} alt="logo" />
+                    </Link>
+                    <h1>Welcome To UGrade</h1>
+                    <Divider />
+                    <Card className="signin-panel">
+                        <h2>Sign In</h2>
+                        <Formik
+                            initialValues={this.initialValue}
+                            validationSchema={this.validationSchema}
+                            onSubmit={this.handleSubmit}
+                            render={SignInForm}
+                        />
+                    </Card>
+                    <BottomLink>
+                        <Link to="/signup">Sign Up</Link>
+                        <Link to="/forgot-password">Forgot Password</Link>
+                        <Link to="/setting">Setting</Link>
+                    </BottomLink>
+                </div>
+            </PublicOnlyPage>
         )
     }
 }
 
-const mapStateToProps = (state: AppState) => ({
-    signedIn: state.auth.isSignedIn
-})
-
-export default connect(mapStateToProps)(SignInPage)
+export default SignInPage
