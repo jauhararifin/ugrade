@@ -1,6 +1,6 @@
 
 export enum SettingActionType {
-    SetProxy = 'SETTING_ACTION_TYPE_SET_PROXY'
+    SetProxy = 'SETTING_SET_PROXY'
 }
 
 export interface SettingSetProxy {

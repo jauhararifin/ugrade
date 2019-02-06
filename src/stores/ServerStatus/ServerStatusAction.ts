@@ -1,6 +1,6 @@
 
 export enum ServerStatusActionType {
-    SetServerClock = 'SET_SERVER_CLOCK'
+    SetServerClock = 'SERVER_STATUS_SET_SERVER_CLOCK'
 }
 
 export interface ServerStatusSetServerClock {

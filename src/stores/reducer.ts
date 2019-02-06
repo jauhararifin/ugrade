@@ -8,6 +8,7 @@ import { AppState } from './state'
 import { authReducer } from './Auth'
 import { settingReducer } from './Setting'
 import { serverStatusReducer } from './ServerStatus'
+import { contestReducer } from './Contest';
 
 export type AppReducer = Reducer<AppState>
 
@@ -16,5 +17,6 @@ export const createReducer = (history: History) => combineReducers<AppState>({
     title: titleReducer,
     auth: authReducer,
     setting: settingReducer,
-    server: serverStatusReducer
+    server: serverStatusReducer,
+    contest: contestReducer,
 })

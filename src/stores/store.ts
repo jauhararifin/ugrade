@@ -10,6 +10,7 @@ import { createReducer } from './reducer'
 import { AppState } from './state'
 import { AppAction } from './action'
 import { ServerStatusService } from '../services/serverStatus'
+import { ContestService } from '../services/contest/ContestService'
 
 declare global {
     interface Window {
@@ -20,6 +21,7 @@ declare global {
 export interface ThunkExtraArguments {
     authService: AuthService
     serverStatusService: ServerStatusService
+    contestService: ContestService
 }
 
 export type AppThunkDispatch = ThunkDispatch<AppState, ThunkExtraArguments, AppAction>

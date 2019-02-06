@@ -1,9 +1,9 @@
 import { User } from "./AuthState"
 
 export enum AuthActionType {
-    SetSignedIn = "AUTH_ACTION_TYPE_SET_SIGNED_IN",
-    SetMe = "AUTH_ACTION_TYPE_SET_ME",
-    SetSignedOut = "AUTH_ACTION_TYPE_SET_LOGOUT"
+    SetSignedIn = "AUTH_SET_SIGNED_IN",
+    SetMe = "AUTH_SET_ME",
+    SetSignedOut = "AUTH_SET_LOGOUT"
 }
 
 export interface AuthSetSignedIn {
