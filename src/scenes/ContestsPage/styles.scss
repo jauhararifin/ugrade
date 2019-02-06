@@ -16,6 +16,7 @@
         height: 100%;
         .contests-navigation {
             flex-grow: 0;
+            flex-shrink: 0;
             width: 360px;
             padding: 10px 20px;
             background-color: #f5f5f5;
@@ -43,6 +44,10 @@
                     border-top: solid 1px $pt-divider-black;
                     width: 100%;
                 }
+            }
+            .contests-contests-group.skeleton {
+                border-color: $pt-divider-black;
+                padding: 0 15px 10px 15px;
             }
         }
     }

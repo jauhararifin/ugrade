@@ -8,13 +8,31 @@ import './styles.css'
 import TopNavigationBar from '../../components/TopNavigationBar'
 import UserOnlyPage from '../UserOnlyPage'
 import SidebarMiniCard from '../../components/SidebarMiniCard'
-import ServerClock from '../../components/ServerClock';
+import ServerClock from '../../components/ServerClock'
+import { AppState, AppThunkDispatch } from '../../stores'
+import { Contest } from '../../stores/Contest'
+import { ContestList } from './ContestList'
+import { getContestsAction } from './actions'
 
 export interface ContestsPageProps {
-  push(path: Path, state?: LocationState): CallHistoryMethodAction
+  dispatch: AppThunkDispatch
+  contests: Contest[]
 }
 
 class ContestsPage extends React.Component<ContestsPageProps> {
+  
+  static defaultProps = {
+    contests: []
+  }
+
+  componentWillMount = () => {
+    this.props.dispatch(getContestsAction())
+  }
+
+  handleContestChoose = (id: number) => {
+    this.props.dispatch(push(`/contests/${id}`))
+  }
+
   render() {
     return (
       <UserOnlyPage>
@@ -31,68 +49,10 @@ class ContestsPage extends React.Component<ContestsPageProps> {
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
               </div>
             </div>
+
             <div className="contests-content">
               <InputGroup leftIcon="search" placeholder="Search Contests" large />
-              <div className="contests-contests-group">
-                <H4 className="contests-contests-title">Active Contests</H4>
-                <HTMLTable bordered striped interactive className="contests-contests-table">
-                  <thead>
-                    <th>Name</th>
-                    <th>Short Description</th>
-                    <th>Start</th>
-                    <th>Duration</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Arkavidia Final Round</td>
-                      <td>Lorem ipsum dos color sit amet</td>
-                      <td>6 January 2019, 02:23:44</td>
-                      <td>5 Hours</td>
-                    </tr>
-                  </tbody>
-                </HTMLTable>
-              </div>
-
-              <div className="contests-contests-group">
-                <H4 className="contests-contests-title">Upcoming Contests</H4>
-                <HTMLTable bordered striped interactive className="contests-contests-table">
-                  <thead>
-                    <th>Name</th>
-                    <th>Short Description</th>
-                    <th>Start</th>
-                    <th>Duration</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Arkavidia Final Round</td>
-                      <td>Lorem ipsum dos color sit amet</td>
-                      <td>6 January 2019, 02:23:44</td>
-                      <td>5 Hours</td>
-                    </tr>
-                  </tbody>
-                </HTMLTable>
-              </div>
-
-              <div className="contests-contests-group">
-                <H4 className="contests-contests-title">Pasts Contests</H4>
-                <HTMLTable bordered striped interactive className="contests-contests-table">
-                  <thead>
-                    <th>Name</th>
-                    <th>Short Description</th>
-                    <th>Start</th>
-                    <th>Duration</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Arkavidia Final Round</td>
-                      <td>Lorem ipsum dos color sit amet</td>
-                      <td>6 January 2019, 02:23:44</td>
-                      <td>5 Hours</td>
-                    </tr>
-                  </tbody>
-                </HTMLTable>
-              </div>
-              
+              <ContestList contests={this.props.contests} onContestChoose={this.handleContestChoose} />
             </div>
           </div>
         </div>
@@ -101,4 +61,8 @@ class ContestsPage extends React.Component<ContestsPageProps> {
   }
 }
 
-export default connect(null, { push })(ContestsPage as any)
+const mapStateToProps = (state: AppState) => ({
+  contests: state.contest.contests
+})
+
+export default connect(mapStateToProps)(ContestsPage as any)
