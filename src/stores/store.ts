@@ -9,6 +9,7 @@ import { History } from 'history'
 import { createReducer } from './reducer'
 import { AppState } from './state'
 import { AppAction } from './action'
+import { ServerStatusService } from '../services/serverStatus'
 
 declare global {
     interface Window {
@@ -18,6 +19,7 @@ declare global {
 
 export interface ThunkExtraArguments {
     authService: AuthService
+    serverStatusService: ServerStatusService
 }
 
 export type AppThunkDispatch = ThunkDispatch<AppState, ThunkExtraArguments, AppAction>
