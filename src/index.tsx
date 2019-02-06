@@ -9,10 +9,12 @@ import App from './scenes/App'
 import { createStore } from './stores'
 import * as serviceWorker from './serviceWorker'
 import { InMemoryAuthService } from './services/auth'
+import { InMemoryServerStatusService } from './services/serverStatus'
 
 const history = createBrowserHistory()
 const store = createStore(history, {
-    authService: new InMemoryAuthService()
+    authService: new InMemoryAuthService(),
+    serverStatusService: new InMemoryServerStatusService()
 })
 
 ReactDOM.render(
