@@ -1,6 +1,5 @@
-
+import { AppState } from "../../stores"
 import { IBreadcrumbProps } from "@blueprintjs/core"
-import { AppState } from "../stores"
 
 export const selectBreadcrumb = (state: AppState): IBreadcrumbProps[] => {
     return [

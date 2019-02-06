@@ -18,9 +18,9 @@ import classNames from "classnames"
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { selectBreadcrumb } from '../../selectors/breadcrumbs'
+import { selectBreadcrumb } from './selectors'
 import { AppState, AppThunkDispatch } from '../../stores'
-import { setSignedOut, User } from '../../stores/Auth'
+import { User } from '../../stores/Auth'
 import { getMeAction, setMeSignOut } from './actions'
 
 export type TopNavigationBarBreadcrumb = IBreadcrumbProps
@@ -54,8 +54,11 @@ export class TopNavigationBar extends React.Component<TopNavigationBarProps> {
                         <MenuItem onClick={() => dispatch(setMeSignOut())} text="Sign Out" />
                     </Menu>} position={Position.BOTTOM}>
                         <Button
+                            icon="caret-down"
+                            large
+                            rightIcon="user"
                             className={classNames(Classes.MINIMAL, { [Classes.SKELETON]: !user })}
-                            text={(user && user.name) || 'Some Fake Username'}
+                            text={(user && user.name) || 'Test'}
                         />
                     </Popover>
                 </NavbarGroup>
