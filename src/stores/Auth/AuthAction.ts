@@ -17,7 +17,11 @@ export interface AuthSetMe {
     me: User
 }
 
-export type AuthAction = AuthSetSignedIn | AuthSetMe
+export interface AuthSetSignedOut {
+    type: AuthActionType.SetSignedOut
+}
+
+export type AuthAction = AuthSetSignedIn | AuthSetMe | AuthSetSignedOut
 
 export const setSignedIn = (token: string, rememberMe: boolean = false): AuthSetSignedIn => ({
     type: AuthActionType.SetSignedIn,
@@ -27,4 +31,4 @@ export const setSignedIn = (token: string, rememberMe: boolean = false): AuthSet
 
 export const setMe = (me: User): AuthSetMe => ({ type: AuthActionType.SetMe, me })
 
-export const setSignedOut = () => ({ type: AuthActionType.SetSignedOut })
+export const setSignedOut = (): AuthSetSignedOut => ({ type: AuthActionType.SetSignedOut })
