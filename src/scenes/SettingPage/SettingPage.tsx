@@ -1,11 +1,10 @@
 import React from "react"
-import { FormGroup, InputGroup, Button, Intent, Divider, Card, Label } from "@blueprintjs/core"
+import { FormGroup, InputGroup, Button, Divider, Label } from "@blueprintjs/core"
 import { Link } from "react-router-dom"
 
-import BottomLink from "../../components/BottomLink"
-
 import "./styles.css"
-import "@blueprintjs/core/lib/css/blueprint.css"
+
+import BottomLink from "../../components/BottomLink"
 
 const SettingPage = () => (
   <div className="setting-page">

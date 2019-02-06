@@ -1,9 +1,8 @@
 import React from "react"
-import { FormGroup, InputGroup, Switch, Button, Intent, Divider, Card, Colors } from "@blueprintjs/core"
+import { FormGroup, InputGroup, Button, Intent, Divider, Card } from "@blueprintjs/core"
 import { Link } from "react-router-dom"
 
 import "./styles.css"
-import "@blueprintjs/core/lib/css/blueprint.css"
 
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"

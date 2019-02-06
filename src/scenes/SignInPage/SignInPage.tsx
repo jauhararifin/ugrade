@@ -6,7 +6,6 @@ import { Link } from "react-router-dom"
 import * as yup from 'yup'
 
 import "./styles.css"
-import "@blueprintjs/core/lib/css/blueprint.css"
 
 import BottomLink from "../../components/BottomLink"
 import logo from "../../assets/images/logo.svg"

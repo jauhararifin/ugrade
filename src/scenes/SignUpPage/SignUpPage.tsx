@@ -3,9 +3,8 @@ import { FormGroup, InputGroup, Button, Intent, Divider, Card, Colors } from "@b
 import { FormikProps, withFormik } from "formik"
 import * as yup from 'yup'
 
-import "@blueprintjs/core/lib/css/blueprint.css"
-
 import "./styles.css"
+
 import logo from "../../assets/images/logo.svg"
 import { Link } from "react-router-dom"
 import BottomLink from "../../components/BottomLink"
