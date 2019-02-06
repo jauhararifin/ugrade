@@ -18,10 +18,12 @@ export const ContestList: React.SFC<ContestListProps> = ({ contests, onContestCh
               <H4 className="contests-contests-title bp3-skeleton">Active Contests</H4>
               <HTMLTable bordered striped interactive className="contests-contests-table bp3-skeleton">
                 <thead>
-                  <th>Name</th>
-                  <th>Short Description</th>
-                  <th>Start</th>
-                  <th>Duration</th>
+                    <tr>
+                        <th>Name</th>
+                        <th>Short Description</th>
+                        <th>Start</th>
+                        <th>Duration</th>
+                    </tr>
                 </thead>
                 <tbody>
                 </tbody>
@@ -47,10 +49,12 @@ export const ContestList: React.SFC<ContestListProps> = ({ contests, onContestCh
             <H4 className="contests-contests-title">{title}</H4>
             <HTMLTable bordered striped interactive className="contests-contests-table">
                 <thead>
-                    <th>Name</th>
-                    <th>Short Description</th>
-                    <th>Start</th>
-                    <th>Duration</th>
+                    <tr>
+                        <th>Name</th>
+                        <th>Short Description</th>
+                        <th>Start</th>
+                        <th>Duration</th>
+                    </tr>
                 </thead>
                 <tbody>
                     { contests.length === 0 && <tr><td colSpan={4}>No Contests</td></tr>}

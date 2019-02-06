@@ -22,7 +22,7 @@ export class ServerClock extends React.Component<ServerClockProps, ServerClockSt
 
     static defaultProps = {
         undefinedText: "Unknown",
-        textFormat: "HH:MM:ss"
+        textFormat: "HH:mm:ss"
     }
     
     constructor(props: ServerClockProps) {

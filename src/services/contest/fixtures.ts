@@ -11,7 +11,7 @@ const ContestArkav4Qual: Contest = {
 }
 
 const ContestArkav4Final: Contest = {
-    id: 1,
+    id: 2,
     slug: 'arkavidia-40-qualification',
     name: 'Final Competitive Programming Arkavidia 4.0',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
@@ -21,7 +21,7 @@ const ContestArkav4Final: Contest = {
 }
 
 const ContestArkav5Qual: Contest = {
-    id: 1,
+    id: 3,
     slug: 'arkavidia-50-qualification',
     name: 'Penyisihan Competitive Programming Arkavidia 5.0',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
@@ -31,7 +31,7 @@ const ContestArkav5Qual: Contest = {
 }
 
 const ContestArkav5Final: Contest = {
-    id: 1,
+    id: 4,
     slug: 'arkavidia-50-final',
     name: 'Final Competitive Programming Arkavidia 5.0',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
