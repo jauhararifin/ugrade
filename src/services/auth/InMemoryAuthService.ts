@@ -9,15 +9,20 @@ export class InMemoryAuthService implements AuthService {
     private usersToken: { [username: string] : string }
 
     constructor() {
-        this.users = {}
-        this.usersPassword = {}
-        this.usersToken = {}
+        const defaultUser: User = {
+            username: 'test',
+            name: 'Test',
+            email: 'test@example.com',
+        }
+        this.users = { [defaultUser.username]: defaultUser }
+        this.usersPassword = { [defaultUser.username]: 'test' }
+        this.usersToken = { [defaultUser.username]: 'test---somefaketoken' }
     }
 
     async login(username: string, password: string): Promise<string> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (username[0] === '.') {
-            throw new Error("Connection error")
+            throw new Error("Connection Error")
         }
         if (this.usersPassword[username] && this.usersPassword[username] === password) {
             return this.usersToken[username]
@@ -28,7 +33,7 @@ export class InMemoryAuthService implements AuthService {
     async register(username: string, name: string, email: string, password: string): Promise<void> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (username[0] === '.') {
-            throw new Error("Connection error")
+            throw new Error("Connection Error")
         }
 
         for (const userUsername in this.users) {
@@ -44,10 +49,17 @@ export class InMemoryAuthService implements AuthService {
         this.usersToken[username] = `${username}---${Math.random().toString(36).substring(7)}`
     }
 
+    async forgotPassword(usernameOrEmail: string): Promise<void> {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        if (usernameOrEmail[0] === '.') {
+            throw new Error("Connection Error")
+        }
+    }
+
     async getMyProfile(token: string): Promise<User> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (token[0] === '.') {
-            throw new Error("Connection error")
+            throw new Error("Connection Error")
         }
 
         const matches = token.match(/^([a-zA-Z0-9_]+)---(.+)$/)

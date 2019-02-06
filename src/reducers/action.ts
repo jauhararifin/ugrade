@@ -1,4 +1,6 @@
 import { RouterAction } from "connected-react-router"
 import { TitleAction } from "./Title"
+import { AuthAction } from "./Auth"
+import { SettingAction } from "./Setting"
 
-export type AppAction = TitleAction | RouterAction
+export type AppAction = TitleAction | RouterAction | AuthAction | SettingAction
