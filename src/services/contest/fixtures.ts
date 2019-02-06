@@ -6,7 +6,7 @@ const ContestArkav4Qual: Contest = {
     name: 'Penyisihan Competitive Programming Arkavidia 4.0',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
     description: '',
-    startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 5),
+    startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 60 * 5),
     finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10)
 }
 
@@ -16,7 +16,7 @@ const ContestArkav4Final: Contest = {
     name: 'Final Competitive Programming Arkavidia 4.0',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
     description: '',
-    startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 5),
+    startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 60 * 5),
     finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5)
 }
 
@@ -27,7 +27,7 @@ const ContestArkav5Qual: Contest = {
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
     description: '',
     startTime: new Date(),
-    finishTime: new Date(Date.now() + 1000 * 60 * 5)
+    finishTime: new Date(Date.now() + 1000 * 60 * 60 * 5)
 }
 
 const ContestArkav5Final: Contest = {
@@ -37,7 +37,7 @@ const ContestArkav5Final: Contest = {
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
     description: '',
     startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
-    finishTime: new Date(Date.now() + 1000 * 60 * 5 + 1000 * 60 * 60 * 24 * 5)
+    finishTime: new Date(Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5)
 }
 
 export const contests: Contest[] = [
