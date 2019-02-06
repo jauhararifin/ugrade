@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AppState, AppThunkDispatch } from '../../stores'
-import dateFormat from 'dateformat'
-import { getServerClockAction } from './actions';
+import { getServerClockAction } from './actions'
+import moment from 'moment'
 
 export interface ServerClockProps {
     localClock: Date,
@@ -33,7 +33,7 @@ export class ServerClock extends React.Component<ServerClockProps, ServerClockSt
     tick = () => {
         if (this.props.serverClock) {
             const currentServerClock = new Date().getTime() - this.props.localClock.getTime() + this.props.serverClock.getTime()
-            this.setState({ displayedClock: dateFormat(currentServerClock, this.props.textFormat) })
+            this.setState({ displayedClock: moment(currentServerClock).format(this.props.textFormat) })
         } else {
             this.setState({ displayedClock: this.props.undefinedText  })
         }
