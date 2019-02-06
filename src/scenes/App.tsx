@@ -24,7 +24,8 @@ const App: React.SFC<AppProps> = ({ title }) => (
       <Route path='/signup' component={SignUpPage} />
       <Route path='/setting' component={SettingPage} />
       <Route path='/forgot-password' component={ForgotPasswordPage} />
-      <Route path='/contests' component={ContestsPage} />
+      <Route path='/contests' exact component={ContestsPage} />
+      <Route path='/contests/:contest-id' component={ContestsPage} />
     </React.Fragment>
   </DocumentTitle>
 )
