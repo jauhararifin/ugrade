@@ -3,13 +3,14 @@ import { Route, withRouter } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 import { connect } from 'react-redux'
 
-import { AppState } from '../reducers'
+import { AppState } from '../stores'
 
 import HomePage from './HomePage'
 import SignInPage from './SignInPage'
 import SettingPage from './SettingPage'
 import SignUpPage from './SignUpPage'
 import ForgotPasswordPage from './ForgotPasswordPage'
+import ContestsPage from './ContestsPage'
 
 export interface AppProps {
   title?: string
@@ -23,7 +24,7 @@ const App: React.SFC<AppProps> = ({ title }) => (
       <Route path='/signup' component={SignUpPage} />
       <Route path='/setting' component={SettingPage} />
       <Route path='/forgot-password' component={ForgotPasswordPage} />
-      <Route path='/contest' exact component={HomePage} />
+      <Route path='/contests' component={ContestsPage} />
     </React.Fragment>
   </DocumentTitle>
 )

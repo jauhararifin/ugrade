@@ -1,4 +1,4 @@
-import { AppThunkAction } from "../../reducers";
+import { AppThunkAction } from "../../stores";
 import { UserRegistrationError } from "../../services/auth";
 
 export interface SignUpResult {

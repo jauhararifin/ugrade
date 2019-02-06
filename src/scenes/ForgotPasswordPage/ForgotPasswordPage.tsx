@@ -12,7 +12,7 @@ import logo from "../../assets/images/logo.svg"
 import PublicOnlyPage from "../PublicOnlyPage"
 import { ForgotPasswordForm, ForgotPasswordFormValue } from "./ForgotPasswordForm"
 import { forgotPasswordAction } from "./actions"
-import { AppThunkDispatch } from "../../reducers"
+import { AppThunkDispatch } from "../../stores"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 
 export interface ForgotPasswordPage {

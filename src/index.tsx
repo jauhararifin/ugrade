@@ -4,12 +4,9 @@ import { Provider} from 'react-redux'
 import { createBrowserHistory } from 'history'
 import { ConnectedRouter } from 'connected-react-router'
 
-import "@blueprintjs/core/lib/css/blueprint.css"
-import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-
 import './index.css'
 import App from './scenes/App'
-import { createStore } from './reducers'
+import { createStore } from './stores'
 import * as serviceWorker from './serviceWorker'
 import { InMemoryAuthService } from './services/auth'
 

@@ -9,8 +9,8 @@ import "./styles.css"
 
 import BottomLink from "../../components/BottomLink"
 import ProxySettingForm, { ProxySettingFormValue } from "./ProxySettingForm"
-import { AppState } from "../../reducers"
-import { setProxy } from "../../reducers/Setting"
+import { AppState } from "../../stores"
+import { setProxy } from "../../stores/Setting"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 
 export interface SettingPageProps {

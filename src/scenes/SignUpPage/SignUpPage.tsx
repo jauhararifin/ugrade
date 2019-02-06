@@ -12,7 +12,7 @@ import logo from "../../assets/images/logo.svg"
 import BottomLink from "../../components/BottomLink"
 import PublicOnlyPage from "../PublicOnlyPage"
 import { SignUpForm, SignUpFormValue } from "./SignUpForm"
-import { AppThunkDispatch } from "../../reducers"
+import { AppThunkDispatch } from "../../stores"
 import { signUpAction } from "./actions"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 

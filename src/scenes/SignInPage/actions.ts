@@ -1,6 +1,6 @@
-import { AppThunkAction } from "../../reducers"
+import { AppThunkAction } from "../../stores"
 import { AuthenticationError } from "../../services/auth"
-import { setSignedIn, setMe } from "../../reducers/Auth"
+import { setSignedIn, setMe } from "../../stores/Auth"
 
 export interface SignInResult {
     success: boolean
