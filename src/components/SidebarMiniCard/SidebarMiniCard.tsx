@@ -1,15 +1,14 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, HTMLAttributes } from 'react'
+import classnames from "classnames"
 
 import './styles.css'
 
-export interface SidebarMiniCardProps {
+export interface SidebarMiniCardProps extends HTMLAttributes<Element> {
     children: ReactNode
 }
 
-export const SidebarMiniCard: React.SFC<SidebarMiniCardProps> = ({ children }) => (
-    <div className="sidebar-mini-card">
-        {children}
-    </div>
+export const SidebarMiniCard: React.SFC<SidebarMiniCardProps> = (props) => (
+    <div {...props} className={classnames("sidebar-mini-card", props.className)} />
 )
 
 export default SidebarMiniCard
