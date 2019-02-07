@@ -6,6 +6,8 @@ export interface Contest {
     description: string
     startTime: Date
     finishTime: Date
+    freezed: boolean
+    registered: boolean
 }
 
 export interface ContestDetail extends Contest {
