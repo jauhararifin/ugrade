@@ -9,12 +9,12 @@ import "./styles.css"
 
 import BottomLink from "../../components/BottomLink"
 import ProxySettingForm, { ProxySettingFormValue } from "./ProxySettingForm"
-import { AppState } from "../../stores"
+import { AppState, AppAction } from "../../stores"
 import { setProxy } from "../../stores/Setting"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 
 export interface SettingPageProps {
-  dispatch: Dispatch<AppState>
+  dispatch: Dispatch<AppAction>
   proxyInitialValue: ProxySettingFormValue
 }
 

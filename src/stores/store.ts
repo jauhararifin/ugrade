@@ -28,7 +28,7 @@ export type AppThunkDispatch = ThunkDispatch<AppState, ThunkExtraArguments, AppA
 export type AppThunkAction<T = void> = ThunkAction<Promise<T>, AppState, ThunkExtraArguments, AppAction>
 
 export const createStore = (history: History, thunkExtraArguments: ThunkExtraArguments) => {
-    const store = createReduxStore<AppState>(
+    const store = createReduxStore<AppState, AppAction, {}, {}>(
         createReducer(history),
         compose(
             applyMiddleware(
