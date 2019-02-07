@@ -1,6 +1,7 @@
 import React, { SFC } from "react"
-import { H5, H2, H6, Button, Alignment } from "@blueprintjs/core"
+import { H5, H2, H6, Button, Alignment, Intent } from "@blueprintjs/core"
 import classnames from "classnames"
+import moment from "moment"
 
 import "./styles.css"
 
@@ -11,10 +12,22 @@ import ContestSubmitForm from "./ContestSubmitForm"
 
 export interface ContestDetailProps {
     contest: Contest
+    rank?: number
+    remainingTime?: number
 }
 
-export const ContestDetailPage: SFC<ContestDetailProps> = ({ contest }) => {
+export const ContestDetailPage: SFC<ContestDetailProps> = ({ contest, rank, remainingTime }) => {
     const skeletonClass = classnames({"bp3-skeleton": !contest})
+    let remainingTimeStr = "--:--:--"
+    if (contest && remainingTime) {
+        if (remainingTime >= 0) {
+            const rtime = moment.duration(remainingTime)
+            const pad = (x: number): string => x < 10 ? `0${x.toString()}` : x.toString()
+            remainingTimeStr = rtime.asDays() > 1 ? rtime.humanize() : `${pad(rtime.hours())}:${pad(rtime.minutes())}:${pad(rtime.seconds())}`
+        } else
+            remainingTimeStr = "Contest Ended"
+    }
+
     return (
         <div className="contests-page">
             <TopNavigationBar />
@@ -28,15 +41,15 @@ export const ContestDetailPage: SFC<ContestDetailProps> = ({ contest }) => {
                 <div className="contest-status-bottom">
                     <SidebarMiniCard className={classnames(skeletonClass, "contest-status-rank")}>
                         <H6>Rank</H6>
-                        <H2>21</H2>
+                        <H2>{ contest && rank ? rank : "-" }</H2>
                     </SidebarMiniCard>
                     <SidebarMiniCard className={classnames(skeletonClass, "contest-status-time")}>
                         <H6>Remaining Time</H6>
-                        <H2>02:10:23</H2>
+                        <H2>{ remainingTimeStr }</H2>
                     </SidebarMiniCard>
                 </div>
                 <div className="contest-menu">
-                    <Button icon="home" fill minimal alignText={Alignment.LEFT} className={skeletonClass} disabled={!contest} text="Overview"/>
+                    <Button icon="home" intent={Intent.PRIMARY} fill minimal alignText={Alignment.LEFT} className={skeletonClass} disabled={!contest} text="Overview"/>
                     <Button icon="notifications" fill minimal alignText={Alignment.LEFT} className={skeletonClass} disabled={!contest} text="Announcements"/>
                     <Button icon="book" fill minimal alignText={Alignment.LEFT} className={skeletonClass} disabled={!contest} text="Problems"/>
                     <Button icon="chat" fill minimal alignText={Alignment.LEFT} className={skeletonClass} disabled={!contest} text="Clarifications"/>
