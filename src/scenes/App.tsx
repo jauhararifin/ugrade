@@ -19,7 +19,7 @@ export interface AppProps {
 const App: React.SFC<AppProps> = ({ title }) => (
   <DocumentTitle title={title || "UGrade"}>
     <React.Fragment>
-      <Route path='/' exact component={Home}></Route>
+      <Route path='/' exact component={Home} />
       <Route path='/signin' component={SignInPage} />
       <Route path='/signup' component={SignUpPage} />
       <Route path='/setting' component={SettingPage} />
