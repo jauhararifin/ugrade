@@ -6,9 +6,9 @@ import { connect } from 'react-redux'
 import { AppState } from '../stores'
 
 import Home from './Home'
-import SignInPage from './SignInPage'
+import SignIn from './SignIn'
 import Setting from './Setting'
-import SignUpPage from './SignUpPage'
+import SignUp from './SignUp'
 import ForgotPassword from './ForgotPassword'
 import Contests from './Contests'
 
@@ -20,8 +20,8 @@ const App: React.SFC<AppProps> = ({ title }) => (
   <DocumentTitle title={title || "UGrade"}>
     <React.Fragment>
       <Route path='/' exact component={Home} />
-      <Route path='/signin' component={SignInPage} />
-      <Route path='/signup' component={SignUpPage} />
+      <Route path='/signin' component={SignIn} />
+      <Route path='/signup' component={SignUp} />
       <Route path='/setting' component={Setting} />
       <Route path='/forgot-password' component={ForgotPassword} />
       <Route path='/contests' exact component={Contests} />
