@@ -1,9 +1,22 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
-html, body, #root {
+html {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
+}  
+body {
+  display: block;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+#root {
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }

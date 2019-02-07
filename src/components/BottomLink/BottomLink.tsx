@@ -10,7 +10,7 @@ export interface BottomLinkProps {
 export const BottomLink: React.SFC<BottomLinkProps> = ({ children, dividerColor }) => (
     <div className="bottom-link">
         {
-            React.Children.map(children, item => <span style={{ borderRightColor: dividerColor }}>{item}</span>)
+            React.Children.map(children, item => item && <span style={{ borderRightColor: dividerColor }}>{item}</span>)
         }
     </div>
 )

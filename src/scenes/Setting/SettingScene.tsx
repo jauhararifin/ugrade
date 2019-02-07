@@ -51,7 +51,8 @@ const mapStateToProps = (state: AppState) => ({
     port: state.setting.proxyPort ? state.setting.proxyPort.toString() : '',
     username: state.setting.proxyUsername,
     password: state.setting.proxyPassword,
-  }
+  },
+  signedIn: state.auth.isSignedIn
 })
 
 export default connect(mapStateToProps, null)(SettingScene)
