@@ -9,10 +9,12 @@ import { Contest } from '../../stores/Contest'
 import { getContestsAction } from './actions'
 import ContestsPage from './ContestsPage'
 import { userOnly } from '../../helpers/auth'
+import { withServer } from '../../helpers/server'
 
 export interface ContestsSceneProps {
   dispatch: AppThunkDispatch
   contests: Contest[]
+  serverClock?: Date
 }
 
 export class ContestsScene extends Component<ContestsSceneProps> {
@@ -33,6 +35,7 @@ export class ContestsScene extends Component<ContestsSceneProps> {
     return <ContestsPage
       contests={this.props.contests}
       onContestChoose={this.handleContestChoose}
+      serverClock={this.props.serverClock}
     />
   }
 }
@@ -43,5 +46,6 @@ const mapStateToProps = (state: AppState) => ({
 
 export default compose<ComponentType>(
   userOnly("/signin"),
-  connect(mapStateToProps)
+  connect(mapStateToProps),
+  withServer,
 )(ContestsScene)
