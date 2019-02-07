@@ -27,8 +27,7 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
     }
     render() {
         const { contest, serverClock } = this.props
-        const remainingTime = contest && serverClock ? contest.finishTime.getTime() - serverClock.getTime() : undefined
-        return <ContestDetailPage contest={this.props.contest} rank={21} remainingTime={remainingTime} />
+        return <ContestDetailPage contest={contest} rank={21} serverClock={serverClock} />
     }
 }
 
