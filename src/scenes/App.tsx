@@ -10,7 +10,7 @@ import SignInPage from './SignInPage'
 import SettingPage from './SettingPage'
 import SignUpPage from './SignUpPage'
 import ForgotPasswordPage from './ForgotPasswordPage'
-import ContestsPage from './ContestsPage'
+import Contests from './Contests'
 
 export interface AppProps {
   title?: string
@@ -24,8 +24,8 @@ const App: React.SFC<AppProps> = ({ title }) => (
       <Route path='/signup' component={SignUpPage} />
       <Route path='/setting' component={SettingPage} />
       <Route path='/forgot-password' component={ForgotPasswordPage} />
-      <Route path='/contests' exact component={ContestsPage} />
-      <Route path='/contests/:contest-id' component={ContestsPage} />
+      <Route path='/contests' exact component={Contests} />
+      <Route path='/contests/:contest-id' component={Contests} />
     </React.Fragment>
   </DocumentTitle>
 )

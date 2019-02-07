@@ -6,12 +6,12 @@ import "./styles.css"
 
 import { Contest } from '../../stores/Contest'
 
-export interface ContestListProps {
+export interface ContestsListProps {
     contests: Contest[],
-    onContestChoose?: (id: number) => any
+    onContestChoose?: (contest: Contest) => any
 }
 
-export const ContestList: React.SFC<ContestListProps> = ({ contests, onContestChoose }) => {
+export const ContestsList: React.SFC<ContestsListProps> = ({ contests, onContestChoose }) => {
     if (contests.length === 0) {
         return (
             <div className="contests-contests-group skeleton">
@@ -37,14 +37,14 @@ export const ContestList: React.SFC<ContestListProps> = ({ contests, onContestCh
     const upcomingContests = contests.slice().filter(contest => currentDate < contest.startTime)
     const pastContests = contests.slice().filter(contest => currentDate >= contest.finishTime)
 
-    const createChooseHandler = (id: number) => {
+    const createChooseHandler = (contest: Contest) => {
         if (onContestChoose) {
-            return () => { onContestChoose(id) }
+            return () => { onContestChoose(contest) }
         }
         return () => {}
     }
 
-    const renderContestList = (title: string, contests: Contest[]) => (
+    const renderContestsList = (title: string, contests: Contest[]) => (
         <div className="contests-contests-group">
             <H4 className="contests-contests-title">{title}</H4>
             <HTMLTable bordered striped interactive className="contests-contests-table">
@@ -59,7 +59,7 @@ export const ContestList: React.SFC<ContestListProps> = ({ contests, onContestCh
                 <tbody>
                     { contests.length === 0 && <tr><td colSpan={4}>No Contests</td></tr>}
                     { contests.length > 0 && contests.map(contest => (
-                        <tr key={contest.id} onClick={createChooseHandler(contest.id)}>
+                        <tr key={contest.id} onClick={createChooseHandler(contest)}>
                             <td><H6>{contest.name}</H6></td>
                             <td><p>{contest.shortDescription}</p></td>
                             <td>{moment(contest.startTime).format("MMMM Do YYYY, h:mm:ss a")}</td>
@@ -74,9 +74,9 @@ export const ContestList: React.SFC<ContestListProps> = ({ contests, onContestCh
 
     return (
         <React.Fragment>
-            { renderContestList("Active Contests", activeContests) }
-            { renderContestList("Upcoming Contests", upcomingContests) }
-            { renderContestList("Past Contests", pastContests) }
+            { renderContestsList("Active Contests", activeContests) }
+            { renderContestsList("Upcoming Contests", upcomingContests) }
+            { renderContestsList("Past Contests", pastContests) }
         </React.Fragment>
     )
 }

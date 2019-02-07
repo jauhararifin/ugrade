@@ -18,6 +18,6 @@ export const HomeScene: SFC<HomeScene> = ({ push }) => <HomePage
 />
 
 export default compose<ComponentType>(
-    publicOnly("/"),
+    publicOnly("/contests"),
     connect(null, { push }),
 )(HomeScene)
