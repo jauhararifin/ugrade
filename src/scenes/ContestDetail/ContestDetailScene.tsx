@@ -8,8 +8,7 @@ import { AppState, AppThunkDispatch } from "../../stores"
 import { Contest } from "../../stores/Contest"
 import { userOnly } from "../../helpers/auth"
 import { getContestById } from "./actions"
-import { withServer } from "../../helpers/server";
-import { ServerClock } from "../../components/ServerClock/ServerClock";
+import { withServer } from "../../helpers/server"
 
 export interface ContestDetailSceneRoute {
     contestId: string
