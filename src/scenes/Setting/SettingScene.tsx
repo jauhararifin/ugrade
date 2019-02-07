@@ -1,24 +1,22 @@
 import React from "react"
-import { Link } from "react-router-dom"
-import { Formik, FormikActions } from "formik"
+import { FormikActions, Formik } from "formik"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 import * as yup from 'yup'
 
-import "./styles.css"
-
-import BottomLink from "../../components/BottomLink"
-import ProxySettingForm, { ProxySettingFormValue } from "./ProxySettingForm"
+import { ProxySettingFormValue } from "./ProxySettingForm"
 import { AppState, AppAction } from "../../stores"
 import { setProxy } from "../../stores/Setting"
 import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
+import SettingPage from "./SettingPage"
 
-export interface SettingPageProps {
+export interface SettingSceneProps {
   dispatch: Dispatch<AppAction>
   proxyInitialValue: ProxySettingFormValue
+  signedIn: boolean
 }
 
-export class SettingPage extends React.Component<SettingPageProps> {
+export class SettingScene extends React.Component<SettingSceneProps> {
 
   proxyValidationSchema = yup.object().shape({
     host: yup.string(),
@@ -38,25 +36,12 @@ export class SettingPage extends React.Component<SettingPageProps> {
   }
 
   render() {
-    return (
-      <div className="setting-page">
-        <div className="setting-page-panel">
-          <div>
-            <h2>Settings</h2>
-          </div>
-          <Formik
-            initialValues={this.props.proxyInitialValue}
-            validationSchema={this.proxyValidationSchema}
-            onSubmit={this.proxyHandleSubmit}
-            render={ProxySettingForm}
-          />
-        </div>
-        <BottomLink>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/signin">Sign In</Link>
-        </BottomLink>
-      </div>
-    )
+    return <Formik
+      initialValues={this.props.proxyInitialValue}
+      onSubmit={this.proxyHandleSubmit}
+      validationSchema={this.proxyValidationSchema}
+      render={props => <SettingPage showSignIn={!this.props.signedIn} showSignUp={!this.props.signedIn} proxyForm={props}/>}
+    />
   }
 }
 
@@ -69,4 +54,4 @@ const mapStateToProps = (state: AppState) => ({
   }
 })
 
-export default connect(mapStateToProps, null)(SettingPage)
+export default connect(mapStateToProps, null)(SettingScene)
