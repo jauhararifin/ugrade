@@ -6,7 +6,6 @@ import * as yup from 'yup'
 import { AppThunkDispatch } from "../../../stores"
 import MyAccountPasswordForm, { MyAccountPasswordFormValue } from "./MyAccountPasswordForm"
 import { setPassword } from "./actions"
-import ActionToaster from "../../../middlewares/ErrorToaster/ActionToaster"
 
 export interface MyAccountPasswordSceneProps {
   dispatch: AppThunkDispatch

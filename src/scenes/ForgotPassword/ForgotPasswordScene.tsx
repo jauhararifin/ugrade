@@ -9,7 +9,6 @@ import "./styles.css"
 import { ForgotPasswordFormValue } from "./ForgotPasswordForm"
 import { forgotPasswordAction } from "./actions"
 import { AppThunkDispatch } from "../../stores"
-import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 import { publicOnly } from "../../helpers/auth"
 import ForgotPasswordPage from "./ForgotPasswordPage"
 
@@ -27,7 +26,6 @@ export class ForgotPasswordScene extends React.Component<ForgotPasswordSceneProp
 
     handleSubmit = (values: ForgotPasswordFormValue, { setSubmitting, resetForm }: FormikActions<ForgotPasswordFormValue>) => {
         this.props.dispatch(forgotPasswordAction(values.usernameOrEmail))
-            .then(result => ActionToaster.showSuccessToast('Check Your Email'))
             .finally(() => {
                 setSubmitting(false)
                 resetForm()

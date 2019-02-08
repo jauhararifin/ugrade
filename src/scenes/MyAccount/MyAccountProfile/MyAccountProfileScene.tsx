@@ -3,12 +3,11 @@ import { FormikActions, Formik } from "formik"
 import { connect } from "react-redux"
 import * as yup from 'yup'
 
-import { AppThunkAction, AppThunkDispatch, AppState } from "../../../stores"
+import { AppThunkDispatch, AppState } from "../../../stores"
 import MyAccountProfileForm, { MyAccountProfileFormValue } from "./MyAccountProfileForm"
 import { ShirtSizeType, GenderType, User } from "../../../stores/Auth"
 import { genderValues, shirtSizeValues } from "./helpers"
 import { setProfile } from "./actions"
-import ActionToaster from "../../../middlewares/ErrorToaster/ActionToaster"
 
 export interface MyAccountProfileSceneProps {
   dispatch: AppThunkDispatch

@@ -1,6 +1,5 @@
 import React, { ComponentType } from "react"
 import { Formik, FormikActions } from "formik"
-import { push } from "connected-react-router"
 import { connect } from "react-redux"
 import * as yup from 'yup'
 
@@ -9,7 +8,6 @@ import "./styles.css"
 import {  SignUpFormValue } from "./SignUpForm"
 import { AppThunkDispatch } from "../../stores"
 import { signUpAction } from "./actions"
-import ActionToaster from "../../middlewares/ErrorToaster/ActionToaster"
 import { compose } from "redux";
 import { publicOnly } from "../../helpers/auth";
 import SignUpPage from "./SignUpPage";
@@ -36,13 +34,7 @@ class SignUpScene extends React.Component<SignUpSceneProps> {
 
   handleSubmit = (values: SignUpFormValue, { setSubmitting, setStatus }: FormikActions<SignUpFormValue>) => {
     this.props.dispatch(signUpAction(values.username, values.name, values.email, values.password))
-      .then(result => {
-        setStatus(result)
-        if (result && result.success) {
-          this.props.dispatch(push('/signin'))
-          ActionToaster.showSuccessToast("Your Account Successfully Created")
-        }
-      })
+      .then(result => setStatus(result))
       .finally(() => setSubmitting(false))
   }
 

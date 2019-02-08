@@ -33,11 +33,7 @@ class SignInScene extends React.Component<SignInSceneProps, {}> {
 
     handleSubmit = (values: SignInFormValue, { setStatus, setSubmitting }: FormikActions<SignInFormValue>) => {
         this.props.dispatch(signInAction(values.username, values.password, values.rememberMe))
-            .then(result => {
-                setStatus(result)
-                if (result.success)
-                    ActionToaster.showSuccessToast('You Are Signed In')
-            })
+            .then(result => setStatus(result))
             .finally(() => setSubmitting(false))
     }
 
