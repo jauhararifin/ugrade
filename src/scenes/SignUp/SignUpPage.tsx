@@ -1,5 +1,4 @@
 import React, { SFC } from "react"
-import { Divider } from "@blueprintjs/core"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import "./styles.css"

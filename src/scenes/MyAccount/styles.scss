@@ -2,13 +2,11 @@
     text-align: center;
     width: 600px;
     text-align: center;
-}
-
-.my-account-page-content {
-    text-align: left;
-    margin-top: 50px;
-}
-
-.my-account-page .right {
-    text-align: right;
+    .my-account-page-content {
+        text-align: left;
+        margin-top: 50px;
+        .right {
+            text-align: right;
+        }
+    }
 }

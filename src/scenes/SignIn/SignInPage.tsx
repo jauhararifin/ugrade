@@ -1,5 +1,5 @@
 import React, { SFC } from "react"
-import { Divider, Card } from "@blueprintjs/core"
+import { Card } from "@blueprintjs/core"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 

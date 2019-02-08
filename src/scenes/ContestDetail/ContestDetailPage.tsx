@@ -15,7 +15,7 @@ export interface ContestDetailPageProps {
 export const ContestDetailPage: SFC<ContestDetailPageProps> = ({ contest, rank, serverClock }) => {
 
     return (
-        <div className="contests-page">
+        <div className="full-page">
             <TopNavigationBar />
             <div className="contests-panel">
                 <ContestDetailSidebar contest={contest} rank={rank} serverClock={serverClock} />

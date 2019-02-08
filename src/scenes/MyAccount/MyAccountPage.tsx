@@ -7,7 +7,6 @@ import "./styles.css"
 import BottomLink from "../../components/BottomLink"
 import MyAccountPassword from "./MyAccountPassword"
 import MyAccountProfile from "./MyAccountProfile"
-import { User } from "../../stores/Auth"
 
 export interface MyAccountPageProps {
   loading: boolean

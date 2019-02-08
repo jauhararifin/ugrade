@@ -17,7 +17,7 @@ export interface ContestsPageProps {
 }
 
 export const ContestsPage: SFC<ContestsPageProps> = ({contests, onContestChoose, serverClock}) => (
-  <div className="contests-page">
+  <div className="full-page">
     <TopNavigationBar />
     <div className="contests-panel">
       <div className="contests-navigation">
@@ -32,7 +32,7 @@ export const ContestsPage: SFC<ContestsPageProps> = ({contests, onContestChoose,
       </div>
 
       <div className="contests-content">
-        <InputGroup leftIcon="search" placeholder="Search Contests" large />
+        <InputGroup className={classnames({"bp3-skeleton": contests.length === 0})} leftIcon="search" placeholder="Search Contests" large />
         <ContestsList contests={contests} onContestChoose={onContestChoose} />
       </div>
     </div>
