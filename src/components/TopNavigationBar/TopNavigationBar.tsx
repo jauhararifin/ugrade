@@ -42,7 +42,7 @@ export class TopNavigationBar extends React.Component<TopNavigationBarProps> {
         return (
             <Navbar>
                 <NavbarGroup align={Alignment.LEFT}>
-                    <NavbarHeading>UGrade</NavbarHeading>
+                    <Link to="/"><NavbarHeading>UGrade</NavbarHeading></Link>
                     <NavbarDivider />
                     <Breadcrumbs items={breadcrumbs} />
                 </NavbarGroup>
