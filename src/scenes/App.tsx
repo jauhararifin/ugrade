@@ -24,7 +24,7 @@ export interface AppProps {
 
 const App: React.SFC<AppProps> = ({ title, location }) => (
   <DocumentTitle title={title || "UGrade"}>
-    <TransitionGroup>
+    <TransitionGroup className="eat-them-all">
       <CSSTransition timeout={300} classNames="fade" key={location.key}>
         <Switch location={location}>
           <Route path='/' exact component={Home} />

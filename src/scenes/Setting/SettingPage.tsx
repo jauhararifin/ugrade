@@ -13,7 +13,7 @@ export interface SettingPageProps {
 }
 
 export const SettingPage: SFC<SettingPageProps> = ({ proxyForm, showSignIn, showSignUp}) => (
-  <div className="setting-page">
+  <div className="plain-page">
     <div className="setting-page-panel">
       <div>
         <h2>Settings</h2>

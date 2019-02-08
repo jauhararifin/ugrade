@@ -13,7 +13,7 @@ export interface HomePageProps {
 }
 
 const HomePage: React.SFC<HomePageProps> = ({ onLogoClick, onSettingClick, onSignInClick, onSignUpClick }) => (
-  <div className="home-page">
+  <div className="plain-page">
     <div className="home-panel">
       <a onClick={onLogoClick}>
         <img src={logo} width={100} alt="logo" />

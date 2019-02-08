@@ -27,8 +27,8 @@ const MyAccountPageFormSkeleton: SFC = () => (
 )
 
 export const MyAccountPage: SFC<MyAccountPageProps> = ({ loading }) => (
-  <div className="setting-page">
-    <div className="setting-page-panel">
+  <div className="plain-page">
+    <div className="my-account-page-panel">
       <div>
         <h2>Account Setting</h2>
       </div>

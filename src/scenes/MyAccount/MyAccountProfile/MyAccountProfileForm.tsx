@@ -25,7 +25,7 @@ export const MyAccountProfileForm: React.SFC<MyAccountProfileFormProps> = ({
     isSubmitting
 }) => (
     <form onSubmit={handleSubmit}>
-        <div className="setting-page-content">
+        <div className="my-account-page-content">
             <h3>Account Profile</h3>
             <Divider />
             

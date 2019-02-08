@@ -12,13 +12,14 @@ export interface SignUpPageProps extends SignUpFormProps {
 }
 
 const SignUpPage: SFC<SignUpPageProps> = props => (
-  <div className="signup-page">
-    <Link to="/">
-        <img src={logo} width={100} alt="logo" />
-    </Link>
-    <h1>Welcome To UGrade</h1>
-    <Divider />
-    <SignUpForm {...props} />
+  <div className="plain-page">
+    <div>
+      <Link to="/">
+          <img src={logo} width={100} alt="logo" />
+      </Link>
+      <h1>Welcome To UGrade</h1>
+      <SignUpForm {...props} />
+    </div>
     <BottomLink>
       <Link to="/signin">Sign In</Link>
       <Link to="/setting">Setting</Link>

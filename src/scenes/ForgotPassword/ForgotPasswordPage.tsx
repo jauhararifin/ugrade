@@ -12,13 +12,14 @@ export interface ForgotPasswordPageProps extends ForgotPasswordFormProps {
 }
 
 export const ForgotPasswordPage: SFC<ForgotPasswordPageProps> = (props) => (
-    <div className="forgot-password-page">
-        <Link to="/">
-            <img src={logo} width={100} alt="logo" />
-        </Link>
-        <h1>Welcome To UGrade</h1>
-        <Divider />
-        <ForgotPasswordForm {...props} />
+    <div className="plain-page">
+        <div>
+            <Link to="/">
+                <img src={logo} width={100} alt="logo" />
+            </Link>
+            <h1>Welcome To UGrade</h1>
+            <ForgotPasswordForm {...props} />
+        </div>
         <BottomLink>
             <Link to="/signup">Sign Up</Link>
             <Link to="/signin">Sign In</Link>

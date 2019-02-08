@@ -21,7 +21,7 @@ export const MyAccountPasswordForm: React.SFC<MyAccountPasswordFormProps> = ({
     isSubmitting
 }) => (
     <form onSubmit={handleSubmit}>
-        <div className="setting-page-content">
+        <div className="my-account-page-content">
             <h3>Password</h3>
             <Divider />
             
