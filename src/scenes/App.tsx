@@ -12,6 +12,7 @@ import SignUp from './SignUp'
 import ForgotPassword from './ForgotPassword'
 import Contests from './Contests'
 import ContestDetail from './ContestDetail'
+import MyAccount from './MyAccount'
 
 export interface AppProps {
   title?: string
@@ -24,6 +25,7 @@ const App: React.SFC<AppProps> = ({ title }) => (
       <Route path='/signin' component={SignIn} />
       <Route path='/signup' component={SignUp} />
       <Route path='/setting' component={Setting} />
+      <Route path='/account' exact component={MyAccount} />
       <Route path='/forgot-password' component={ForgotPassword} />
       <Route path='/contests' exact component={Contests} />
       <Route path='/contests/:contestId' component={ContestDetail} />
