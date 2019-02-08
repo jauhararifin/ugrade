@@ -50,6 +50,7 @@ export class TopNavigationBar extends React.Component<TopNavigationBarProps> {
                     <Popover
                         disabled={!user}
                         content={<Menu>
+                        <Link to="/account"><MenuItem text="My Account" /></Link>
                         <Link to="/setting"><MenuItem text="Setting" /></Link>
                         <MenuItem onClick={() => dispatch(setMeSignOut())} text="Sign Out" />
                     </Menu>} position={Position.BOTTOM}>
