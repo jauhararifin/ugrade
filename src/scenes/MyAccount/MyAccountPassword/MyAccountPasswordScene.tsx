@@ -21,9 +21,12 @@ export class MyAccountPasswordScene extends React.Component<MyAccountPasswordSce
         .oneOf([yup.ref('newPassword'), null], "Passwords don't match"),
   })
 
-  handleSubmit = (values: MyAccountPasswordFormValue, { setSubmitting }: FormikActions<MyAccountPasswordFormValue>) => {
+  handleSubmit = (values: MyAccountPasswordFormValue, { setSubmitting,resetForm }: FormikActions<MyAccountPasswordFormValue>) => {
     this.props.dispatch(setPassword(values.oldPassword, values.newPassword))
-      .finally(() => setSubmitting(false))
+      .finally(() => {
+        setSubmitting(false)
+        resetForm()
+      })
   }
 
   render() {

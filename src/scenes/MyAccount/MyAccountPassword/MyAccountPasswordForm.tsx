@@ -51,7 +51,7 @@ export const MyAccountPasswordForm: React.SFC<MyAccountPasswordFormProps> = ({
                 intent={touched.confirmation && errors && (errors.confirmation || errors.confirmation) ? Intent.DANGER : Intent.NONE}
             >
                 <Label>
-                    <InputGroup type="password" name="confirmation" placeholder="Repeat Your New Password" onChange={handleChange} onBlur={handleBlur} value={values.newPassword} />
+                    <InputGroup type="password" name="confirmation" placeholder="Repeat Your New Password" onChange={handleChange} onBlur={handleBlur} value={values.confirmation} />
                 </Label>
             </FormGroup>
 
