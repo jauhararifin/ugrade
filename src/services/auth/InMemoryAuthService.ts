@@ -1,5 +1,5 @@
 import { AuthService } from './AuthService'
-import { User } from './User'
+import { User, GenderType, ShirtSizeType } from './User'
 import { AuthenticationError, UserRegistrationError } from './errors'
 
 export class InMemoryAuthService implements AuthService {
@@ -67,6 +67,31 @@ export class InMemoryAuthService implements AuthService {
             return this.users[matches[1]]
         }
         throw new AuthenticationError('Invalid token')
+    }
+
+    async setMyProfile(token: string, name?: string, gender?: GenderType, shirtSize?: ShirtSizeType, address?: string): Promise<User> {
+        const me = {...await this.getMyProfile(token)}
+
+        if (name)
+            me.name = name
+        if (gender)
+            me.gender = gender
+        if (shirtSize)
+            me.shirtSize = shirtSize
+        if (address)
+            me.address = address
+        this.users[me.username] = me
+
+        return me
+    }
+
+    async setMyPassword(token: string, oldPassword: string, newPassword: string): Promise<void> {
+        const me = {...await this.getMyProfile(token)}
+        if (this.usersPassword[me.username] === oldPassword) {
+            this.usersPassword[me.username] = newPassword
+            return
+        }
+        throw new AuthenticationError('Wrong password')
     }
 
 }
