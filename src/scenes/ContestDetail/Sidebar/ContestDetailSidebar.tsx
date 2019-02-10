@@ -1,5 +1,5 @@
 import React, { SFC } from "react"
-import { H5, H2, H6, Button, Alignment, Intent, Divider } from "@blueprintjs/core"
+import { H5, H2, H6, Button, Alignment, Intent } from "@blueprintjs/core"
 import classnames from "classnames"
 import moment from "moment"
 
@@ -7,7 +7,7 @@ import "./styles.css"
 
 import SidebarMiniCard from "../../../components/SidebarMiniCard"
 import { Contest } from "../../../stores/Contest"
-import ContestSubmitForm from "../ContestSubmitForm"
+import ContestSubmitForm from "./ContestSubmitForm"
 
 export interface ContestDetailSidebarProps {
     contest?: Contest
@@ -82,7 +82,7 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
             </div>
 
             <div className={classnames(["contest-menu",skeletonClass])}>
-                { loading ? [0,0,0].map(() => <Button fill text="Fake"/>) : (<React.Fragment>
+                { loading ? [0,1,2].map(i => <Button key={i} fill text="Fake"/>) : (<React.Fragment>
                     <Button icon="home" intent={Intent.PRIMARY} fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Overview"/>
                     { started && <Button icon="notifications" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Announcements"/> }
                     { started && <Button icon="book" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Problems"/> }
