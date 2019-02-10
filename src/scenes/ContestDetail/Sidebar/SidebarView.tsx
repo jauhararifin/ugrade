@@ -9,7 +9,7 @@ import SidebarMiniCard from "../../../components/SidebarMiniCard"
 import { Contest } from "../../../stores/Contest"
 import ContestSubmitForm from "./ContestSubmitForm"
 
-export enum ContestMenu {
+export enum Menu {
     Overview = "Overview",
     Announcements = "Announcements",
     Problems = "Problems",
@@ -18,11 +18,12 @@ export enum ContestMenu {
     Scoreboard = "Scoreboard",
 }
 
-export interface ContestDetailSidebarProps {
+export interface SidebarViewProps {
     contest?: Contest
     rank?: number
     serverClock?: Date
-    menu?: ContestMenu
+    menu?: Menu
+    onChoose?: (menu: Menu) => any
 }
 
 const durationToStr = (duration: moment.Duration | number): string => {
@@ -31,9 +32,9 @@ const durationToStr = (duration: moment.Duration | number): string => {
     return rtime.asDays() > 1 ? rtime.humanize() : `${pad(rtime.hours())}:${pad(rtime.minutes())}:${pad(rtime.seconds())}`
 }
 
-export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, serverClock, rank, menu }) => {
+export const SidebarView: SFC<SidebarViewProps> = ({ contest, serverClock, rank, menu, onChoose }) => {
     
-    const loading = !contest
+    const loading = !contest || !serverClock
     const participated = contest && contest.registered
     const started = serverClock && contest && serverClock >= contest.startTime
     const ended = serverClock && contest && serverClock >= contest.finishTime
@@ -46,7 +47,7 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
 
     return (
         <div className="contests-navigation">
-            { contest ? <H5>{ contest.name }</H5> :  <H2 className="bp3-skeleton">{ "Fake" }</H2> }
+            { !loading && contest ? <H5>{ contest.name }</H5> :  <H2 className="bp3-skeleton">{ "Fake" }</H2> }
             <p className={skeletonClass} style={{textAlign: "left"}}>{contest && contest.shortDescription}</p>
 
             <div className="contest-status-bottom">
@@ -95,7 +96,8 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
                 { loading ? [0,1,2].map(i => <Button key={i} fill text="Fake"/>) : (<React.Fragment>
                     <Button
                         icon="home"
-                        intent={menu === ContestMenu.Overview ? Intent.PRIMARY : Intent.NONE}
+                        onClick={() => { if (onChoose) onChoose(Menu.Overview) }}
+                        intent={menu === Menu.Overview ? Intent.PRIMARY : Intent.NONE}
                         fill
                         minimal
                         alignText={Alignment.LEFT}
@@ -104,7 +106,8 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
 
                     { started && <Button
                         icon="notifications"
-                        intent={menu === ContestMenu.Announcements ? Intent.PRIMARY : Intent.NONE}
+                        onClick={() => { if (onChoose) onChoose(Menu.Announcements) }}
+                        intent={menu === Menu.Announcements ? Intent.PRIMARY : Intent.NONE}
                         fill
                         minimal
                         alignText={Alignment.LEFT}
@@ -113,7 +116,8 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
 
                     { started && <Button
                         icon="book"
-                        intent={menu === ContestMenu.Problems ? Intent.PRIMARY : Intent.NONE}
+                        onClick={() => { if (onChoose) onChoose(Menu.Problems) }}
+                        intent={menu === Menu.Problems ? Intent.PRIMARY : Intent.NONE}
                         fill
                         minimal
                         alignText={Alignment.LEFT}
@@ -122,7 +126,8 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
 
                     { participated && started && <Button
                         icon="chat"
-                        intent={menu === ContestMenu.Clarifications ? Intent.PRIMARY : Intent.NONE}
+                        onClick={() => { if (onChoose) onChoose(Menu.Clarifications) }}
+                        intent={menu === Menu.Clarifications ? Intent.PRIMARY : Intent.NONE}
                         fill
                         minimal
                         alignText={Alignment.LEFT}
@@ -131,7 +136,8 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
                     
                     { participated && started && <Button
                         icon="layers"
-                        intent={menu === ContestMenu.Submissions ? Intent.PRIMARY : Intent.NONE}
+                        onClick={() => { if (onChoose) onChoose(Menu.Submissions) }}
+                        intent={menu === Menu.Submissions ? Intent.PRIMARY : Intent.NONE}
                         fill
                         minimal
                         alignText={Alignment.LEFT}
@@ -140,7 +146,8 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
 
                     { started && <Button 
                         icon="th-list"
-                        intent={menu === ContestMenu.Scoreboard ? Intent.PRIMARY : Intent.NONE}
+                        onClick={() => { if (onChoose) onChoose(Menu.Scoreboard) }}
+                        intent={menu === Menu.Scoreboard ? Intent.PRIMARY : Intent.NONE}
                         fill
                         minimal
                         alignText={Alignment.LEFT}

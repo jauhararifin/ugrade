@@ -1,37 +1,22 @@
 import React, { Component, ComponentType } from "react"
 import { compose } from "redux"
-import { RouteComponentProps, Switch, Route } from "react-router"
+import { Route } from "react-router"
 
 import ContestOverview from "./ContestOverview"
-import { AppState, AppThunkDispatch } from "../../stores"
 import { userOnly } from "../../helpers/auth"
-import { getContestById } from "./actions"
-import { withServer } from "../../helpers/server"
+import { ContestDetailPage } from "./ContestDetailPage"
 
-export interface ContestDetailSceneRoute {
-    contestId: string
-}
-
-export interface ContestDetailSceneProps extends RouteComponentProps<ContestDetailSceneRoute> {
-    dispatch: AppThunkDispatch
-}
-
-export class ContestDetailScene extends Component<ContestDetailSceneProps> {
-    componentDidMount() {
-        const contestId = Number(this.props.match.params.contestId)
-        this.props.dispatch(getContestById(contestId))
-    }
+export class ContestDetailScene extends Component {
     render() {
         return (
-            <Switch>
+            <ContestDetailPage>
                 <Route path="/contests/:contestId/" exact component={ContestOverview} />
                 <Route path="/contests/:contestId/overview" exact component={ContestOverview}  />
-            </Switch>
+            </ContestDetailPage>
         )
     }
 }
 
 export default compose<ComponentType>(
     userOnly(),
-    withServer,
 )(ContestDetailScene)

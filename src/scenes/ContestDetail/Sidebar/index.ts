@@ -1,1 +1,2 @@
-export * from './ContestDetailSidebar'
+import SidebarScene from "./SidebarScene"
+export default SidebarScene
