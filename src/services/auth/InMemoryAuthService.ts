@@ -56,6 +56,11 @@ export class InMemoryAuthService implements AuthService {
         }
     }
 
+    async getMe(token: string): Promise<User> {
+        const { username, name, email } = await this.getMyProfile(token)
+        return { username, name, email }
+    }
+
     async getMyProfile(token: string): Promise<User> {
         await new Promise(resolve => setTimeout(resolve, 1000))
         if (token[0] === '.') {
