@@ -22,6 +22,7 @@ import { selectBreadcrumb } from './selectors'
 import { AppState, AppThunkDispatch } from '../../stores'
 import { User } from '../../stores/Auth'
 import { getMeAction, setMeSignOut } from './actions'
+import { push } from 'connected-react-router';
 
 export type TopNavigationBarBreadcrumb = IBreadcrumbProps
 
@@ -39,12 +40,17 @@ export class TopNavigationBar extends React.Component<TopNavigationBarProps> {
 
     render() {
         const { user, breadcrumbs, dispatch } = this.props
+        const breadcrumbWithRouter = breadcrumbs.map(breadcrumbItem => ({
+            ...breadcrumbItem,
+            onClick: () => { if (breadcrumbItem.href) dispatch(push(breadcrumbItem.href)) },
+            href: undefined
+        }))
         return (
             <Navbar>
                 <NavbarGroup align={Alignment.LEFT}>
                     <Link to="/"><NavbarHeading>UGrade</NavbarHeading></Link>
                     <NavbarDivider />
-                    <Breadcrumbs items={breadcrumbs} />
+                    <Breadcrumbs items={breadcrumbWithRouter} />
                 </NavbarGroup>
                 <NavbarGroup align={Alignment.RIGHT}>
                     <Popover
