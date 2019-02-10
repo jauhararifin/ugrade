@@ -7,7 +7,7 @@ import "./styles.css"
 
 import TopNavigationBar from "../../../components/TopNavigationBar"
 import { Contest } from "../../../stores/Contest"
-import { ContestDetailSidebar } from "../Sidebar"
+import { ContestDetailSidebar, ContestMenu } from "../Sidebar"
 
 export interface ContestOverviewPageProps {
     contest?: Contest
@@ -20,7 +20,7 @@ export const ContestOverviewPage: SFC<ContestOverviewPageProps> = ({ contest, ra
         <div className="full-page">
             <TopNavigationBar />
             <div className="contests-panel">
-                <ContestDetailSidebar contest={contest} rank={rank} serverClock={serverClock} />
+                <ContestDetailSidebar contest={contest} rank={rank} serverClock={serverClock} menu={ContestMenu.Overview} />
                 <div className="contest-content">
                     <div className="contest-overview">
                         { contest ? <ReactMarkdown

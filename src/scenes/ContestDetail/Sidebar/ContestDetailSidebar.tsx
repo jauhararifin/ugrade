@@ -9,10 +9,20 @@ import SidebarMiniCard from "../../../components/SidebarMiniCard"
 import { Contest } from "../../../stores/Contest"
 import ContestSubmitForm from "./ContestSubmitForm"
 
+export enum ContestMenu {
+    Overview = "Overview",
+    Announcements = "Announcements",
+    Problems = "Problems",
+    Clarifications = "Clarifications",
+    Submissions = "Submissions",
+    Scoreboard = "Scoreboard",
+}
+
 export interface ContestDetailSidebarProps {
     contest?: Contest
     rank?: number
     serverClock?: Date
+    menu?: ContestMenu
 }
 
 const durationToStr = (duration: moment.Duration | number): string => {
@@ -21,7 +31,7 @@ const durationToStr = (duration: moment.Duration | number): string => {
     return rtime.asDays() > 1 ? rtime.humanize() : `${pad(rtime.hours())}:${pad(rtime.minutes())}:${pad(rtime.seconds())}`
 }
 
-export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, serverClock, rank }) => {
+export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, serverClock, rank, menu }) => {
     
     const loading = !contest
     const participated = contest && contest.registered
@@ -83,17 +93,66 @@ export const ContestDetailSidebar: SFC<ContestDetailSidebarProps> = ({ contest, 
 
             <div className={classnames(["contest-menu",skeletonClass])}>
                 { loading ? [0,1,2].map(i => <Button key={i} fill text="Fake"/>) : (<React.Fragment>
-                    <Button icon="home" intent={Intent.PRIMARY} fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Overview"/>
-                    { started && <Button icon="notifications" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Announcements"/> }
-                    { started && <Button icon="book" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Problems"/> }
-                    { participated && started && <Button icon="chat" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Clarifications"/> }
-                    { participated && started && <Button icon="layers" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Submissions"/> }
-                    { started && <Button icon="th-list" fill minimal alignText={Alignment.LEFT} disabled={!contest} text="Scoreboard"/> }
+                    <Button
+                        icon="home"
+                        intent={menu === ContestMenu.Overview ? Intent.PRIMARY : Intent.NONE}
+                        fill
+                        minimal
+                        alignText={Alignment.LEFT}
+                        disabled={!contest}
+                        text="Overview"/>
+
+                    { started && <Button
+                        icon="notifications"
+                        intent={menu === ContestMenu.Announcements ? Intent.PRIMARY : Intent.NONE}
+                        fill
+                        minimal
+                        alignText={Alignment.LEFT}
+                        disabled={!contest}
+                        text="Announcements"/> }
+
+                    { started && <Button
+                        icon="book"
+                        intent={menu === ContestMenu.Problems ? Intent.PRIMARY : Intent.NONE}
+                        fill
+                        minimal
+                        alignText={Alignment.LEFT}
+                        disabled={!contest}
+                        text="Problems"/> }
+
+                    { participated && started && <Button
+                        icon="chat"
+                        intent={menu === ContestMenu.Clarifications ? Intent.PRIMARY : Intent.NONE}
+                        fill
+                        minimal
+                        alignText={Alignment.LEFT}
+                        disabled={!contest}
+                        text="Clarifications"/> }
+                    
+                    { participated && started && <Button
+                        icon="layers"
+                        intent={menu === ContestMenu.Submissions ? Intent.PRIMARY : Intent.NONE}
+                        fill
+                        minimal
+                        alignText={Alignment.LEFT}
+                        disabled={!contest}
+                        text="Submissions"/> }
+
+                    { started && <Button 
+                        icon="th-list"
+                        intent={menu === ContestMenu.Scoreboard ? Intent.PRIMARY : Intent.NONE}
+                        fill
+                        minimal
+                        alignText={Alignment.LEFT}
+                        disabled={!contest}
+                        text="Scoreboard"/> }
                 </React.Fragment>)}
             </div>
+
             <div className={classnames(skeletonClass, "contest-submit-solution")}>
                 { loading ? <ContestSubmitForm /> : participated && started && <ContestSubmitForm /> }
             </div>
+
             <div className={classnames(skeletonClass, "contest-registration")}>
                 { loading ? <Button text="Fake" /> : !participated && !started && <Button fill disabled={!contest} intent={Intent.PRIMARY} text="Register"/>}
             </div>
