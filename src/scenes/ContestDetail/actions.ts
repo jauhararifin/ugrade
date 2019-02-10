@@ -1,6 +1,6 @@
-import { AppThunkAction } from "../../../stores"
-import { setCurrentContestAnnouncements } from "../../../stores/Contest"
-import { Announcement } from "../../../services/contest/Announcement"
+import { AppThunkAction } from "../../stores"
+import { setCurrentContestAnnouncements } from "../../stores/Contest"
+import { Announcement } from "../../services/contest/Announcement"
 
 export const getContestAnnouncement = (id: number): AppThunkAction<Announcement[]> => {
     return async (dispatch, getState, { contestService }) => {

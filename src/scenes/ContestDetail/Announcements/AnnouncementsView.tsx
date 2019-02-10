@@ -26,7 +26,7 @@ export const AnnouncementsView: SFC<AnnouncementsViewProps> = ({ contest, server
                 { contest && contest.announcements && contest.announcements.length === 0 && <H3>No Announcements Yet</H3> }
 
                 { contest && contest.announcements && contest.announcements.map(announcement => (
-                    <Card className="item" elevation={announcement.read ? Elevation.ZERO : Elevation.TWO}>
+                    <Card key={announcement.id} className="item" elevation={announcement.read ? Elevation.ZERO : Elevation.TWO}>
                         <div className="header">
                             <H3 className="title">{announcement.title}</H3>
                             <p className="info">{

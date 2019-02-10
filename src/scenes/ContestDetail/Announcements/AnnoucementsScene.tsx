@@ -8,7 +8,7 @@ import { Contest, readAnnouncements, Announcement } from "../../../stores/Contes
 import { userOnly } from "../../../helpers/auth"
 import { withServer } from "../../../helpers/server"
 import { AnnouncementsView } from "./AnnouncementsView"
-import { getContestAnnouncement } from "./action"
+import { getContestAnnouncement } from "../actions"
 
 export interface AnnouncementsSceneRoute {
     contestId: string
