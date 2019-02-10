@@ -33,13 +33,19 @@ export interface WithServerState {
 }
 
 export const withServer = <P extends object>(Component: ComponentType<P>): ComponentType<{ serverClock?: Date }> => {
+    const reloadMs = 3 * 1000 // refetch every 5 minutes
     class WithServer extends React.Component<P & WithServerProps, WithServerState> {
-
         private timer?: NodeJS.Timeout
+        private timeToRefresh = reloadMs
         
         constructor(props: P & WithServerProps) {
             super(props)
-            this.state = { serverClock: undefined }
+            if (this.props.serverClock && this.props.localClock) {
+                const currentServerClock = new Date().getTime() - this.props.localClock.getTime() + this.props.serverClock.getTime()
+                this.state = { serverClock: moment(currentServerClock).toDate() }
+            } else {
+                this.state = { serverClock: undefined }
+            }
         }
         
         tick = () => {
@@ -49,10 +55,16 @@ export const withServer = <P extends object>(Component: ComponentType<P>): Compo
             } else {
                 this.setState({ serverClock: undefined })
             }
+            if (--this.timeToRefresh === 0) {
+                this.timeToRefresh = reloadMs
+                this.props.dispatch(getServerClockAction())
+            }
         }
         
         componentDidMount = () => {
-            this.props.dispatch(getServerClockAction())
+            if (!this.props.serverClock || !this.props.localClock) {
+                this.props.dispatch(getServerClockAction())
+            }
             this.timer = setInterval(this.tick, 1000)
         }
         
