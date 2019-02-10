@@ -22,24 +22,35 @@ export interface AppProps {
   location: Location
 }
 
-const App: React.SFC<AppProps> = ({ title, location }) => (
-  <DocumentTitle title={title || "UGrade"}>
-    <TransitionGroup className="eat-them-all">
-      <CSSTransition timeout={300} classNames="fade" key={location.key}>
-        <Switch location={location}>
-          <Route path='/' exact component={Home} />
-          <Route path='/signin' component={SignIn} />
-          <Route path='/signup' component={SignUp} />
-          <Route path='/setting' component={Setting} />
-          <Route path='/account' exact component={MyAccount} />
-          <Route path='/forgot-password' component={ForgotPassword} />
-          <Route path='/contests' exact component={Contests} />
-          <Route path='/contests/:contestId' component={ContestDetail} />
-        </Switch>
-      </CSSTransition>
-    </TransitionGroup>
-  </DocumentTitle>
-)
+const App: React.SFC<AppProps> = ({ title, location }) => {
+  let locationKey = "/"
+  if (location.pathname.match("/signin")) locationKey = "signin"
+  else if (location.pathname.match("/signup")) locationKey = "signup"
+  else if (location.pathname.match("/setting")) locationKey = "setting"
+  else if (location.pathname.match("/account")) locationKey = "account"
+  else if (location.pathname.match("/forgot-password")) locationKey = "forgot-password"
+  else if (location.pathname.match("/contests/.+")) locationKey = "contests/"
+  else if (location.pathname.match("/contests/?")) locationKey = "contests"
+
+  return (
+    <DocumentTitle title={title || "UGrade"}>
+      <TransitionGroup className="eat-them-all">
+        <CSSTransition timeout={300} classNames="fade" key={locationKey}>
+          <Switch location={location}>
+            <Route path='/' exact component={Home} />
+            <Route path='/signin' component={SignIn} />
+            <Route path='/signup' component={SignUp} />
+            <Route path='/setting' component={Setting} />
+            <Route path='/account' exact component={MyAccount} />
+            <Route path='/forgot-password' component={ForgotPassword} />
+            <Route path='/contests' exact component={Contests} />
+            <Route path='/contests/:contestId' component={ContestDetail} />
+          </Switch>
+        </CSSTransition>
+      </TransitionGroup>
+    </DocumentTitle>
+  )
+}
 
 const mapStateToProps = (state: AppState) => ({ title: state.title })
 
