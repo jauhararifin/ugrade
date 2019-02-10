@@ -9,24 +9,19 @@ import { Contest } from "../../../stores/Contest"
 
 export interface ContestOverviewPageProps {
     contest?: Contest
-    rank?: number
-    serverClock?: Date
 }
 
-export const ContestOverviewPage: SFC<ContestOverviewPageProps> = ({ contest, rank, serverClock }) => {
-    return (
-        <div className="contest-overview">
-            { contest ? <ReactMarkdown
-                className="markdown-body"
-                source={contest.description} />
-            : (<React.Fragment>
-                <H2 className="bp3-skeleton">Fake Contest Title</H2>
-                <p className="bp3-skeleton">{"fake content".repeat(100)}</p>
-                <p className="bp3-skeleton">{"fake content".repeat(100)}</p>
-            </React.Fragment>)}
-        </div>
-    )
-
-}
+export const ContestOverviewPage: SFC<ContestOverviewPageProps> = ({ contest }) => (
+    <div className="contest-overview">
+        { contest ? <ReactMarkdown
+            className="markdown-body"
+            source={contest.description} />
+        : (<React.Fragment>
+            <H2 className="bp3-skeleton">Fake Contest Title</H2>
+            <p className="bp3-skeleton">{"fake content".repeat(100)}</p>
+            <p className="bp3-skeleton">{"fake content".repeat(100)}</p>
+        </React.Fragment>)}
+    </div>
+)
 
 export default ContestOverviewPage
