@@ -1,3 +1,18 @@
+
+export interface Problem {
+    id: number
+    slug: string
+    name: string
+    description: string
+}
+
+export interface Announcement {
+    id: string
+    title: string
+    content: string
+    issuedTime: Date
+}
+
 export interface Contest {
     id: number
     slug: string
@@ -8,6 +23,9 @@ export interface Contest {
     finishTime: Date
     freezed: boolean
     registered: boolean
+
+    problems?: Problem[]
+    announcements?: Announcement[]
 }
 
 export interface ContestDetail extends Contest {
