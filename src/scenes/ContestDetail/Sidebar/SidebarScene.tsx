@@ -29,9 +29,19 @@ export interface ContestDetailSceneState {
 export class ContestDetailScene extends Component<ContestDetailSceneProps, ContestDetailSceneState> {
     constructor(props: ContestDetailSceneProps) {
         super(props)
-        this.state = {
-            menu: Menu.Overview
-        }
+
+        let menu = Menu.Overview
+        const match = props.location.pathname.match(/contests\/[0-9]+\/([a-z]+)/)
+        if (match && match[1])
+            switch (match[1]) {
+                case "announcements": menu = Menu.Announcements; break
+                case "problems": menu = Menu.Problems; break
+                case "clarifications": menu = Menu.Clarifications; break
+                case "submissions": menu = Menu.Submissions; break
+                case "scoreboard": menu = Menu.Scoreboard; break
+            }
+
+        this.state = { menu }
     }
     componentDidMount() {
         const contestId = Number(this.props.match.params.contestId)
