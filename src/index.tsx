@@ -10,14 +10,13 @@ import { createStore } from './stores'
 import * as serviceWorker from './serviceWorker'
 import { InMemoryAuthService } from './services/auth'
 import { InMemoryServerStatusService } from './services/serverStatus'
-import { InMemoryContestService } from './services/contest/InMemoryContestService';
+import { InMemoryContestService } from './services/contest/InMemoryContestService'
 
 const history = createBrowserHistory()
-const store = createStore(history, {
-    authService: new InMemoryAuthService(),
-    serverStatusService: new InMemoryServerStatusService(),
-    contestService: new InMemoryContestService()
-})
+const authService           = new InMemoryAuthService()
+const serverStatusService   = new InMemoryServerStatusService()
+const contestService        = new InMemoryContestService(authService)
+const store = createStore(history, { authService, serverStatusService, contestService })
 
 ReactDOM.render(
     <Provider store={store}>

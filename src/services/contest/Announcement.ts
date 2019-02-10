@@ -1,6 +1,7 @@
 export interface Announcement {
-    id: string
+    id: number
     title: string
     content: string
     issuedTime: Date
+    read: boolean
 }

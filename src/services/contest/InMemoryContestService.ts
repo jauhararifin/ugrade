@@ -1,13 +1,17 @@
 import { ContestService } from "./ContestService"
 import { Contest } from "./Contest"
-import { contests } from "./fixtures"
+import { contests, annoucements, AnnouncementExample1 } from "./fixtures"
 import { NoSuchContest } from "./errors"
+import { Announcement } from "./Announcement"
+import { AuthService } from "../auth"
 
 export class InMemoryContestService implements ContestService {
 
+    private authService: AuthService
     private contests: Contest[] = []
 
-    constructor() {
+    constructor(authService: AuthService) {
+        this.authService = authService
         this.contests = contests
     }
 
@@ -25,6 +29,18 @@ export class InMemoryContestService implements ContestService {
         if (contest)
             return contest
         throw new NoSuchContest("No Such Contest")
+    }
+
+    async getAccouncementsByContestId(contestId: number): Promise<Announcement[]> {
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        if (contestId === 0)
+            throw new Error("Connection Error")
+        return annoucements
+    }
+
+    async readAnnouncements(token: string, id: number[]): Promise<void> {
+        const user = this.authService.getMe(token)
+        annoucements.filter(i => i.id in id).forEach(val => val.read = true)
     }
 
 }
