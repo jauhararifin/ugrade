@@ -3,6 +3,7 @@ import { compose } from "redux"
 import { Route, Switch, withRouter, RouteComponentProps } from "react-router"
 
 import ContestOverview from "./ContestOverview"
+import Announcements from "./Announcements"
 import { userOnly } from "../../helpers/auth"
 import { ContestDetailPage } from "./ContestDetailPage"
 import { TransitionGroup, CSSTransition } from "react-transition-group"
@@ -19,6 +20,7 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
                         <Switch location={this.props.location}>
                             <Route path="/contests/:contestId/" exact component={ContestOverview} />
                             <Route path="/contests/:contestId/overview" exact component={ContestOverview}  />
+                            <Route path="/contests/:contestId/announcements" exact component={Announcements}  />
                         </Switch>
                     </CSSTransition>
                 </TransitionGroup>

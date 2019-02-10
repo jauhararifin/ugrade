@@ -1,0 +1,27 @@
+.contests-panel {
+    .contest-content {
+        .contest-announcements {
+            padding: 30px 100px;
+            text-align: left;
+            width: 100%;
+            .header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .item {
+                margin-top: 10px;
+                .header {
+                    display: flex;
+                    margin-bottom: 0px;
+                    justify-content: space-between;
+                    .title {
+                        text-align: left;
+                    }
+                    .info {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+}

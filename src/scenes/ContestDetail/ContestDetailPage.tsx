@@ -16,8 +16,10 @@ export const ContestDetailPage: SFC<ContestDetailPageProps> = ({ children }) => 
             <TopNavigationBar />
             <div className="contests-panel">
                 <Sidebar />
-                <div className="contest-content">
-                    { children }
+                <div className="contest-outer-content">
+                    <div className="contest-content">
+                        { children }
+                    </div>
                 </div>
             </div>
         </div>

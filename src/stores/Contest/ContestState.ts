@@ -7,10 +7,11 @@ export interface Problem {
 }
 
 export interface Announcement {
-    id: string
+    id: number
     title: string
     content: string
     issuedTime: Date
+    read: boolean
 }
 
 export interface Contest {
@@ -28,12 +29,9 @@ export interface Contest {
     announcements?: Announcement[]
 }
 
-export interface ContestDetail extends Contest {
-}
-
 export interface ContestState {
     contests: Contest[]
-    currentContest?: ContestDetail
+    currentContest?: Contest
 }
 
 export const initialValue: ContestState = {
