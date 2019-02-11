@@ -4,7 +4,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
-import './index.css'
+import '@blueprintjs/core/lib/css/blueprint.css'
+import '@blueprintjs/icons/lib/css/blueprint-icons.css'
+
 import App from './scenes/App'
 import { InMemoryAuthService } from './services/auth'
 import { InMemoryContestService } from './services/contest/InMemoryContestService'

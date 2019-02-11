@@ -1,6 +1,7 @@
 import { FormGroup, InputGroup, Label } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
+import classnames from 'classnames'
 
 import './styles.css'
 
@@ -38,7 +39,7 @@ export const MyAccountPage: FunctionComponent<MyAccountPageProps> = ({
 }) => (
   <div className='plain-page'>
     <div className='my-account-page-panel'>
-      <div>
+      <div className={classnames({"bp3-skeleton": loading})}>
         <h2>Account Setting</h2>
       </div>
 
