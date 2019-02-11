@@ -40,7 +40,7 @@ export class InMemoryContestService implements ContestService {
   }
 
   async readAnnouncements(token: string, id: number[]): Promise<void> {
-    const user = this.authService.getMe(token)
+    await this.authService.getMe(token)
     annoucements.filter(i => i.id in id).forEach(val => (val.read = true))
   }
 }

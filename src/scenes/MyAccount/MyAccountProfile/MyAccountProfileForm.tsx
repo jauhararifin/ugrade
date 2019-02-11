@@ -5,7 +5,6 @@ import {
   HTMLSelect,
   InputGroup,
   Intent,
-  Label,
   TextArea,
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'

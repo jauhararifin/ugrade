@@ -14,7 +14,7 @@ export const signUpAction = (
   email: string,
   password: string
 ): AppThunkAction<SignUpResult> => {
-  return async (dispatch, getState, { authService }) => {
+  return async (dispatch, _getState, { authService }) => {
     try {
       await authService.register(username, name, email, password)
       dispatch(push('/signin'))
