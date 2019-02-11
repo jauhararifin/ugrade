@@ -111,12 +111,12 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
 export const ContestArkav4QualAnnouncements = annoucements.slice()
 
 export const ContestArkav4QualProblems = [
-  problem1,
-  problem2,
-  problem3,
-  problem4,
-  problem5,
-  problem6,
+  problem1.id,
+  problem2.id,
+  problem3.id,
+  problem4.id,
+  problem5.id,
+  problem6.id,
 ]
 
 export const ContestArkav4Final: ContestDetail = {
@@ -137,14 +137,14 @@ export const ContestArkav4Final: ContestDetail = {
 export const ContestArkav4FinalAnnouncements = annoucements.slice()
 
 export const ContestArkav4FinalProblems = [
-  problem7,
-  problem8,
-  problem9,
-  problem10,
-  problem11,
-  problem12,
-  problem13,
-  problem14,
+  problem7.id,
+  problem8.id,
+  problem9.id,
+  problem10.id,
+  problem11.id,
+  problem12.id,
+  problem13.id,
+  problem14.id,
 ]
 
 const ContestArkav5Qual: ContestDetail = {
@@ -163,12 +163,12 @@ const ContestArkav5Qual: ContestDetail = {
 export const ContestArkav5QualAnnouncements = annoucements.slice()
 
 export const ContestArkav5QualProblems = [
-  problem1,
-  problem2,
-  problem3,
-  problem4,
-  problem5,
-  problem6,
+  problem1.id,
+  problem2.id,
+  problem3.id,
+  problem4.id,
+  problem5.id,
+  problem6.id,
 ]
 
 const ContestArkav5Final: ContestDetail = {
@@ -189,14 +189,14 @@ const ContestArkav5Final: ContestDetail = {
 export const ContestArkav5FinalAnnouncements = annoucements.slice()
 
 export const ContestArkav5FinalProblems = [
-  problem7,
-  problem8,
-  problem9,
-  problem10,
-  problem11,
-  problem12,
-  problem13,
-  problem14,
+  problem7.id,
+  problem8.id,
+  problem9.id,
+  problem10.id,
+  problem11.id,
+  problem12.id,
+  problem13.id,
+  problem14.id,
 ]
 
 export const contests: Contest[] = [

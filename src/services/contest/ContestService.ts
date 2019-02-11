@@ -1,4 +1,3 @@
-import { Problem } from '../problem'
 import { Announcement } from './Announcement'
 import { Contest, ContestDetail } from './Contest'
 
@@ -7,6 +6,10 @@ export type AnnouncementSubscribeCallback = (
 ) => any
 
 export type AnnouncementUbsubscribeFunction = () => any
+
+export type ProblemIdsSubscribeCallback = (problemIds: number[]) => any
+
+export type ProblemIdsUnsubscribeFunction = () => any
 
 export interface ContestService {
   getAllContests(): Promise<Contest[]>
@@ -25,5 +28,11 @@ export interface ContestService {
     id: number[]
   ): Promise<void>
 
-  getContestProblems(token: string, contestId: number): Promise<Problem[]>
+  getContestProblemIds(token: string, contestId: number): Promise<number[]>
+
+  subscribeContestProblemIds(
+    token: string,
+    contestId: number,
+    callback: ProblemIdsSubscribeCallback
+  ): ProblemIdsUnsubscribeFunction
 }

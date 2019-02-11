@@ -1,11 +1,12 @@
 import { AuthService, ForbiddenActionError } from '../auth'
-import { Problem } from '../problem'
 import { Announcement } from './Announcement'
 import { Contest, ContestDetail } from './Contest'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
   ContestService,
+  ProblemIdsSubscribeCallback,
+  ProblemIdsUnsubscribeFunction,
 } from './ContestService'
 import { NoSuchContest } from './errors'
 import {
@@ -17,7 +18,7 @@ import {
 export class InMemoryContestService implements ContestService {
   private authService: AuthService
   private contests: ContestDetail[] = []
-  private contestProblemsMap: { [id: number]: Problem[] } = {}
+  private contestProblemsMap: { [id: number]: number[] } = {}
   private contestAnnouncementsMap: { [id: number]: Announcement[] } = {}
 
   constructor(authService: AuthService) {
@@ -91,10 +92,33 @@ export class InMemoryContestService implements ContestService {
     }
   }
 
-  async getContestProblems(
+  subscribeContestProblemIds(
+    token: string,
+    contestId: number,
+    callback: ProblemIdsSubscribeCallback
+  ): ProblemIdsUnsubscribeFunction {
+    const runThis = async () => {
+      const arr = await this.getContestProblemIds(token, contestId)
+      if (arr.length > 0) {
+        const first = arr.shift() as number
+        arr.push(first)
+      }
+      this.contestProblemsMap[contestId] = arr
+
+      const problemIds = await this.getContestProblemIds(token, contestId)
+      callback(problemIds)
+    }
+
+    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    return () => {
+      clearInterval(timeout)
+    }
+  }
+
+  async getContestProblemIds(
     token: string,
     contestId: number
-  ): Promise<Problem[]> {
+  ): Promise<number[]> {
     await this.authService.getMe(token)
     const contest = await this.getContestDetailById(contestId)
     if (!contest.registered) {
