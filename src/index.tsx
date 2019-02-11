@@ -4,7 +4,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
+// tslint:disable-next-line:no-submodule-imports
 import '@blueprintjs/core/lib/css/blueprint.css'
+// tslint:disable-next-line:no-submodule-imports
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 
 import App from './scenes/App'

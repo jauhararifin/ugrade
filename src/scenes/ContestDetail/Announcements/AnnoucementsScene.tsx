@@ -23,10 +23,10 @@ export interface AnnouncementsSceneProps
 
 export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
   componentDidMount() {
-    this.readAllAnnouncements()
+    this.readAllAnnouncements().catch(null)
   }
   componentDidUpdate() {
-    this.readAllAnnouncements()
+    this.readAllAnnouncements().catch(null)
   }
   readAllAnnouncements = async () => {
     if (this.props.contest && this.props.contest.announcements) {
