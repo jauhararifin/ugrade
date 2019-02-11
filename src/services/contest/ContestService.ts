@@ -1,10 +1,10 @@
-import { Contest } from "./Contest"
-import { Announcement } from "./Announcement"
+import { Announcement } from './Announcement'
+import { Contest } from './Contest'
 
 export interface ContestService {
-    getAllContests(): Promise<Contest[]>
-    getContestById(id: number): Promise<Contest>
-    getAccouncementsByContestId(contestId: number): Promise<Announcement[]>
+  getAllContests(): Promise<Contest[]>
+  getContestById(id: number): Promise<Contest>
+  getAccouncementsByContestId(contestId: number): Promise<Announcement[]>
 
-    readAnnouncements(token: string, id: number[]): Promise<void>
+  readAnnouncements(token: string, id: number[]): Promise<void>
 }

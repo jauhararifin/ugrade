@@ -1,3 +1,3 @@
 export interface ServerStatusService {
-    getClock(): Promise<Date>
+  getClock(): Promise<Date>
 }

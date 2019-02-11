@@ -1,12 +1,13 @@
-import { Contest } from "./Contest"
-import { Announcement } from "./Announcement";
+import { Announcement } from './Announcement'
+import { Contest } from './Contest'
 
 const ContestArkav4Qual: Contest = {
-    id: 1,
-    slug: 'arkavidia-40-qualification',
-    name: 'Penyisihan Competitive Programming Arkavidia 4.0',
-    shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    description: `# Arkavidia
+  id: 1,
+  slug: 'arkavidia-40-qualification',
+  name: 'Penyisihan Competitive Programming Arkavidia 4.0',
+  shortDescription:
+    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  description: `# Arkavidia
 
 Kompetisi merupakan salah satu main event pada Arkavidia Informatics & IT Festival yang diselenggarakan untuk menggali dan mengasah potensipotensi yang ada untuk berani unjuk diri berinovasi dan menghasilkan karya terbaik dalam bidang teknologi informasi yang diharapkan dapat menjadi jawaban dalam permasalahan perekonomian di Indonesia. Terdapat empat kompetisi yang diselenggarakan dalam Arkavidia Informatics & IT Festival, yakni Programming Contest, Capture The Flag, Technovation, serta Arkalogica.
 
@@ -45,59 +46,68 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
 11. Panitia berhak mendiskualikasi tim yang melakukan tindak kecurangan maupun pelanggaran terhadap aturan kompetisi.
 12. Panitia berhak untuk mencabut gelar juara dari pemenang jika ditemukan kecurangan atau pelanggaran hukum dalam karya yang dilombakan ataupun dalam proses pelaksanaan perlombaan.
 13. Peserta dilarang bekerjasama dengan peserta/tim lain dalam bentuk apapun.`,
-    registered: true,
-    startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 60 * 5),
-    freezed: false,
-    finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10)
+  registered: true,
+  startTime: new Date(
+    Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 60 * 5
+  ),
+  freezed: false,
+  finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
 }
 
 const ContestArkav4Final: Contest = {
-    id: 2,
-    slug: 'arkavidia-40-qualification',
-    name: 'Final Competitive Programming Arkavidia 4.0',
-    shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    description: ContestArkav4Qual.description,
-    startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 60 * 5),
-    freezed: false,
-    registered: false,
-    finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5)
+  id: 2,
+  slug: 'arkavidia-40-qualification',
+  name: 'Final Competitive Programming Arkavidia 4.0',
+  shortDescription:
+    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  description: ContestArkav4Qual.description,
+  startTime: new Date(
+    Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 60 * 5
+  ),
+  freezed: false,
+  registered: false,
+  finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
 }
 
 const ContestArkav5Qual: Contest = {
-    id: 3,
-    slug: 'arkavidia-50-qualification',
-    name: 'Penyisihan Competitive Programming Arkavidia 5.0',
-    shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    description: ContestArkav4Qual.description,
-    startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
-    freezed: true,
-    registered: true,
-    finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5)
+  id: 3,
+  slug: 'arkavidia-50-qualification',
+  name: 'Penyisihan Competitive Programming Arkavidia 5.0',
+  shortDescription:
+    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  description: ContestArkav4Qual.description,
+  startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
+  freezed: true,
+  registered: true,
+  finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
 }
 
 const ContestArkav5Final: Contest = {
-    id: 4,
-    slug: 'arkavidia-50-final',
-    name: 'Final Competitive Programming Arkavidia 5.0',
-    shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-    description: ContestArkav4Qual.description,
-    startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
-    freezed: false,
-    registered: false,
-    finishTime: new Date(Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5)
+  id: 4,
+  slug: 'arkavidia-50-final',
+  name: 'Final Competitive Programming Arkavidia 5.0',
+  shortDescription:
+    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  description: ContestArkav4Qual.description,
+  startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
+  freezed: false,
+  registered: false,
+  finishTime: new Date(
+    Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
+  ),
 }
 
 export const contests: Contest[] = [
-    ContestArkav4Qual,
-    ContestArkav4Final,
-    ContestArkav5Qual,
-    ContestArkav5Final
+  ContestArkav4Qual,
+  ContestArkav4Final,
+  ContestArkav5Qual,
+  ContestArkav5Final,
 ]
 
 export const AnnouncementExample1: Announcement = {
-    id: 1,
-    title: `Term and Condition`,
-    content: `By competing in TLX contests, you agree that:
+  id: 1,
+  title: `Term and Condition`,
+  content: `By competing in TLX contests, you agree that:
 
 - You will not collaborate with any other contestants.
 - You will not use fake or multiple TLX accounts, other than your own account.
@@ -106,28 +116,28 @@ export const AnnouncementExample1: Announcement = {
 Failure to comply with the above rules can result to a disqualification or ban.
     
 Enjoy the contest!`,
-    issuedTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
-    read: true
+  issuedTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
+  read: true,
 }
 
 export const AnnouncementExample2: Announcement = {
-    id: 2,
-    title: `Scoreboard`,
-    content: `Ada masalah dengan scoreboard sehingga untuk sementara scoreboard tidak dapat ditampilkan. Kami sedang berusaha memperbaikinya, mohon maaf atas ketidaknyamanannya. Terima kasih.`,
-    issuedTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    read: true
+  id: 2,
+  title: `Scoreboard`,
+  content: `Ada masalah dengan scoreboard sehingga untuk sementara scoreboard tidak dapat ditampilkan. Kami sedang berusaha memperbaikinya, mohon maaf atas ketidaknyamanannya. Terima kasih.`,
+  issuedTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  read: true,
 }
 
 export const AnnouncementExample3: Announcement = {
-    id: 3,
-    title: `Scoreboard Sudah Muncul`,
-    content: `Scoreboard sudah bisa ditampilkan. Terima kasih atas kesabarannya!`,
-    issuedTime: new Date(Date.now() - 1 * 60 * 60 * 1000),
-    read: false
+  id: 3,
+  title: `Scoreboard Sudah Muncul`,
+  content: `Scoreboard sudah bisa ditampilkan. Terima kasih atas kesabarannya!`,
+  issuedTime: new Date(Date.now() - 1 * 60 * 60 * 1000),
+  read: false,
 }
 
 export const annoucements: Announcement[] = [
-    AnnouncementExample1,
-    AnnouncementExample2,
-    AnnouncementExample3
+  AnnouncementExample1,
+  AnnouncementExample2,
+  AnnouncementExample3,
 ]
