@@ -1,6 +1,7 @@
 import { Reducer } from 'redux'
 import {
   ContestActionReadAnnouncements,
+  ContestActionSetCurrentContest,
   ContestActionSetCurrentContestAnnouncements,
   ContestActionType,
 } from './ContestAction'
@@ -18,10 +19,7 @@ export const contestReducer: Reducer<ContestState> = (
       }
 
     case ContestActionType.SetCurrentContest:
-      return {
-        ...state,
-        currentContest: action.contest,
-      }
+      return setCurrentContest(state, action as ContestActionSetCurrentContest)
 
     case ContestActionType.SetCurrentContestAnnouncements:
       return setCurrentContestAnnouncements(
@@ -33,6 +31,23 @@ export const contestReducer: Reducer<ContestState> = (
       return readAnnouncements(state, action as ContestActionReadAnnouncements)
   }
   return state
+}
+
+function setCurrentContest(
+  state: ContestState,
+  action: ContestActionSetCurrentContest
+): ContestState {
+  return {
+    ...state,
+    currentContest: {
+      ...action.contest,
+      announcements: action.contest.announcements
+        ? action.contest.announcements
+            .sort((a, b) => b.issuedTime.getTime() - a.issuedTime.getTime())
+            .slice()
+        : undefined,
+    },
+  }
 }
 
 function setCurrentContestAnnouncements(
