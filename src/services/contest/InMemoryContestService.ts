@@ -54,7 +54,8 @@ export class InMemoryContestService implements ContestService {
 
   async readAnnouncements(token: string, id: number[]): Promise<void> {
     await this.authService.getMe(token)
-    annoucements
+    this.contests
+      .flatMap(contest => contest.announcements || [])
       .filter(i => id.includes(i.id))
       .forEach(val => (val.read = true))
   }
