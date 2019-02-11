@@ -40,7 +40,7 @@ function setCurrentContestAnnouncements(
   action: ContestActionSetCurrentContestAnnouncements
 ): ContestState {
   const currentContest = state.currentContest
-  if (currentContest) {
+  if (currentContest && currentContest.id === action.contestId) {
     if (!currentContest.announcements) currentContest.announcements = []
 
     const contestIdAccouncement: { [id: number]: Announcement } = {}
