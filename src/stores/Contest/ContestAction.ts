@@ -12,32 +12,15 @@ export interface ContestActionSetContests {
   contests: Contest[]
 }
 
-export interface ContestActionSetCurrentContest {
-  type: ContestActionType.SetCurrentContest
-  contest: Contest
-}
-
-export interface ContestActionSetCurrentContestAnnouncements {
-  type: ContestActionType.SetCurrentContestAnnouncements
-  contestId: number
-  announcements: Announcement[]
-}
-
-export interface ContestActionReadAnnouncements {
-  type: ContestActionType.ReadAnnouncements
-  announcements: number[]
-}
-
-export type ContestAction =
-  | ContestActionSetContests
-  | ContestActionSetCurrentContest
-  | ContestActionSetCurrentContestAnnouncements
-  | ContestActionReadAnnouncements
-
 export const setContests = (contests: Contest[]): ContestActionSetContests => ({
   type: ContestActionType.SetContests,
   contests,
 })
+
+export interface ContestActionSetCurrentContest {
+  type: ContestActionType.SetCurrentContest
+  contest: Contest
+}
 
 export const setCurrentContest = (
   contest: Contest
@@ -45,6 +28,12 @@ export const setCurrentContest = (
   type: ContestActionType.SetCurrentContest,
   contest,
 })
+
+export interface ContestActionSetCurrentContestAnnouncements {
+  type: ContestActionType.SetCurrentContestAnnouncements
+  contestId: number
+  announcements: Announcement[]
+}
 
 export const setCurrentContestAnnouncements = (
   contest: number | Contest,
@@ -55,9 +44,20 @@ export const setCurrentContestAnnouncements = (
   announcements,
 })
 
+export interface ContestActionReadAnnouncements {
+  type: ContestActionType.ReadAnnouncements
+  announcements: number[]
+}
+
 export const readAnnouncements = (
   announcements: number[]
 ): ContestActionReadAnnouncements => ({
   type: ContestActionType.ReadAnnouncements,
   announcements,
 })
+
+export type ContestAction =
+  | ContestActionSetContests
+  | ContestActionSetCurrentContest
+  | ContestActionSetCurrentContestAnnouncements
+  | ContestActionReadAnnouncements

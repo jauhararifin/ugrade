@@ -18,12 +18,12 @@ export interface Contest {
   slug: string
   name: string
   shortDescription: string
-  description: string
   startTime: Date
   finishTime: Date
   freezed: boolean
   registered: boolean
 
+  description?: string
   problems?: Problem[]
   announcements?: Announcement[]
 }
