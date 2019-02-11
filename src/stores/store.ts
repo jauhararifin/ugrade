@@ -3,7 +3,6 @@ import {
   applyMiddleware,
   compose,
   createStore as createReduxStore,
-  Middleware,
 } from 'redux'
 import logger from 'redux-logger'
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
