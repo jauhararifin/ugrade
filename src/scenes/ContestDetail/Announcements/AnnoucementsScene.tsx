@@ -30,13 +30,18 @@ export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
   }
   readAllAnnouncements = async () => {
     if (this.props.contest && this.props.contest.announcements) {
-      await new Promise(resolve => setTimeout(resolve, 3000)) // read after 5 seconds
+      await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
       const announcements = this.props.contest.announcements.filter(
         annoucement => !annoucement.read
       )
       if (announcements.length > 0) {
         this.props
-          .dispatch(readAnnouncementsAction(announcements.map(it => it.id)))
+          .dispatch(
+            readAnnouncementsAction(
+              this.props.contest.id,
+              announcements.map(it => it.id)
+            )
+          )
           .catch(null)
       }
     }

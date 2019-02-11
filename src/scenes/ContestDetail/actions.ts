@@ -2,20 +2,36 @@ import { Announcement } from '../../services/contest/Announcement'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
+  ProblemIdsSubscribeCallback,
+  ProblemIdsUnsubscribeFunction,
 } from '../../services/contest/ContestService'
+import { Problem } from '../../services/problem'
 import { AppThunkAction } from '../../stores'
 import {
   Contest,
   readAnnouncements,
   setCurrentContest,
   setCurrentContestAnnouncements,
+  setCurrentContestProblems,
 } from '../../stores/Contest'
 
 export const getContestById = (id: number): AppThunkAction<Contest> => {
   return async (dispatch, _getState, { contestService }) => {
-    const contest = await contestService.getContestById(id)
+    const contest = await contestService.getContestDetailById(id)
     dispatch(setCurrentContest(contest))
     return contest
+  }
+}
+
+export const getContestAnnouncements = (
+  contestId: number
+): AppThunkAction<Announcement[]> => {
+  return async (dispatch, _getState, { contestService }) => {
+    const announcements = await contestService.getContestAnnouncements(
+      contestId
+    )
+    dispatch(setCurrentContestAnnouncements(contestId, announcements))
+    return announcements
   }
 }
 
@@ -24,26 +40,55 @@ export const subscribeContestAnnouncements = (
   callback: AnnouncementSubscribeCallback
 ): AppThunkAction<AnnouncementUbsubscribeFunction> => {
   return async (_dispatch, _getState, { contestService }) => {
-    return contestService.subscribeAnnouncements(contest.id, callback)
-  }
-}
-
-export const getContestAnnouncement = (
-  id: number
-): AppThunkAction<Announcement[]> => {
-  return async (dispatch, _getState, { contestService }) => {
-    const announcements = await contestService.getAccouncementsByContestId(id)
-    dispatch(setCurrentContestAnnouncements(id, announcements))
-    return announcements
+    return contestService.subscribeContestAnnouncements(contest.id, callback)
   }
 }
 
 export const readAnnouncementsAction = (
+  contestId: number,
   ids: number[]
 ): AppThunkAction<void> => {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    await contestService.readAnnouncements(token, ids)
+    await contestService.readContestAnnouncements(token, contestId, ids)
     dispatch(readAnnouncements(ids))
+  }
+}
+
+export const getContestProblemsByIds = (
+  contestId: number,
+  problemIds: number[]
+): AppThunkAction<Problem[]> => {
+  return async (dispatch, _getState, { problemService }) => {
+    const problems = await problemService.getProblemByIds(problemIds)
+    dispatch(setCurrentContestProblems(contestId, problems, problemIds))
+    return problems
+  }
+}
+
+export const getContestProblems = (
+  contestId: number
+): AppThunkAction<Problem[]> => {
+  return async (dispatch, getState, { contestService }) => {
+    const token = getState().auth.token
+    const problemIds = await contestService.getContestProblemIds(
+      token,
+      contestId
+    )
+    return dispatch(getContestProblemsByIds(contestId, problemIds))
+  }
+}
+
+export const subscribeContestProblemIds = (
+  contest: Contest,
+  callback: ProblemIdsSubscribeCallback
+): AppThunkAction<ProblemIdsUnsubscribeFunction> => {
+  return async (_dispatch, getState, { contestService }) => {
+    const token = getState().auth.token
+    return contestService.subscribeContestProblemIds(
+      token,
+      contest.id,
+      callback
+    )
   }
 }

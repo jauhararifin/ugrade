@@ -10,13 +10,17 @@ import { Announcement } from '../../services/contest/Announcement'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import { Contest, setCurrentContestAnnouncements } from '../../stores/Contest'
 import {
-  getContestAnnouncement,
+  getContestAnnouncements,
   getContestById,
+  getContestProblems,
+  getContestProblemsByIds,
   subscribeContestAnnouncements,
+  subscribeContestProblemIds,
 } from './actions'
 import Announcements from './Announcements'
 import { ContestDetailPage } from './ContestDetailPage'
 import ContestOverview from './ContestOverview'
+import Problem from './Problem'
 
 export interface ContestDetailSceneRoute {
   contestId: string
@@ -31,21 +35,28 @@ export interface ContestDetailSceneProps
 
 export class ContestDetailScene extends Component<ContestDetailSceneProps> {
   private unsubscribeContestAnnouncement: () => any
+  private unsubscribeContestProblemIds: () => any
 
   constructor(props: ContestDetailSceneProps) {
     super(props)
     this.unsubscribeContestAnnouncement = () => null
+    this.unsubscribeContestProblemIds = () => null
   }
 
   async componentDidMount() {
     const contestId = Number(this.props.match.params.contestId)
     if (!this.props.contest) {
       const contest = await this.props.dispatch(getContestById(contestId))
-      await this.props.dispatch(getContestAnnouncement(contest.id))
-      this.unsubscribeContestAnnouncement = await this.props.dispatch(
-        subscribeContestAnnouncements(contest, this.announcemnetIssued)
-      )
+      this.initializeAnnouncements(contest)
+      this.initializeProblems(contest)
     }
+  }
+
+  initializeAnnouncements = async (contest: Contest) => {
+    await this.props.dispatch(getContestAnnouncements(contest.id))
+    this.unsubscribeContestAnnouncement = await this.props.dispatch(
+      subscribeContestAnnouncements(contest, this.announcemnetIssued)
+    )
   }
 
   announcemnetIssued = (announcements: Announcement[]) => {
@@ -57,8 +68,24 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
     )
   }
 
+  initializeProblems = async (contest: Contest) => {
+    await this.props.dispatch(getContestProblems(contest.id))
+    this.unsubscribeContestProblemIds = await this.props.dispatch(
+      subscribeContestProblemIds(contest, this.problemIdsUpdated)
+    )
+  }
+
+  problemIdsUpdated = (problemIds: number[]) => {
+    if (this.props.contest) {
+      this.props.dispatch(
+        getContestProblemsByIds(this.props.contest.id, problemIds)
+      )
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribeContestAnnouncement()
+    this.unsubscribeContestProblemIds()
   }
 
   render() {
@@ -85,6 +112,11 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
                 path='/contests/:contestId/announcements'
                 exact={true}
                 component={Announcements}
+              />
+              <Route
+                path='/contests/:contestId/problems'
+                exact={true}
+                component={Problem}
               />
             </Switch>
           </CSSTransition>

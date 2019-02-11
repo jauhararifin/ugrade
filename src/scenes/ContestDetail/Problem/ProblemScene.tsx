@@ -20,7 +20,8 @@ export interface AnnouncementsSceneProps
 
 export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
   render() {
-    return <ProblemListView />
+    const { contest } = this.props
+    return <ProblemListView problems={contest && contest.problems} />
   }
 }
 

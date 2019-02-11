@@ -22,8 +22,8 @@ export class ContestsScene extends Component<ContestsSceneProps> {
     contests: [],
   }
 
-  componentDidMount = () => {
-    this.props.dispatch(getContestsAction()).catch(null)
+  async componentDidMount() {
+    await this.props.dispatch(getContestsAction())
   }
 
   handleContestChoose = (contest: Contest) => {
