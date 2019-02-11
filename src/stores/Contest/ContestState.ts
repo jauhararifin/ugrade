@@ -36,6 +36,8 @@ export interface Contest {
   description?: string
   problems?: Problem[]
   announcements?: Announcement[]
+
+  currentProblem?: Problem
 }
 
 export interface ContestState {

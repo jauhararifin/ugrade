@@ -4,6 +4,7 @@ import {
   ContestActionReadAnnouncements,
   ContestActionSetCurrentContest,
   ContestActionSetCurrentContestAnnouncements,
+  ContestActionSetCurrentContestCurrentProblem,
   ContestActionSetCurrentContestProblems,
   ContestActionType,
 } from './ContestAction'
@@ -33,6 +34,12 @@ export const contestReducer: Reducer<ContestState> = (
       return setCurrentContestProblems(
         state,
         action as ContestActionSetCurrentContestProblems
+      )
+
+    case ContestActionType.SetCurrentContestCurrentProblem:
+      return setCurrentContestCurrentProblem(
+        state,
+        action as ContestActionSetCurrentContestCurrentProblem
       )
 
     case ContestActionType.ReadAnnouncements:
@@ -117,6 +124,32 @@ function setCurrentContestProblems(
       currentContest: {
         ...currentContest,
         problems: result,
+      },
+    }
+  }
+  return { ...state }
+}
+
+function setCurrentContestCurrentProblem(
+  state: ContestState,
+  action: ContestActionSetCurrentContestCurrentProblem
+): ContestState {
+  const currentContest = state.currentContest
+  if (currentContest && currentContest.id === action.contestId) {
+    let resultProblem
+    if (typeof action.problem === 'number') {
+      resultProblem = (currentContest.problems || [])
+        .slice()
+        .filter(prob => prob.id === action.problem)
+        .pop()
+    } else {
+      resultProblem = action.problem
+    }
+    return {
+      ...state,
+      currentContest: {
+        ...currentContest,
+        currentProblem: resultProblem as Problem,
       },
     }
   }

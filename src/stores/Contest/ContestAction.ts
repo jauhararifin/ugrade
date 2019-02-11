@@ -5,6 +5,7 @@ export enum ContestActionType {
   SetCurrentContest = 'CONTEST_SET_CURRENT_CONTEST',
   SetCurrentContestAnnouncements = 'CONTEST_SET_CURRENT_CONTEST_ANNOUNCEMENTS',
   SetCurrentContestProblems = 'CONTEST_SET_CURRENT_CONTEST_PROBLEMS',
+  SetCurrentContestCurrentProblem = 'CONTEST_SET_CURRENT_CONTEST_CURRENT_PROBLEM',
   ReadAnnouncements = 'CONTEST_READ_ANNOUNCEMENTS',
 }
 
@@ -63,6 +64,21 @@ export const setCurrentContestProblems = (
   problemOrder,
 })
 
+export interface ContestActionSetCurrentContestCurrentProblem {
+  type: ContestActionType.SetCurrentContestCurrentProblem
+  contestId: number
+  problem: number | Problem
+}
+
+export const setCurrentContestCurrentProblem = (
+  contest: number | Contest,
+  problem: number | Problem
+): ContestActionSetCurrentContestCurrentProblem => ({
+  type: ContestActionType.SetCurrentContestCurrentProblem,
+  contestId: typeof contest === 'number' ? contest : contest.id,
+  problem,
+})
+
 export interface ContestActionReadAnnouncements {
   type: ContestActionType.ReadAnnouncements
   announcements: number[]
@@ -80,4 +96,5 @@ export type ContestAction =
   | ContestActionSetCurrentContest
   | ContestActionSetCurrentContestAnnouncements
   | ContestActionSetCurrentContestProblems
+  | ContestActionSetCurrentContestCurrentProblem
   | ContestActionReadAnnouncements
