@@ -1,25 +1,31 @@
-import { AuthService } from '../auth'
+import { AuthService, ForbiddenActionError } from '../auth'
+import { Problem } from '../problem'
 import { Announcement } from './Announcement'
-import { Contest } from './Contest'
+import { Contest, ContestDetail } from './Contest'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
   ContestService,
 } from './ContestService'
 import { NoSuchContest } from './errors'
-import { annoucements, contests } from './fixtures'
+import {
+  contestAnnouncementsMap,
+  contestProblemsMap,
+  contests,
+} from './fixtures'
 
 export class InMemoryContestService implements ContestService {
   private authService: AuthService
-  private contests: Contest[] = []
+  private contests: ContestDetail[] = []
+  private contestProblemsMap: { [id: number]: Problem[] } = {}
+  private contestAnnouncementsMap: { [id: number]: Announcement[] } = {}
 
   constructor(authService: AuthService) {
     this.authService = authService
 
-    this.contests = contests
-    this.contests.forEach(
-      contest => (contest.announcements = annoucements.slice())
-    )
+    this.contests = contests.slice()
+    this.contestProblemsMap = { ...contestProblemsMap }
+    this.contestAnnouncementsMap = { ...contestAnnouncementsMap }
   }
 
   async getAllContests(): Promise<Contest[]> {
@@ -27,7 +33,7 @@ export class InMemoryContestService implements ContestService {
     return this.contests
   }
 
-  async getContestById(id: number): Promise<Contest> {
+  async getContestDetailById(id: number): Promise<ContestDetail> {
     await new Promise(resolve => setTimeout(resolve, 1500))
     if (id === 0) throw new Error('Connection Error')
 
@@ -39,28 +45,26 @@ export class InMemoryContestService implements ContestService {
     throw new NoSuchContest('No Such Contest')
   }
 
-  async getAccouncementsByContestId(
-    contestId: number
-  ): Promise<Announcement[]> {
+  async getContestAnnouncements(contestId: number): Promise<Announcement[]> {
     await new Promise(resolve => setTimeout(resolve, 1500))
     if (contestId === 0) throw new Error('Connection Error')
-    if (!this.contests[contestId]) throw new NoSuchContest('No Such Contest')
-    const contest = this.contests[contestId]
-    if (contest.announcements) {
-      return contest.announcements.slice()
-    }
-    return []
+    await this.getContestDetailById(contestId)
+    return this.contestAnnouncementsMap[contestId].slice()
   }
 
-  async readAnnouncements(token: string, id: number[]): Promise<void> {
+  async readContestAnnouncements(
+    token: string,
+    contestId: number,
+    id: number[]
+  ): Promise<void> {
     await this.authService.getMe(token)
-    this.contests
-      .flatMap(contest => contest.announcements || [])
+    await this.getContestDetailById(contestId)
+    this.contestAnnouncementsMap[contestId]
       .filter(i => id.includes(i.id))
       .forEach(val => (val.read = true))
   }
 
-  subscribeAnnouncements(
+  subscribeContestAnnouncements(
     contestId: number,
     callback: AnnouncementSubscribeCallback
   ): AnnouncementUbsubscribeFunction {
@@ -73,11 +77,11 @@ export class InMemoryContestService implements ContestService {
         read: false,
       }
 
-      const arr = (this.contests[contestId].announcements || []).slice()
+      const arr = await this.getContestAnnouncements(contestId)
       arr.push(newAnnouncement)
-      this.contests[contestId].announcements = arr
+      this.contestAnnouncementsMap[contestId] = arr
 
-      const announcements = await this.getAccouncementsByContestId(contestId)
+      const announcements = await this.getContestAnnouncements(contestId)
       callback(announcements)
     }
 
@@ -85,5 +89,17 @@ export class InMemoryContestService implements ContestService {
     return () => {
       clearInterval(timeout)
     }
+  }
+
+  async getContestProblems(
+    token: string,
+    contestId: number
+  ): Promise<Problem[]> {
+    await this.authService.getMe(token)
+    const contest = await this.getContestDetailById(contestId)
+    if (!contest.registered) {
+      throw new ForbiddenActionError('Cannot access this contest problems')
+    }
+    return this.contestProblemsMap[contestId].slice()
   }
 }

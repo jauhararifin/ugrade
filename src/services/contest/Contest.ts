@@ -1,6 +1,3 @@
-import { Problem } from '../problem/Problem'
-import { Announcement } from './Announcement'
-
 export interface Contest {
   id: number
   slug: string
@@ -11,7 +8,8 @@ export interface Contest {
   freezed: boolean
   finishTime: Date
   registered: boolean
+}
 
-  problems?: Problem[]
-  announcements?: Announcement[]
+export interface ContestDetail extends Contest {
+  description: string
 }

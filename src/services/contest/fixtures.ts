@@ -15,9 +15,47 @@ import {
   problem9,
 } from '../problem/fixtures'
 import { Announcement } from './Announcement'
-import { Contest } from './Contest'
+import { Contest, ContestDetail } from './Contest'
 
-const ContestArkav4Qual: Contest = {
+export const AnnouncementExample1: Announcement = {
+  id: 1,
+  title: `Term and Condition`,
+  content: `By competing in TLX contests, you agree that:
+
+- You will not collaborate with any other contestants.
+- You will not use fake or multiple TLX accounts, other than your own account.
+- You will not try to hack or attack the contest system in any way.
+
+Failure to comply with the above rules can result to a disqualification or ban.
+    
+Enjoy the contest!`,
+  issuedTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
+  read: true,
+}
+
+export const AnnouncementExample2: Announcement = {
+  id: 2,
+  title: `Scoreboard`,
+  content: `Ada masalah dengan scoreboard sehingga untuk sementara scoreboard tidak dapat ditampilkan. Kami sedang berusaha memperbaikinya, mohon maaf atas ketidaknyamanannya. Terima kasih.`,
+  issuedTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  read: true,
+}
+
+export const AnnouncementExample3: Announcement = {
+  id: 3,
+  title: `Scoreboard Sudah Muncul`,
+  content: `Scoreboard sudah bisa ditampilkan. Terima kasih atas kesabarannya!`,
+  issuedTime: new Date(Date.now() - 1 * 60 * 60 * 1000),
+  read: false,
+}
+
+export const annoucements: Announcement[] = [
+  AnnouncementExample1,
+  AnnouncementExample2,
+  AnnouncementExample3,
+]
+
+export const ContestArkav4Qual: ContestDetail = {
   id: 1,
   slug: 'arkavidia-40-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 4.0',
@@ -68,10 +106,20 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
-  problems: [problem1, problem2, problem3, problem4, problem5, problem6],
 }
 
-const ContestArkav4Final: Contest = {
+export const ContestArkav4QualAnnouncements = annoucements.slice()
+
+export const ContestArkav4QualProblems = [
+  problem1,
+  problem2,
+  problem3,
+  problem4,
+  problem5,
+  problem6,
+]
+
+export const ContestArkav4Final: ContestDetail = {
   id: 2,
   slug: 'arkavidia-40-qualification',
   name: 'Final Competitive Programming Arkavidia 4.0',
@@ -84,19 +132,22 @@ const ContestArkav4Final: Contest = {
   freezed: false,
   registered: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
-  problems: [
-    problem7,
-    problem8,
-    problem9,
-    problem10,
-    problem11,
-    problem12,
-    problem13,
-    problem14,
-  ],
 }
 
-const ContestArkav5Qual: Contest = {
+export const ContestArkav4FinalAnnouncements = annoucements.slice()
+
+export const ContestArkav4FinalProblems = [
+  problem7,
+  problem8,
+  problem9,
+  problem10,
+  problem11,
+  problem12,
+  problem13,
+  problem14,
+]
+
+const ContestArkav5Qual: ContestDetail = {
   id: 3,
   slug: 'arkavidia-50-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 5.0',
@@ -107,10 +158,20 @@ const ContestArkav5Qual: Contest = {
   freezed: true,
   registered: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
-  problems: [problem1, problem2, problem3, problem4, problem5, problem6],
 }
 
-const ContestArkav5Final: Contest = {
+export const ContestArkav5QualAnnouncements = annoucements.slice()
+
+export const ContestArkav5QualProblems = [
+  problem1,
+  problem2,
+  problem3,
+  problem4,
+  problem5,
+  problem6,
+]
+
+const ContestArkav5Final: ContestDetail = {
   id: 4,
   slug: 'arkavidia-50-final',
   name: 'Final Competitive Programming Arkavidia 5.0',
@@ -123,17 +184,20 @@ const ContestArkav5Final: Contest = {
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
-  problems: [
-    problem7,
-    problem8,
-    problem9,
-    problem10,
-    problem11,
-    problem12,
-    problem13,
-    problem14,
-  ],
 }
+
+export const ContestArkav5FinalAnnouncements = annoucements.slice()
+
+export const ContestArkav5FinalProblems = [
+  problem7,
+  problem8,
+  problem9,
+  problem10,
+  problem11,
+  problem12,
+  problem13,
+  problem14,
+]
 
 export const contests: Contest[] = [
   ContestArkav4Qual,
@@ -142,40 +206,16 @@ export const contests: Contest[] = [
   ContestArkav5Final,
 ]
 
-export const AnnouncementExample1: Announcement = {
-  id: 1,
-  title: `Term and Condition`,
-  content: `By competing in TLX contests, you agree that:
-
-- You will not collaborate with any other contestants.
-- You will not use fake or multiple TLX accounts, other than your own account.
-- You will not try to hack or attack the contest system in any way.
-
-Failure to comply with the above rules can result to a disqualification or ban.
-    
-Enjoy the contest!`,
-  issuedTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
-  read: true,
+export const contestAnnouncementsMap = {
+  [ContestArkav4Qual.id]: ContestArkav4QualAnnouncements,
+  [ContestArkav4Final.id]: ContestArkav4FinalAnnouncements,
+  [ContestArkav5Qual.id]: ContestArkav5QualAnnouncements,
+  [ContestArkav5Final.id]: ContestArkav5FinalAnnouncements,
 }
 
-export const AnnouncementExample2: Announcement = {
-  id: 2,
-  title: `Scoreboard`,
-  content: `Ada masalah dengan scoreboard sehingga untuk sementara scoreboard tidak dapat ditampilkan. Kami sedang berusaha memperbaikinya, mohon maaf atas ketidaknyamanannya. Terima kasih.`,
-  issuedTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
-  read: true,
+export const contestProblemsMap = {
+  [ContestArkav4Qual.id]: ContestArkav4QualProblems,
+  [ContestArkav4Final.id]: ContestArkav4FinalProblems,
+  [ContestArkav5Qual.id]: ContestArkav5QualProblems,
+  [ContestArkav5Final.id]: ContestArkav5FinalProblems,
 }
-
-export const AnnouncementExample3: Announcement = {
-  id: 3,
-  title: `Scoreboard Sudah Muncul`,
-  content: `Scoreboard sudah bisa ditampilkan. Terima kasih atas kesabarannya!`,
-  issuedTime: new Date(Date.now() - 1 * 60 * 60 * 1000),
-  read: false,
-}
-
-export const annoucements: Announcement[] = [
-  AnnouncementExample1,
-  AnnouncementExample2,
-  AnnouncementExample3,
-]
