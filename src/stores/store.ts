@@ -11,6 +11,7 @@ import { History } from 'history'
 import ErrorToaster from '../middlewares/ErrorToaster/ErrorToaster'
 import { AuthService } from '../services/auth'
 import { ContestService } from '../services/contest/ContestService'
+import { ProblemService } from '../services/problem'
 import { ServerStatusService } from '../services/serverStatus'
 import { AppAction } from './action'
 import { createReducer } from './reducer'
@@ -26,6 +27,7 @@ export interface ThunkExtraArguments {
   authService: AuthService
   serverStatusService: ServerStatusService
   contestService: ContestService
+  problemService: ProblemService
 }
 
 export type AppThunkDispatch = ThunkDispatch<

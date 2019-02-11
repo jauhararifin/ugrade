@@ -1,8 +1,10 @@
 import { Reducer } from 'redux'
+import { Problem } from '../../services/problem'
 import {
   ContestActionReadAnnouncements,
   ContestActionSetCurrentContest,
   ContestActionSetCurrentContestAnnouncements,
+  ContestActionSetCurrentContestProblems,
   ContestActionType,
 } from './ContestAction'
 import { Announcement, ContestState, initialValue } from './ContestState'
@@ -25,6 +27,12 @@ export const contestReducer: Reducer<ContestState> = (
       return setCurrentContestAnnouncements(
         state,
         action as ContestActionSetCurrentContestAnnouncements
+      )
+
+    case ContestActionType.SetCurrentContestProblems:
+      return setCurrentContestProblems(
+        state,
+        action as ContestActionSetCurrentContestProblems
       )
 
     case ContestActionType.ReadAnnouncements:
@@ -77,6 +85,38 @@ function setCurrentContestAnnouncements(
       currentContest: {
         ...currentContest,
         announcements: result,
+      },
+    }
+  }
+  return { ...state }
+}
+
+function setCurrentContestProblems(
+  state: ContestState,
+  action: ContestActionSetCurrentContestProblems
+): ContestState {
+  const currentContest = state.currentContest
+  if (currentContest && currentContest.id === action.contestId) {
+    if (!currentContest.problems) currentContest.problems = []
+
+    const contestIdProblem: { [id: number]: Problem } = {}
+    currentContest.problems
+      .slice()
+      .forEach(value => (contestIdProblem[value.id] = value))
+
+    const newProblems = action.problems
+    newProblems.slice().forEach(value => (contestIdProblem[value.id] = value))
+
+    const order = action.problemOrder.slice()
+    const result = order
+      .map(problemId => contestIdProblem[problemId])
+      .filter(problem => problem)
+
+    return {
+      ...state,
+      currentContest: {
+        ...currentContest,
+        problems: result,
       },
     }
   }
