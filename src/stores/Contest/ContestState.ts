@@ -2,7 +2,7 @@ export interface Problem {
   id: number
   slug: string
   name: string
-  description: string
+  statement: string
 }
 
 export interface Announcement {

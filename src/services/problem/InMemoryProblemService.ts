@@ -1,12 +1,12 @@
 import { NoSuchProblem } from './errors'
-import { problemsFixture } from './fixtures'
+import { problems as fixture } from './fixtures'
 import { Problem } from './Problem'
 import { ProblemService } from './ProblemService'
 
 export class InMemoryProblemService implements ProblemService {
   private problems: Problem[] = []
 
-  constructor(problems: Problem[] = problemsFixture) {
+  constructor(problems: Problem[] = fixture) {
     this.problems = problems
   }
 

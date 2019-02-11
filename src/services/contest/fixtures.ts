@@ -1,3 +1,19 @@
+import {
+  problem1,
+  problem10,
+  problem11,
+  problem12,
+  problem13,
+  problem14,
+  problem2,
+  problem3,
+  problem4,
+  problem5,
+  problem6,
+  problem7,
+  problem8,
+  problem9,
+} from '../problem/fixtures'
 import { Announcement } from './Announcement'
 import { Contest } from './Contest'
 
@@ -52,6 +68,7 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
+  problems: [problem1, problem2, problem3, problem4, problem5, problem6],
 }
 
 const ContestArkav4Final: Contest = {
@@ -67,6 +84,16 @@ const ContestArkav4Final: Contest = {
   freezed: false,
   registered: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+  problems: [
+    problem7,
+    problem8,
+    problem9,
+    problem10,
+    problem11,
+    problem12,
+    problem13,
+    problem14,
+  ],
 }
 
 const ContestArkav5Qual: Contest = {
@@ -80,6 +107,7 @@ const ContestArkav5Qual: Contest = {
   freezed: true,
   registered: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
+  problems: [problem1, problem2, problem3, problem4, problem5, problem6],
 }
 
 const ContestArkav5Final: Contest = {
@@ -95,6 +123,16 @@ const ContestArkav5Final: Contest = {
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
+  problems: [
+    problem7,
+    problem8,
+    problem9,
+    problem10,
+    problem11,
+    problem12,
+    problem13,
+    problem14,
+  ],
 }
 
 export const contests: Contest[] = [

@@ -7,6 +7,11 @@ export interface Problem {
   id: number
   slug: string
   name: string
-  description: string
+  statement: string
   type: ProblemType
+
+  timeLimit: number
+  tolerance: number
+  memoryLimit: number
+  outputLimit: number
 }
