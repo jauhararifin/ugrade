@@ -1,35 +1,34 @@
-import React, { SFC } from "react"
-import { Card } from "@blueprintjs/core"
-import { Link } from "react-router-dom"
-import { connect } from "react-redux"
+import { Card } from '@blueprintjs/core'
+import React, { SFC } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-import "./styles.css"
+import './styles.css'
 
-import BottomLink from "../../components/BottomLink"
-import logo from "../../assets/images/logo.svg"
-import SignInForm, { SignInFormProps } from "./SignInForm"
+import logo from '../../assets/images/logo.svg'
+import BottomLink from '../../components/BottomLink'
+import SignInForm, { SignInFormProps } from './SignInForm'
 
-export interface SignInPageProps extends SignInFormProps {
-}
+export type SignInPageProps = SignInFormProps
 
 const SignInPage: SFC<SignInPageProps> = props => (
-    <div className="plain-page">
-        <div>
-            <Link to="/">
-                <img src={logo} width={100} alt="logo" />
-            </Link>
-            <h1>Welcome To UGrade</h1>
-            <Card className="signin-panel">
-                <h2>Sign In</h2>
-                <SignInForm {...props} />
-            </Card>
-        </div>
-        <BottomLink>
-            <Link to="/signup">Sign Up</Link>
-            <Link to="/forgot-password">Forgot Password</Link>
-            <Link to="/setting">Setting</Link>
-        </BottomLink>
+  <div className='plain-page'>
+    <div>
+      <Link to='/'>
+        <img src={logo} width={100} alt='logo' />
+      </Link>
+      <h1>Welcome To UGrade</h1>
+      <Card className='signin-panel'>
+        <h2>Sign In</h2>
+        <SignInForm {...props} />
+      </Card>
     </div>
+    <BottomLink>
+      <Link to='/signup'>Sign Up</Link>
+      <Link to='/forgot-password'>Forgot Password</Link>
+      <Link to='/setting'>Setting</Link>
+    </BottomLink>
+  </div>
 )
 
 export default connect()(SignInPage)

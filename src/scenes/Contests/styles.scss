@@ -1,44 +1,44 @@
-@import "~@blueprintjs/core/lib/scss/variables.scss";
+@import '~@blueprintjs/core/lib/scss/variables.scss';
 
 .contests-panel {
-    display: flex;
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  .contests-navigation {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 360px;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    .contests-server-clock {
+      padding: 15px 40px;
+    }
+    .contests-tips {
+      margin-top: 15px;
+      text-align: left;
+    }
+  }
+  .contests-content {
     flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    .contests-navigation {
-        flex-grow: 0;
-        flex-shrink: 0;
-        width: 360px;
-        padding: 10px 20px;
-        background-color: #f5f5f5;
-        .contests-server-clock {
-            padding: 15px 40px;
-        }
-        .contests-tips {
-            margin-top: 15px;
-            text-align: left;
-        }
+    justify-content: stretch;
+    align-content: center;
+    text-align: left;
+    padding: 20px 40px;
+    .contests-contests-group {
+      margin-top: 30px;
+      border: solid 1px $pt-dark-divider-black;
+      .contests-contests-title {
+        margin: 10px 20px;
+      }
+      .contests-contests-table {
+        border-top: solid 1px $pt-divider-black;
+        width: 100%;
+      }
     }
-    .contests-content {
-        flex-grow: 1;
-        justify-content: stretch;
-        align-content: center;
-        text-align: left;
-        padding: 20px 40px;
-        .contests-contests-group {
-            margin-top: 30px;
-            border: solid 1px $pt-dark-divider-black;
-            .contests-contests-title {
-                margin: 10px 20px;
-            }
-            .contests-contests-table {
-                border-top: solid 1px $pt-divider-black;
-                width: 100%;
-            }
-        }
-        .contests-contests-group.skeleton {
-            border-color: $pt-divider-black;
-            padding: 0 15px 10px 15px;
-        }
+    .contests-contests-group.skeleton {
+      border-color: $pt-divider-black;
+      padding: 0 15px 10px 15px;
     }
+  }
 }

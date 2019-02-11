@@ -1,27 +1,26 @@
-import React, { SFC } from "react"
-import { connect } from "react-redux"
-import { Link } from "react-router-dom"
-import "./styles.css"
+import React, { SFC } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import './styles.css'
 
-import logo from "../../assets/images/logo.svg"
-import BottomLink from "../../components/BottomLink"
-import { SignUpForm, SignUpFormProps } from "./SignUpForm"
+import logo from '../../assets/images/logo.svg'
+import BottomLink from '../../components/BottomLink'
+import { SignUpForm, SignUpFormProps } from './SignUpForm'
 
-export interface SignUpPageProps extends SignUpFormProps {
-}
+export type SignUpPageProps = SignUpFormProps
 
 const SignUpPage: SFC<SignUpPageProps> = props => (
-  <div className="plain-page">
+  <div className='plain-page'>
     <div>
-      <Link to="/">
-          <img src={logo} width={100} alt="logo" />
+      <Link to='/'>
+        <img src={logo} width={100} alt='logo' />
       </Link>
       <h1>Welcome To UGrade</h1>
       <SignUpForm {...props} />
     </div>
     <BottomLink>
-      <Link to="/signin">Sign In</Link>
-      <Link to="/setting">Setting</Link>
+      <Link to='/signin'>Sign In</Link>
+      <Link to='/setting'>Setting</Link>
     </BottomLink>
   </div>
 )

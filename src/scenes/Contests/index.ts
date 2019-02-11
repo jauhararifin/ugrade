@@ -1,2 +1,3 @@
-import ContestsScene from "./ContestsScene"
+import ContestsScene from './ContestsScene'
+
 export default ContestsScene

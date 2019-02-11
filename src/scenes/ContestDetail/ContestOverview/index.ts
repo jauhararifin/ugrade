@@ -1,2 +1,3 @@
-import ContestOverviewScene from "./ContestOverviewScene"
+import ContestOverviewScene from './ContestOverviewScene'
+
 export default ContestOverviewScene

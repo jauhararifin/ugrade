@@ -1,15 +1,15 @@
-import React, { ComponentType, Component } from 'react'
-import { compose } from 'redux'
+import { push } from 'connected-react-router'
+import React, { Component, ComponentType } from 'react'
 import { connect } from 'react-redux'
-import { push, } from 'connected-react-router'
+import { compose } from 'redux'
 
-import './styles.css'
+import { userOnly } from '../../helpers/auth'
+import { withServer } from '../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../stores'
 import { Contest } from '../../stores/Contest'
 import { getContestsAction } from './actions'
 import ContestsPage from './ContestsPage'
-import { userOnly } from '../../helpers/auth'
-import { withServer } from '../../helpers/server'
+import './styles.css'
 
 export interface ContestsSceneProps {
   dispatch: AppThunkDispatch
@@ -18,9 +18,8 @@ export interface ContestsSceneProps {
 }
 
 export class ContestsScene extends Component<ContestsSceneProps> {
-  
   static defaultProps = {
-    contests: []
+    contests: [],
   }
 
   componentDidMount = () => {
@@ -32,20 +31,22 @@ export class ContestsScene extends Component<ContestsSceneProps> {
   }
 
   render() {
-    return <ContestsPage
-      contests={this.props.contests}
-      onContestChoose={this.handleContestChoose}
-      serverClock={this.props.serverClock}
-    />
+    return (
+      <ContestsPage
+        contests={this.props.contests}
+        onContestChoose={this.handleContestChoose}
+        serverClock={this.props.serverClock}
+      />
+    )
   }
 }
 
 const mapStateToProps = (state: AppState) => ({
-  contests: state.contest.contests
+  contests: state.contest.contests,
 })
 
 export default compose<ComponentType>(
-  userOnly("/signin"),
+  userOnly('/signin'),
   connect(mapStateToProps),
-  withServer,
+  withServer
 )(ContestsScene)

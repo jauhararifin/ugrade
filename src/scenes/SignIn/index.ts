@@ -1,2 +1,3 @@
-import SignInScene from "./SignInScene"
+import SignInScene from './SignInScene'
+
 export default SignInScene

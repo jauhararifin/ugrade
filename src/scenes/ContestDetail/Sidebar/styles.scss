@@ -1,21 +1,23 @@
-@import "~@blueprintjs/core/lib/scss/variables.scss";
+@import '~@blueprintjs/core/lib/scss/variables.scss';
 
 .contests-navigation {
-    .contest-status-bottom {
-        display: flex;
-        .freezed > * {
-            color: $pt-intent-warning;
-        }
-        .contest-status-rank {
-            margin-right: 10px;
-            padding: 10px 40px;
-        }
-        .contest-status-time {
-            flex-grow: 1;
-            padding: 10px;
-        }
-    }            
-    .contest-menu, .contest-submit-solution, .contest-registration {
-        margin-top: 10px;
+  .contest-status-bottom {
+    display: flex;
+    .freezed > * {
+      color: $pt-intent-warning;
     }
+    .contest-status-rank {
+      margin-right: 10px;
+      padding: 10px 40px;
+    }
+    .contest-status-time {
+      flex-grow: 1;
+      padding: 10px;
+    }
+  }
+  .contest-menu,
+  .contest-submit-solution,
+  .contest-registration {
+    margin-top: 10px;
+  }
 }

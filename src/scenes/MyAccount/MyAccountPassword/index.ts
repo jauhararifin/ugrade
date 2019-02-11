@@ -1,2 +1,3 @@
-import MyAccountPasswordScene from "./MyAccountPasswordScene"
+import MyAccountPasswordScene from './MyAccountPasswordScene'
+
 export default MyAccountPasswordScene
