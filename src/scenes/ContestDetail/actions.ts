@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router'
 import { Announcement } from '../../services/contest/Announcement'
 import {
   AnnouncementSubscribeCallback,
@@ -12,6 +13,7 @@ import {
   readAnnouncements,
   setCurrentContest,
   setCurrentContestAnnouncements,
+  setCurrentContestCurrentProblem,
   setCurrentContestProblems,
 } from '../../stores/Contest'
 
@@ -90,5 +92,15 @@ export const subscribeContestProblemIds = (
       contest.id,
       callback
     )
+  }
+}
+
+export const loadContestProblem = (
+  contestId: number,
+  problemId: number
+): AppThunkAction<void> => {
+  return async dispatch => {
+    dispatch(setCurrentContestCurrentProblem(contestId, problemId))
+    dispatch(push(`/contests/${contestId}/problems/${problemId}`))
   }
 }

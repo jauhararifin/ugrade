@@ -5,8 +5,9 @@ import { compose, Dispatch } from 'redux'
 
 import { userOnly } from '../../../helpers/auth'
 import { AppAction, AppState, AppThunkDispatch } from '../../../stores'
-import { Contest } from '../../../stores/Contest'
-import { ProblemListView } from './ProblemListView'
+import { Contest, Problem } from '../../../stores/Contest'
+import { loadContestProblem } from '../actions'
+import { ProblemsView } from './ProblemsView'
 
 export interface AnnouncementsSceneRoute {
   contestId: string
@@ -19,9 +20,20 @@ export interface AnnouncementsSceneProps
 }
 
 export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
+  handleProblemChoose = (problem: Problem) => {
+    const { contest } = this.props
+    if (contest) {
+      this.props.dispatch(loadContestProblem(contest.id, problem.id))
+    }
+  }
   render() {
     const { contest } = this.props
-    return <ProblemListView problems={contest && contest.problems} />
+    return (
+      <ProblemsView
+        problems={contest && contest.problems}
+        onChoose={this.handleProblemChoose}
+      />
+    )
   }
 }
 

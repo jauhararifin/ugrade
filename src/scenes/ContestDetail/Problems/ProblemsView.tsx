@@ -1,20 +1,26 @@
-import { Card, H1, H3 } from '@blueprintjs/core'
+import { Card, H1, H3, H4 } from '@blueprintjs/core'
 import classnames from 'classnames'
-import 'github-markdown-css'
 import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
 import { Problem } from '../../../services/problem'
 
-export interface ProblemListViewProps {
+export interface ProblemsViewProps {
   problems?: Problem[]
+  onChoose?: (problem: Problem) => any
 }
 
-export const ProblemListView: FunctionComponent<ProblemListViewProps> = ({
+export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
   problems,
+  onChoose,
 }) => {
   const loading = !problems
+
+  const generateOnClickCallback = (problem: Problem) => () => {
+    if (onChoose) onChoose(problem)
+  }
+
   return (
     <div className='contest-problems'>
       <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
@@ -29,9 +35,13 @@ export const ProblemListView: FunctionComponent<ProblemListViewProps> = ({
 
         {problems &&
           problems.map(problem => (
-            <Card key={problem.id} className='item'>
+            <Card
+              key={problem.id}
+              className='item'
+              onClick={generateOnClickCallback(problem)}
+            >
               <div className='header'>
-                <H3 className='title'>{problem.name}</H3>
+                <H4 className='title'>{problem.name}</H4>
               </div>
             </Card>
           ))}
@@ -40,4 +50,4 @@ export const ProblemListView: FunctionComponent<ProblemListViewProps> = ({
   )
 }
 
-export default ProblemListView
+export default ProblemsView

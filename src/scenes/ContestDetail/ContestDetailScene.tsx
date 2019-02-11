@@ -8,7 +8,11 @@ import { userOnly } from '../../helpers/auth'
 import { withServer } from '../../helpers/server'
 import { Announcement } from '../../services/contest/Announcement'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
-import { Contest, setCurrentContestAnnouncements } from '../../stores/Contest'
+import {
+  Contest,
+  setCurrentContestAnnouncements,
+  setCurrentContestCurrentProblem,
+} from '../../stores/Contest'
 import {
   getContestAnnouncements,
   getContestById,
@@ -20,7 +24,8 @@ import {
 import Announcements from './Announcements'
 import { ContestDetailPage } from './ContestDetailPage'
 import ContestOverview from './ContestOverview'
-import Problem from './Problem'
+import ProblemDetailScene from './ProblemDetail'
+import Problems from './Problems'
 
 export interface ContestDetailSceneRoute {
   contestId: string
@@ -70,9 +75,24 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
 
   initializeProblems = async (contest: Contest) => {
     await this.props.dispatch(getContestProblems(contest.id))
+    this.loadCurrentProblem()
     this.unsubscribeContestProblemIds = await this.props.dispatch(
       subscribeContestProblemIds(contest, this.problemIdsUpdated)
     )
+  }
+
+  loadCurrentProblem = () => {
+    const match = this.props.location.pathname.match(
+      /\/contests\/[0-9]+\/problems\/([0-9]+)\/?/
+    )
+    if (match && match[1]) {
+      this.props.dispatch(
+        setCurrentContestCurrentProblem(
+          parseInt(this.props.match.params.contestId, 10),
+          parseInt(match[1] as string, 10)
+        )
+      )
+    }
   }
 
   problemIdsUpdated = (problemIds: number[]) => {
@@ -116,7 +136,12 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
               <Route
                 path='/contests/:contestId/problems'
                 exact={true}
-                component={Problem}
+                component={Problems}
+              />
+              <Route
+                path='/contests/:contestId/problems/:problemId'
+                exact={true}
+                component={ProblemDetailScene}
               />
             </Switch>
           </CSSTransition>
