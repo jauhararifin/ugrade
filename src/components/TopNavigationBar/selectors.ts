@@ -20,6 +20,25 @@ export const selectBreadcrumb = (state: AppState): IBreadcrumbProps[] => {
         href: `/contests/${currentContestId}`,
         text: currentContest.name,
       })
+      const contestMenu = location.pop()
+      if (contestMenu === 'problems') {
+        result.push({
+          href: `/contests/${currentContestId}/problems`,
+          text: 'Problems',
+        })
+        const problemId = location.pop()
+        const currentProblem = currentContest.currentProblem
+        if (
+          problemId &&
+          currentProblem &&
+          problemId === currentProblem.id.toString()
+        ) {
+          result.push({
+            href: `/contests/${currentContestId}/problems/${problemId}`,
+            text: currentProblem.name,
+          })
+        }
+      }
     }
   }
 
