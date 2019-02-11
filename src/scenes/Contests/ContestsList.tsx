@@ -11,7 +11,7 @@ export interface ContestsListProps {
   onContestChoose?: (contest: Contest) => any
 }
 
-export const ContestsList: React.SFC<ContestsListProps> = ({
+export const ContestsList: React.FunctionComponent<ContestsListProps> = ({
   contests,
   onContestChoose,
 }) => {

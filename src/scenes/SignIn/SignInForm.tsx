@@ -19,7 +19,7 @@ export interface SignInFormValue {
 
 export interface SignInFormProps extends FormikProps<SignInFormValue> {}
 
-const SignInForm: React.SFC<SignInFormProps> = ({
+const SignInForm: React.FunctionComponent<SignInFormProps> = ({
   handleSubmit,
   handleChange,
   handleBlur,

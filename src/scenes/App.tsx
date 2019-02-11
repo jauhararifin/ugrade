@@ -22,7 +22,7 @@ export interface AppProps {
   location: Location
 }
 
-const App: React.SFC<AppProps> = ({ title, location }) => {
+const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
   let locationKey = '/'
   if (location.pathname.match('/signin')) locationKey = 'signin'
   else if (location.pathname.match('/signup')) locationKey = 'signup'

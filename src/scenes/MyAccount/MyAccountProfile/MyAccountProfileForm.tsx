@@ -29,7 +29,9 @@ export interface MyAccountProfileFormValue {
 export interface MyAccountProfileFormProps
   extends FormikProps<MyAccountProfileFormValue> {}
 
-export const MyAccountProfileForm: React.SFC<MyAccountProfileFormProps> = ({
+export const MyAccountProfileForm: React.FunctionComponent<
+  MyAccountProfileFormProps
+> = ({
   handleSubmit,
   handleBlur,
   handleChange,

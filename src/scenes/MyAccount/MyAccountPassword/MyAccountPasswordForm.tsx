@@ -18,7 +18,9 @@ export interface MyAccountPasswordFormValue {
 export interface MyAccountPasswordFormProps
   extends FormikProps<MyAccountPasswordFormValue> {}
 
-export const MyAccountPasswordForm: React.SFC<MyAccountPasswordFormProps> = ({
+export const MyAccountPasswordForm: React.FunctionComponent<
+  MyAccountPasswordFormProps
+> = ({
   handleSubmit,
   handleBlur,
   handleChange,

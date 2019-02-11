@@ -50,6 +50,7 @@ export class MyAccountProfileScene extends React.Component<
         )
       )
       .finally(() => setSubmitting(false))
+      .catch(null)
   }
 
   render() {

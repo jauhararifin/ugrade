@@ -23,7 +23,7 @@ export class ContestsScene extends Component<ContestsSceneProps> {
   }
 
   componentDidMount = () => {
-    this.props.dispatch(getContestsAction())
+    this.props.dispatch(getContestsAction()).catch(null)
   }
 
   handleContestChoose = (contest: Contest) => {

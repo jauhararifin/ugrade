@@ -21,12 +21,8 @@ export const shirtSizeToString = (shirtSize?: ShirtSizeType): string => {
   }
 }
 
-export const genderKeys = Object.keys(GenderType).filter(
-  k => typeof GenderType[k as any] === 'string'
-)
+export const genderKeys = Object.keys(GenderType)
 export const genderValues = genderKeys.map(k => GenderType[k as any])
 
-export const shirtSizeKeys = Object.keys(ShirtSizeType).filter(
-  k => typeof ShirtSizeType[k as any] === 'string'
-)
+export const shirtSizeKeys = Object.keys(ShirtSizeType)
 export const shirtSizeValues = shirtSizeKeys.map(k => ShirtSizeType[k as any])

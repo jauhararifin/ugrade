@@ -1,5 +1,5 @@
 import { FormGroup, InputGroup, Label } from '@blueprintjs/core'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 
 import './styles.css'
@@ -12,7 +12,7 @@ export interface MyAccountPageProps {
   loading: boolean
 }
 
-const MyAccountPageFormSkeleton: SFC = () => (
+const MyAccountPageFormSkeleton: FunctionComponent = () => (
   <React.Fragment>
     {[0, 0, 0].map(() => (
       <React.Fragment>
@@ -33,7 +33,9 @@ const MyAccountPageFormSkeleton: SFC = () => (
   </React.Fragment>
 )
 
-export const MyAccountPage: SFC<MyAccountPageProps> = ({ loading }) => (
+export const MyAccountPage: FunctionComponent<MyAccountPageProps> = ({
+  loading,
+}) => (
   <div className='plain-page'>
     <div className='my-account-page-panel'>
       <div>

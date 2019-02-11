@@ -50,6 +50,7 @@ export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
           )
         )
         .finally(() => (this.loadingAnnouncement = false))
+        .catch(null)
     }
   }
   render() {

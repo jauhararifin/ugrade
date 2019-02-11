@@ -38,6 +38,7 @@ export class ForgotPasswordScene extends React.Component<
         setSubmitting(false)
         resetForm()
       })
+      .catch(null)
   }
 
   render() {

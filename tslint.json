@@ -12,8 +12,7 @@
     "object-literal-sort-keys": false,
     "ordered-imports": true,
     "interface-name": false,
-    "no-console": false,
-    "no-unused-variable": true
+    "no-console": false
   },
   "rulesDirectory": []
 }

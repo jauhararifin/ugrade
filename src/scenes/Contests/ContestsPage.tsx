@@ -1,7 +1,7 @@
 import { H2, H5, InputGroup } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
@@ -16,7 +16,7 @@ export interface ContestsPageProps {
   serverClock?: Date
 }
 
-export const ContestsPage: SFC<ContestsPageProps> = ({
+export const ContestsPage: FunctionComponent<ContestsPageProps> = ({
   contests,
   onContestChoose,
   serverClock,

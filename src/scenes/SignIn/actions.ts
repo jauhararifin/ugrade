@@ -13,12 +13,12 @@ export const signInAction = (
   password: string,
   rememberMe: boolean
 ): AppThunkAction<SignInResult> => {
-  return async (dispatch, getState, { authService }) => {
+  return async (dispatch, _, { authService }) => {
     try {
       const token = await authService.login(username, password)
       const me = await authService.getMyProfile(token)
-      await dispatch(setSignedIn(token, rememberMe))
-      await dispatch(setMe(me))
+      dispatch(setSignedIn(token, rememberMe))
+      dispatch(setMe(me))
       ActionToaster.showSuccessToast('You Are Signed In')
       return { success: true }
     } catch (error) {

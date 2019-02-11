@@ -50,7 +50,7 @@ export const createStore = (
     compose(
       applyMiddleware(
         routerMiddleware(history),
-        ErrorToaster as Middleware,
+        ErrorToaster,
         logger,
         thunk.withExtraArgument(thunkExtraArguments)
       ),

@@ -2,9 +2,9 @@ import { AppThunkAction } from '../../stores'
 import { Contest, setContests } from '../../stores/Contest'
 
 export const getContestsAction = (): AppThunkAction<Contest[]> => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, _, { contestService }) => {
     const contests = await contestService.getAllContests()
-    await dispatch(setContests(contests))
+    dispatch(setContests(contests))
     return contests
   }
 }

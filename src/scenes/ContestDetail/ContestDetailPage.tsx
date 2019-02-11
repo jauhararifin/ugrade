@@ -1,5 +1,5 @@
 import 'github-markdown-css'
-import React, { ReactNode, SFC } from 'react'
+import React, { FunctionComponent, ReactNode } from 'react'
 
 import './styles.css'
 
@@ -10,7 +10,7 @@ export interface ContestDetailPageProps {
   children?: ReactNode
 }
 
-export const ContestDetailPage: SFC<ContestDetailPageProps> = ({
+export const ContestDetailPage: FunctionComponent<ContestDetailPageProps> = ({
   children,
 }) => {
   return (

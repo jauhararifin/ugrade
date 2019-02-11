@@ -2,7 +2,7 @@ import { Card, Elevation, H1, H3 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 import './styles.css'
@@ -14,7 +14,7 @@ export interface AnnouncementsViewProps {
   serverClock?: Date
 }
 
-export const AnnouncementsView: SFC<AnnouncementsViewProps> = ({
+export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
   contest,
   serverClock,
 }) => {

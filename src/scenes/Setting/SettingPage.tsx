@@ -1,4 +1,4 @@
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 
 import './styles.css'
@@ -12,7 +12,7 @@ export interface SettingPageProps {
   showSignUp: boolean
 }
 
-export const SettingPage: SFC<SettingPageProps> = ({
+export const SettingPage: FunctionComponent<SettingPageProps> = ({
   proxyForm,
   showSignIn,
   showSignUp,

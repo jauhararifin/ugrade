@@ -1,5 +1,5 @@
 import { Card } from '@blueprintjs/core'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -11,7 +11,7 @@ import SignInForm, { SignInFormProps } from './SignInForm'
 
 export type SignInPageProps = SignInFormProps
 
-const SignInPage: SFC<SignInPageProps> = props => (
+const SignInPage: FunctionComponent<SignInPageProps> = props => (
   <div className='plain-page'>
     <div>
       <Link to='/'>

@@ -8,9 +8,9 @@ import {
   HTMLSelect,
   Intent,
 } from '@blueprintjs/core'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 
-export const ContestSubmitForm: SFC = () => (
+export const ContestSubmitForm: FunctionComponent = () => (
   <form>
     <H5>Submit Solution</H5>
     <FormGroup>

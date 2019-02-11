@@ -7,10 +7,12 @@ export const getProfile = (): AppThunkAction<User> => {
     try {
       const token = getState().auth.token
       const me = await authService.getMyProfile(token)
-      await dispatch(setMe(me))
+      dispatch(setMe(me))
       return me
     } catch (error) {
-      if (error instanceof AuthenticationError) await dispatch(setSignedOut())
+      if (error instanceof AuthenticationError) {
+        dispatch(setSignedOut())
+      }
       throw error
     }
   }

@@ -18,7 +18,7 @@ export interface SignUpFormValue {
 
 export interface SignUpFormProps extends FormikProps<SignUpFormValue> {}
 
-export const SignUpForm: React.SFC<SignUpFormProps> = ({
+export const SignUpForm: React.FunctionComponent<SignUpFormProps> = ({
   handleSubmit,
   handleBlur,
   handleChange,

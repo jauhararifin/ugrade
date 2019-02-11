@@ -19,7 +19,9 @@ export interface ProxySettingFormValue {
 export interface ProxySettingFormProps
   extends FormikProps<ProxySettingFormValue> {}
 
-export const ProxySettingForm: React.SFC<ProxySettingFormProps> = ({
+export const ProxySettingForm: React.FunctionComponent<
+  ProxySettingFormProps
+> = ({
   handleSubmit,
   handleBlur,
   handleChange,

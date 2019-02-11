@@ -1,6 +1,6 @@
 import { H2 } from '@blueprintjs/core'
 import 'github-markdown-css'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 import './styles.css'
@@ -11,9 +11,9 @@ export interface ContestOverviewPageProps {
   contest?: Contest
 }
 
-export const ContestOverviewPage: SFC<ContestOverviewPageProps> = ({
-  contest,
-}) => (
+export const ContestOverviewPage: FunctionComponent<
+  ContestOverviewPageProps
+> = ({ contest }) => (
   <div className='contest-overview'>
     {contest ? (
       <ReactMarkdown className='markdown-body' source={contest.description} />

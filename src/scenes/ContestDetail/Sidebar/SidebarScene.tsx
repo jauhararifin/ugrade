@@ -59,7 +59,9 @@ export class ContestDetailScene extends Component<
   }
   componentDidMount() {
     const contestId = Number(this.props.match.params.contestId)
-    if (!this.props.contest) this.props.dispatch(getContestById(contestId))
+    if (!this.props.contest) {
+      this.props.dispatch(getContestById(contestId)).catch(null)
+    }
   }
   onMenuChoosed = (menu: Menu) => {
     const contestId = Number(this.props.match.params.contestId)

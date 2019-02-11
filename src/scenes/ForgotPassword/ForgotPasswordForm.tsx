@@ -9,7 +9,9 @@ export interface ForgotPasswordFormValue {
 export interface ForgotPasswordFormProps
   extends FormikProps<ForgotPasswordFormValue> {}
 
-export const ForgotPasswordForm: React.SFC<ForgotPasswordFormProps> = ({
+export const ForgotPasswordForm: React.FunctionComponent<
+  ForgotPasswordFormProps
+> = ({
   handleSubmit,
   handleBlur,
   handleChange,

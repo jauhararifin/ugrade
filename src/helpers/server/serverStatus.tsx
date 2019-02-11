@@ -6,14 +6,14 @@ import { AppState, AppThunkAction, AppThunkDispatch } from '../../stores'
 import { setServerClock } from '../../stores/ServerStatus'
 
 const getServerClockAction = (): AppThunkAction => {
-  return async (dispatch, getState, { serverStatusService }) => {
+  return async (dispatch, _, { serverStatusService }) => {
     let triedTimes = 0
     while (true) {
       try {
         triedTimes++
         const serverClock = await serverStatusService.getClock()
         const localClock = new Date()
-        await dispatch(setServerClock(serverClock, localClock))
+        dispatch(setServerClock(serverClock, localClock))
         return
       } catch (error) {
         await new Promise(resolve =>
@@ -70,13 +70,13 @@ export const withServer = <P extends object>(
       }
       if (--this.timeToRefresh === 0) {
         this.timeToRefresh = reloadMs
-        this.props.dispatch(getServerClockAction())
+        this.props.dispatch(getServerClockAction()).catch(null)
       }
     }
 
     componentDidMount = () => {
       if (!this.props.serverClock || !this.props.localClock) {
-        this.props.dispatch(getServerClockAction())
+        this.props.dispatch(getServerClockAction()).catch(null)
       }
       this.timer = setInterval(this.tick, 1000)
     }

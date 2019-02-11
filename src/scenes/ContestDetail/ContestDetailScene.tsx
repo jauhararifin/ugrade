@@ -6,7 +6,7 @@ import { compose, Dispatch } from 'redux'
 
 import { userOnly } from '../../helpers/auth'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
-import { Contest, readAnnouncements } from '../../stores/Contest'
+import { Contest } from '../../stores/Contest'
 import { getContestAnnouncement } from './actions'
 import Announcements from './Announcements'
 import { ContestDetailPage } from './ContestDetailPage'
@@ -39,6 +39,7 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
           this.loadingAnnouncement = false
           setTimeout(this.reloadAnnoucements, 1000 * (15 + Math.random() * 15))
         })
+        .catch(null)
     }
   }
   render() {

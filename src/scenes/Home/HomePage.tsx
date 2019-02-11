@@ -12,7 +12,7 @@ export interface HomePageProps {
   onSignUpClick: () => any
 }
 
-const HomePage: React.SFC<HomePageProps> = ({
+const HomePage: React.FunctionComponent<HomePageProps> = ({
   onLogoClick,
   onSettingClick,
   onSignInClick,

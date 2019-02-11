@@ -1,4 +1,4 @@
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import './styles.css'
@@ -9,7 +9,7 @@ import { SignUpForm, SignUpFormProps } from './SignUpForm'
 
 export type SignUpPageProps = SignUpFormProps
 
-const SignUpPage: SFC<SignUpPageProps> = props => (
+const SignUpPage: FunctionComponent<SignUpPageProps> = props => (
   <div className='plain-page'>
     <div>
       <Link to='/'>

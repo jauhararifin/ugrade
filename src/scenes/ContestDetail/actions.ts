@@ -5,9 +5,9 @@ import { setCurrentContestAnnouncements } from '../../stores/Contest'
 export const getContestAnnouncement = (
   id: number
 ): AppThunkAction<Announcement[]> => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, _, { contestService }) => {
     const announcements = await contestService.getAccouncementsByContestId(id)
-    await dispatch(setCurrentContestAnnouncements(id, announcements))
+    dispatch(setCurrentContestAnnouncements(id, announcements))
     return announcements
   }
 }

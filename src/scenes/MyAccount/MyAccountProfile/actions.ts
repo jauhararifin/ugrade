@@ -18,7 +18,7 @@ export const setProfile = (
       shirtSize,
       address
     )
-    await dispatch(setMe(me))
+    dispatch(setMe(me))
     ActionToaster.showSuccessToast('Profile Changed')
     return me
   }

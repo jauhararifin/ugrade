@@ -1,7 +1,7 @@
 import { Alignment, Button, H2, H5, H6, Intent } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
@@ -35,7 +35,7 @@ const durationToStr = (duration: moment.Duration | number): string => {
     : `${pad(rtime.hours())}:${pad(rtime.minutes())}:${pad(rtime.seconds())}`
 }
 
-export const SidebarView: SFC<SidebarViewProps> = ({
+export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   contest,
   serverClock,
   rank,

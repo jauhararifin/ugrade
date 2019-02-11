@@ -52,6 +52,7 @@ class SignUpScene extends React.Component<SignUpSceneProps> {
       )
       .then(result => setStatus(result))
       .finally(() => setSubmitting(false))
+      .catch(null)
   }
 
   render() {

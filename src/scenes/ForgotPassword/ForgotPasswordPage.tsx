@@ -1,4 +1,4 @@
-import React, { SFC } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 
 import './styles.css'
@@ -12,7 +12,9 @@ import {
 
 export type ForgotPasswordPageProps = ForgotPasswordFormProps
 
-export const ForgotPasswordPage: SFC<ForgotPasswordPageProps> = props => (
+export const ForgotPasswordPage: FunctionComponent<
+  ForgotPasswordPageProps
+> = props => (
   <div className='plain-page'>
     <div>
       <Link to='/'>
