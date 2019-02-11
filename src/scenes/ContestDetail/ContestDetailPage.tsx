@@ -8,16 +8,18 @@ import Sidebar from './Sidebar'
 
 export interface ContestDetailPageProps {
   children?: ReactNode
+  serverClock?: Date
 }
 
 export const ContestDetailPage: FunctionComponent<ContestDetailPageProps> = ({
   children,
+  serverClock,
 }) => {
   return (
     <div className='full-page'>
       <TopNavigationBar />
       <div className='contests-panel'>
-        <Sidebar />
+        <Sidebar serverClock={serverClock} />
         <div className='contest-outer-content'>
           <div className='contest-content'>{children}</div>
         </div>

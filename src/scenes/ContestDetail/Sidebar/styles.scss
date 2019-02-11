@@ -20,4 +20,16 @@
   .contest-registration {
     margin-top: 10px;
   }
+  .contest-menu {
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      .menu-title {
+        text-align: left;
+      }
+      .menu-tag {
+        text-align: right;
+      }
+    }
+  }
 }

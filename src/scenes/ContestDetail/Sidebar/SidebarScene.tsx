@@ -4,33 +4,33 @@ import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { compose } from 'redux'
 
-import { userOnly } from '../../../helpers/auth'
-import { withServer } from '../../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { Contest } from '../../../stores/Contest'
-import { getContestById } from './actions'
+import { ContestDetailSceneRoute } from '../ContestDetailScene'
 import { Menu, SidebarView } from './SidebarView'
 
-export interface SidebarSceneRoute {
-  contestId: string
-}
-
-export interface ContestDetailSceneProps
-  extends RouteComponentProps<SidebarSceneRoute> {
+export interface SidebarSceneFromRedux {
   contest?: Contest
-  serverClock: Date
   dispatch: AppThunkDispatch
 }
 
-export interface ContestDetailSceneState {
+export interface SidebarSceneInitialProps {
+  serverClock?: Date
+}
+
+export type SidebarSceneProps = RouteComponentProps<ContestDetailSceneRoute> &
+  SidebarSceneFromRedux &
+  SidebarSceneInitialProps
+
+export interface SidebarSceneState {
   menu: Menu
 }
 
-export class ContestDetailScene extends Component<
-  ContestDetailSceneProps,
-  ContestDetailSceneState
+export class SidebarScene extends Component<
+  SidebarSceneProps,
+  SidebarSceneState
 > {
-  constructor(props: ContestDetailSceneProps) {
+  constructor(props: SidebarSceneProps) {
     super(props)
 
     let menu = Menu.Overview
@@ -57,12 +57,7 @@ export class ContestDetailScene extends Component<
 
     this.state = { menu }
   }
-  componentDidMount() {
-    const contestId = Number(this.props.match.params.contestId)
-    if (!this.props.contest) {
-      this.props.dispatch(getContestById(contestId)).catch(null)
-    }
-  }
+
   onMenuChoosed = (menu: Menu) => {
     const contestId = Number(this.props.match.params.contestId)
 
@@ -84,8 +79,13 @@ export class ContestDetailScene extends Component<
         return this.props.dispatch(push(`/contests/${contestId}/scoreboard`))
     }
   }
+
   render() {
     const { contest, serverClock } = this.props
+    const newAnnouncementCount =
+      contest && contest.announcements
+        ? contest.announcements.filter(x => !x.read).length
+        : 0
     const menu = this.state.menu
     const rank = 21
     return (
@@ -95,6 +95,7 @@ export class ContestDetailScene extends Component<
         serverClock={serverClock}
         menu={menu}
         onChoose={this.onMenuChoosed}
+        newAnnouncementCount={newAnnouncementCount}
       />
     )
   }
@@ -104,9 +105,7 @@ const mapStateToProps = (state: AppState) => ({
   contest: state.contest.currentContest,
 })
 
-export default compose<ComponentType>(
-  userOnly(),
-  withServer,
+export default compose<ComponentType<SidebarSceneInitialProps>>(
   connect(mapStateToProps),
   withRouter
-)(ContestDetailScene)
+)(SidebarScene)

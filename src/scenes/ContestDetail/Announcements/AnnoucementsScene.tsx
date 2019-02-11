@@ -6,12 +6,8 @@ import { compose, Dispatch } from 'redux'
 import { userOnly } from '../../../helpers/auth'
 import { withServer } from '../../../helpers/server'
 import { AppAction, AppState, AppThunkDispatch } from '../../../stores'
-import {
-  Announcement,
-  Contest,
-  readAnnouncements,
-} from '../../../stores/Contest'
-import { getContestAnnouncement } from '../actions'
+import { Contest } from '../../../stores/Contest'
+import { readAnnouncementsAction } from '../actions'
 import { AnnouncementsView } from './AnnouncementsView'
 
 export interface AnnouncementsSceneRoute {
@@ -26,31 +22,23 @@ export interface AnnouncementsSceneProps
 }
 
 export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
-  private loadingAnnouncement = false
   componentDidMount() {
-    this.reloadAnnoucements()
+    this.readAllAnnouncements()
   }
   componentDidUpdate() {
-    this.reloadAnnoucements()
+    this.readAllAnnouncements()
   }
-  reloadAnnoucements = () => {
-    if (
-      this.props.contest &&
-      !this.props.contest.announcements &&
-      !this.loadingAnnouncement
-    ) {
-      this.loadingAnnouncement = true
-      this.props
-        .dispatch(getContestAnnouncement(this.props.contest.id))
-        .then(annoucements =>
-          this.props.dispatch(
-            readAnnouncements(
-              annoucements.map((it: Announcement): number => it.id)
-            )
-          )
-        )
-        .finally(() => (this.loadingAnnouncement = false))
-        .catch(null)
+  readAllAnnouncements = async () => {
+    if (this.props.contest && this.props.contest.announcements) {
+      await new Promise(resolve => setTimeout(resolve, 3000)) // read after 5 seconds
+      const announcements = this.props.contest.announcements.filter(
+        annoucement => !annoucement.read
+      )
+      if (announcements.length > 0) {
+        this.props
+          .dispatch(readAnnouncementsAction(announcements.map(it => it.id)))
+          .catch(null)
+      }
     }
   }
   render() {

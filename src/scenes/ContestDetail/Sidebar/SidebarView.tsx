@@ -1,4 +1,4 @@
-import { Alignment, Button, H2, H5, H6, Intent } from '@blueprintjs/core'
+import { Alignment, Button, H2, H5, H6, Intent, Tag } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
@@ -23,6 +23,7 @@ export interface SidebarViewProps {
   rank?: number
   serverClock?: Date
   menu?: Menu
+  newAnnouncementCount: number
   onChoose?: (menu: Menu) => any
 }
 
@@ -41,6 +42,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   rank,
   menu,
   onChoose,
+  newAnnouncementCount,
 }) => {
   const loading = !contest || !serverClock
   const participated = contest && contest.registered
@@ -199,8 +201,18 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
                 minimal={true}
                 alignText={Alignment.LEFT}
                 disabled={!contest}
-                text='Announcements'
-              />
+              >
+                <div className='menu-item'>
+                  <div className='menu-title'>Announcements</div>
+                  {newAnnouncementCount > 0 && (
+                    <div className='menu-tag'>
+                      <Tag round={true} intent={Intent.SUCCESS}>
+                        {newAnnouncementCount}
+                      </Tag>
+                    </div>
+                  )}
+                </div>
+              </Button>
             )}
 
             {started && (

@@ -2,7 +2,10 @@
 @import '../Contests/styles.css';
 
 .contests-panel {
-  .contest-content {
-    position: relative;
+  .contest-outer-content {
+    width: 100%;
+    .contest-content {
+      position: relative;
+    }
   }
 }
