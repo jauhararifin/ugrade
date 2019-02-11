@@ -1,24 +1,28 @@
-
 export enum SettingActionType {
-    SetProxy = 'SETTING_SET_PROXY'
+  SetProxy = 'SETTING_SET_PROXY',
 }
 
 export interface SettingSetProxy {
-    type: SettingActionType.SetProxy
-    host: string
-    port: number
-    username: string
-    password: string
+  type: SettingActionType.SetProxy
+  host: string
+  port: number
+  username: string
+  password: string
 }
 
-export function setProxy(host: string, port: string | number, username?: string, password?: string): SettingSetProxy {
-    return {
-        type: SettingActionType.SetProxy,
-        host,
-        port: Number(port),
-        username: username ? username : '',
-        password: password ? password : '',
-    }
+export function setProxy(
+  host: string,
+  port: string | number,
+  username?: string,
+  password?: string
+): SettingSetProxy {
+  return {
+    type: SettingActionType.SetProxy,
+    host,
+    port: Number(port),
+    username: username ? username : '',
+    password: password ? password : '',
+  }
 }
 
 export type SettingAction = SettingSetProxy

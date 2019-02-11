@@ -1,8 +1,14 @@
-import { RouterAction } from "connected-react-router"
-import { TitleAction } from "./Title"
-import { AuthAction } from "./Auth"
-import { SettingAction } from "./Setting"
-import { ServerStatusAction } from "./ServerStatus"
-import { ContestAction } from "./Contest"
+import { RouterAction } from 'connected-react-router'
+import { AuthAction } from './Auth'
+import { ContestAction } from './Contest'
+import { ServerStatusAction } from './ServerStatus'
+import { SettingAction } from './Setting'
+import { TitleAction } from './Title'
 
-export type AppAction = TitleAction | RouterAction | AuthAction | SettingAction | ServerStatusAction | ContestAction
+export type AppAction =
+  | TitleAction
+  | RouterAction
+  | AuthAction
+  | SettingAction
+  | ServerStatusAction
+  | ContestAction

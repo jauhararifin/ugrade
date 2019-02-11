@@ -1,3 +1,3 @@
 export type TitleState = string
 
-export const initialValue: TitleState = "UGrade"
+export const initialValue: TitleState = 'UGrade'
