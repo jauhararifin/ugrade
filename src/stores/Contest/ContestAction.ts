@@ -3,6 +3,7 @@ import { Announcement, Contest, Problem } from './ContestState'
 export enum ContestActionType {
   SetContests = 'CONTEST_SET_CONTESTS',
   SetCurrentContest = 'CONTEST_SET_CURRENT_CONTEST',
+  UnsetCurrentContest = 'CONTEST_UNSET_CURRENT_CONTEST',
   SetCurrentContestAnnouncements = 'CONTEST_SET_CURRENT_CONTEST_ANNOUNCEMENTS',
   SetCurrentContestProblems = 'CONTEST_SET_CURRENT_CONTEST_PROBLEMS',
   SetCurrentContestCurrentProblem = 'CONTEST_SET_CURRENT_CONTEST_CURRENT_PROBLEM',
@@ -29,6 +30,14 @@ export const setCurrentContest = (
 ): ContestActionSetCurrentContest => ({
   type: ContestActionType.SetCurrentContest,
   contest,
+})
+
+export interface ContestActionUnsetCurrentContest {
+  type: ContestActionType.UnsetCurrentContest
+}
+
+export const unsetCurrentContest = (): ContestActionUnsetCurrentContest => ({
+  type: ContestActionType.UnsetCurrentContest,
 })
 
 export interface ContestActionSetCurrentContestAnnouncements {
@@ -94,6 +103,7 @@ export const readAnnouncements = (
 export type ContestAction =
   | ContestActionSetContests
   | ContestActionSetCurrentContest
+  | ContestActionUnsetCurrentContest
   | ContestActionSetCurrentContestAnnouncements
   | ContestActionSetCurrentContestProblems
   | ContestActionSetCurrentContestCurrentProblem

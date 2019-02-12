@@ -24,6 +24,9 @@ export const contestReducer: Reducer<ContestState> = (
     case ContestActionType.SetCurrentContest:
       return setCurrentContest(state, action as ContestActionSetCurrentContest)
 
+    case ContestActionType.UnsetCurrentContest:
+      return { ...state, currentContest: undefined }
+
     case ContestActionType.SetCurrentContestAnnouncements:
       return setCurrentContestAnnouncements(
         state,

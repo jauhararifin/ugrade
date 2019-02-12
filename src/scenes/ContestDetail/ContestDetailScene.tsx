@@ -10,8 +10,10 @@ import { Announcement } from '../../services/contest/Announcement'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import {
   Contest,
+  setCurrentContest,
   setCurrentContestAnnouncements,
   setCurrentContestCurrentProblem,
+  unsetCurrentContest,
 } from '../../stores/Contest'
 import {
   getContestAnnouncements,
@@ -50,11 +52,9 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
 
   async componentDidMount() {
     const contestId = Number(this.props.match.params.contestId)
-    if (!this.props.contest) {
-      const contest = await this.props.dispatch(getContestById(contestId))
-      this.initializeAnnouncements(contest)
-      this.initializeProblems(contest)
-    }
+    const contest = await this.props.dispatch(getContestById(contestId))
+    this.initializeAnnouncements(contest)
+    this.initializeProblems(contest)
   }
 
   initializeAnnouncements = async (contest: Contest) => {
@@ -74,11 +74,13 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
   }
 
   initializeProblems = async (contest: Contest) => {
-    await this.props.dispatch(getContestProblems(contest.id))
-    this.loadCurrentProblem()
-    this.unsubscribeContestProblemIds = await this.props.dispatch(
-      subscribeContestProblemIds(contest, this.problemIdsUpdated)
-    )
+    if (contest.registered) {
+      await this.props.dispatch(getContestProblems(contest.id))
+      this.loadCurrentProblem()
+      this.unsubscribeContestProblemIds = await this.props.dispatch(
+        subscribeContestProblemIds(contest, this.problemIdsUpdated)
+      )
+    }
   }
 
   loadCurrentProblem = () => {
@@ -106,6 +108,8 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
   componentWillUnmount() {
     this.unsubscribeContestAnnouncement()
     this.unsubscribeContestProblemIds()
+
+    this.props.dispatch(unsetCurrentContest())
   }
 
   render() {

@@ -49,7 +49,10 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   submitForm,
 }) => {
   const loading =
-    !contest || !serverClock || !contest.problems || !contest.permittedLanguages
+    !contest ||
+    !serverClock ||
+    (contest.registered && !contest.problems) ||
+    (contest.registered && !contest.permittedLanguages)
   const participated = contest && contest.registered
   const started = serverClock && contest && serverClock >= contest.startTime
   const ended = serverClock && contest && serverClock >= contest.finishTime
