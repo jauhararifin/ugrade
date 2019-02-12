@@ -8,21 +8,52 @@ import {
   HTMLSelect,
   Intent,
 } from '@blueprintjs/core'
+import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
 
-export const ContestSubmitForm: FunctionComponent = () => (
-  <form>
+export interface ContestSubmitFormValue {
+  language: number
+  problem: number
+}
+
+export interface ContestSubmitFormProps
+  extends FormikProps<ContestSubmitFormValue> {
+  avaiableLanguages: Array<{ label: string; value: number }>
+  avaiableProblems: Array<{ label: string; value: number }>
+}
+
+export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
+  values,
+  handleSubmit,
+  handleChange,
+  handleBlur,
+  avaiableProblems,
+  avaiableLanguages,
+}) => (
+  <form onSubmit={handleSubmit}>
     <H5>Submit Solution</H5>
     <FormGroup>
       <ControlGroup fill={true}>
-        <HTMLSelect className={Classes.FIXED} options={['C', 'C++', 'Java']} />
+        <HTMLSelect
+          name='language'
+          className={Classes.FIXED}
+          options={avaiableLanguages}
+          value={values.language}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
         <FileInput placeholder='Source Code' />
       </ControlGroup>
     </FormGroup>
     <FormGroup>
       <HTMLSelect
         fill={true}
-        options={['Memotong Kue', 'Hashing', 'Kotak Coklat']}
+        name='problem'
+        className={Classes.FIXED}
+        options={avaiableProblems}
+        value={values.problem}
+        onChange={handleChange}
+        onBlur={handleBlur}
       />
     </FormGroup>
     <p>

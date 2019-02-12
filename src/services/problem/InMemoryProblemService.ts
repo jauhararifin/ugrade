@@ -26,6 +26,6 @@ export class InMemoryProblemService implements ProblemService {
     await new Promise(resolve => setTimeout(resolve, 1500))
     if (ids.length === 0) throw new Error('Connection Error')
 
-    return this.problems.filter(x => x.id in ids).slice()
+    return this.problems.filter(x => ids.includes(x.id)).slice()
   }
 }

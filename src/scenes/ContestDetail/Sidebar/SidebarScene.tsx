@@ -3,10 +3,13 @@ import React, { Component, ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { compose } from 'redux'
+import * as yup from 'yup'
 
+import { Formik, FormikActions, FormikProps } from 'formik'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { Contest } from '../../../stores/Contest'
 import { ContestDetailSceneRoute } from '../ContestDetailScene'
+import { ContestSubmitFormValue } from './ContestSubmitForm'
 import { Menu, SidebarView } from './SidebarView'
 
 export interface SidebarSceneFromRedux {
@@ -30,11 +33,26 @@ export class SidebarScene extends Component<
   SidebarSceneProps,
   SidebarSceneState
 > {
+  submitSolutionInitialValue = {
+    language: 0,
+    problem: 0,
+  }
+
+  submitSolutionSchema = yup.object().shape({
+    language: yup.number().required(),
+    problem: yup.number().required(),
+  })
+
   constructor(props: SidebarSceneProps) {
     super(props)
+    this.state = { menu: this.getCurrentMenu() }
+  }
 
+  getCurrentMenu = () => {
     let menu = Menu.Overview
-    const match = props.location.pathname.match(/contests\/[0-9]+\/([a-z]+)/)
+    const match = this.props.location.pathname.match(
+      /contests\/[0-9]+\/([a-z]+)/
+    )
     if (match && match[1]) {
       switch (match[1]) {
         case 'announcements':
@@ -54,8 +72,7 @@ export class SidebarScene extends Component<
           break
       }
     }
-
-    this.state = { menu }
+    return menu
   }
 
   onMenuChoosed = (menu: Menu) => {
@@ -80,6 +97,14 @@ export class SidebarScene extends Component<
     }
   }
 
+  handleSubmitSolution = (
+    _values: ContestSubmitFormValue,
+    { setSubmitting, resetForm }: FormikActions<ContestSubmitFormValue>
+  ) => {
+    setSubmitting(false)
+    resetForm()
+  }
+
   render() {
     const { contest, serverClock } = this.props
     const newAnnouncementCount =
@@ -88,7 +113,8 @@ export class SidebarScene extends Component<
         : 0
     const menu = this.state.menu
     const rank = 21
-    return (
+
+    const getSidebarView = (props: FormikProps<ContestSubmitFormValue>) => (
       <SidebarView
         contest={contest}
         rank={rank}
@@ -96,6 +122,16 @@ export class SidebarScene extends Component<
         menu={menu}
         onChoose={this.onMenuChoosed}
         newAnnouncementCount={newAnnouncementCount}
+        submitForm={props}
+      />
+    )
+
+    return (
+      <Formik
+        initialValues={this.submitSolutionInitialValue}
+        validationSchema={this.submitSolutionSchema}
+        onSubmit={this.handleSubmitSolution}
+        render={getSidebarView}
       />
     )
   }

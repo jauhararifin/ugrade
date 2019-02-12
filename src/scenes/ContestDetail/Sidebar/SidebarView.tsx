@@ -5,9 +5,10 @@ import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
+import { FormikProps } from 'formik'
 import SidebarMiniCard from '../../../components/SidebarMiniCard'
 import { Contest } from '../../../stores/Contest'
-import ContestSubmitForm from './ContestSubmitForm'
+import ContestSubmitForm, { ContestSubmitFormValue } from './ContestSubmitForm'
 
 export enum Menu {
   Overview = 'Overview',
@@ -25,6 +26,8 @@ export interface SidebarViewProps {
   menu?: Menu
   newAnnouncementCount: number
   onChoose?: (menu: Menu) => any
+
+  submitForm: FormikProps<ContestSubmitFormValue>
 }
 
 const durationToStr = (duration: moment.Duration | number): string => {
@@ -43,8 +46,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   menu,
   onChoose,
   newAnnouncementCount,
+  submitForm,
 }) => {
-  const loading = !contest || !serverClock
+  const loading = !contest || !serverClock || !contest.problems
   const participated = contest && contest.registered
   const started = serverClock && contest && serverClock >= contest.startTime
   const ended = serverClock && contest && serverClock >= contest.finishTime
@@ -276,9 +280,24 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
 
       <div className={classnames(skeletonClass, 'contest-submit-solution')}>
         {loading ? (
-          <ContestSubmitForm />
+          <p>{'Lorem ipsum'.repeat(30)}</p>
         ) : (
-          participated && started && <ContestSubmitForm />
+          contest &&
+          participated &&
+          started &&
+          contest.problems && (
+            <ContestSubmitForm
+              avaiableProblems={contest.problems.map(problem => ({
+                label: problem.name,
+                value: problem.id,
+              }))}
+              avaiableLanguages={[
+                { label: 'C', value: 0 },
+                { label: 'C++', value: 1 },
+              ]}
+              {...submitForm}
+            />
+          )
         )}
       </div>
 
