@@ -326,6 +326,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
           contest &&
           participated &&
           started &&
+          !ended &&
           contest.problems &&
           submitForm && (
             <ContestSubmitForm
