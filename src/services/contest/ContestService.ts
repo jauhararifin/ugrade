@@ -15,6 +15,9 @@ export interface ContestService {
   getAllContests(): Promise<Contest[]>
   getContestDetailById(id: number): Promise<ContestDetail>
 
+  registerContest(token: string, contestId: number): Promise<void>
+  unregisterContest(token: string, contestId: number): Promise<void>
+
   getContestAnnouncements(contestId: number): Promise<Announcement[]>
 
   subscribeContestAnnouncements(

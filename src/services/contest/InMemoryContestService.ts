@@ -8,7 +8,8 @@ import {
   ProblemIdsSubscribeCallback,
   ProblemIdsUnsubscribeFunction,
 } from './ContestService'
-import { NoSuchContest } from './errors'
+import { ContestAlreadyStarted, NoSuchContest } from './errors'
+import { AlreadyRegistered } from './errors/AlreadyRegistered'
 import {
   contestAnnouncementsMap,
   contestProblemsMap,
@@ -44,6 +45,26 @@ export class InMemoryContestService implements ContestService {
       .pop()
     if (contest) return contest
     throw new NoSuchContest('No Such Contest')
+  }
+
+  async registerContest(token: string, contestId: number): Promise<void> {
+    await this.authService.getMe(token)
+    const contest = await this.getContestDetailById(contestId)
+    if (contest.registered) {
+      throw new AlreadyRegistered('Already Registered In The Contest')
+    }
+    if (contest.startTime > new Date()) contest.registered = true
+    else throw new ContestAlreadyStarted('Registration Is Closed')
+  }
+
+  async unregisterContest(token: string, contestId: number): Promise<void> {
+    await this.authService.getMe(token)
+    const contest = await this.getContestDetailById(contestId)
+    if (!contest.registered) {
+      throw new ForbiddenActionError('Not Yet Registered To The Contest')
+    }
+    if (contest.startTime > new Date()) contest.registered = false
+    else throw new ContestAlreadyStarted('Contest Already Running')
   }
 
   async getContestAnnouncements(contestId: number): Promise<Announcement[]> {
