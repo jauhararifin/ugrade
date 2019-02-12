@@ -27,7 +27,9 @@ export interface SidebarViewProps {
   newAnnouncementCount: number
   onChoose?: (menu: Menu) => any
 
-  submitForm: FormikProps<ContestSubmitFormValue>
+  registerForm?: FormikProps<{}>
+  unregisterForm?: FormikProps<{}>
+  submitForm?: FormikProps<ContestSubmitFormValue>
 }
 
 const durationToStr = (duration: moment.Duration | number): string => {
@@ -47,12 +49,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   onChoose,
   newAnnouncementCount,
   submitForm,
+  registerForm,
+  unregisterForm,
 }) => {
-  const loading =
-    !contest ||
-    !serverClock ||
-    (contest.registered && !contest.problems) ||
-    (contest.registered && !contest.permittedLanguages)
   const participated = contest && contest.registered
   const started = serverClock && contest && serverClock >= contest.startTime
   const ended = serverClock && contest && serverClock >= contest.finishTime
@@ -71,6 +70,13 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
           moment.duration(moment(contest.startTime).diff(moment(serverClock)))
         )
       : undefined
+
+  const loading =
+    !contest ||
+    !serverClock ||
+    (contest.registered && started && !contest.problems) ||
+    (contest.registered && !contest.permittedLanguages)
+
   const skeletonClass = classnames({ 'bp3-skeleton': loading })
 
   const onMenuOverviewChoosed = onChoose
@@ -91,6 +97,37 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   const onMenuScoreboardChoosed = onChoose
     ? () => onChoose(Menu.Scoreboard)
     : () => null
+
+  const renderRegisterForm = () => {
+    if (loading) return <Button text='Fake' />
+    else if (!started) {
+      if (!participated && registerForm) {
+        return (
+          <form onSubmit={registerForm.handleSubmit}>
+            <Button
+              fill={true}
+              intent={Intent.PRIMARY}
+              type='submit'
+              text={registerForm.isSubmitting ? 'Registering...' : 'Register'}
+            />
+          </form>
+        )
+      } else if (participated && unregisterForm) {
+        return (
+          <form onSubmit={unregisterForm.handleSubmit}>
+            <Button
+              fill={true}
+              intent={Intent.DANGER}
+              type='submit'
+              text={
+                unregisterForm.isSubmitting ? 'Unregistering...' : 'Unregister'
+              }
+            />
+          </form>
+        )
+      }
+    }
+  }
 
   return (
     <div className='contests-navigation'>
@@ -289,7 +326,8 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
           contest &&
           participated &&
           started &&
-          contest.problems && (
+          contest.problems &&
+          submitForm && (
             <ContestSubmitForm
               avaiableProblems={contest.problems.map(problem => ({
                 label: problem.name,
@@ -305,19 +343,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
       </div>
 
       <div className={classnames(skeletonClass, 'contest-registration')}>
-        {loading ? (
-          <Button text='Fake' />
-        ) : (
-          !participated &&
-          !started && (
-            <Button
-              fill={true}
-              disabled={!contest}
-              intent={Intent.PRIMARY}
-              text='Register'
-            />
-          )
-        )}
+        {renderRegisterForm()}
       </div>
     </div>
   )

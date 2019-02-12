@@ -6,9 +6,11 @@ import { compose } from 'redux'
 import * as yup from 'yup'
 
 import { Formik, FormikActions, FormikProps } from 'formik'
+import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { Contest } from '../../../stores/Contest'
 import { ContestDetailSceneRoute } from '../ContestDetailScene'
+import { registerContest, unregisterContest } from './actions'
 import { ContestSubmitFormValue } from './ContestSubmitForm'
 import { Menu, SidebarView } from './SidebarView'
 
@@ -105,6 +107,40 @@ export class SidebarScene extends Component<
     resetForm()
   }
 
+  handleContestRegister = (
+    _values: {},
+    { setSubmitting, resetForm }: FormikActions<{}>
+  ) => {
+    const contestId = Number(this.props.match.params.contestId)
+    this.props
+      .dispatch(registerContest(contestId))
+      .then(() => {
+        ActionToaster.showSuccessToast('You Are Registered')
+      })
+      .finally(() => {
+        setSubmitting(false)
+        resetForm()
+      })
+      .catch(_ => null)
+  }
+
+  handleContestUnregister = (
+    _values: {},
+    { setSubmitting, resetForm }: FormikActions<{}>
+  ) => {
+    const contestId = Number(this.props.match.params.contestId)
+    this.props
+      .dispatch(unregisterContest(contestId))
+      .then(() => {
+        ActionToaster.showSuccessToast('Unregistered')
+      })
+      .finally(() => {
+        setSubmitting(false)
+        resetForm()
+      })
+      .catch(_ => null)
+  }
+
   render() {
     const { contest, serverClock } = this.props
     const newAnnouncementCount =
@@ -114,7 +150,10 @@ export class SidebarScene extends Component<
     const menu = this.state.menu
     const rank = 21
 
-    const getSidebarView = (props: FormikProps<ContestSubmitFormValue>) => (
+    const renderUnregisterContest = (
+      submitSolutionForm: FormikProps<ContestSubmitFormValue>,
+      contestRegisterForm: FormikProps<{}>
+    ) => (contestUnregisterForm: FormikProps<{}>) => (
       <SidebarView
         contest={contest}
         rank={rank}
@@ -122,7 +161,34 @@ export class SidebarScene extends Component<
         menu={menu}
         onChoose={this.onMenuChoosed}
         newAnnouncementCount={newAnnouncementCount}
-        submitForm={props}
+        registerForm={contestRegisterForm}
+        unregisterForm={contestUnregisterForm}
+        submitForm={submitSolutionForm}
+      />
+    )
+
+    const renderRegisterContest = (
+      submitSolutionForm: FormikProps<ContestSubmitFormValue>
+    ) => (contestRegisterForm: FormikProps<{}>) => (
+      <Formik
+        initialValues={{}}
+        validationSchema={{}}
+        onSubmit={this.handleContestUnregister}
+        render={renderUnregisterContest(
+          submitSolutionForm,
+          contestRegisterForm
+        )}
+      />
+    )
+
+    const renderSubmitSolution = (
+      submitSolutionForm: FormikProps<ContestSubmitFormValue>
+    ) => (
+      <Formik
+        initialValues={{}}
+        validationSchema={{}}
+        onSubmit={this.handleContestRegister}
+        render={renderRegisterContest(submitSolutionForm)}
       />
     )
 
@@ -131,7 +197,7 @@ export class SidebarScene extends Component<
         initialValues={this.submitSolutionInitialValue}
         validationSchema={this.submitSolutionSchema}
         onSubmit={this.handleSubmitSolution}
-        render={getSidebarView}
+        render={renderSubmitSolution}
       />
     )
   }
