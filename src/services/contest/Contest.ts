@@ -1,3 +1,8 @@
+export interface Language {
+  id: number
+  name: string
+}
+
 export interface Contest {
   id: number
   slug: string
@@ -12,4 +17,5 @@ export interface Contest {
 
 export interface ContestDetail extends Contest {
   description: string
+  permittedLanguages: Language[]
 }

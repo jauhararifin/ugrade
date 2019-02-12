@@ -48,7 +48,8 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   newAnnouncementCount,
   submitForm,
 }) => {
-  const loading = !contest || !serverClock || !contest.problems
+  const loading =
+    !contest || !serverClock || !contest.problems || !contest.permittedLanguages
   const participated = contest && contest.registered
   const started = serverClock && contest && serverClock >= contest.startTime
   const ended = serverClock && contest && serverClock >= contest.finishTime
@@ -291,10 +292,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
                 label: problem.name,
                 value: problem.id,
               }))}
-              avaiableLanguages={[
-                { label: 'C', value: 0 },
-                { label: 'C++', value: 1 },
-              ]}
+              avaiableLanguages={(contest.permittedLanguages || []).map(
+                lang => ({ value: lang.id, label: lang.name })
+              )}
               {...submitForm}
             />
           )

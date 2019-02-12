@@ -15,6 +15,11 @@ export interface Problem {
   outputLimit: number
 }
 
+export interface Language {
+  id: number
+  name: string
+}
+
 export interface Announcement {
   id: number
   title: string
@@ -34,6 +39,8 @@ export interface Contest {
   registered: boolean
 
   description?: string
+  permittedLanguages?: Language[]
+
   problems?: Problem[]
   announcements?: Announcement[]
 

@@ -106,6 +106,13 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
+  permittedLanguages: [
+    { id: 1, name: 'C++11' },
+    { id: 2, name: 'C' },
+    { id: 3, name: 'Java' },
+    { id: 4, name: 'Python2' },
+    { id: 5, name: 'Python3' },
+  ],
 }
 
 export const ContestArkav4QualAnnouncements = annoucements.slice()
@@ -132,6 +139,13 @@ export const ContestArkav4Final: ContestDetail = {
   freezed: false,
   registered: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+  permittedLanguages: [
+    { id: 1, name: 'C++11' },
+    { id: 2, name: 'C' },
+    { id: 3, name: 'Java' },
+    { id: 4, name: 'Python2' },
+    { id: 5, name: 'Python3' },
+  ],
 }
 
 export const ContestArkav4FinalAnnouncements = annoucements.slice()
@@ -158,6 +172,13 @@ const ContestArkav5Qual: ContestDetail = {
   freezed: true,
   registered: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
+  permittedLanguages: [
+    { id: 1, name: 'C++11' },
+    { id: 2, name: 'C' },
+    { id: 3, name: 'Java' },
+    { id: 4, name: 'Python2' },
+    { id: 5, name: 'Python3' },
+  ],
 }
 
 export const ContestArkav5QualAnnouncements = annoucements.slice()
@@ -184,6 +205,13 @@ const ContestArkav5Final: ContestDetail = {
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
+  permittedLanguages: [
+    { id: 1, name: 'C++11' },
+    { id: 2, name: 'C' },
+    { id: 3, name: 'Java' },
+    { id: 4, name: 'Python2' },
+    { id: 5, name: 'Python3' },
+  ],
 }
 
 export const ContestArkav5FinalAnnouncements = annoucements.slice()
@@ -199,7 +227,7 @@ export const ContestArkav5FinalProblems = [
   problem14.id,
 ]
 
-export const contests: Contest[] = [
+export const contests: ContestDetail[] = [
   ContestArkav4Qual,
   ContestArkav4Final,
   ContestArkav5Qual,
