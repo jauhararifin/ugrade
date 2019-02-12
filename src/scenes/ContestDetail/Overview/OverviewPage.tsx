@@ -7,13 +7,13 @@ import './styles.css'
 
 import { Contest } from '../../../stores/Contest'
 
-export interface ContestOverviewPageProps {
+export interface OverviewPageProps {
   contest?: Contest
 }
 
-export const ContestOverviewPage: FunctionComponent<
-  ContestOverviewPageProps
-> = ({ contest }) => (
+export const OverviewPage: FunctionComponent<OverviewPageProps> = ({
+  contest,
+}) => (
   <div className='contest-overview'>
     {contest ? (
       <ReactMarkdown className='markdown-body' source={contest.description} />
@@ -27,4 +27,4 @@ export const ContestOverviewPage: FunctionComponent<
   </div>
 )
 
-export default ContestOverviewPage
+export default OverviewPage

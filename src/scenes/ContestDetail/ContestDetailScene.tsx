@@ -23,7 +23,7 @@ import {
 } from './actions'
 import Announcements from './Announcements'
 import { ContestDetailPage } from './ContestDetailPage'
-import ContestOverview from './ContestOverview'
+import Overview from './Overview'
 import ProblemDetailScene from './ProblemDetail'
 import Problems from './Problems'
 
@@ -121,12 +121,12 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
               <Route
                 path='/contests/:contestId/'
                 exact={true}
-                component={ContestOverview}
+                component={Overview}
               />
               <Route
                 path='/contests/:contestId/overview'
                 exact={true}
-                component={ContestOverview}
+                component={Overview}
               />
               <Route
                 path='/contests/:contestId/announcements'
