@@ -8,17 +8,17 @@ import { AppState } from '../../../stores'
 import { Problem } from '../../../stores/Contest'
 import { ProblemDetailView } from './ProblemDetailView'
 
-export interface AnnouncementsSceneRoute {
+export interface ProblemDetailSceneRoute {
   contestId: string
   problemId: string
 }
 
-export interface AnnouncementsSceneProps
-  extends RouteComponentProps<AnnouncementsSceneRoute> {
+export interface ProblemDetailSceneProps
+  extends RouteComponentProps<ProblemDetailSceneRoute> {
   problem?: Problem
 }
 
-export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
+export class ProblemDetailScene extends Component<ProblemDetailSceneProps> {
   render() {
     const { problem } = this.props
     return <ProblemDetailView problem={problem} />
@@ -33,4 +33,4 @@ const mapStateToProps = (state: AppState) => ({
 export default compose<ComponentType>(
   userOnly(),
   connect(mapStateToProps)
-)(AnnouncementsScene)
+)(ProblemDetailScene)

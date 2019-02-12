@@ -1,11 +1,11 @@
 import { H1, H2 } from '@blueprintjs/core'
 import classnames from 'classnames'
-import 'github-markdown-css'
 import React, { FunctionComponent } from 'react'
-import ReactMarkdown from 'react-markdown'
 
-import { Problem } from '../../../stores/Contest'
 import './styles.css'
+
+import { Markdown } from '../../../components/Markdown'
+import { Problem } from '../../../stores/Contest'
 
 export interface ProblemDetailViewProps {
   problem?: Problem
@@ -22,7 +22,7 @@ export const ProblemDetailView: FunctionComponent<ProblemDetailViewProps> = ({
       </H1>
       <div>
         {problem ? (
-          <ReactMarkdown className='markdown-body' source={problem.statement} />
+          <Markdown source={problem.statement} />
         ) : (
           <React.Fragment>
             <H2 className='bp3-skeleton'>Fake Contest Title</H2>
