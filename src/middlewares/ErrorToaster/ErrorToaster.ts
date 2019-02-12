@@ -8,6 +8,7 @@ export function createErrorToasterMiddleware(
     const result = next(action)
     const promise = Promise.resolve(result).catch(error => {
       toaster.showErrorToast(error)
+      throw error
     })
     return (promise as unknown) as A
   }
