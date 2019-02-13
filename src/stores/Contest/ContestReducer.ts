@@ -1,14 +1,31 @@
 import { Reducer } from 'redux'
-import { Problem } from '../../services/problem'
+import { ContestActionType } from './ContestAction'
 import {
-  ContestActionReadAnnouncements,
-  ContestActionSetCurrentContest,
-  ContestActionSetCurrentContestAnnouncements,
-  ContestActionSetCurrentContestCurrentProblem,
-  ContestActionSetCurrentContestProblems,
-  ContestActionType,
-} from './ContestAction'
-import { Announcement, ContestState, initialValue } from './ContestState'
+  ContestReadAnnouncements,
+  readAnnouncementsReducer,
+} from './ContestReadAnnouncements'
+import { ContestSetContests, setContestsReducer } from './ContestSetContests'
+import {
+  ContestSetCurrentContest,
+  setCurrentContestReducer,
+} from './ContestSetCurrentContest'
+import {
+  ContestSetCurrentContestAnnouncements,
+  setCurrentContestAnnouncementsReducer,
+} from './ContestSetCurrentContestAnnouncements'
+import {
+  ContestSetCurrentContestCurrentProblem,
+  setCurrentContestCurrentProblemReducer,
+} from './ContestSetCurrentContestCurrentProblem'
+import {
+  ContestSetCurrentContestProblems,
+  setCurrentContestProblemsReducer,
+} from './ContestSetCurrentContestProblems'
+import { ContestState, initialValue } from './ContestState'
+import {
+  ContestUnsetCurrentContest,
+  unsetCurrentContestReducer,
+} from './ContestUnsetCurrentContest'
 
 export const contestReducer: Reducer<ContestState> = (
   state: ContestState = initialValue,
@@ -16,168 +33,37 @@ export const contestReducer: Reducer<ContestState> = (
 ): ContestState => {
   switch (action.type) {
     case ContestActionType.SetContests:
-      return {
-        ...state,
-        contests: action.contests,
-      }
+      return setContestsReducer(state, action as ContestSetContests)
 
     case ContestActionType.SetCurrentContest:
-      return setCurrentContest(state, action as ContestActionSetCurrentContest)
+      return setCurrentContestReducer(state, action as ContestSetCurrentContest)
 
     case ContestActionType.UnsetCurrentContest:
-      return { ...state, currentContest: undefined }
+      return unsetCurrentContestReducer(
+        state,
+        action as ContestUnsetCurrentContest
+      )
 
     case ContestActionType.SetCurrentContestAnnouncements:
-      return setCurrentContestAnnouncements(
+      return setCurrentContestAnnouncementsReducer(
         state,
-        action as ContestActionSetCurrentContestAnnouncements
+        action as ContestSetCurrentContestAnnouncements
       )
 
     case ContestActionType.SetCurrentContestProblems:
-      return setCurrentContestProblems(
+      return setCurrentContestProblemsReducer(
         state,
-        action as ContestActionSetCurrentContestProblems
+        action as ContestSetCurrentContestProblems
       )
 
     case ContestActionType.SetCurrentContestCurrentProblem:
-      return setCurrentContestCurrentProblem(
+      return setCurrentContestCurrentProblemReducer(
         state,
-        action as ContestActionSetCurrentContestCurrentProblem
+        action as ContestSetCurrentContestCurrentProblem
       )
 
     case ContestActionType.ReadAnnouncements:
-      return readAnnouncements(state, action as ContestActionReadAnnouncements)
+      return readAnnouncementsReducer(state, action as ContestReadAnnouncements)
   }
   return state
-}
-
-function setCurrentContest(
-  state: ContestState,
-  action: ContestActionSetCurrentContest
-): ContestState {
-  return {
-    ...state,
-    currentContest: {
-      ...action.contest,
-      announcements: action.contest.announcements
-        ? action.contest.announcements
-            .sort((a, b) => b.issuedTime.getTime() - a.issuedTime.getTime())
-            .slice()
-        : undefined,
-    },
-  }
-}
-
-function setCurrentContestAnnouncements(
-  state: ContestState,
-  action: ContestActionSetCurrentContestAnnouncements
-): ContestState {
-  const currentContest = state.currentContest
-  if (currentContest && currentContest.id === action.contestId) {
-    if (!currentContest.announcements) currentContest.announcements = []
-
-    const contestIdAccouncement: { [id: number]: Announcement } = {}
-    currentContest.announcements
-      .slice()
-      .forEach(value => (contestIdAccouncement[value.id] = value))
-
-    const newAnnouncements = action.announcements
-    newAnnouncements
-      .slice()
-      .forEach(value => (contestIdAccouncement[value.id] = value))
-
-    const result = Object.values(contestIdAccouncement).sort(
-      (a, b) => b.issuedTime.getTime() - a.issuedTime.getTime()
-    )
-
-    return {
-      ...state,
-      currentContest: {
-        ...currentContest,
-        announcements: result,
-      },
-    }
-  }
-  return { ...state }
-}
-
-function setCurrentContestProblems(
-  state: ContestState,
-  action: ContestActionSetCurrentContestProblems
-): ContestState {
-  const currentContest = state.currentContest
-  if (currentContest && currentContest.id === action.contestId) {
-    if (!currentContest.problems) currentContest.problems = []
-
-    const contestIdProblem: { [id: number]: Problem } = {}
-    currentContest.problems
-      .slice()
-      .forEach(value => (contestIdProblem[value.id] = value))
-
-    const newProblems = action.problems
-    newProblems.slice().forEach(value => (contestIdProblem[value.id] = value))
-
-    const order = action.problemOrder.slice()
-    const result = order
-      .map(problemId => contestIdProblem[problemId])
-      .filter(problem => problem)
-
-    return {
-      ...state,
-      currentContest: {
-        ...currentContest,
-        problems: result,
-      },
-    }
-  }
-  return { ...state }
-}
-
-function setCurrentContestCurrentProblem(
-  state: ContestState,
-  action: ContestActionSetCurrentContestCurrentProblem
-): ContestState {
-  const currentContest = state.currentContest
-  if (currentContest && currentContest.id === action.contestId) {
-    let resultProblem
-    if (typeof action.problem === 'number') {
-      resultProblem = (currentContest.problems || [])
-        .slice()
-        .filter(prob => prob.id === action.problem)
-        .pop()
-    } else {
-      resultProblem = action.problem
-    }
-    return {
-      ...state,
-      currentContest: {
-        ...currentContest,
-        currentProblem: resultProblem as Problem,
-      },
-    }
-  }
-  return { ...state }
-}
-
-function readAnnouncements(
-  state: ContestState,
-  action: ContestActionReadAnnouncements
-): ContestState {
-  const currentContest = state.currentContest
-  if (currentContest) {
-    if (!currentContest.announcements) currentContest.announcements = []
-    const announcements = currentContest.announcements.slice().map(item => ({
-      ...item,
-      read: action.announcements.includes(item.id) ? true : item.read,
-    }))
-
-    return {
-      ...state,
-      currentContest: {
-        ...currentContest,
-        announcements,
-      },
-    }
-  }
-  return { ...state }
 }

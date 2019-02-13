@@ -1,4 +1,10 @@
-import { Announcement, Contest, Problem } from './ContestState'
+import { ContestReadAnnouncements } from './ContestReadAnnouncements'
+import { ContestSetContests } from './ContestSetContests'
+import { ContestSetCurrentContest } from './ContestSetCurrentContest'
+import { ContestSetCurrentContestAnnouncements } from './ContestSetCurrentContestAnnouncements'
+import { ContestSetCurrentContestCurrentProblem } from './ContestSetCurrentContestCurrentProblem'
+import { ContestSetCurrentContestProblems } from './ContestSetCurrentContestProblems'
+import { ContestUnsetCurrentContest } from './ContestUnsetCurrentContest'
 
 export enum ContestActionType {
   SetContests = 'CONTEST_SET_CONTESTS',
@@ -10,101 +16,11 @@ export enum ContestActionType {
   ReadAnnouncements = 'CONTEST_READ_ANNOUNCEMENTS',
 }
 
-export interface ContestActionSetContests {
-  type: ContestActionType.SetContests
-  contests: Contest[]
-}
-
-export const setContests = (contests: Contest[]): ContestActionSetContests => ({
-  type: ContestActionType.SetContests,
-  contests,
-})
-
-export interface ContestActionSetCurrentContest {
-  type: ContestActionType.SetCurrentContest
-  contest: Contest
-}
-
-export const setCurrentContest = (
-  contest: Contest
-): ContestActionSetCurrentContest => ({
-  type: ContestActionType.SetCurrentContest,
-  contest,
-})
-
-export interface ContestActionUnsetCurrentContest {
-  type: ContestActionType.UnsetCurrentContest
-}
-
-export const unsetCurrentContest = (): ContestActionUnsetCurrentContest => ({
-  type: ContestActionType.UnsetCurrentContest,
-})
-
-export interface ContestActionSetCurrentContestAnnouncements {
-  type: ContestActionType.SetCurrentContestAnnouncements
-  contestId: number
-  announcements: Announcement[]
-}
-
-export const setCurrentContestAnnouncements = (
-  contest: number | Contest,
-  announcements: Announcement[]
-): ContestActionSetCurrentContestAnnouncements => ({
-  type: ContestActionType.SetCurrentContestAnnouncements,
-  contestId: typeof contest === 'number' ? contest : contest.id,
-  announcements,
-})
-
-export interface ContestActionSetCurrentContestProblems {
-  type: ContestActionType.SetCurrentContestProblems
-  contestId: number
-  problems: Problem[]
-  problemOrder: number[]
-}
-
-export const setCurrentContestProblems = (
-  contest: number | Contest,
-  problems: Problem[],
-  problemOrder: number[]
-): ContestActionSetCurrentContestProblems => ({
-  type: ContestActionType.SetCurrentContestProblems,
-  contestId: typeof contest === 'number' ? contest : contest.id,
-  problems,
-  problemOrder,
-})
-
-export interface ContestActionSetCurrentContestCurrentProblem {
-  type: ContestActionType.SetCurrentContestCurrentProblem
-  contestId: number
-  problem: number | Problem
-}
-
-export const setCurrentContestCurrentProblem = (
-  contest: number | Contest,
-  problem: number | Problem
-): ContestActionSetCurrentContestCurrentProblem => ({
-  type: ContestActionType.SetCurrentContestCurrentProblem,
-  contestId: typeof contest === 'number' ? contest : contest.id,
-  problem,
-})
-
-export interface ContestActionReadAnnouncements {
-  type: ContestActionType.ReadAnnouncements
-  announcements: number[]
-}
-
-export const readAnnouncements = (
-  announcements: number[]
-): ContestActionReadAnnouncements => ({
-  type: ContestActionType.ReadAnnouncements,
-  announcements,
-})
-
 export type ContestAction =
-  | ContestActionSetContests
-  | ContestActionSetCurrentContest
-  | ContestActionUnsetCurrentContest
-  | ContestActionSetCurrentContestAnnouncements
-  | ContestActionSetCurrentContestProblems
-  | ContestActionSetCurrentContestCurrentProblem
-  | ContestActionReadAnnouncements
+  | ContestSetContests
+  | ContestSetCurrentContest
+  | ContestUnsetCurrentContest
+  | ContestSetCurrentContestAnnouncements
+  | ContestSetCurrentContestProblems
+  | ContestSetCurrentContestCurrentProblem
+  | ContestReadAnnouncements
