@@ -35,7 +35,7 @@ export interface TopNavigationBarProps {
 export class TopNavigationBar extends React.Component<TopNavigationBarProps> {
   constructor(props: TopNavigationBarProps) {
     super(props)
-    props.dispatch(getMeAction()).catch(null)
+    props.dispatch(getMeAction()).catch(_ => null)
   }
 
   render() {
