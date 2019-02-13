@@ -23,10 +23,10 @@ export interface AnnouncementsSceneProps
 
 export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
   componentDidMount() {
-    this.readAllAnnouncements().catch(null)
+    this.readAllAnnouncements().catch(_ => null)
   }
   componentDidUpdate() {
-    this.readAllAnnouncements().catch(null)
+    this.readAllAnnouncements().catch(_ => null)
   }
   readAllAnnouncements = async () => {
     if (this.props.contest && this.props.contest.announcements) {
@@ -42,7 +42,7 @@ export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
               announcements.map(it => it.id)
             )
           )
-          .catch(null)
+          .catch(_ => null)
       }
     }
   }

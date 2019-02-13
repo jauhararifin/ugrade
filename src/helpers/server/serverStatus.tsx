@@ -70,13 +70,13 @@ export const withServer = <P extends object>(
       }
       if (--this.timeToRefresh === 0) {
         this.timeToRefresh = reloadMs
-        this.props.dispatch(getServerClockAction()).catch(null)
+        this.props.dispatch(getServerClockAction()).catch(_ => null)
       }
     }
 
     componentDidMount = () => {
       if (!this.props.serverClock || !this.props.localClock) {
-        this.props.dispatch(getServerClockAction()).catch(null)
+        this.props.dispatch(getServerClockAction()).catch(_ => null)
       }
       this.timer = setInterval(this.tick, 1000)
     }

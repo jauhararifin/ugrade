@@ -44,7 +44,7 @@ class SignInScene extends React.Component<SignInSceneProps, {}> {
       )
       .then(result => setStatus(result))
       .finally(() => setSubmitting(false))
-      .catch(null)
+      .catch(_ => null)
   }
 
   render() {

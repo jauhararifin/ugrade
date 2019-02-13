@@ -42,7 +42,7 @@ export class MyAccountPasswordScene extends React.Component<
         setSubmitting(false)
         resetForm()
       })
-      .catch(null)
+      .catch(_ => null)
   }
 
   render() {
