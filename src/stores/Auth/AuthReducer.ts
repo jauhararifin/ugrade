@@ -1,58 +1,23 @@
 import { Reducer } from 'redux'
 import { AuthActionType } from './AuthAction'
-import {
-  AUTH_IS_SIGNED_IN_KEY,
-  AUTH_REMEMBER_ME_KEY,
-  AUTH_TOKEN_KEY,
-  AuthState,
-  initialState,
-} from './AuthState'
+import { AuthSetMe, setMeReducer } from './AuthSetMe'
+import { AuthSetSignedIn, setSignedInReducer } from './AuthSetSignedIn'
+import { AuthSetSignedOut, setSignedOutReducer } from './AuthSetSignedOut'
+import { AuthState, initialState } from './AuthState'
 
 export const authReducer: Reducer<AuthState> = (
   state: AuthState = initialState,
   action
 ): AuthState => {
-  const result = { ...state }
-
   switch (action.type) {
     case AuthActionType.SetSignedIn:
-      result.isSignedIn = true
-      result.token = action.token
-      result.rememberMe = action.rememberMe
-      break
+      return setSignedInReducer(state, action as AuthSetSignedIn)
 
     case AuthActionType.SetMe:
-      result.me = action.me
-      break
+      return setMeReducer(state, action as AuthSetMe)
 
     case AuthActionType.SetSignedOut:
-      result.isSignedIn = false
-      result.token = ''
-      result.rememberMe = false
-      result.me = undefined
+      return setSignedOutReducer(state, action as AuthSetSignedOut)
   }
-
-  sessionStorage.setItem(AUTH_TOKEN_KEY, result.token)
-  sessionStorage.setItem(
-    AUTH_IS_SIGNED_IN_KEY,
-    result.isSignedIn ? 'true' : 'false'
-  )
-  sessionStorage.setItem(
-    AUTH_REMEMBER_ME_KEY,
-    result.rememberMe ? 'true' : 'false'
-  )
-
-  if (result.rememberMe) {
-    localStorage.setItem(AUTH_TOKEN_KEY, result.token)
-    localStorage.setItem(
-      AUTH_IS_SIGNED_IN_KEY,
-      result.isSignedIn ? 'true' : 'false'
-    )
-    localStorage.setItem(
-      AUTH_REMEMBER_ME_KEY,
-      result.rememberMe ? 'true' : 'false'
-    )
-  }
-
-  return result
+  return { ...state }
 }
