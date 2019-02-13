@@ -10,7 +10,7 @@ export interface ContestSetCurrentContestAnnouncements {
 export function setCurrentContestAnnouncements(
   contest: number | Contest,
   announcements: Announcement[]
-) {
+): ContestSetCurrentContestAnnouncements {
   return {
     type: ContestActionType.SetCurrentContestAnnouncements,
     contestId: typeof contest === 'number' ? contest : contest.id,
@@ -21,7 +21,7 @@ export function setCurrentContestAnnouncements(
 export function setCurrentContestAnnouncementsReducer(
   state: ContestState,
   action: ContestSetCurrentContestAnnouncements
-) {
+): ContestState {
   const currentContest = state.currentContest
   if (currentContest && currentContest.id === action.contestId) {
     if (!currentContest.announcements) currentContest.announcements = []

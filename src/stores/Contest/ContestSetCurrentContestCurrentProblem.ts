@@ -10,7 +10,7 @@ export interface ContestSetCurrentContestCurrentProblem {
 export function setCurrentContestCurrentProblem(
   contest: number | Contest,
   problem: number | Problem
-) {
+): ContestSetCurrentContestCurrentProblem {
   return {
     type: ContestActionType.SetCurrentContestCurrentProblem,
     contestId: typeof contest === 'number' ? contest : contest.id,
@@ -21,7 +21,7 @@ export function setCurrentContestCurrentProblem(
 export function setCurrentContestCurrentProblemReducer(
   state: ContestState,
   action: ContestSetCurrentContestCurrentProblem
-) {
+): ContestState {
   const currentContest = state.currentContest
   if (currentContest && currentContest.id === action.contestId) {
     let resultProblem

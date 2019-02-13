@@ -16,7 +16,7 @@ export function setContests(contests: Contest[]): ContestSetContests {
 export function setContestsReducer(
   state: ContestState,
   action: ContestSetContests
-) {
+): ContestState {
   return {
     ...state,
     contests: action.contests,

@@ -5,7 +5,7 @@ export interface ContestUnsetCurrentContest {
   type: ContestActionType.UnsetCurrentContest
 }
 
-export function unsetCurrentContest() {
+export function unsetCurrentContest(): ContestUnsetCurrentContest {
   return {
     type: ContestActionType.UnsetCurrentContest,
   }
@@ -14,6 +14,6 @@ export function unsetCurrentContest() {
 export function unsetCurrentContestReducer(
   state: ContestState,
   _action: ContestUnsetCurrentContest
-) {
+): ContestState {
   return { ...state, currentContest: undefined }
 }

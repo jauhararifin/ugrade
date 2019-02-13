@@ -6,7 +6,7 @@ export interface ContestSetCurrentContest {
   contest: Contest
 }
 
-export function setCurrentContest(contest: Contest) {
+export function setCurrentContest(contest: Contest): ContestSetCurrentContest {
   return {
     type: ContestActionType.SetCurrentContest,
     contest,
@@ -16,7 +16,7 @@ export function setCurrentContest(contest: Contest) {
 export function setCurrentContestReducer(
   state: ContestState,
   action: ContestSetCurrentContest
-) {
+): ContestState {
   return {
     ...state,
     currentContest: {

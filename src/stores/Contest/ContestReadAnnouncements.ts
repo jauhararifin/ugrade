@@ -6,7 +6,9 @@ export interface ContestReadAnnouncements {
   announcements: number[]
 }
 
-export function readAnnouncements(announcements: number[]) {
+export function readAnnouncements(
+  announcements: number[]
+): ContestReadAnnouncements {
   return {
     type: ContestActionType.ReadAnnouncements,
     announcements,
@@ -16,7 +18,7 @@ export function readAnnouncements(announcements: number[]) {
 export function readAnnouncementsReducer(
   state: ContestState,
   action: ContestReadAnnouncements
-) {
+): ContestState {
   const currentContest = state.currentContest
   if (currentContest) {
     if (!currentContest.announcements) currentContest.announcements = []

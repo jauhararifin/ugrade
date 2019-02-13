@@ -12,7 +12,7 @@ export function setCurrentContestProblems(
   contest: number | Contest,
   problems: Problem[],
   problemOrder: number[]
-) {
+): ContestSetCurrentContestProblems {
   return {
     type: ContestActionType.SetCurrentContestProblems,
     contestId: typeof contest === 'number' ? contest : contest.id,
@@ -24,7 +24,7 @@ export function setCurrentContestProblems(
 export function setCurrentContestProblemsReducer(
   state: ContestState,
   action: ContestSetCurrentContestProblems
-) {
+): ContestState {
   const currentContest = state.currentContest
   if (currentContest && currentContest.id === action.contestId) {
     if (!currentContest.problems) currentContest.problems = []
