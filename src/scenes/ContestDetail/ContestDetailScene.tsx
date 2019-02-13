@@ -15,6 +15,7 @@ import {
   setCurrentContestCurrentProblem,
   unsetCurrentContest,
 } from '../../stores/Contest'
+import { setTitle } from '../../stores/Title'
 import {
   getContestAnnouncements,
   getContestById,
@@ -53,6 +54,7 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
   async componentDidMount() {
     const contestId = Number(this.props.match.params.contestId)
     const contest = await this.props.dispatch(getContestById(contestId))
+    this.props.dispatch(setTitle(`UGrade | ${contest.name}`))
     this.initializeAnnouncements(contest)
     this.initializeProblems(contest)
   }

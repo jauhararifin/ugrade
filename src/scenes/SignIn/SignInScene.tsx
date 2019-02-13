@@ -8,6 +8,7 @@ import './styles.css'
 
 import { publicOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
+import { setTitle } from '../../stores/Title'
 import { signInAction } from './actions'
 import { SignInFormValue } from './SignInForm'
 import SignInPage from './SignInPage'
@@ -28,6 +29,10 @@ class SignInScene extends React.Component<SignInSceneProps, {}> {
     password: yup.string().required(),
     rememberMe: yup.boolean(),
   })
+
+  componentDidMount() {
+    this.props.dispatch(setTitle('UGrade | Sign In'))
+  }
 
   handleSubmit = (
     values: SignInFormValue,

@@ -7,6 +7,7 @@ import * as yup from 'yup'
 import ActionToaster from '../../middlewares/ErrorToaster/ActionToaster'
 import { AppAction, AppState } from '../../stores'
 import { setProxy } from '../../stores/Setting'
+import { setTitle } from '../../stores/Title'
 import {
   ProxySettingFormProps,
   ProxySettingFormValue,
@@ -34,6 +35,10 @@ export class SettingScene extends React.Component<SettingSceneProps> {
     username: yup.string(),
     password: yup.string(),
   })
+
+  componentDidMount() {
+    this.props.dispatch(setTitle('UGrade | Settings'))
+  }
 
   proxyHandleSubmit = (
     values: ProxySettingFormValue,

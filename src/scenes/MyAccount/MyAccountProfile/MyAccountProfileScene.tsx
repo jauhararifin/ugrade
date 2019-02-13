@@ -5,6 +5,7 @@ import * as yup from 'yup'
 
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { GenderType, ShirtSizeType, User } from '../../../stores/Auth'
+import { setTitle } from '../../../stores/Title'
 import { setProfile } from './actions'
 import { genderValues, shirtSizeValues } from './helpers'
 import MyAccountProfileForm, {
@@ -34,6 +35,10 @@ export class MyAccountProfileScene extends React.Component<
       .oneOf(genderValues),
     address: yup.string().label('Name'),
   })
+
+  componentDidMount() {
+    this.props.dispatch(setTitle('UGrade | My Account'))
+  }
 
   handleSubmit = (
     values: MyAccountProfileFormValue,

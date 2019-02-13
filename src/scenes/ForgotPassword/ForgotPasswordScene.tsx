@@ -8,6 +8,7 @@ import './styles.css'
 
 import { publicOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
+import { setTitle } from '../../stores/Title'
 import { forgotPasswordAction } from './actions'
 import { ForgotPasswordFormValue } from './ForgotPasswordForm'
 import ForgotPasswordPage from './ForgotPasswordPage'
@@ -27,6 +28,10 @@ export class ForgotPasswordScene extends React.Component<
       .label('username or email')
       .required(),
   })
+
+  componentDidMount() {
+    this.props.dispatch(setTitle('UGrade | Forgot Password'))
+  }
 
   handleSubmit = (
     values: ForgotPasswordFormValue,

@@ -7,8 +7,10 @@ import { userOnly } from '../../helpers/auth'
 import { withServer } from '../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../stores'
 import { Contest } from '../../stores/Contest'
+import { setTitle } from '../../stores/Title'
 import { getContestsAction } from './actions'
 import ContestsPage from './ContestsPage'
+
 import './styles.css'
 
 export interface ContestsSceneProps {
@@ -24,6 +26,7 @@ export class ContestsScene extends Component<ContestsSceneProps> {
 
   async componentDidMount() {
     await this.props.dispatch(getContestsAction())
+    this.props.dispatch(setTitle('UGrade | Contests'))
   }
 
   handleContestChoose = (contest: Contest) => {

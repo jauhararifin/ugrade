@@ -8,6 +8,7 @@ import './styles.css'
 import { compose } from 'redux'
 import { publicOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
+import { setTitle } from '../../stores/Title'
 import { signUpAction } from './actions'
 import { SignUpFormValue } from './SignUpForm'
 import SignUpPage from './SignUpPage'
@@ -36,6 +37,10 @@ class SignUpScene extends React.Component<SignUpSceneProps> {
       .min(8)
       .required(),
   })
+
+  componentDidMount() {
+    this.props.dispatch(setTitle('UGrade | Sign Up'))
+  }
 
   handleSubmit = (
     values: SignUpFormValue,
