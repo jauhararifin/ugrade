@@ -1,14 +1,8 @@
 import { Reducer } from 'redux'
 
 import { SettingActionType } from './SettingAction'
-import {
-  initialState,
-  SETTING_PROXY_HOST_KEY,
-  SETTING_PROXY_PASSWORD_KEY,
-  SETTING_PROXY_PORT_KEY,
-  SETTING_PROXY_USERNAME_KEY,
-  SettingState,
-} from './SettingState'
+import { setProxyReducer, SettingSetProxy } from './SettingSetProxy'
+import { initialState, SettingState } from './SettingState'
 
 export const settingReducer: Reducer<SettingState> = (
   state: SettingState = initialState,
@@ -16,18 +10,7 @@ export const settingReducer: Reducer<SettingState> = (
 ): SettingState => {
   switch (action.type) {
     case SettingActionType.SetProxy:
-      const result = {
-        ...state,
-        proxyHost: action.host,
-        proxyPort: action.port,
-        proxyUsername: action.username,
-        proxyPassword: action.password,
-      }
-      localStorage.setItem(SETTING_PROXY_HOST_KEY, result.proxyHost)
-      localStorage.setItem(SETTING_PROXY_PORT_KEY, result.proxyPort)
-      localStorage.setItem(SETTING_PROXY_USERNAME_KEY, result.proxyUsername)
-      localStorage.setItem(SETTING_PROXY_PASSWORD_KEY, result.proxyPassword)
-      return result
+      return setProxyReducer(state, action as SettingSetProxy)
   }
   return state
 }
