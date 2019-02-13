@@ -1,3 +1,4 @@
 export * from './TitleAction'
-export * from './TitleReducer'
 export * from './TitleState'
+export * from './TitleReducer'
+export * from './TitleSetTitle'
