@@ -10,7 +10,6 @@ import { Announcement } from '../../services/contest/Announcement'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import {
   Contest,
-  setCurrentContest,
   setCurrentContestAnnouncements,
   setCurrentContestCurrentProblem,
   unsetCurrentContest,
