@@ -27,6 +27,7 @@ export const settingReducer: Reducer<SettingState> = (
       localStorage.setItem(SETTING_PROXY_PORT_KEY, result.proxyPort)
       localStorage.setItem(SETTING_PROXY_USERNAME_KEY, result.proxyUsername)
       localStorage.setItem(SETTING_PROXY_PASSWORD_KEY, result.proxyPassword)
+      return result
   }
   return state
 }
