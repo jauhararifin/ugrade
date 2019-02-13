@@ -55,8 +55,8 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
     const contestId = Number(this.props.match.params.contestId)
     const contest = await this.props.dispatch(getContestById(contestId))
     this.props.dispatch(setTitle(`UGrade | ${contest.name}`))
-    this.initializeAnnouncements(contest)
-    this.initializeProblems(contest)
+    this.initializeAnnouncements(contest).catch(_ => null)
+    this.initializeProblems(contest).catch(_ => null)
   }
 
   initializeAnnouncements = async (contest: Contest) => {
@@ -93,7 +93,7 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
       this.props.dispatch(
         setCurrentContestCurrentProblem(
           parseInt(this.props.match.params.contestId, 10),
-          parseInt(match[1] as string, 10)
+          parseInt(match[1], 10)
         )
       )
     }
@@ -101,9 +101,9 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
 
   problemIdsUpdated = (problemIds: number[]) => {
     if (this.props.contest) {
-      this.props.dispatch(
-        getContestProblemsByIds(this.props.contest.id, problemIds)
-      )
+      this.props
+        .dispatch(getContestProblemsByIds(this.props.contest.id, problemIds))
+        .catch(_ => null)
     }
   }
 

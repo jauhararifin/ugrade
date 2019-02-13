@@ -23,7 +23,9 @@ export class AnnouncementsScene extends Component<AnnouncementsSceneProps> {
   handleProblemChoose = (problem: Problem) => {
     const { contest } = this.props
     if (contest) {
-      this.props.dispatch(loadContestProblem(contest.id, problem.id))
+      this.props
+        .dispatch(loadContestProblem(contest.id, problem.id))
+        .catch(_ => null)
     }
   }
   render() {

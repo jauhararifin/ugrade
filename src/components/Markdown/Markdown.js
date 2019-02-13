@@ -17,14 +17,14 @@ export class Markdown extends Component {
   render() {
     const source = this.props.source
     const newProps = {
-      source,
       plugins: [RemarkMathPlugin],
       renderers: {
-        math: props => <MathJax.Node>{props.value}</MathJax.Node>,
         inlineMath: props => (
           <MathJax.Node inline={true}>{props.value}</MathJax.Node>
         ),
+        math: props => <MathJax.Node>{props.value}</MathJax.Node>,
       },
+      source,
     }
     return (
       <MathJax.Context input='tex'>
