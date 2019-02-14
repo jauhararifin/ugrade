@@ -294,4 +294,40 @@ export class InMemoryContestService implements ContestService {
     })
     return { ...clarification }
   }
+
+  async readContestClarificationEntries(
+    token: string,
+    contestId: number,
+    clarificationId: number,
+    entryIds: number[]
+  ): Promise<void> {
+    await this.authService.getMe(token)
+
+    const contest = this.contests.filter(c => c.id === contestId).pop()
+    if (!contest) {
+      throw new NoSuchContest('No Such Contest')
+    }
+    if (!contest.registered) {
+      throw new ForbiddenActionError('You Are Not Registered To The Contest')
+    }
+    if (new Date() >= contest.finishTime) {
+      throw new ForbiddenActionError('Contest Already Finished')
+    }
+
+    const clarification = Object.values(
+      this.contestClarificationsMap[contest.id]
+    )
+      .filter(c => c.id === clarificationId)
+      .pop()
+
+    if (!clarification) {
+      throw new NoSuchClarification('No Such Clarification')
+    }
+
+    clarification.entries.forEach(entry => {
+      if (entryIds.includes(entry.id)) {
+        entry.read = true
+      }
+    })
+  }
 }

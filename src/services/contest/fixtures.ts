@@ -15,7 +15,7 @@ import {
   problem9,
 } from '../problem/fixtures'
 import { Announcement } from './Announcement'
-import { Contest, ContestDetail } from './Contest'
+import { ContestDetail } from './Contest'
 
 export const AnnouncementExample1: Announcement = {
   id: 1,

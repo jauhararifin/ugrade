@@ -71,4 +71,11 @@ export interface ContestService {
     clarificationId: number,
     content: string
   ): Promise<Clarification>
+
+  readContestClarificationEntries(
+    token: string,
+    contestId: number,
+    clarificationId: number,
+    entryIds: number[]
+  ): Promise<void>
 }
