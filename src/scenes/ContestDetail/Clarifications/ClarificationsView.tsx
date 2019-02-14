@@ -5,12 +5,10 @@ import {
   H1,
   H3,
   H5,
-  Icon,
   Intent,
   Tag,
 } from '@blueprintjs/core'
 import classnames from 'classnames'
-import { FormikProps } from 'formik'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { Component } from 'react'
@@ -18,16 +16,12 @@ import React, { Component } from 'react'
 import './styles.css'
 
 import { Clarification, Contest } from '../../../stores/Contest'
-import { ClarificationDetailView } from './ClarificationDetailView'
-import {
-  NewClarificationForm,
-  NewClarificationFormValue,
-} from './NewClarificationForm'
+import CreateClarificationForm from './CreateClarificationForm'
+import { ClarificationDetailView } from './DetailView/ClarificationDetailView'
 
 export interface ClarificationsViewProps {
   contest?: Contest
   serverClock?: Date
-  clarificationForm: FormikProps<NewClarificationFormValue>
 }
 
 export interface ClarificationsViewState {
@@ -44,20 +38,9 @@ export class ClarificationsView extends Component<
   }
 
   render() {
-    const { contest, serverClock, clarificationForm } = this.props
+    const { contest, serverClock } = this.props
     const loading = !contest || !contest.clarifications || !contest.problems
     const currentMoment = moment(serverClock || new Date())
-    const subjectOptions =
-      contest && contest.problems
-        ? [
-            { label: 'General Issue', value: 'General Issue' },
-            { label: 'Technical Issue', value: 'Technical Issue' },
-            ...contest.problems.map(problem => ({
-              label: `Problem: ${problem.name}`,
-              value: `Problem: ${problem.name}`,
-            })),
-          ]
-        : []
     const createClarificationChooseHandler = (
       clarification: Clarification
     ) => () => this.setState({ currentClarification: clarification })
@@ -70,7 +53,7 @@ export class ClarificationsView extends Component<
           <ClarificationDetailView
             clarification={this.state.currentClarification}
             handleClose={clarificationUnchooseHandler}
-            serverClock={serverClock}
+            serverClock={serverClock || new Date()}
           />
         )}
         <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
@@ -146,10 +129,7 @@ export class ClarificationsView extends Component<
         </div>
         {!loading ? (
           <Card className='clarification-form-panel'>
-            <NewClarificationForm
-              subjectOptions={subjectOptions}
-              {...clarificationForm}
-            />
+            <CreateClarificationForm />
           </Card>
         ) : (
           <div className='bp3-skeleton'>{'fake content'.repeat(100)}</div>

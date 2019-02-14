@@ -48,47 +48,7 @@
       }
       .clarification-form-panel {
         margin-top: 30px;
-        .clarification-form {
-          .head {
-            display: flex;
-            width: 100%;
-            .group-subject {
-              margin-right: 10px;
-            }
-            .group-title {
-              flex-grow: 1;
-              margin-left: 10px;
-            }
-          }
-        }
       }
-    }
-  }
-}
-
-.clarif-detail {
-  .info {
-    display: flex;
-    justify-content: space-between;
-  }
-  .content {
-    .entry {
-      margin-top: 10px;
-    }
-  }
-  .reply-form {
-    display: flex;
-    .reply-message {
-      flex-grow: 1;
-      resize: vertical;
-    }
-    .send-reply {
-      flex-grow: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin-left: 10px;
-      min-width: 50px;
     }
   }
 }

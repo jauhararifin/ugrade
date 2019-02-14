@@ -1,0 +1,11 @@
+.clarification-detail {
+  .info {
+    display: flex;
+    justify-content: space-between;
+  }
+  .content {
+    .entry {
+      margin-top: 10px;
+    }
+  }
+}

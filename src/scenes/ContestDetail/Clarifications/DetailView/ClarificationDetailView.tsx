@@ -1,16 +1,11 @@
-import {
-  Button,
-  Card,
-  Classes,
-  Drawer,
-  H5,
-  Intent,
-  Label,
-  TextArea,
-} from '@blueprintjs/core'
+import { Card, Classes, Drawer, H5 } from '@blueprintjs/core'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { Clarification } from '../../../stores/Contest'
+
+import './styles.scss'
+
+import { Clarification } from '../../../../stores/Contest'
+import CreateClarificationEntryForm from './CreateClarificationEntryForm'
 
 export interface ClarificationDetailViewProps {
   clarification?: Clarification
@@ -28,7 +23,7 @@ export const ClarificationDetailView: FunctionComponent<
       isOpen={!!clarification}
       onClose={handleClose}
       title={clarification && clarification.title}
-      className='clarif-detail'
+      className='clarification-detail'
     >
       {clarification && (
         <React.Fragment>
@@ -40,7 +35,11 @@ export const ClarificationDetailView: FunctionComponent<
               </div>
               <div className='content'>
                 {clarification.entries.map(entry => (
-                  <Card className='entry' elevation={entry.read ? 0 : 2}>
+                  <Card
+                    key={entry.id}
+                    className='entry'
+                    elevation={entry.read ? 0 : 2}
+                  >
                     <div className='info'>
                       <H5>From: {entry.sender}</H5>
                       <p>{moment(entry.issuedTime).from(currentMoment)}</p>
@@ -52,22 +51,7 @@ export const ClarificationDetailView: FunctionComponent<
             </div>
           </div>
           <div className={Classes.DRAWER_FOOTER}>
-            <form className='reply-form'>
-              <TextArea
-                className='reply-message'
-                rows={3}
-                fill={true}
-                placeholder='Reply the clarifications here...'
-              />
-              <div className='send-reply'>
-                <Button
-                  intent={Intent.PRIMARY}
-                  minimal={true}
-                  fill={true}
-                  icon='circle-arrow-right'
-                />
-              </div>
-            </form>
+            <CreateClarificationEntryForm clarificationId={clarification.id} />
           </div>
         </React.Fragment>
       )}

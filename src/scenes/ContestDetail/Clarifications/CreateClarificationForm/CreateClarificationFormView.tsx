@@ -9,24 +9,23 @@ import {
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
 
-export interface NewClarificationFormValue {
-  title: string
-  subject: string
-  content: string
-}
+import { CreateClarificationFormValue } from './CreateClarificationForm'
+import './styles.css'
 
 export interface SubjectOption {
   label: string
   value: string
 }
 
-export interface NewClarificationFormProps
-  extends FormikProps<NewClarificationFormValue> {
+export interface CreateClarificationFormViewOwnProps {
   subjectOptions: SubjectOption[]
 }
 
-export const NewClarificationForm: FunctionComponent<
-  NewClarificationFormProps
+export type CreateClarificationFormViewProps = CreateClarificationFormViewOwnProps &
+  FormikProps<CreateClarificationFormValue>
+
+export const CreateClarificationFormView: FunctionComponent<
+  CreateClarificationFormViewProps
 > = ({
   handleSubmit,
   errors,
