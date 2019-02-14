@@ -1,4 +1,5 @@
 import { Announcement } from './Announcement'
+import { Clarification } from './Clarification'
 import { Contest, ContestDetail } from './Contest'
 
 export type AnnouncementSubscribeCallback = (
@@ -10,6 +11,12 @@ export type AnnouncementUbsubscribeFunction = () => any
 export type ProblemIdsSubscribeCallback = (problemIds: number[]) => any
 
 export type ProblemIdsUnsubscribeFunction = () => any
+
+export type ClarificationSubscribeCallback = (
+  clarifications: Clarification[]
+) => any
+
+export type ClarificationUnsubscribeFunction = () => any
 
 export interface ContestService {
   getAllContests(): Promise<Contest[]>
@@ -38,4 +45,23 @@ export interface ContestService {
     contestId: number,
     callback: ProblemIdsSubscribeCallback
   ): ProblemIdsUnsubscribeFunction
+
+  getContestClarifications(
+    token: string,
+    contestId: number
+  ): Promise<Clarification[]>
+
+  subscribeContestClarifications(
+    token: string,
+    contestId: number,
+    callback: ClarificationSubscribeCallback
+  ): Promise<ClarificationUnsubscribeFunction>
+
+  createContestClarification(
+    token: string,
+    contestId: number,
+    title: string,
+    subject: string,
+    content: string
+  ): Promise<void>
 }

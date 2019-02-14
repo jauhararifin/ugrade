@@ -1,9 +1,12 @@
 import { AuthService, ForbiddenActionError } from '../auth'
 import { Announcement } from './Announcement'
+import { Clarification, ClarificationEntry } from './Clarification'
 import { Contest, ContestDetail } from './Contest'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
+  ClarificationSubscribeCallback,
+  ClarificationUnsubscribeFunction,
   ContestService,
   ProblemIdsSubscribeCallback,
   ProblemIdsUnsubscribeFunction,
@@ -21,6 +24,7 @@ export class InMemoryContestService implements ContestService {
   private contests: ContestDetail[] = []
   private contestProblemsMap: { [id: number]: number[] } = {}
   private contestAnnouncementsMap: { [id: number]: Announcement[] } = {}
+  private contestClarificationsMap: { [id: number]: Clarification[] } = {}
 
   constructor(authService: AuthService) {
     this.authService = authService
@@ -28,6 +32,10 @@ export class InMemoryContestService implements ContestService {
     this.contests = contests.slice()
     this.contestProblemsMap = { ...contestProblemsMap }
     this.contestAnnouncementsMap = { ...contestAnnouncementsMap }
+
+    this.contests.forEach(
+      contest => (this.contestClarificationsMap[contest.id] = [])
+    )
   }
 
   async getAllContests(): Promise<Contest[]> {
@@ -146,5 +154,83 @@ export class InMemoryContestService implements ContestService {
       throw new ForbiddenActionError('Cannot access this contest problems')
     }
     return this.contestProblemsMap[contestId].slice()
+  }
+
+  async getContestClarifications(
+    token: string,
+    contestId: number
+  ): Promise<Clarification[]> {
+    await this.authService.getMe(token)
+    await this.getContestDetailById(contestId)
+    return this.contestClarificationsMap[contestId].slice()
+  }
+
+  async subscribeContestClarifications(
+    token: string,
+    contestId: number,
+    callback: ClarificationSubscribeCallback
+  ): Promise<ClarificationUnsubscribeFunction> {
+    await this.authService.getMe(token)
+    const contest = await this.getContestDetailById(contestId)
+    if (!contest.registered) {
+      throw new ForbiddenActionError('Cannot access contest clarification')
+    }
+
+    const runThis = async () => {
+      const arr = await this.getContestClarifications(token, contestId)
+      for (const clarif of arr) {
+        const newEntry: ClarificationEntry = {
+          id: Math.round(Math.random() * 100000),
+          sender: 'jury',
+          content: `Some random content ${Math.random()}`,
+          read: false,
+          issuedTime: new Date(),
+        }
+        clarif.entries.push(newEntry)
+      }
+
+      const clarifications = await this.getContestClarifications(
+        token,
+        contestId
+      )
+      callback(clarifications)
+    }
+
+    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    return () => {
+      clearInterval(timeout)
+    }
+  }
+
+  async createContestClarification(
+    token: string,
+    contestId: number,
+    title: string,
+    subject: string,
+    content: string
+  ): Promise<void> {
+    const user = await this.authService.getMe(token)
+    const contest = await this.getContestDetailById(contestId)
+    if (!contest.registered) {
+      throw new ForbiddenActionError('Cannot access contest clarification')
+    }
+
+    const clarification: Clarification = {
+      id: Math.round(Math.random() * 100000),
+      title,
+      subject,
+      issuedTime: new Date(),
+      entries: [
+        {
+          id: Math.round(Math.random() * 100000),
+          sender: user.username,
+          content,
+          read: true,
+          issuedTime: new Date(),
+        },
+      ],
+    }
+
+    this.contestClarificationsMap[contest.id].push(clarification)
   }
 }
