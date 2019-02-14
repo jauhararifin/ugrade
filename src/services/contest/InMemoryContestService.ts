@@ -229,7 +229,7 @@ export class InMemoryContestService implements ContestService {
     title: string,
     subject: string,
     content: string
-  ): Promise<void> {
+  ): Promise<Clarification> {
     const user = await this.authService.getMe(token)
     const contest = await this.getContestDetailById(contestId)
     if (!contest.registered) {
@@ -253,42 +253,36 @@ export class InMemoryContestService implements ContestService {
     }
 
     this.contestClarificationsMap[contest.id].push(clarification)
+    return { ...clarification }
   }
 
   async createContestClarificationEntry(
     token: string,
+    contestId: number,
     clarificationId: number,
     content: string
-  ): Promise<void> {
+  ): Promise<Clarification> {
     const user = await this.authService.getMe(token)
-    let contest: Contest | undefined
-    let clarification: Clarification | undefined
-    for (const cid in this.contestClarificationsMap) {
-      if (this.contestClarificationsMap.hasOwnProperty(cid)) {
-        const clarifs = this.contestClarificationsMap[cid]
-        const clarif = clarifs.filter(temp => temp.id === clarificationId).pop()
-        if (clarif !== undefined) {
-          clarification = clarif
-          contest = this.contests[cid]
-          break
-        }
-      }
-    }
 
+    const contest = this.contests.filter(c => c.id === contestId).pop()
     if (!contest) {
       throw new NoSuchContest('No Such Contest')
     }
-
-    if (!clarification) {
-      throw new NoSuchClarification('No Such Clarification')
-    }
-
     if (!contest.registered) {
       throw new ForbiddenActionError('You Are Not Registered To The Contest')
     }
-
     if (new Date() >= contest.finishTime) {
       throw new ForbiddenActionError('Contest Already Finished')
+    }
+
+    const clarification = Object.values(
+      this.contestClarificationsMap[contest.id]
+    )
+      .filter(c => c.id === clarificationId)
+      .pop()
+
+    if (!clarification) {
+      throw new NoSuchClarification('No Such Clarification')
     }
 
     clarification.entries.push({
@@ -298,5 +292,6 @@ export class InMemoryContestService implements ContestService {
       read: true,
       content,
     })
+    return { ...clarification }
   }
 }

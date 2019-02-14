@@ -63,11 +63,12 @@ export interface ContestService {
     title: string,
     subject: string,
     content: string
-  ): Promise<void>
+  ): Promise<Clarification>
 
   createContestClarificationEntry(
     token: string,
+    contestId: number,
     clarificationId: number,
     content: string
-  ): Promise<void>
+  ): Promise<Clarification>
 }
