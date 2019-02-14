@@ -8,17 +8,11 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
+import { SignUpFormValue } from './SignUpForm'
 
-export interface SignUpFormValue {
-  username: string
-  name: string
-  email: string
-  password: string
-}
+export interface SignUpFormViewProps extends FormikProps<SignUpFormValue> {}
 
-export interface SignUpFormProps extends FormikProps<SignUpFormValue> {}
-
-export const SignUpForm: React.FunctionComponent<SignUpFormProps> = ({
+export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
   handleSubmit,
   handleBlur,
   handleChange,

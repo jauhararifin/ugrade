@@ -1,22 +1,20 @@
 import React, { FunctionComponent } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+
 import './styles.css'
 
 import logo from '../../assets/images/logo.svg'
 import BottomLink from '../../components/BottomLink'
-import { SignUpForm, SignUpFormProps } from './SignUpForm'
+import SignUpForm from './SignUpForm'
 
-export type SignUpPageProps = SignUpFormProps
-
-const SignUpPage: FunctionComponent<SignUpPageProps> = props => (
+export const SignUpView: FunctionComponent = () => (
   <div className='plain-page'>
     <div>
       <Link to='/'>
         <img src={logo} width={100} alt='logo' />
       </Link>
       <h1>Welcome To UGrade</h1>
-      <SignUpForm {...props} />
+      <SignUpForm />
     </div>
     <BottomLink>
       <Link to='/signin'>Sign In</Link>
@@ -24,5 +22,3 @@ const SignUpPage: FunctionComponent<SignUpPageProps> = props => (
     </BottomLink>
   </div>
 )
-
-export default connect()(SignUpPage)

@@ -6,12 +6,18 @@ import * as yup from 'yup'
 import './styles.css'
 
 import { compose } from 'redux'
-import { publicOnly } from '../../helpers/auth'
-import { AppThunkDispatch } from '../../stores'
-import { setTitle } from '../../stores/Title'
+import { publicOnly } from '../../../helpers/auth'
+import { AppThunkDispatch } from '../../../stores'
 import { signUpAction } from './actions'
 import { SignUpFormValue } from './SignUpForm'
-import SignUpPage from './SignUpPage'
+import { SignUpFormView } from './SignUpFormView'
+
+export interface SignUpFormValue {
+  username: string
+  name: string
+  email: string
+  password: string
+}
 
 export interface SignUpSceneProps {
   dispatch: AppThunkDispatch
@@ -38,10 +44,6 @@ class SignUpScene extends React.Component<SignUpSceneProps> {
       .required(),
   })
 
-  componentDidMount() {
-    this.props.dispatch(setTitle('UGrade | Sign Up'))
-  }
-
   handleSubmit = (
     values: SignUpFormValue,
     { setSubmitting, setStatus }: FormikActions<SignUpFormValue>
@@ -66,7 +68,7 @@ class SignUpScene extends React.Component<SignUpSceneProps> {
         validationSchema={this.validationSchema}
         onSubmit={this.handleSubmit}
         initialValues={this.initialValues}
-        component={SignUpPage}
+        component={SignUpFormView}
       />
     )
   }

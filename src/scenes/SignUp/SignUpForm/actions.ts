@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
-import ActionToaster from '../../middlewares/ErrorToaster/ActionToaster'
-import { UserRegistrationError } from '../../services/auth'
-import { AppThunkAction } from '../../stores'
+import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
+import { UserRegistrationError } from '../../../services/auth'
+import { AppThunkAction } from '../../../stores'
 
 export interface SignUpResult {
   success: boolean

@@ -1,3 +1,3 @@
-import SignUpScene from './SignUpScene'
+import SignUp from './SignUp'
 
-export default SignUpScene
+export default SignUp
