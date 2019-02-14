@@ -16,6 +16,7 @@ import { Menu, SidebarView } from './SidebarView'
 
 export interface SidebarSceneFromRedux {
   contest?: Contest
+  username: string
   dispatch: AppThunkDispatch
 }
 
@@ -142,10 +143,21 @@ export class SidebarScene extends Component<
   }
 
   render() {
-    const { contest, serverClock } = this.props
+    const { contest, serverClock, username } = this.props
     const newAnnouncementCount =
       contest && contest.announcements
         ? contest.announcements.filter(x => !x.read).length
+        : 0
+    const newClarificationCount =
+      contest && contest.clarifications
+        ? contest.clarifications
+            .map(
+              clarif =>
+                clarif.entries.filter(
+                  entry => entry.sender !== username && !entry.read
+                ).length
+            )
+            .reduce((a, b) => a + b)
         : 0
     const menu = this.state.menu
     const rank = 21
@@ -161,6 +173,7 @@ export class SidebarScene extends Component<
         menu={menu}
         onChoose={this.onMenuChoosed}
         newAnnouncementCount={newAnnouncementCount}
+        newClarificationCount={newClarificationCount}
         registerForm={contestRegisterForm}
         unregisterForm={contestUnregisterForm}
         submitForm={submitSolutionForm}
@@ -205,6 +218,7 @@ export class SidebarScene extends Component<
 
 const mapStateToProps = (state: AppState) => ({
   contest: state.contest.currentContest,
+  username: state.auth.me ? state.auth.me.username : '',
 })
 
 export default compose<ComponentType<SidebarSceneInitialProps>>(

@@ -25,6 +25,7 @@ export interface SidebarViewProps {
   serverClock?: Date
   menu?: Menu
   newAnnouncementCount: number
+  newClarificationCount: number
   onChoose?: (menu: Menu) => any
 
   registerForm?: FormikProps<{}>
@@ -48,6 +49,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   menu,
   onChoose,
   newAnnouncementCount,
+  newClarificationCount,
   submitForm,
   registerForm,
   unregisterForm,
@@ -284,8 +286,18 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
                 minimal={true}
                 alignText={Alignment.LEFT}
                 disabled={!contest}
-                text='Clarifications'
-              />
+              >
+                <div className='menu-item'>
+                  <div className='menu-title'>Clarifications</div>
+                  {newClarificationCount > 0 && (
+                    <div className='menu-tag'>
+                      <Tag round={true} intent={Intent.SUCCESS}>
+                        {newClarificationCount}
+                      </Tag>
+                    </div>
+                  )}
+                </div>
+              </Button>
             )}
 
             {participated && started && (
