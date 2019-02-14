@@ -7,6 +7,7 @@ import {
   H5,
   Icon,
   Intent,
+  Tag,
 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import { FormikProps } from 'formik'
@@ -115,11 +116,14 @@ export class ClarificationsView extends Component<
                         </p>
                         {notReadCount > 0 && (
                           <p className='unread'>
-                            <Icon icon='notifications' intent={Intent.DANGER} />
-                            &nbsp;
-                            {`${notReadCount} unread message${
-                              notReadCount > 1 ? 's' : ''
-                            }`}
+                            <Tag
+                              className='unread'
+                              icon={'notifications'}
+                              large={true}
+                              intent={Intent.DANGER}
+                            >
+                              {notReadCount}
+                            </Tag>
                           </p>
                         )}
                       </div>
