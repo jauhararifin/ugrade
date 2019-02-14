@@ -11,15 +11,11 @@ import React from 'react'
 
 import './styles.css'
 
-export interface SignInFormValue {
-  username: string
-  password: string
-  rememberMe: boolean
-}
+import { SignInFormValue } from './SignInForm'
 
-export interface SignInFormProps extends FormikProps<SignInFormValue> {}
+export type SignInFormViewProps = FormikProps<SignInFormValue>
 
-const SignInForm: React.FunctionComponent<SignInFormProps> = ({
+const SignInFormView: React.FunctionComponent<SignInFormViewProps> = ({
   handleSubmit,
   handleChange,
   handleBlur,
@@ -91,4 +87,4 @@ const SignInForm: React.FunctionComponent<SignInFormProps> = ({
   </form>
 )
 
-export default SignInForm
+export default SignInFormView

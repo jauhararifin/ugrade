@@ -1,17 +1,14 @@
 import { Card } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import './styles.css'
 
 import logo from '../../assets/images/logo.svg'
 import BottomLink from '../../components/BottomLink'
-import SignInForm, { SignInFormProps } from './SignInForm'
+import SignInForm from './SignInForm'
 
-export type SignInPageProps = SignInFormProps
-
-const SignInPage: FunctionComponent<SignInPageProps> = props => (
+export const SignInView: FunctionComponent = () => (
   <div className='plain-page'>
     <div>
       <Link to='/'>
@@ -20,7 +17,7 @@ const SignInPage: FunctionComponent<SignInPageProps> = props => (
       <h1>Welcome To UGrade</h1>
       <Card className='signin-panel'>
         <h2>Sign In</h2>
-        <SignInForm {...props} />
+        <SignInForm />
       </Card>
     </div>
     <BottomLink>
@@ -30,5 +27,3 @@ const SignInPage: FunctionComponent<SignInPageProps> = props => (
     </BottomLink>
   </div>
 )
-
-export default connect()(SignInPage)

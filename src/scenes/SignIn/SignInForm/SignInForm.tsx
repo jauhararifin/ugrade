@@ -4,20 +4,22 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import * as yup from 'yup'
 
-import './styles.css'
-
-import { publicOnly } from '../../helpers/auth'
-import { AppThunkDispatch } from '../../stores'
-import { setTitle } from '../../stores/Title'
+import { publicOnly } from '../../../helpers/auth'
+import { AppThunkDispatch } from '../../../stores'
 import { signInAction } from './actions'
-import { SignInFormValue } from './SignInForm'
-import SignInPage from './SignInPage'
+import SignInFormView from './SignInFormView'
 
-export interface SignInSceneProps {
+export interface SignInFormValue {
+  username: string
+  password: string
+  rememberMe: boolean
+}
+
+export interface SignInFormProps {
   dispatch: AppThunkDispatch
 }
 
-class SignInScene extends React.Component<SignInSceneProps, {}> {
+class SignInForm extends React.Component<SignInFormProps, {}> {
   initialValue: SignInFormValue = {
     username: '',
     password: '',
@@ -29,10 +31,6 @@ class SignInScene extends React.Component<SignInSceneProps, {}> {
     password: yup.string().required(),
     rememberMe: yup.boolean(),
   })
-
-  componentDidMount() {
-    this.props.dispatch(setTitle('UGrade | Sign In'))
-  }
 
   handleSubmit = (
     values: SignInFormValue,
@@ -53,7 +51,7 @@ class SignInScene extends React.Component<SignInSceneProps, {}> {
         initialValues={this.initialValue}
         validationSchema={this.validationSchema}
         onSubmit={this.handleSubmit}
-        component={SignInPage}
+        component={SignInFormView}
       />
     )
   }
@@ -62,4 +60,4 @@ class SignInScene extends React.Component<SignInSceneProps, {}> {
 export default compose<ComponentType>(
   publicOnly(),
   connect()
-)(SignInScene)
+)(SignInForm)

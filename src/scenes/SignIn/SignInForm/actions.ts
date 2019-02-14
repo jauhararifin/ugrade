@@ -1,7 +1,7 @@
-import ActionToaster from '../../middlewares/ErrorToaster/ActionToaster'
-import { AuthenticationError } from '../../services/auth'
-import { AppThunkAction } from '../../stores'
-import { setMe, setSignedIn } from '../../stores/Auth'
+import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
+import { AuthenticationError } from '../../../services/auth'
+import { AppThunkAction } from '../../../stores'
+import { setMe, setSignedIn } from '../../../stores/Auth'
 
 export interface SignInResult {
   success: boolean
