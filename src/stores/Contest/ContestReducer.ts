@@ -14,6 +14,10 @@ import {
   setCurrentContestAnnouncementsReducer,
 } from './ContestSetCurrentContestAnnouncements'
 import {
+  ContestSetCurrentContestClarifications,
+  setCurrentContestClarrificationsReducer,
+} from './ContestSetCurrentContestClarrifications'
+import {
   ContestSetCurrentContestCurrentProblem,
   setCurrentContestCurrentProblemReducer,
 } from './ContestSetCurrentContestCurrentProblem'
@@ -64,6 +68,12 @@ export const contestReducer: Reducer<ContestState> = (
 
     case ContestActionType.ReadAnnouncements:
       return readAnnouncementsReducer(state, action as ContestReadAnnouncements)
+
+    case ContestActionType.SetCurrentContestClarifications:
+      return setCurrentContestClarrificationsReducer(
+        state,
+        action as ContestSetCurrentContestClarifications
+      )
   }
   return state
 }

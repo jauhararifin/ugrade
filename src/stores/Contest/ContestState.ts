@@ -28,6 +28,22 @@ export interface Announcement {
   read: boolean
 }
 
+export interface ClarificationEntry {
+  id: number
+  sender: string
+  content: string
+  read: boolean
+  issuedTime: Date
+}
+
+export interface Clarification {
+  id: number
+  title: string
+  subject: string
+  issuedTime: Date
+  entries: ClarificationEntry[]
+}
+
 export interface Contest {
   id: number
   slug: string
@@ -43,6 +59,8 @@ export interface Contest {
 
   problems?: Problem[]
   announcements?: Announcement[]
+
+  clarifications?: Clarification[]
 
   currentProblem?: Problem
 }
