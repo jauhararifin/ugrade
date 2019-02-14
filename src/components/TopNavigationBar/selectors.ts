@@ -38,6 +38,11 @@ export const selectBreadcrumb = (state: AppState): IBreadcrumbProps[] => {
             text: currentProblem.name,
           })
         }
+      } else if (contestMenu === 'clarifications') {
+        result.push({
+          href: `/contests/${currentContestId}/problems`,
+          text: 'Clarifications',
+        })
       }
     }
   }
