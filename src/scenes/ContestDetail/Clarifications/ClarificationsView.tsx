@@ -1,4 +1,13 @@
-import { Card, Divider, Elevation, H1, H3 } from '@blueprintjs/core'
+import {
+  Card,
+  Divider,
+  Elevation,
+  H1,
+  H3,
+  H5,
+  Icon,
+  Intent,
+} from '@blueprintjs/core'
 import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
@@ -48,6 +57,7 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
             const notReadCount = clarification.entries.filter(
               entry => !entry.read
             ).length
+            const content = clarification.entries[0]
             return (
               <Card
                 key={clarification.id}
@@ -55,11 +65,26 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
                 elevation={notReadCount === 0 ? Elevation.ZERO : Elevation.TWO}
               >
                 <div className='header'>
+                  <H5 className='subject'>{clarification.subject}</H5>
                   <H3 className='title'>{clarification.title}</H3>
-                  <p className='info'>
-                    {moment(clarification.issuedTime).from(currentMoment)}
-                  </p>
+                  <div className='info'>
+                    <div className='info-container'>
+                      <p className='time'>
+                        {moment(clarification.issuedTime).from(currentMoment)}
+                      </p>
+                      {notReadCount > 0 && (
+                        <p className='unread'>
+                          <Icon icon='notifications' intent={Intent.DANGER} />
+                          &nbsp;
+                          {`${notReadCount} unread message${
+                            notReadCount > 1 ? 's' : ''
+                          }`}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
+                {content && <div>{content.content}</div>}
               </Card>
             )
           })}

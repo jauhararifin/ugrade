@@ -14,11 +14,32 @@
           display: flex;
           margin-bottom: 0px;
           justify-content: space-between;
-          .title {
+          .subject {
             text-align: left;
+            flex: 1 1 0;
+          }
+          .title {
+            text-align: center;
+            flex: 1 1 0;
           }
           .info {
             text-align: right;
+            flex: 1 1 0;
+            .info-container {
+              display: flex;
+              text-align: right;
+              justify-content: flex-end;
+              align-items: center;
+              .unread {
+                padding-left: 10px;
+                margin-left: 10px;
+                border-left: solid 1px #505050;
+                text-align: right;
+              }
+              .time {
+                text-align: right;
+              }
+            }
           }
         }
       }
