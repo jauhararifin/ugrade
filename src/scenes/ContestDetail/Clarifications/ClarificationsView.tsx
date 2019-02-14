@@ -17,7 +17,7 @@ import './styles.css'
 
 import { Clarification, Contest } from '../../../stores/Contest'
 import CreateClarificationForm from './CreateClarificationForm'
-import { ClarificationDetailView } from './DetailView/ClarificationDetailView'
+import ClarificationDetail from './Detail'
 
 export interface ClarificationsViewProps {
   contest?: Contest
@@ -50,7 +50,7 @@ export class ClarificationsView extends Component<
     return (
       <div className='contest-clarifications'>
         {serverClock && (
-          <ClarificationDetailView
+          <ClarificationDetail
             clarification={this.state.currentClarification}
             handleClose={clarificationUnchooseHandler}
             serverClock={serverClock || new Date()}

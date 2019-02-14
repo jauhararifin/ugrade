@@ -300,7 +300,7 @@ export class InMemoryContestService implements ContestService {
     contestId: number,
     clarificationId: number,
     entryIds: number[]
-  ): Promise<void> {
+  ): Promise<Clarification> {
     await this.authService.getMe(token)
 
     const contest = this.contests.filter(c => c.id === contestId).pop()
@@ -329,5 +329,6 @@ export class InMemoryContestService implements ContestService {
         entry.read = true
       }
     })
+    return clarification
   }
 }

@@ -77,5 +77,5 @@ export interface ContestService {
     contestId: number,
     clarificationId: number,
     entryIds: number[]
-  ): Promise<void>
+  ): Promise<Clarification>
 }
