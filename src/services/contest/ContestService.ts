@@ -64,4 +64,10 @@ export interface ContestService {
     subject: string,
     content: string
   ): Promise<void>
+
+  createContestClarificationEntry(
+    token: string,
+    clarificationId: number,
+    content: string
+  ): Promise<void>
 }

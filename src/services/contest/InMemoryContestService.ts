@@ -11,7 +11,11 @@ import {
   ProblemIdsSubscribeCallback,
   ProblemIdsUnsubscribeFunction,
 } from './ContestService'
-import { ContestAlreadyStarted, NoSuchContest } from './errors'
+import {
+  ContestAlreadyStarted,
+  NoSuchClarification,
+  NoSuchContest,
+} from './errors'
 import { AlreadyRegistered } from './errors/AlreadyRegistered'
 import {
   contestAnnouncementsMap,
@@ -249,5 +253,50 @@ export class InMemoryContestService implements ContestService {
     }
 
     this.contestClarificationsMap[contest.id].push(clarification)
+  }
+
+  async createContestClarificationEntry(
+    token: string,
+    clarificationId: number,
+    content: string
+  ): Promise<void> {
+    const user = await this.authService.getMe(token)
+    let contest: Contest | undefined
+    let clarification: Clarification | undefined
+    for (const cid in this.contestClarificationsMap) {
+      if (this.contestClarificationsMap.hasOwnProperty(cid)) {
+        const clarifs = this.contestClarificationsMap[cid]
+        const clarif = clarifs.filter(temp => temp.id === clarificationId).pop()
+        if (clarif !== undefined) {
+          clarification = clarif
+          contest = this.contests[cid]
+          break
+        }
+      }
+    }
+
+    if (!contest) {
+      throw new NoSuchContest('No Such Contest')
+    }
+
+    if (!clarification) {
+      throw new NoSuchClarification('No Such Clarification')
+    }
+
+    if (!contest.registered) {
+      throw new ForbiddenActionError('You Are Not Registered To The Contest')
+    }
+
+    if (new Date() >= contest.finishTime) {
+      throw new ForbiddenActionError('Contest Already Finished')
+    }
+
+    clarification.entries.push({
+      id: Math.round(Math.random() * 100000),
+      sender: user.username,
+      issuedTime: new Date(),
+      read: true,
+      content,
+    })
   }
 }
