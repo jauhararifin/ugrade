@@ -3,12 +3,14 @@ import { Announcement } from '../../services/contest/Announcement'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
+  ClarificationSubscribeCallback,
   ProblemIdsSubscribeCallback,
   ProblemIdsUnsubscribeFunction,
 } from '../../services/contest/ContestService'
 import { Problem } from '../../services/problem'
 import { AppThunkAction } from '../../stores'
 import {
+  Clarification,
   Contest,
   readAnnouncements,
   setCurrentContest,
@@ -16,6 +18,7 @@ import {
   setCurrentContestCurrentProblem,
   setCurrentContestProblems,
 } from '../../stores/Contest'
+import { setCurrentContestClarrifications } from '../../stores/Contest/ContestSetCurrentContestClarrifications'
 
 export const getContestById = (id: number): AppThunkAction<Contest> => {
   return async (dispatch, _getState, { contestService }) => {
@@ -102,5 +105,33 @@ export const loadContestProblem = (
   return async dispatch => {
     dispatch(setCurrentContestCurrentProblem(contestId, problemId))
     dispatch(push(`/contests/${contestId}/problems/${problemId}`))
+  }
+}
+
+export const getContestClarifications = (
+  contestId: number
+): AppThunkAction<Clarification[]> => {
+  return async (dispatch, getState, { contestService }) => {
+    const token = getState().auth.token
+    const clarifications = await contestService.getContestClarifications(
+      token,
+      contestId
+    )
+    dispatch(setCurrentContestClarrifications(contestId, clarifications))
+    return clarifications
+  }
+}
+
+export const subscribeContestClarifications = (
+  contest: Contest,
+  callback: ClarificationSubscribeCallback
+): AppThunkAction<ProblemIdsUnsubscribeFunction> => {
+  return async (_dispatch, getState, { contestService }) => {
+    const token = getState().auth.token
+    return contestService.subscribeContestClarifications(
+      token,
+      contest.id,
+      callback
+    )
   }
 }

@@ -7,6 +7,7 @@ import { compose, Dispatch } from 'redux'
 import { userOnly } from '../../helpers/auth'
 import { withServer } from '../../helpers/server'
 import { Announcement } from '../../services/contest/Announcement'
+import { Clarification } from '../../services/contest/Clarification'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import {
   Contest,
@@ -14,16 +15,20 @@ import {
   setCurrentContestCurrentProblem,
   unsetCurrentContest,
 } from '../../stores/Contest'
+import { setCurrentContestClarrifications } from '../../stores/Contest/ContestSetCurrentContestClarrifications'
 import { setTitle } from '../../stores/Title'
 import {
   getContestAnnouncements,
   getContestById,
+  getContestClarifications,
   getContestProblems,
   getContestProblemsByIds,
   subscribeContestAnnouncements,
+  subscribeContestClarifications,
   subscribeContestProblemIds,
 } from './actions'
 import Announcements from './Announcements'
+import Clarifications from './Clarifications'
 import { ContestDetailPage } from './ContestDetailPage'
 import Overview from './Overview'
 import ProblemDetailScene from './ProblemDetail'
@@ -43,11 +48,13 @@ export interface ContestDetailSceneProps
 export class ContestDetailScene extends Component<ContestDetailSceneProps> {
   private unsubscribeContestAnnouncement: () => any
   private unsubscribeContestProblemIds: () => any
+  private unsubscribeContestClarifications: () => any
 
   constructor(props: ContestDetailSceneProps) {
     super(props)
     this.unsubscribeContestAnnouncement = () => null
     this.unsubscribeContestProblemIds = () => null
+    this.unsubscribeContestClarifications = () => null
   }
 
   async componentDidMount() {
@@ -56,6 +63,7 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
     this.props.dispatch(setTitle(`UGrade | ${contest.name}`))
     this.initializeAnnouncements(contest).catch(_ => null)
     this.initializeProblems(contest).catch(_ => null)
+    this.initializeClarifications(contest).catch(_ => null)
   }
 
   initializeAnnouncements = async (contest: Contest) => {
@@ -106,9 +114,27 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
     }
   }
 
+  initializeClarifications = async (contest: Contest) => {
+    if (contest.registered) {
+      await this.props.dispatch(getContestClarifications(contest.id))
+      this.unsubscribeContestClarifications = await this.props.dispatch(
+        subscribeContestClarifications(contest, this.clarificationsUpdated)
+      )
+    }
+  }
+
+  clarificationsUpdated = (clarifications: Clarification[]) => {
+    if (this.props.contest) {
+      this.props.dispatch(
+        setCurrentContestClarrifications(this.props.contest.id, clarifications)
+      )
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribeContestAnnouncement()
     this.unsubscribeContestProblemIds()
+    this.unsubscribeContestClarifications()
 
     this.props.dispatch(unsetCurrentContest())
   }
@@ -147,6 +173,11 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
                 path='/contests/:contestId/problems/:problemId'
                 exact={true}
                 component={ProblemDetailScene}
+              />
+              <Route
+                path='/contests/:contestId/clarifications'
+                exact={true}
+                component={Clarifications}
               />
             </Switch>
           </CSSTransition>
