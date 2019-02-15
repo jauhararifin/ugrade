@@ -9,18 +9,12 @@ import {
 import { FormikProps } from 'formik'
 import React from 'react'
 
-export interface ProxySettingFormValue {
-  host: string
-  port: string
-  username: string
-  password: string
-}
+import { ProxySettingFormValue } from './ProxySettingForm'
 
-export interface ProxySettingFormProps
-  extends FormikProps<ProxySettingFormValue> {}
+export type ProxySettingFormViewProps = FormikProps<ProxySettingFormValue>
 
-export const ProxySettingForm: React.FunctionComponent<
-  ProxySettingFormProps
+export const ProxySettingFormView: React.FunctionComponent<
+  ProxySettingFormViewProps
 > = ({
   handleSubmit,
   handleBlur,
@@ -101,5 +95,3 @@ export const ProxySettingForm: React.FunctionComponent<
     </div>
   </form>
 )
-
-export default ProxySettingForm

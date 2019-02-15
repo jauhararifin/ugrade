@@ -1,3 +1,3 @@
-import SettingScene from './SettingScene'
+import Setting from './Setting'
 
-export default SettingScene
+export default Setting

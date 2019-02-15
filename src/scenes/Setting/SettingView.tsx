@@ -4,16 +4,14 @@ import { Link } from 'react-router-dom'
 import './styles.css'
 
 import BottomLink from '../../components/BottomLink'
-import ProxySettingForm, { ProxySettingFormProps } from './ProxySettingForm'
+import ProxySettingForm from './ProxySettingForm'
 
-export interface SettingPageProps {
-  proxyForm: ProxySettingFormProps
+export interface SettingViewProps {
   showSignIn: boolean
   showSignUp: boolean
 }
 
-export const SettingPage: FunctionComponent<SettingPageProps> = ({
-  proxyForm,
+export const SettingView: FunctionComponent<SettingViewProps> = ({
   showSignIn,
   showSignUp,
 }) => (
@@ -22,7 +20,7 @@ export const SettingPage: FunctionComponent<SettingPageProps> = ({
       <div>
         <h2>Settings</h2>
       </div>
-      <ProxySettingForm {...proxyForm} />
+      <ProxySettingForm />
     </div>
     <BottomLink>
       <Link to='/'>Home</Link>
@@ -32,9 +30,7 @@ export const SettingPage: FunctionComponent<SettingPageProps> = ({
   </div>
 )
 
-SettingPage.defaultProps = {
+SettingView.defaultProps = {
   showSignIn: true,
   showSignUp: true,
 }
-
-export default SettingPage
