@@ -77,6 +77,9 @@ export class Submissions extends Component<SubmissionProps> {
       if (problems && languages) {
         const problemId: { [id: number]: Problem } = {}
         const languageId: { [id: number]: Language } = {}
+        problems.forEach(prob => (problemId[prob.id] = prob))
+        languages.forEach(lang => (languageId[lang.id] = lang))
+
         const submissions = contest ? contest.submissions || [] : []
         const myUsername = me ? me.username : ''
         const mySubmissions = submissions.filter(
