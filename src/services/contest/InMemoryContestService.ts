@@ -391,8 +391,34 @@ export class InMemoryContestService implements ContestService {
           ].id,
         issuedTime: new Date(),
         verdict: GradingVerdict.Pending,
-        sourceCode: 'lorem ipsum dos color sit amet',
-        gradings: [],
+        sourceCode:
+          'https://raw.githubusercontent.com/jauhararifin/cp/master/atcoder_89_regular/c.cpp',
+        gradings: [
+          {
+            id: Math.round(Math.random() * 100000),
+            issuedTime: new Date(),
+            verdict: GradingVerdict.InternalError,
+            message: '',
+            compilationOutput:
+              'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
+          },
+          {
+            id: Math.round(Math.random() * 100000),
+            issuedTime: new Date(),
+            verdict: GradingVerdict.WrongAnswer,
+            message: 'fixing compiler in worker',
+            compilationOutput:
+              'https://raw.githubusercontent.com/jauhararifin/cp/master/.gitignore',
+          },
+          {
+            id: Math.round(Math.random() * 100000),
+            issuedTime: new Date(),
+            verdict: GradingVerdict.Accepted,
+            message: 'fixing testcases',
+            compilationOutput:
+              'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
+          },
+        ],
       }
       this.contestSubmissionsMap[contestId].push(newSubmission)
 
