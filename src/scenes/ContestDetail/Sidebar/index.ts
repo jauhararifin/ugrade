@@ -1,3 +1,3 @@
-import SidebarScene from './SidebarScene'
+import Sidebar from './Sidebar'
 
-export default SidebarScene
+export default Sidebar
