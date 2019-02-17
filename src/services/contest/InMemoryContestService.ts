@@ -351,6 +351,9 @@ export class InMemoryContestService implements ContestService {
     if (!contest.registered) {
       throw new ForbiddenActionError('You Are Not Registered To The Contest')
     }
+    if (!this.contestSubmissionsMap[contestId]) {
+      this.contestSubmissionsMap[contestId] = []
+    }
     return this.contestSubmissionsMap[contestId].slice()
   }
 
