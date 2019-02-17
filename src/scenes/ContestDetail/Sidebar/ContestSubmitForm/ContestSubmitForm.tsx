@@ -60,9 +60,9 @@ export class ContestSubmitForm extends Component<ContestSubmitFormProps> {
     const { contest, dispatch } = this.props
     dispatch(
       submitSolution(
-        contest.id,
-        values.problem,
-        values.language,
+        Number(contest.id),
+        Number(values.problem),
+        Number(values.language),
         values.sourceCode
       )
     )

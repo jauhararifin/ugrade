@@ -33,9 +33,6 @@ export const ContestSubmitFormView: FunctionComponent<
   errors,
 }) => (
   <form onSubmit={handleSubmit}>
-    <H5>{errors.language}</H5>
-    <H5>{errors.problem}</H5>
-    <H5>{errors.sourceCode}</H5>
     <H5>Submit Solution</H5>
     <FormGroup>
       <ControlGroup fill={true}>

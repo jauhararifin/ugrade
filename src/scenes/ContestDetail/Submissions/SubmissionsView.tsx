@@ -31,11 +31,13 @@ export interface ISubmission extends Submission {
 export interface SubmissionsViewProps {
   submissions?: ISubmission[]
   serverClock?: Date
+  handleProblemClick?: (problemId: number) => any
 }
 
 export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
   submissions,
   serverClock,
+  handleProblemClick,
 }) => {
   const loading = !submissions || !serverClock
   const currentMoment = moment(serverClock || new Date())
@@ -59,6 +61,10 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
       default:
         return <Tag>Pending</Tag>
     }
+  }
+
+  const genProblemOnClick = (problemId: number) => () => {
+    if (handleProblemClick) handleProblemClick(problemId)
   }
 
   return (
@@ -106,13 +112,9 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
                       </Tooltip>
                     </td>
                     <td>
-                      <Link
-                        to={`/contests/${submission.contestId}/problems/${
-                          submission.problemId
-                        }`}
-                      >
+                      <a onClick={genProblemOnClick(submission.problem.id)}>
                         {submission.problem.name}
-                      </Link>
+                      </a>
                     </td>
                     <td>{submission.language.name}</td>
                     <td>{renderVerdict(submission.verdict)}</td>

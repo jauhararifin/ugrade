@@ -14,6 +14,7 @@ import {
   Submission,
 } from '../../../stores/Contest'
 import { setCurrentContestSubmissions } from '../../../stores/Contest/ContestSetCurrentContestSubmissions'
+import { loadContestProblem } from '../actions'
 import { getContestSubmissions, subscribeContestSubmissions } from './actions'
 import SubmissionsView, { ISubmission } from './SubmissionsView'
 
@@ -67,6 +68,13 @@ export class Submissions extends Component<SubmissionProps> {
     )
   }
 
+  handleProblemClick = (problemId: number) => {
+    const contest = this.props.contest
+    if (contest) {
+      this.props.dispatch(loadContestProblem(contest.id, problemId))
+    }
+  }
+
   render() {
     const { contest, serverClock, me } = this.props
 
@@ -115,6 +123,7 @@ export class Submissions extends Component<SubmissionProps> {
           <SubmissionsView
             submissions={isubmissions}
             serverClock={serverClock}
+            handleProblemClick={this.handleProblemClick}
           />
         )
       }
