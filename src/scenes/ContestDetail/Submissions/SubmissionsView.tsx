@@ -1,4 +1,12 @@
-import { Card, Classes, H1, H3, HTMLTable, Tooltip } from '@blueprintjs/core'
+import {
+  Card,
+  Classes,
+  H1,
+  HTMLTable,
+  Intent,
+  Tag,
+  Tooltip,
+} from '@blueprintjs/core'
 import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
@@ -6,10 +14,22 @@ import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
-import { Submission } from '../../../stores/Contest'
+import { Link } from 'react-router-dom'
+import {
+  GradingVerdict,
+  Language,
+  Problem,
+  Submission,
+  SubmissionVerdict,
+} from '../../../stores/Contest'
+
+export interface ISubmission extends Submission {
+  problem: Problem
+  language: Language
+}
 
 export interface SubmissionsViewProps {
-  submissions?: Submission[]
+  submissions?: ISubmission[]
   serverClock?: Date
 }
 
@@ -19,6 +39,28 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
 }) => {
   const loading = !submissions || !serverClock
   const currentMoment = moment(serverClock || new Date())
+
+  const renderVerdict = (verdict: SubmissionVerdict) => {
+    switch (verdict) {
+      case GradingVerdict.Accepted:
+        return <Tag intent={Intent.SUCCESS}>Accepted</Tag>
+      case GradingVerdict.WrongAnswer:
+        return <Tag intent={Intent.DANGER}>Wrong Answer</Tag>
+      case GradingVerdict.TimeLimitExceeded:
+        return <Tag intent={Intent.WARNING}>Time Limit Exceeded</Tag>
+      case GradingVerdict.MemoryLimitExceeded:
+        return <Tag intent={Intent.WARNING}>Memory Limit Exceeded</Tag>
+      case GradingVerdict.RuntimeError:
+        return <Tag intent={Intent.WARNING}>Runtime Error</Tag>
+      case GradingVerdict.CompilationError:
+        return <Tag intent={Intent.WARNING}>Compilation Error</Tag>
+      case GradingVerdict.InternalError:
+        return <Tag intent={Intent.WARNING}>Internal Error</Tag>
+      default:
+        return <Tag>Pending</Tag>
+    }
+  }
+
   return (
     <div className='contest-submissions'>
       <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
@@ -63,9 +105,17 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
                         {moment(submission.issuedTime).from(currentMoment)}
                       </Tooltip>
                     </td>
-                    <td>{submission.problemId}</td>
-                    <td>{submission.languageId}</td>
-                    <td>{submission.verdict}</td>
+                    <td>
+                      <Link
+                        to={`/contests/${submission.contestId}/problems/${
+                          submission.problemId
+                        }`}
+                      >
+                        {submission.problem.name}
+                      </Link>
+                    </td>
+                    <td>{submission.language.name}</td>
+                    <td>{renderVerdict(submission.verdict)}</td>
                   </tr>
                 ))}
             </tbody>

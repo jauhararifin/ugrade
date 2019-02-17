@@ -5,10 +5,17 @@ import { compose } from 'redux'
 import { userOnly } from '../../../helpers/auth'
 import { withServer } from '../../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../../stores'
-import { Contest, Submission } from '../../../stores/Contest'
+import { User } from '../../../stores/Auth'
+import {
+  Contest,
+  Language,
+  Problem,
+  ProblemType,
+  Submission,
+} from '../../../stores/Contest'
 import { setCurrentContestSubmissions } from '../../../stores/Contest/ContestSetCurrentContestSubmissions'
 import { getContestSubmissions, subscribeContestSubmissions } from './actions'
-import SubmissionsView from './SubmissionsView'
+import SubmissionsView, { ISubmission } from './SubmissionsView'
 
 export interface SubmissionServerProps {
   serverClock: Date
@@ -16,6 +23,7 @@ export interface SubmissionServerProps {
 
 export interface SubmissionsReduxProps {
   contest?: Contest
+  me: User
   dispatch: AppThunkDispatch
 }
 
@@ -60,18 +68,62 @@ export class Submissions extends Component<SubmissionProps> {
   }
 
   render() {
-    const { contest, serverClock } = this.props
-    return (
-      <SubmissionsView
-        submissions={contest ? contest.submissions : undefined}
-        serverClock={serverClock}
-      />
-    )
+    const { contest, serverClock, me } = this.props
+
+    if (contest) {
+      const problems = contest.problems
+      const languages = contest.permittedLanguages
+
+      if (problems && languages) {
+        const problemId: { [id: number]: Problem } = {}
+        const languageId: { [id: number]: Language } = {}
+        const submissions = contest ? contest.submissions || [] : []
+        const myUsername = me ? me.username : ''
+        const mySubmissions = submissions.filter(
+          submission => submission.issuer === myUsername
+        )
+
+        const noneProblem: Problem = {
+          id: 0,
+          slug: 'unknown',
+          name: 'Unknown',
+          statement: '',
+          type: ProblemType.PROBLEM_TYPE_BATCH,
+          timeLimit: 0,
+          tolerance: 0,
+          memoryLimit: 0,
+          outputLimit: 0,
+        }
+
+        const noneLanguage = {
+          id: 0,
+          name: 'Unknown',
+        }
+
+        const isubmissions = mySubmissions.map(
+          (submission: Submission): ISubmission => ({
+            ...submission,
+            problem: problemId[submission.problemId] || noneProblem,
+            language: languageId[submission.languageId] || noneLanguage,
+          })
+        )
+
+        return (
+          <SubmissionsView
+            submissions={isubmissions}
+            serverClock={serverClock}
+          />
+        )
+      }
+    }
+
+    return <SubmissionsView serverClock={serverClock} />
   }
 }
 
 const mapStateToProps = (state: AppState) => ({
   contest: state.contest.currentContest,
+  me: state.auth.me,
 })
 
 export default compose<ComponentType>(
