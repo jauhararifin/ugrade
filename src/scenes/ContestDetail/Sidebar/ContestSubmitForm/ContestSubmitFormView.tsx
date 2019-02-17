@@ -29,8 +29,13 @@ export const ContestSubmitFormView: FunctionComponent<
   handleBlur,
   avaiableProblems,
   avaiableLanguages,
+  isSubmitting,
+  errors,
 }) => (
   <form onSubmit={handleSubmit}>
+    <H5>{errors.language}</H5>
+    <H5>{errors.problem}</H5>
+    <H5>{errors.sourceCode}</H5>
     <H5>Submit Solution</H5>
     <FormGroup>
       <ControlGroup fill={true}>
@@ -43,6 +48,11 @@ export const ContestSubmitFormView: FunctionComponent<
           onBlur={handleBlur}
         />
         <FileInput placeholder='Source Code' />
+        <input
+          type='hidden'
+          name='sourceCode'
+          value='https://raw.githubusercontent.com/jauhararifin/cp/master/uva/820.cpp'
+        />
       </ControlGroup>
     </FormGroup>
     <FormGroup>
@@ -61,8 +71,13 @@ export const ContestSubmitFormView: FunctionComponent<
       pretests or resubmission (except failure on the first test, denial of
       judgement or similar verdicts).
     </p>
-    <Button intent={Intent.PRIMARY} fill={true}>
-      Submit
+    <Button
+      type='submit'
+      intent={Intent.PRIMARY}
+      fill={true}
+      disabled={isSubmitting}
+    >
+      {isSubmitting ? 'Submitting...' : 'Submit'}
     </Button>
   </form>
 )
