@@ -5,6 +5,7 @@ import { ContestSetCurrentContestAnnouncements } from './ContestSetCurrentContes
 import { ContestSetCurrentContestClarifications } from './ContestSetCurrentContestClarrifications'
 import { ContestSetCurrentContestCurrentProblem } from './ContestSetCurrentContestCurrentProblem'
 import { ContestSetCurrentContestProblems } from './ContestSetCurrentContestProblems'
+import { ContestSetCurrentContestSubmissions } from './ContestSetCurrentContestSubmissions'
 import { ContestUnsetCurrentContest } from './ContestUnsetCurrentContest'
 
 export enum ContestActionType {
@@ -15,6 +16,7 @@ export enum ContestActionType {
   SetCurrentContestProblems = 'CONTEST_SET_CURRENT_CONTEST_PROBLEMS',
   SetCurrentContestClarifications = 'CONTEST_SET_CURRENT_CONTEST_CLARIFICATIONS',
   SetCurrentContestCurrentProblem = 'CONTEST_SET_CURRENT_CONTEST_CURRENT_PROBLEM',
+  SetCurrentContestSubmissions = 'CONTEST_SET_CURRENT_CONTEST_SUBMISSIONS',
   ReadAnnouncements = 'CONTEST_READ_ANNOUNCEMENTS',
 }
 
@@ -27,3 +29,4 @@ export type ContestAction =
   | ContestSetCurrentContestClarifications
   | ContestSetCurrentContestCurrentProblem
   | ContestReadAnnouncements
+  | ContestSetCurrentContestSubmissions
