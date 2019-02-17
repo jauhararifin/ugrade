@@ -1,4 +1,5 @@
 import { AuthService, ForbiddenActionError } from '../auth'
+import { NoSuchProblem } from '../problem'
 import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
 import { Contest, ContestDetail } from './Contest'
@@ -10,6 +11,8 @@ import {
   ContestService,
   ProblemIdsSubscribeCallback,
   ProblemIdsUnsubscribeFunction,
+  SubmissionSubscribeCallback,
+  SubmissionUnsubscribeFunction,
 } from './ContestService'
 import {
   ContestAlreadyStarted,
@@ -17,11 +20,14 @@ import {
   NoSuchContest,
 } from './errors'
 import { AlreadyRegistered } from './errors/AlreadyRegistered'
+import { NoSuchLanguage } from './errors/NoSuchLanguage'
 import {
   contestAnnouncementsMap,
   contestProblemsMap,
   contests,
 } from './fixtures'
+import { GradingVerdict } from './Grading'
+import { Submission, SubmissionDetail } from './Submission'
 
 export class InMemoryContestService implements ContestService {
   private authService: AuthService
@@ -29,6 +35,7 @@ export class InMemoryContestService implements ContestService {
   private contestProblemsMap: { [id: number]: number[] } = {}
   private contestAnnouncementsMap: { [id: number]: Announcement[] } = {}
   private contestClarificationsMap: { [id: number]: Clarification[] } = {}
+  private contestSubmissionsMap: { [id: number]: SubmissionDetail[] } = {}
 
   constructor(authService: AuthService) {
     this.authService = authService
@@ -330,5 +337,120 @@ export class InMemoryContestService implements ContestService {
       }
     })
     return clarification
+  }
+
+  async getContestSubmissions(
+    token: string,
+    contestId: number
+  ): Promise<Submission[]> {
+    await this.authService.getMe(token)
+    const contest = this.contests.filter(c => c.id === contestId).pop()
+    if (!contest) {
+      throw new NoSuchContest('No Such Contest')
+    }
+    if (!contest.registered) {
+      throw new ForbiddenActionError('You Are Not Registered To The Contest')
+    }
+    return this.contestSubmissionsMap[contestId].slice()
+  }
+
+  async subscribeContestSubmissions(
+    token: string,
+    contestId: number,
+    callback: SubmissionSubscribeCallback
+  ): Promise<SubmissionUnsubscribeFunction> {
+    await this.authService.getMe(token)
+    const contest = await this.getContestDetailById(contestId)
+    if (!contest.registered) {
+      throw new ForbiddenActionError('Cannot access contest submissions')
+    }
+
+    const runThis = async () => {
+      if (!this.contestSubmissionsMap[contestId]) {
+        this.contestSubmissionsMap[contestId] = []
+      }
+      const newSubmission: SubmissionDetail = {
+        id: Math.round(Math.random() * 100000),
+        issuer: [
+          'jauhar',
+          'arifin',
+          'lorem',
+          'ipsum',
+          'dos',
+          'color',
+          'sit',
+          'amet',
+        ][Math.floor(Math.random() * 8)],
+        contestId,
+        problemId: this.contestProblemsMap[contestId][
+          Math.floor(Math.random() * this.contestProblemsMap[contestId].length)
+        ],
+        languageId:
+          contest.permittedLanguages[
+            Math.floor(Math.random() * contest.permittedLanguages.length)
+          ].id,
+        issuedTime: new Date(),
+        verdict: GradingVerdict.Pending,
+        sourceCode: 'lorem ipsum dos color sit amet',
+        gradings: [],
+      }
+      this.contestSubmissionsMap[contestId].push(newSubmission)
+
+      const submissions = await this.getContestSubmissions(token, contestId)
+      callback(submissions)
+    }
+
+    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    return () => {
+      clearInterval(timeout)
+    }
+  }
+
+  async submitContestSolution(
+    token: string,
+    contestId: number,
+    problemId: number,
+    languageId: number,
+    sourceCode: string
+  ): Promise<SubmissionDetail> {
+    const me = await this.authService.getMe(token)
+    const contest = this.contests.filter(c => c.id === contestId).pop()
+    if (!contest) {
+      throw new NoSuchContest('No Such Contest')
+    }
+    if (!contest.registered) {
+      throw new ForbiddenActionError('You Are Not Registered To The Contest')
+    }
+    if (new Date() >= contest.finishTime) {
+      throw new ForbiddenActionError('Contest Already Finished')
+    }
+    const language = contest.permittedLanguages
+      .filter(lang => lang.id === languageId)
+      .pop()
+    if (!language) {
+      throw new NoSuchLanguage('No Such Language')
+    }
+    const problems = this.contestProblemsMap[contestId].slice()
+    if (!problems.includes(problemId)) {
+      throw new NoSuchProblem('No Such Problem')
+    }
+
+    const submissionDetail: SubmissionDetail = {
+      id: Math.round(Math.random() * 100000),
+      issuer: me.username,
+      contestId,
+      problemId,
+      languageId,
+      issuedTime: new Date(),
+      verdict: GradingVerdict.Pending,
+      sourceCode,
+      gradings: [],
+    }
+
+    if (!this.contestSubmissionsMap[contestId]) {
+      this.contestSubmissionsMap[contestId] = []
+    }
+    this.contestSubmissionsMap[contestId].push(submissionDetail)
+    return { ...submissionDetail }
   }
 }

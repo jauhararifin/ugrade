@@ -1,6 +1,7 @@
 import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
 import { Contest, ContestDetail } from './Contest'
+import { Submission, SubmissionDetail } from './Submission'
 
 export type AnnouncementSubscribeCallback = (
   announcements: Announcement[]
@@ -17,6 +18,10 @@ export type ClarificationSubscribeCallback = (
 ) => any
 
 export type ClarificationUnsubscribeFunction = () => any
+
+export type SubmissionSubscribeCallback = (submissions: Submission[]) => any
+
+export type SubmissionUnsubscribeFunction = () => any
 
 export interface ContestService {
   getAllContests(): Promise<Contest[]>
@@ -78,4 +83,20 @@ export interface ContestService {
     clarificationId: number,
     entryIds: number[]
   ): Promise<Clarification>
+
+  getContestSubmissions(token: string, contestId: number): Promise<Submission[]>
+
+  subscribeContestSubmissions(
+    token: string,
+    contestId: number,
+    callback: SubmissionSubscribeCallback
+  ): Promise<SubmissionUnsubscribeFunction>
+
+  submitContestSolution(
+    token: string,
+    contestId: number,
+    problemId: number,
+    languageId: number,
+    sourceCode: string
+  ): Promise<SubmissionDetail>
 }
