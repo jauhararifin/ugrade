@@ -44,6 +44,40 @@ export interface Clarification {
   entries: ClarificationEntry[]
 }
 
+export enum GradingVerdict {
+  Pending = 'GRADING_VERDICT_PENDING',
+  Accepted = 'GRADING_VERDICT_ACCEPTED',
+  WrongAnswer = 'GRADING_VERDICT_WRONG_ANSWER',
+  TimeLimitExceeded = 'GRADING_VERDICT_TIME_LIMIT_EXCEEDED',
+  MemoryLimitExceeded = 'GRADING_VERDICT_MEMORY_LIMIT_EXCEEDED',
+  RuntimeError = 'GRADING_VERDICT_RUNTIME_ERROR',
+  InternalError = 'GRADING_VERDICT_INTERNAL_ERROR',
+  CompilationError = 'GRADING_VERDICT_COMPILATION_ERROR',
+}
+
+export type SubmissionVerdict = GradingVerdict
+
+export interface Grading {
+  id: number
+  issuedTime: Date
+  verdict: GradingVerdict
+  message: string
+  compilationOutput: string
+}
+
+export interface Submission {
+  id: number
+  issuer: string
+  contestId: number
+  problemId: number
+  languageId: number
+  issuedTime: Date
+  verdict: SubmissionVerdict
+
+  sourceCode?: string
+  gradings?: Grading[]
+}
+
 export interface Contest {
   id: number
   slug: string
@@ -59,8 +93,8 @@ export interface Contest {
 
   problems?: Problem[]
   announcements?: Announcement[]
-
   clarifications?: Clarification[]
+  submissions?: Submission[]
 
   currentProblem?: Problem
 }

@@ -10,25 +10,27 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
+import { ContestSubmitFormValue } from './ContestSubmitForm'
 
-export interface ContestSubmitFormValue {
-  language: number
-  problem: number
-}
-
-export interface ContestSubmitFormProps
-  extends FormikProps<ContestSubmitFormValue> {
+export interface ContestSubmitFormViewOwnProps {
   avaiableLanguages: Array<{ label: string; value: number }>
   avaiableProblems: Array<{ label: string; value: number }>
 }
 
-export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
+export type ContestSubmitFormViewProps = FormikProps<ContestSubmitFormValue> &
+  ContestSubmitFormViewOwnProps
+
+export const ContestSubmitFormView: FunctionComponent<
+  ContestSubmitFormViewProps
+> = ({
   values,
   handleSubmit,
   handleChange,
   handleBlur,
   avaiableProblems,
   avaiableLanguages,
+  isSubmitting,
+  errors,
 }) => (
   <form onSubmit={handleSubmit}>
     <H5>Submit Solution</H5>
@@ -43,6 +45,11 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
           onBlur={handleBlur}
         />
         <FileInput placeholder='Source Code' />
+        <input
+          type='hidden'
+          name='sourceCode'
+          value='https://raw.githubusercontent.com/jauhararifin/cp/master/uva/820.cpp'
+        />
       </ControlGroup>
     </FormGroup>
     <FormGroup>
@@ -61,10 +68,15 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
       pretests or resubmission (except failure on the first test, denial of
       judgement or similar verdicts).
     </p>
-    <Button intent={Intent.PRIMARY} fill={true}>
-      Submit
+    <Button
+      type='submit'
+      intent={Intent.PRIMARY}
+      fill={true}
+      disabled={isSubmitting}
+    >
+      {isSubmitting ? 'Submitting...' : 'Submit'}
     </Button>
   </form>
 )
 
-export default ContestSubmitForm
+export default ContestSubmitFormView

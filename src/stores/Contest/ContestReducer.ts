@@ -25,6 +25,10 @@ import {
   ContestSetCurrentContestProblems,
   setCurrentContestProblemsReducer,
 } from './ContestSetCurrentContestProblems'
+import {
+  ContestSetCurrentContestSubmissions,
+  setCurrentContestSubmissionReducer,
+} from './ContestSetCurrentContestSubmissions'
 import { ContestState, initialValue } from './ContestState'
 import {
   ContestUnsetCurrentContest,
@@ -73,6 +77,12 @@ export const contestReducer: Reducer<ContestState> = (
       return setCurrentContestClarrificationsReducer(
         state,
         action as ContestSetCurrentContestClarifications
+      )
+
+    case ContestActionType.SetCurrentContestSubmissions:
+      return setCurrentContestSubmissionReducer(
+        state,
+        action as ContestSetCurrentContestSubmissions
       )
   }
   return state
