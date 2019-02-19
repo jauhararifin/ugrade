@@ -1,16 +1,15 @@
 import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 
-export interface ForgotPasswordFormValue {
-  usernameOrEmail: string
-}
+import './styles.css'
 
-export interface ForgotPasswordFormProps
-  extends FormikProps<ForgotPasswordFormValue> {}
+import { ForgotPasswordFormValue } from './ForgotPasswordForm'
 
-export const ForgotPasswordForm: React.FunctionComponent<
-  ForgotPasswordFormProps
+export type ForgotPasswordFormViewProps = FormikProps<ForgotPasswordFormValue>
+
+export const ForgotPasswordFormView: FunctionComponent<
+  ForgotPasswordFormViewProps
 > = ({
   handleSubmit,
   handleBlur,

@@ -1,27 +1,18 @@
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 
-import './styles.css'
-
 import logo from '../../assets/images/logo.svg'
 import BottomLink from '../../components/BottomLink'
-import {
-  ForgotPasswordForm,
-  ForgotPasswordFormProps,
-} from './ForgotPasswordForm'
+import ForgotPasswordForm from './ForgotPasswordForm'
 
-export type ForgotPasswordPageProps = ForgotPasswordFormProps
-
-export const ForgotPasswordPage: FunctionComponent<
-  ForgotPasswordPageProps
-> = props => (
+export const ForgotPasswordView: FunctionComponent = () => (
   <div className='plain-page'>
     <div>
       <Link to='/'>
         <img src={logo} width={100} alt='logo' />
       </Link>
       <h1>Welcome To UGrade</h1>
-      <ForgotPasswordForm {...props} />
+      <ForgotPasswordForm />
     </div>
     <BottomLink>
       <Link to='/signup'>Sign Up</Link>
@@ -31,4 +22,4 @@ export const ForgotPasswordPage: FunctionComponent<
   </div>
 )
 
-export default ForgotPasswordPage
+export default ForgotPasswordView

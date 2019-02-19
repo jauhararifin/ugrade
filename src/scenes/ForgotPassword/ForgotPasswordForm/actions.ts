@@ -1,5 +1,5 @@
-import ActionToaster from '../../middlewares/ErrorToaster/ActionToaster'
-import { AppThunkAction } from '../../stores'
+import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
+import { AppThunkAction } from '../../../stores'
 
 export const forgotPasswordAction = (
   usernameOrEmail: string

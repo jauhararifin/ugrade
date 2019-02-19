@@ -1,25 +1,25 @@
-import { Formik, FormikActions } from 'formik'
-import React, { ComponentType } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { Component, ComponentType } from 'react'
 import * as yup from 'yup'
 
-import './styles.css'
-
-import { publicOnly } from '../../helpers/auth'
-import { AppThunkDispatch } from '../../stores'
-import { setTitle } from '../../stores/Title'
+import { Formik, FormikActions } from 'formik'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { AppThunkDispatch } from '../../../stores'
+import { setTitle } from '../../../stores/Title'
 import { forgotPasswordAction } from './actions'
-import { ForgotPasswordFormValue } from './ForgotPasswordForm'
-import ForgotPasswordPage from './ForgotPasswordPage'
+import { ForgotPasswordFormView } from './ForgotPasswordFormView'
 
-export interface ForgotPasswordSceneProps {
+export interface ForgotPasswordFormValue {
+  usernameOrEmail: string
+}
+
+export interface ForgotPasswordFormReduxProps {
   dispatch: AppThunkDispatch
 }
 
-export class ForgotPasswordScene extends React.Component<
-  ForgotPasswordSceneProps
-> {
+export type ForgotPasswordFormProps = ForgotPasswordFormReduxProps
+
+export class ForgotPasswordForm extends Component<ForgotPasswordFormProps> {
   initialValue = { usernameOrEmail: '' }
 
   validationSchema = yup.object().shape({
@@ -50,15 +50,12 @@ export class ForgotPasswordScene extends React.Component<
     return (
       <Formik
         initialValues={this.initialValue}
-        validationSchema={this.validationSchema}
         onSubmit={this.handleSubmit}
-        render={ForgotPasswordPage}
+        validationSchema={this.validationSchema}
+        component={ForgotPasswordFormView}
       />
     )
   }
 }
 
-export default compose<ComponentType>(
-  publicOnly(),
-  connect()
-)(ForgotPasswordScene)
+export default compose<ComponentType>(connect())(ForgotPasswordForm)

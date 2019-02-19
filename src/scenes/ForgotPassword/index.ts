@@ -1,3 +1,3 @@
-import ForgotPasswordScene from './ForgotPasswordScene'
+import ForgotPassword from './ForgotPassword'
 
-export default ForgotPasswordScene
+export default ForgotPassword
