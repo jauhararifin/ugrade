@@ -5,14 +5,14 @@ import logo from '../../assets/images/logo.svg'
 import BottomLink from '../../components/BottomLink'
 import './styles.css'
 
-export interface HomePageProps {
+export interface HomeViewProps {
   onLogoClick: () => any
   onSettingClick: () => any
   onSignInClick: () => any
   onSignUpClick: () => any
 }
 
-const HomePage: React.FunctionComponent<HomePageProps> = ({
+const HomeView: React.FunctionComponent<HomeViewProps> = ({
   onLogoClick,
   onSettingClick,
   onSignInClick,
@@ -54,4 +54,4 @@ const HomePage: React.FunctionComponent<HomePageProps> = ({
   </div>
 )
 
-export default HomePage
+export default HomeView

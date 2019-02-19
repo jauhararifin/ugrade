@@ -1,3 +1,3 @@
-import HomeScene from './HomeScene'
+import Home from './Home'
 
-export default HomeScene
+export default Home

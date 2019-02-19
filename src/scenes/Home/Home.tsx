@@ -6,21 +6,21 @@ import { compose, Dispatch } from 'redux'
 import { publicOnly } from '../../helpers/auth'
 import { AppAction } from '../../stores'
 import { setTitle } from '../../stores/Title'
-import HomePage from './HomePage'
+import HomeView from './HomeView'
 
-export interface HomeSceneProps {
+export interface HomeProps {
   push: (location: string) => CallHistoryMethodAction
   dispatch: Dispatch<AppAction>
 }
 
-export class HomeScene extends Component<HomeSceneProps> {
+export class Home extends Component<HomeProps> {
   componentDidMount() {
     this.props.dispatch(setTitle('UGrade | Home'))
   }
   render() {
     const createPush = (to: string) => () => this.props.push(to)
     return (
-      <HomePage
+      <HomeView
         onLogoClick={createPush('/')}
         onSignInClick={createPush('/signin')}
         onSignUpClick={createPush('/signup')}
@@ -36,4 +36,4 @@ export default compose<ComponentType>(
     null,
     { push }
   )
-)(HomeScene)
+)(Home)
