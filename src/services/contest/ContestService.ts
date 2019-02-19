@@ -19,7 +19,9 @@ export type ClarificationSubscribeCallback = (
 
 export type ClarificationUnsubscribeFunction = () => any
 
-export type SubmissionSubscribeCallback = (submissions: Submission[]) => any
+export type SubmissionSubscribeCallback = (
+  submissions: Array<Submission | SubmissionDetail>
+) => any
 
 export type SubmissionUnsubscribeFunction = () => any
 

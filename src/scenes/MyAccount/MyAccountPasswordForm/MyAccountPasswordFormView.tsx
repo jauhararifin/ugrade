@@ -8,7 +8,7 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-import { MyAccountPasswordFormValue } from './MyAccountPasswordScene'
+import { MyAccountPasswordFormValue } from './MyAccountPassword'
 
 export type MyAccountPasswordFormViewProps = FormikProps<
   MyAccountPasswordFormValue
