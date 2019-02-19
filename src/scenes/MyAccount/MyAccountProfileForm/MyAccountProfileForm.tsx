@@ -8,17 +8,22 @@ import { GenderType, ShirtSizeType, User } from '../../../stores/Auth'
 import { setTitle } from '../../../stores/Title'
 import { setProfile } from './actions'
 import { genderValues, shirtSizeValues } from './helpers'
-import MyAccountProfileForm, {
-  MyAccountProfileFormValue,
-} from './MyAccountProfileForm'
+import MyAccountProfileFormView from './MyAccountProfileFormView'
 
-export interface MyAccountProfileSceneProps {
+export interface MyAccountProfileFormValue {
+  name: string
+  gender?: GenderType
+  address?: string
+  shirtSize?: ShirtSizeType
+}
+
+export interface MyAccountProfileFormProps {
   dispatch: AppThunkDispatch
   me: User
 }
 
-export class MyAccountProfileScene extends React.Component<
-  MyAccountProfileSceneProps
+export class MyAccountProfileForm extends React.Component<
+  MyAccountProfileFormProps
 > {
   validationSchema = yup.object().shape({
     name: yup
@@ -64,7 +69,7 @@ export class MyAccountProfileScene extends React.Component<
         initialValues={this.props.me}
         onSubmit={this.handleSubmit}
         validationSchema={this.validationSchema}
-        render={MyAccountProfileForm}
+        render={MyAccountProfileFormView}
       />
     )
   }
@@ -73,4 +78,4 @@ export class MyAccountProfileScene extends React.Component<
 const mapStateToProps = (state: AppState) => ({
   me: state.auth.me,
 })
-export default connect(mapStateToProps)(MyAccountProfileScene as any)
+export default connect(mapStateToProps)(MyAccountProfileForm as any)

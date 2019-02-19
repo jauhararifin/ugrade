@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
 import './styles.css'
 
 import BottomLink from '../../components/BottomLink'
-import MyAccountPassword from './MyAccountPassword'
-import MyAccountProfile from './MyAccountProfile'
+import MyAccountPasswordForm from './MyAccountPasswordForm'
+import MyAccountProfileForm from './MyAccountProfileForm'
 
 export interface MyAccountViewProps {
   loading: boolean
@@ -45,8 +45,8 @@ export const MyAccountView: FunctionComponent<MyAccountViewProps> = ({
 
       {loading && <MyAccountViewFormSkeleton />}
 
-      {!loading && <MyAccountProfile />}
-      {!loading && <MyAccountPassword />}
+      {!loading && <MyAccountProfileForm />}
+      {!loading && <MyAccountPasswordForm />}
     </div>
     <BottomLink>
       <Link to='/'>Home</Link>

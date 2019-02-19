@@ -8,19 +8,16 @@ import { User } from '../../stores/Auth'
 import { getProfile } from './actions'
 import { MyAccountView } from './MyAccountView'
 
-export interface MyAccountSceneProps {
+export interface MyAccountProps {
   dispatch: AppThunkDispatch
 }
 
-export interface MyAccountSceneState {
+export interface MyAccountState {
   me?: User
 }
 
-export class MyAccountScene extends React.Component<
-  MyAccountSceneProps,
-  MyAccountSceneState
-> {
-  constructor(props: MyAccountSceneProps) {
+export class MyAccount extends React.Component<MyAccountProps, MyAccountState> {
+  constructor(props: MyAccountProps) {
     super(props)
     this.state = { me: undefined }
   }
@@ -36,4 +33,4 @@ export class MyAccountScene extends React.Component<
 export default compose<ComponentType>(
   connect(),
   userOnly()
-)(MyAccountScene)
+)(MyAccount)

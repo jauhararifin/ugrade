@@ -10,26 +10,19 @@ import {
 import { FormikProps } from 'formik'
 import React from 'react'
 
-import { GenderType, ShirtSizeType } from '../../../stores/Auth'
 import {
   genderToString,
   genderValues,
   shirtSizeToString,
   shirtSizeValues,
 } from './helpers'
+import { MyAccountProfileFormValue } from './MyAccountProfileForm'
 
-export interface MyAccountProfileFormValue {
-  name: string
-  gender?: GenderType
-  address?: string
-  shirtSize?: ShirtSizeType
-}
-
-export interface MyAccountProfileFormProps
+export interface MyAccountProfileFormViewProps
   extends FormikProps<MyAccountProfileFormValue> {}
 
-export const MyAccountProfileForm: React.FunctionComponent<
-  MyAccountProfileFormProps
+export const MyAccountProfileFormView: React.FunctionComponent<
+  MyAccountProfileFormViewProps
 > = ({
   handleSubmit,
   handleBlur,
@@ -132,4 +125,4 @@ export const MyAccountProfileForm: React.FunctionComponent<
   </form>
 )
 
-export default MyAccountProfileForm
+export default MyAccountProfileFormView

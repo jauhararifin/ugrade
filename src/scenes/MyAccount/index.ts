@@ -1,3 +1,3 @@
-import MyAccountScene from './MyAccountScene'
+import MyAccount from './MyAccount'
 
-export default MyAccountScene
+export default MyAccount

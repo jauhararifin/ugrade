@@ -5,17 +5,19 @@ import * as yup from 'yup'
 
 import { AppThunkDispatch } from '../../../stores'
 import { setPassword } from './actions'
-import MyAccountPasswordForm, {
-  MyAccountPasswordFormValue,
-} from './MyAccountPasswordForm'
+import MyAccountPasswordFormView from './MyAccountPasswordFormView'
 
-export interface MyAccountPasswordSceneProps {
+export interface MyAccountPasswordFormValue {
+  oldPassword: string
+  newPassword: string
+  confirmation: string
+}
+
+export interface MyAccountPasswordProps {
   dispatch: AppThunkDispatch
 }
 
-export class MyAccountPasswordScene extends React.Component<
-  MyAccountPasswordSceneProps
-> {
+export class MyAccountPassword extends React.Component<MyAccountPasswordProps> {
   validationSchema = yup.object().shape({
     oldPassword: yup
       .string()
@@ -51,10 +53,10 @@ export class MyAccountPasswordScene extends React.Component<
         initialValues={{ oldPassword: '', newPassword: '', confirmation: '' }}
         onSubmit={this.handleSubmit}
         validationSchema={this.validationSchema}
-        render={MyAccountPasswordForm}
+        render={MyAccountPasswordFormView}
       />
     )
   }
 }
 
-export default connect()(MyAccountPasswordScene as any)
+export default connect()(MyAccountPassword as any)
