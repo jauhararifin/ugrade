@@ -36,7 +36,7 @@ export function setCurrentContestSubmissionReducer(
       .slice()
       .forEach(value => (contestIdSubmission[value.id] = value))
 
-    const result = Object.values(newSubmissions).sort(
+    const result = Object.values(contestIdSubmission).sort(
       (a, b) => a.issuedTime.getTime() - b.issuedTime.getTime()
     )
 

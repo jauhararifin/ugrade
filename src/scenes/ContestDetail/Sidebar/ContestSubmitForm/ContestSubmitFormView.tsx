@@ -30,7 +30,6 @@ export const ContestSubmitFormView: FunctionComponent<
   avaiableProblems,
   avaiableLanguages,
   isSubmitting,
-  errors,
 }) => (
   <form onSubmit={handleSubmit}>
     <H5>Submit Solution</H5>
