@@ -473,7 +473,22 @@ export class InMemoryContestService implements ContestService {
       issuedTime: new Date(),
       verdict: GradingVerdict.Pending,
       sourceCode,
-      gradings: [],
+      gradings: [
+        {
+          id: Math.round(Math.random() * 100000),
+          issuedTime: new Date(),
+          verdict: GradingVerdict.Accepted,
+          message: '',
+          compilationOutput: 'some compilation output here',
+        },
+        {
+          id: Math.round(Math.random() * 100000),
+          issuedTime: new Date(Date.now()),
+          verdict: GradingVerdict.Pending,
+          message: '',
+          compilationOutput: '',
+        },
+      ],
     }
 
     if (!this.contestSubmissionsMap[contestId]) {
