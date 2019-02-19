@@ -13,7 +13,6 @@ import {
   Contest,
   setCurrentContestAnnouncements,
   setCurrentContestCurrentProblem,
-  Submission,
   unsetCurrentContest,
 } from '../../stores/Contest'
 import { setCurrentContestClarrifications } from '../../stores/Contest/ContestSetCurrentContestClarrifications'
@@ -34,6 +33,7 @@ import { ContestDetailPage } from './ContestDetailPage'
 import Overview from './Overview'
 import ProblemDetailScene from './ProblemDetail'
 import Problems from './Problems'
+import Scoreboard from './Scoreboard'
 import Submissions from './Submissions'
 
 export interface ContestDetailSceneRoute {
@@ -185,6 +185,11 @@ export class ContestDetailScene extends Component<ContestDetailSceneProps> {
                 path='/contests/:contestId/submissions'
                 exact={true}
                 component={Submissions}
+              />
+              <Route
+                path='/contests/:contestId/scoreboard'
+                exact={true}
+                component={Scoreboard}
               />
             </Switch>
           </CSSTransition>
