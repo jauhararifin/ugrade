@@ -1,0 +1,10 @@
+.submission-detail {
+  .info {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    .source-code {
+      overflow-x: scroll;
+    }
+  }
+}
