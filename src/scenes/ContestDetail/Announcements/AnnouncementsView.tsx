@@ -1,4 +1,4 @@
-import { Card, Elevation, H1, H3 } from '@blueprintjs/core'
+import { Card, Classes, Elevation, H1, H3, Tooltip } from '@blueprintjs/core'
 import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
@@ -45,7 +45,14 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
               <div className='header'>
                 <H3 className='title'>{announcement.title}</H3>
                 <p className='info'>
-                  {moment(announcement.issuedTime).from(currentMoment)}
+                  <Tooltip
+                    className={Classes.TOOLTIP_INDICATOR}
+                    content={moment(announcement.issuedTime).format(
+                      'dddd, MMMM Do YYYY, h:mm:ss a'
+                    )}
+                  >
+                    {moment(announcement.issuedTime).from(currentMoment)}
+                  </Tooltip>
                 </p>
               </div>
               <ReactMarkdown source={announcement.content} />

@@ -1,12 +1,14 @@
 import {
   Button,
   Card,
+  Classes,
   Elevation,
   H1,
   H3,
   H5,
   Intent,
   Tag,
+  Tooltip,
 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import 'github-markdown-css'
@@ -95,7 +97,16 @@ export class ClarificationsView extends Component<
                     <div className='info'>
                       <div className='info-container'>
                         <p className='time'>
-                          {moment(clarification.issuedTime).from(currentMoment)}
+                          <Tooltip
+                            className={Classes.TOOLTIP_INDICATOR}
+                            content={moment(clarification.issuedTime).format(
+                              'dddd, MMMM Do YYYY, h:mm:ss a'
+                            )}
+                          >
+                            {moment(clarification.issuedTime).from(
+                              currentMoment
+                            )}
+                          </Tooltip>
                         </p>
                         {notReadCount > 0 && (
                           <p className='unread'>

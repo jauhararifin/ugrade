@@ -1,4 +1,4 @@
-import { H4, H6, HTMLTable } from '@blueprintjs/core'
+import { Classes, H4, H6, HTMLTable, Tooltip } from '@blueprintjs/core'
 import moment from 'moment'
 import React from 'react'
 
@@ -9,12 +9,15 @@ import { Contest } from '../../stores/Contest'
 export interface ContestsListProps {
   contests: Contest[]
   onContestChoose?: (contest: Contest) => any
+  serverClock?: Date
 }
 
 export const ContestsList: React.FunctionComponent<ContestsListProps> = ({
   contests,
   onContestChoose,
+  serverClock,
 }) => {
+  const currentMoment = moment(serverClock || new Date())
   if (contests.length === 0) {
     return (
       <div className='contests-contests-group skeleton'>
@@ -97,7 +100,14 @@ export const ContestsList: React.FunctionComponent<ContestsListProps> = ({
                   <p>{contest.shortDescription}</p>
                 </td>
                 <td>
-                  {moment(contest.startTime).format('MMMM Do YYYY, h:mm:ss a')}
+                  <Tooltip
+                    className={Classes.TOOLTIP_INDICATOR}
+                    content={moment(contest.startTime).format(
+                      'dddd, MMMM Do YYYY, h:mm:ss a'
+                    )}
+                  >
+                    {moment(contest.startTime).from(currentMoment)}
+                  </Tooltip>
                 </td>
                 <td>
                   {moment

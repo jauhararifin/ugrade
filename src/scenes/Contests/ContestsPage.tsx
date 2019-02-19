@@ -56,7 +56,11 @@ export const ContestsPage: FunctionComponent<ContestsPageProps> = ({
           placeholder='Search Contests'
           large={true}
         />
-        <ContestsList contests={contests} onContestChoose={onContestChoose} />
+        <ContestsList
+          serverClock={serverClock}
+          contests={contests}
+          onContestChoose={onContestChoose}
+        />
       </div>
     </div>
   </div>
