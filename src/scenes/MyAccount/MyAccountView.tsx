@@ -9,11 +9,11 @@ import BottomLink from '../../components/BottomLink'
 import MyAccountPassword from './MyAccountPassword'
 import MyAccountProfile from './MyAccountProfile'
 
-export interface MyAccountPageProps {
+export interface MyAccountViewProps {
   loading: boolean
 }
 
-const MyAccountPageFormSkeleton: FunctionComponent = () => (
+const MyAccountViewFormSkeleton: FunctionComponent = () => (
   <React.Fragment>
     {[0, 0, 0].map(() => (
       <React.Fragment>
@@ -34,7 +34,7 @@ const MyAccountPageFormSkeleton: FunctionComponent = () => (
   </React.Fragment>
 )
 
-export const MyAccountPage: FunctionComponent<MyAccountPageProps> = ({
+export const MyAccountView: FunctionComponent<MyAccountViewProps> = ({
   loading,
 }) => (
   <div className='plain-page'>
@@ -43,7 +43,7 @@ export const MyAccountPage: FunctionComponent<MyAccountPageProps> = ({
         <h2>Account Setting</h2>
       </div>
 
-      {loading && <MyAccountPageFormSkeleton />}
+      {loading && <MyAccountViewFormSkeleton />}
 
       {!loading && <MyAccountProfile />}
       {!loading && <MyAccountPassword />}
@@ -54,4 +54,4 @@ export const MyAccountPage: FunctionComponent<MyAccountPageProps> = ({
   </div>
 )
 
-export default MyAccountPage
+export default MyAccountView

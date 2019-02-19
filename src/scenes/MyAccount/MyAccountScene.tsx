@@ -6,7 +6,7 @@ import { userOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
 import { User } from '../../stores/Auth'
 import { getProfile } from './actions'
-import { MyAccountPage } from './MyAccountPage'
+import { MyAccountView } from './MyAccountView'
 
 export interface MyAccountSceneProps {
   dispatch: AppThunkDispatch
@@ -29,7 +29,7 @@ export class MyAccountScene extends React.Component<
     this.setState({ me })
   }
   render() {
-    return <MyAccountPage loading={!this.state.me} />
+    return <MyAccountView loading={!this.state.me} />
   }
 }
 
