@@ -1,6 +1,7 @@
 import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
 import { Contest, ContestDetail } from './Contest'
+import { Scoreboard } from './Scoreboard'
 import { Submission, SubmissionDetail } from './Submission'
 
 export type AnnouncementSubscribeCallback = (
@@ -101,4 +102,6 @@ export interface ContestService {
     languageId: number,
     sourceCode: string
   ): Promise<SubmissionDetail>
+
+  getScoreboard(token: string, contestId: number): Promise<Scoreboard>
 }

@@ -27,6 +27,7 @@ import {
   contests,
 } from './fixtures'
 import { GradingVerdict } from './Grading'
+import { Scoreboard } from './Scoreboard'
 import { Submission, SubmissionDetail } from './Submission'
 
 export class InMemoryContestService implements ContestService {
@@ -496,5 +497,13 @@ export class InMemoryContestService implements ContestService {
     }
     this.contestSubmissionsMap[contestId].push(submissionDetail)
     return { ...submissionDetail }
+  }
+
+  async getScoreboard(token: string, contestId: number): Promise<Scoreboard> {
+    return {
+      contestId,
+      lastUpdated: new Date(),
+      entries: [],
+    }
   }
 }
