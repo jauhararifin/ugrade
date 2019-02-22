@@ -1,8 +1,5 @@
-import { Card } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-
-import './styles.css'
 
 import logo from '../../assets/images/logo.svg'
 import BottomLink from '../../components/BottomLink'
@@ -15,10 +12,7 @@ export const SignInView: FunctionComponent = () => (
         <img src={logo} width={100} alt='logo' />
       </Link>
       <h1>Welcome To UGrade</h1>
-      <Card className='signin-panel'>
-        <h2>Sign In</h2>
-        <SignInForm />
-      </Card>
+      <SignInForm />
     </div>
     <BottomLink>
       <Link to='/signup'>Sign Up</Link>
