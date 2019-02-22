@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+message User {
+  string uuid = 1;
+  string contestId = 2;
+  string email = 3;
+}
+
+message UserDetail {
+  User user = 1;
+  string username = 2;
+}
+
+message Session {
+  string token = 1;
+}
+
+message SignUpRequest {
+  string contestId = 1;
+  string email = 2;
+  string registrationCode = 3;
+  string username = 4;
+  string password = 5;
+}
+
+message SignInRequest {
+  string contestId = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message GetMeRequest {
+  string sessionToken = 1;
+}
+
+message ForgotPasswordRequest {
+  string contestId = 1;
+  string email = 2;
+}
+
+message Void {}
+
+service AuthService {
+
+  rpc SignUp(SignUpRequest) returns (UserDetail);
+
+  rpc SignIn(SignInRequest) returns (Session);
+  
+  rpc GetMe(GetMeRequest) returns (UserDetail);
+
+  rpc ForgotPassword(ForgotPasswordRequest) returns (Void);
+
+}
