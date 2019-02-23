@@ -1,32 +1,29 @@
 import { ContestReadAnnouncements } from './ContestReadAnnouncements'
-import { ContestSetContests } from './ContestSetContests'
-import { ContestSetCurrentContest } from './ContestSetCurrentContest'
-import { ContestSetCurrentContestAnnouncements } from './ContestSetCurrentContestAnnouncements'
-import { ContestSetCurrentContestClarifications } from './ContestSetCurrentContestClarrifications'
-import { ContestSetCurrentContestCurrentProblem } from './ContestSetCurrentContestCurrentProblem'
-import { ContestSetCurrentContestProblems } from './ContestSetCurrentContestProblems'
-import { ContestSetCurrentContestSubmissions } from './ContestSetCurrentContestSubmissions'
-import { ContestUnsetCurrentContest } from './ContestUnsetCurrentContest'
+import { ContestSetAnnouncements } from './ContestSetAnnouncements'
+import { ContestSetClarifications } from './ContestSetClarrifications'
+import { ContestSetContest } from './ContestSetContest'
+import { ContestSetProblems } from './ContestSetProblems'
+import { ContestSetRegistered } from './ContestSetRegistered'
+import { ContestSetSubmissions } from './ContestSetSubmissions'
+import { ContestUnsetContest } from './ContestUnsetContest'
 
 export enum ContestActionType {
-  SetContests = 'CONTEST_SET_CONTESTS',
-  SetCurrentContest = 'CONTEST_SET_CURRENT_CONTEST',
-  UnsetCurrentContest = 'CONTEST_UNSET_CURRENT_CONTEST',
-  SetCurrentContestAnnouncements = 'CONTEST_SET_CURRENT_CONTEST_ANNOUNCEMENTS',
-  SetCurrentContestProblems = 'CONTEST_SET_CURRENT_CONTEST_PROBLEMS',
-  SetCurrentContestClarifications = 'CONTEST_SET_CURRENT_CONTEST_CLARIFICATIONS',
-  SetCurrentContestCurrentProblem = 'CONTEST_SET_CURRENT_CONTEST_CURRENT_PROBLEM',
-  SetCurrentContestSubmissions = 'CONTEST_SET_CURRENT_CONTEST_SUBMISSIONS',
+  SetContest = 'CONTEST_SET_CONTEST',
+  SetRegistered = 'CONTEST_SET_REGISTERED',
+  UnsetContest = 'CONTEST_UNSET_CONTEST',
+  SetAnnouncements = 'CONTEST_SET_ANNOUNCEMENTS',
+  SetProblems = 'CONTEST_SET_PROBLEMS',
+  SetClarifications = 'CONTEST_SET_CLARIFICATIONS',
+  SetSubmissions = 'CONTEST_SET_SUBMISSIONS',
   ReadAnnouncements = 'CONTEST_READ_ANNOUNCEMENTS',
 }
 
 export type ContestAction =
-  | ContestSetContests
-  | ContestSetCurrentContest
-  | ContestUnsetCurrentContest
-  | ContestSetCurrentContestAnnouncements
-  | ContestSetCurrentContestProblems
-  | ContestSetCurrentContestClarifications
-  | ContestSetCurrentContestCurrentProblem
+  | ContestSetContest
+  | ContestSetRegistered
+  | ContestUnsetContest
+  | ContestSetAnnouncements
+  | ContestSetProblems
+  | ContestSetClarifications
   | ContestReadAnnouncements
-  | ContestSetCurrentContestSubmissions
+  | ContestSetSubmissions

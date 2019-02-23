@@ -1,13 +1,13 @@
 import { ContestActionType } from './ContestAction'
-import { ContestState } from './ContestState'
+import { Announcement, ContestState } from './ContestState'
 
 export interface ContestReadAnnouncements {
   type: ContestActionType.ReadAnnouncements
-  announcements: number[]
+  announcements: string[]
 }
 
 export function readAnnouncements(
-  announcements: number[]
+  announcements: string[]
 ): ContestReadAnnouncements {
   return {
     type: ContestActionType.ReadAnnouncements,
@@ -19,21 +19,14 @@ export function readAnnouncementsReducer(
   state: ContestState,
   action: ContestReadAnnouncements
 ): ContestState {
-  const currentContest = state.currentContest
-  if (currentContest) {
-    if (!currentContest.announcements) currentContest.announcements = []
-    const announcements = currentContest.announcements.slice().map(item => ({
-      ...item,
-      read: action.announcements.includes(item.id) ? true : item.read,
-    }))
-
-    return {
-      ...state,
-      currentContest: {
-        ...currentContest,
-        announcements,
-      },
-    }
+  const nextState = { ...state }
+  const announcements: { [id: string]: Announcement } =
+    nextState.announcements || {}
+  action.announcements.forEach(id => {
+    if (announcements[id]) announcements[id].read = true
+  })
+  return {
+    ...nextState,
+    announcements,
   }
-  return { ...state }
 }

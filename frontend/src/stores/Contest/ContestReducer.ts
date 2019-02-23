@@ -4,86 +4,58 @@ import {
   ContestReadAnnouncements,
   readAnnouncementsReducer,
 } from './ContestReadAnnouncements'
-import { ContestSetContests, setContestsReducer } from './ContestSetContests'
 import {
-  ContestSetCurrentContest,
-  setCurrentContestReducer,
-} from './ContestSetCurrentContest'
+  ContestSetAnnouncements,
+  setAnnouncementsReducer,
+} from './ContestSetAnnouncements'
 import {
-  ContestSetCurrentContestAnnouncements,
-  setCurrentContestAnnouncementsReducer,
-} from './ContestSetCurrentContestAnnouncements'
+  ContestSetClarifications,
+  setClarrificationsReducer,
+} from './ContestSetClarrifications'
+import { ContestSetContest, setContestReducer } from './ContestSetContest'
+import { ContestSetProblems, setProblemsReducer } from './ContestSetProblems'
 import {
-  ContestSetCurrentContestClarifications,
-  setCurrentContestClarrificationsReducer,
-} from './ContestSetCurrentContestClarrifications'
+  ContestSetRegistered,
+  setRegisteredReducer,
+} from './ContestSetRegistered'
 import {
-  ContestSetCurrentContestCurrentProblem,
-  setCurrentContestCurrentProblemReducer,
-} from './ContestSetCurrentContestCurrentProblem'
-import {
-  ContestSetCurrentContestProblems,
-  setCurrentContestProblemsReducer,
-} from './ContestSetCurrentContestProblems'
-import {
-  ContestSetCurrentContestSubmissions,
-  setCurrentContestSubmissionReducer,
-} from './ContestSetCurrentContestSubmissions'
+  ContestSetSubmissions,
+  setSubmissionReducer,
+} from './ContestSetSubmissions'
 import { ContestState, initialValue } from './ContestState'
-import {
-  ContestUnsetCurrentContest,
-  unsetCurrentContestReducer,
-} from './ContestUnsetCurrentContest'
+import { ContestUnsetContest, unsetContestReducer } from './ContestUnsetContest'
 
 export const contestReducer: Reducer<ContestState> = (
   state: ContestState = initialValue,
   action
 ): ContestState => {
   switch (action.type) {
-    case ContestActionType.SetContests:
-      return setContestsReducer(state, action as ContestSetContests)
+    case ContestActionType.SetContest:
+      return setContestReducer(state, action as ContestSetContest)
 
-    case ContestActionType.SetCurrentContest:
-      return setCurrentContestReducer(state, action as ContestSetCurrentContest)
+    case ContestActionType.SetRegistered:
+      return setRegisteredReducer(state, action as ContestSetRegistered)
 
-    case ContestActionType.UnsetCurrentContest:
-      return unsetCurrentContestReducer(
-        state,
-        action as ContestUnsetCurrentContest
-      )
+    case ContestActionType.UnsetContest:
+      return unsetContestReducer(state, action as ContestUnsetContest)
 
-    case ContestActionType.SetCurrentContestAnnouncements:
-      return setCurrentContestAnnouncementsReducer(
-        state,
-        action as ContestSetCurrentContestAnnouncements
-      )
+    case ContestActionType.SetAnnouncements:
+      return setAnnouncementsReducer(state, action as ContestSetAnnouncements)
 
-    case ContestActionType.SetCurrentContestProblems:
-      return setCurrentContestProblemsReducer(
-        state,
-        action as ContestSetCurrentContestProblems
-      )
-
-    case ContestActionType.SetCurrentContestCurrentProblem:
-      return setCurrentContestCurrentProblemReducer(
-        state,
-        action as ContestSetCurrentContestCurrentProblem
-      )
+    case ContestActionType.SetProblems:
+      return setProblemsReducer(state, action as ContestSetProblems)
 
     case ContestActionType.ReadAnnouncements:
       return readAnnouncementsReducer(state, action as ContestReadAnnouncements)
 
-    case ContestActionType.SetCurrentContestClarifications:
-      return setCurrentContestClarrificationsReducer(
+    case ContestActionType.SetClarifications:
+      return setClarrificationsReducer(
         state,
-        action as ContestSetCurrentContestClarifications
+        action as ContestSetClarifications
       )
 
-    case ContestActionType.SetCurrentContestSubmissions:
-      return setCurrentContestSubmissionReducer(
-        state,
-        action as ContestSetCurrentContestSubmissions
-      )
+    case ContestActionType.SetSubmissions:
+      return setSubmissionReducer(state, action as ContestSetSubmissions)
   }
   return state
 }

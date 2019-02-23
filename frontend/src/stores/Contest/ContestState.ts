@@ -4,10 +4,11 @@ export enum ProblemType {
 }
 
 export interface Problem {
-  id: number
+  id: string
   slug: string
   name: string
   statement: string
+  order: number
   type: ProblemType
   timeLimit: number
   tolerance: number
@@ -16,12 +17,12 @@ export interface Problem {
 }
 
 export interface Language {
-  id: number
+  id: string
   name: string
 }
 
 export interface Announcement {
-  id: number
+  id: string
   title: string
   content: string
   issuedTime: Date
@@ -29,7 +30,7 @@ export interface Announcement {
 }
 
 export interface ClarificationEntry {
-  id: number
+  id: string
   sender: string
   content: string
   read: boolean
@@ -37,11 +38,11 @@ export interface ClarificationEntry {
 }
 
 export interface Clarification {
-  id: number
+  id: string
   title: string
   subject: string
   issuedTime: Date
-  entries: ClarificationEntry[]
+  entries: { [clarificationEntryId: string]: ClarificationEntry }
 }
 
 export enum GradingVerdict {
@@ -58,7 +59,7 @@ export enum GradingVerdict {
 export type SubmissionVerdict = GradingVerdict
 
 export interface Grading {
-  id: number
+  id: string
   issuedTime: Date
   verdict: GradingVerdict
   message: string
@@ -66,44 +67,35 @@ export interface Grading {
 }
 
 export interface Submission {
-  id: number
-  issuer: string
+  id: string
   contestId: number
   problemId: number
   languageId: number
   issuedTime: Date
   verdict: SubmissionVerdict
-
-  sourceCode?: string
+  sourceCode: string
   gradings?: Grading[]
 }
 
-export interface Contest {
-  id: number
-  slug: string
+export interface ContestInfo {
   name: string
   shortDescription: string
   startTime: Date
   finishTime: Date
   freezed: boolean
-  registered: boolean
-
-  description?: string
-  permittedLanguages?: Language[]
-
-  problems?: Problem[]
-  announcements?: Announcement[]
-  clarifications?: Clarification[]
-  submissions?: Submission[]
-
-  currentProblem?: Problem
+  description: string
+  permittedLanguages: Language[]
 }
 
 export interface ContestState {
-  contests: Contest[]
-  currentContest?: Contest
+  id?: string
+  shortId?: string
+  registered?: boolean
+  info?: ContestInfo
+  problems?: { [problemId: string]: Problem }
+  announcements?: { [announcementId: string]: Announcement }
+  clarifications?: { [clarificationId: string]: Clarification }
+  submissions?: { [submissionId: string]: Submission }
 }
 
-export const initialValue: ContestState = {
-  contests: [],
-}
+export const initialValue: ContestState = {}
