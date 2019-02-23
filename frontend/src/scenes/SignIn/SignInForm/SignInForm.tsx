@@ -10,7 +10,7 @@ import { signInAction } from './actions'
 import SignInFormView from './SignInFormView'
 
 export interface SignInFormValue {
-  username: string
+  usernameOrEmail: string
   password: string
   rememberMe: boolean
 }
@@ -21,28 +21,29 @@ export interface SignInFormProps {
 
 class SignInForm extends React.Component<SignInFormProps, {}> {
   initialValue: SignInFormValue = {
-    username: '',
+    usernameOrEmail: '',
     password: '',
     rememberMe: false,
   }
 
   validationSchema = yup.object().shape({
-    username: yup.string().required(),
+    usernameOrEmail: yup.string().required(),
     password: yup.string().required(),
     rememberMe: yup.boolean(),
   })
 
-  handleSubmit = (
+  handleSubmit = async (
     values: SignInFormValue,
     { setStatus, setSubmitting }: FormikActions<SignInFormValue>
   ) => {
-    this.props
-      .dispatch(
-        signInAction(values.username, values.password, values.rememberMe)
+    try {
+      const result = await this.props.dispatch(
+        signInAction(values.usernameOrEmail, values.password, values.rememberMe)
       )
-      .then(result => setStatus(result))
-      .finally(() => setSubmitting(false))
-      .catch(_ => null)
+      setStatus(result)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   render() {

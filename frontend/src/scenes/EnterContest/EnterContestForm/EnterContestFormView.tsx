@@ -1,11 +1,4 @@
-import {
-  Button,
-  Card,
-  Colors,
-  FormGroup,
-  InputGroup,
-  Intent,
-} from '@blueprintjs/core'
+import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
 
@@ -23,14 +16,10 @@ const EnterContestFormView: React.FunctionComponent<
   handleBlur,
   values,
   errors,
-  status,
   submitCount,
   isSubmitting,
 }) => (
   <form className='enter-contest-panel' onSubmit={handleSubmit}>
-    {status && !status.success && (
-      <h5 style={{ color: Colors.RED2 }}>{status.message}</h5>
-    )}
     <Card>
       <h2>Enter Contest</h2>
       <p>Insert Contest ID to enter the contest</p>
@@ -60,7 +49,7 @@ const EnterContestFormView: React.FunctionComponent<
         large={true}
         intent={Intent.SUCCESS}
       >
-        {isSubmitting ? 'Entering Contest...' : 'Enter Contest'}
+        {isSubmitting ? 'Entering Contest...' : 'Continue'}
       </Button>
     </Card>
   </form>

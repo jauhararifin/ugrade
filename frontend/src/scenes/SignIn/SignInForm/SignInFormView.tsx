@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Colors,
   FormGroup,
   InputGroup,
   Intent,
@@ -22,29 +21,27 @@ const SignInFormView: React.FunctionComponent<SignInFormViewProps> = ({
   handleBlur,
   values,
   errors,
-  status,
   submitCount,
   isSubmitting,
 }) => (
   <form onSubmit={handleSubmit}>
-    {status && !status.success && (
-      <h5 style={{ color: Colors.RED2 }}>{status.message}</h5>
-    )}
     <Card className='signin-panel'>
       <h2>Sign In</h2>
       <FormGroup
-        helperText={submitCount > 0 && errors && errors.username}
-        labelFor='signin-input-username'
+        helperText={submitCount > 0 && errors && errors.usernameOrEmail}
+        labelFor='signin-input-username-email'
         intent={
-          submitCount && errors && errors.username ? Intent.DANGER : Intent.NONE
+          submitCount && errors && errors.usernameOrEmail
+            ? Intent.DANGER
+            : Intent.NONE
         }
       >
         <InputGroup
           name='username'
           large={true}
-          id='signin-input-username'
-          placeholder='Username'
-          value={values.username}
+          id='signin-input-username-email'
+          placeholder='Username Or Email'
+          value={values.usernameOrEmail}
           onChange={handleChange}
           onBlur={handleBlur}
         />

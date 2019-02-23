@@ -4,7 +4,7 @@ import { compose } from 'redux'
 
 import './styles.css'
 
-import { publicOnly } from '../../helpers/auth'
+import { contestOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
 import { setTitle } from '../../stores/Title'
 import { SignInView } from './SignInView'
@@ -23,6 +23,6 @@ class SignIn extends React.Component<SignInProps> {
 }
 
 export default compose<ComponentType>(
-  publicOnly(),
+  contestOnly(),
   connect()
 )(SignIn)

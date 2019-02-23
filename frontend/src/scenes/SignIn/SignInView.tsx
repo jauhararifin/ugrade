@@ -15,7 +15,6 @@ export const SignInView: FunctionComponent = () => (
       <SignInForm />
     </div>
     <BottomLink>
-      <Link to='/signup'>Sign Up</Link>
       <Link to='/forgot-password'>Forgot Password</Link>
       <Link to='/setting'>Setting</Link>
     </BottomLink>

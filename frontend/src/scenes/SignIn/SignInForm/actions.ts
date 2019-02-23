@@ -1,31 +1,22 @@
-import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
-import { AuthenticationError } from '../../../services/auth'
 import { AppThunkAction } from '../../../stores'
 import { setMe, setSignedIn } from '../../../stores/Auth'
-
-export interface SignInResult {
-  success: boolean
-  message?: string
-}
+import { setUserProfile } from '../../../stores/UserProfile'
 
 export const signInAction = (
-  username: string,
+  usernameOrPassword: string,
   password: string,
   rememberMe: boolean
-): AppThunkAction<SignInResult> => {
-  return async (dispatch, _, { authService }) => {
-    try {
-      const token = await authService.login(username, password)
-      const me = await authService.getMyProfile(token)
-      dispatch(setSignedIn(token, rememberMe))
-      dispatch(setMe(me))
-      ActionToaster.showSuccessToast('You Are Signed In')
-      return { success: true }
-    } catch (error) {
-      if (error instanceof AuthenticationError) {
-        return { success: false, message: error.message }
-      }
-      throw error
-    }
+): AppThunkAction => {
+  return async (dispatch, getState, { authService, userService }) => {
+    const contestId = getState().contest.id as string
+    const token = await authService.signin(
+      contestId,
+      usernameOrPassword,
+      password
+    )
+    const me = await userService.getMyProfile(token)
+    dispatch(setSignedIn(token, rememberMe))
+    dispatch(setMe(me))
+    dispatch(setUserProfile(me.gender, me.shirtSize, me.address))
   }
 }

@@ -1,13 +1,9 @@
-import { push } from 'connected-react-router'
 import { Formik, FormikActions } from 'formik'
 import React, { ComponentType } from 'react'
-import { connect } from 'react-redux'
 import { compose } from 'redux'
 import * as yup from 'yup'
 
 import { publicOnly } from '../../../helpers/auth'
-import { AppThunkDispatch } from '../../../stores'
-import { enterContest } from './actions'
 import EnterContestFormView from './EnterContestFormView'
 
 export interface EnterContestFormValue {
@@ -15,7 +11,7 @@ export interface EnterContestFormValue {
 }
 
 export interface EnterContestFormProps {
-  dispatch: AppThunkDispatch
+  onSubmit: (contestId: string) => Promise<any>
 }
 
 class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
@@ -28,7 +24,7 @@ class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
       .string()
       .min(4)
       .max(255)
-      .label('contest id')
+      .label('Contest ID')
       .matches(/[a-zA-Z0-9\-]+/)
       .required(),
   })
@@ -37,9 +33,11 @@ class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
     values: EnterContestFormValue,
     { setSubmitting }: FormikActions<EnterContestFormValue>
   ) => {
-    await this.props.dispatch(enterContest(values.contestId))
-    this.props.dispatch(push('/signin'))
-    setSubmitting(false)
+    try {
+      await this.props.onSubmit(values.contestId)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   render() {
@@ -54,7 +52,6 @@ class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
   }
 }
 
-export default compose<ComponentType>(
-  publicOnly(),
-  connect()
-)(EnterContestForm)
+export default compose<ComponentType<EnterContestFormProps>>(publicOnly())(
+  EnterContestForm
+)

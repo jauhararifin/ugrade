@@ -1,3 +1,3 @@
-import SignIn from './SignIn'
+import EnterContest from './EnterContest'
 
-export default SignIn
+export default EnterContest
