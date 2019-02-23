@@ -1,10 +1,10 @@
 import { AuthService } from './AuthService'
-import { contestUserMap, userPasswordMap } from './fixtures'
 import {
   AuthenticationError,
-  UserRegistrationError,
   ForbiddenActionError,
+  UserRegistrationError,
 } from './errors'
+import { contestUserMap, userPasswordMap } from './fixtures'
 import { User } from './User'
 
 export class InMemoryAuthService implements AuthService {
@@ -43,8 +43,9 @@ export class InMemoryAuthService implements AuthService {
       )
       .pop()
     if (!user) throw new AuthenticationError('Wrong Username Or Password')
-    if (this.userPasswordMap[user.id] !== password)
+    if (this.userPasswordMap[user.id] !== password) {
       throw new AuthenticationError('Wrong Username Or Password')
+    }
     const token = `${contestId}---${user.id}---somefaketoken`
     this.usersToken[user.id] = token
     return token
@@ -64,14 +65,16 @@ export class InMemoryAuthService implements AuthService {
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new ForbiddenActionError('Operation Not Allowed')
-    if (user.username && user.username.length > 0)
+    if (user.username && user.username.length > 0) {
       throw new UserRegistrationError('User Already Registered')
+    }
     if (
       Object.values(userMap)
         .filter(x => x.username === username)
         .pop()
-    )
+    ) {
       throw new UserRegistrationError('Username Already Taken')
+    }
     this.contestUserMap[contestId][user.id] = {
       ...user,
       username,
@@ -86,10 +89,12 @@ export class InMemoryAuthService implements AuthService {
     usernameOrEmail: string
   ): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    if (!this.contestUserMap[contestId])
+    if (!this.contestUserMap[contestId]) {
       throw new AuthenticationError('No Such Contest')
-    if (usernameOrEmail.length === 0)
+    }
+    if (usernameOrEmail.length === 0) {
       throw new AuthenticationError('No Such User')
+    }
   }
 
   async getMe(token: string): Promise<User> {
@@ -113,8 +118,9 @@ export class InMemoryAuthService implements AuthService {
     newPassword: string
   ): Promise<void> {
     const user = await this.getMe(token)
-    if (this.userPasswordMap[user.id] !== oldPassword)
+    if (this.userPasswordMap[user.id] !== oldPassword) {
       throw new AuthenticationError('Wrong Password')
+    }
     this.userPasswordMap[user.id] = newPassword
   }
 

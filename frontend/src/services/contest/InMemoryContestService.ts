@@ -62,6 +62,16 @@ export class InMemoryContestService implements ContestService {
     )
   }
 
+  async getContestByShortId(shortId: string): Promise<Contest> {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    const contest = this.contests
+      .slice()
+      .filter(x => x.shortId === shortId)
+      .pop()
+    if (!contest) throw new NoSuchContest('No Such Contest')
+    return contest
+  }
+
   async getMyContest(token: string): Promise<Contest> {
     const user = await this.authService.getMe(token)
     const contest = contests

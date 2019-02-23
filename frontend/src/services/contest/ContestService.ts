@@ -25,6 +25,8 @@ export type SubmissionSubscribeCallback = (submissions: Submission[]) => any
 export type SubmissionUnsubscribeFunction = () => any
 
 export interface ContestService {
+  getContestByShortId(shortId: string): Promise<Contest>
+
   getMyContest(token: string): Promise<Contest>
 
   getAnnouncements(token: string): Promise<Announcement[]>
