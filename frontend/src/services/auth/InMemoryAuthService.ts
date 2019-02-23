@@ -80,7 +80,7 @@ export class InMemoryAuthService implements AuthService {
       name,
     }
     this.userPasswordMap[user.id] = password
-    return this.signin(contestId, username, password)
+    return this.signin(contestId, email, password)
   }
 
   async forgotPassword(
