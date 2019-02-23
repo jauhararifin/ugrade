@@ -1,13 +1,9 @@
 import { User } from './User'
 
 export interface AuthService {
-  isRegistered(contestId: string, usernameOrEmail: string): Promise<boolean>
+  isRegistered(contestId: string, email: string): Promise<boolean>
 
-  signin(
-    contestId: string,
-    usernameOrEmail: string,
-    password: string
-  ): Promise<string>
+  signin(contestId: string, email: string, password: string): Promise<string>
 
   signup(
     contestId: string,

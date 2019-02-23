@@ -19,33 +19,27 @@ export class InMemoryAuthService implements AuthService {
     this.usersToken = {}
   }
 
-  async isRegistered(
-    contestId: string,
-    usernameOrEmail: string
-  ): Promise<boolean> {
+  async isRegistered(contestId: string, email: string): Promise<boolean> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthenticationError('No Such Contest')
     const user = Object.values(userMap)
-      .filter(
-        x => x.email === usernameOrEmail || x.username === usernameOrEmail
-      )
+      .filter(x => x.email === email)
       .pop()
-    return !!user
+    if (!user) throw new AuthenticationError('No Such User')
+    return user.username.length > 0
   }
 
   async signin(
     contestId: string,
-    usernameOrEmail: string,
+    email: string,
     password: string
   ): Promise<string> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthenticationError('No Such Contest')
     const user = Object.values(userMap)
-      .filter(
-        x => x.username === usernameOrEmail || x.email === usernameOrEmail
-      )
+      .filter(x => x.email === email)
       .pop()
     if (!user) throw new AuthenticationError('Wrong Username Or Password')
     if (this.userPasswordMap[user.id] !== password) {

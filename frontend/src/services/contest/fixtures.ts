@@ -58,7 +58,7 @@ export const annoucements: Announcement[] = [
 export const ContestArkav4Qual: Contest = {
   id: '1',
   shortId: 'arkavidia-40-qualification',
-  title: 'Penyisihan Competitive Programming Arkavidia 4.0',
+  name: 'Penyisihan Competitive Programming Arkavidia 4.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: `# Arkavidia
@@ -128,7 +128,7 @@ export const ContestArkav4QualProblems = [
 export const ContestArkav4Final: Contest = {
   id: '2',
   shortId: 'arkavidia-40-qualification',
-  title: 'Final Competitive Programming Arkavidia 4.0',
+  name: 'Final Competitive Programming Arkavidia 4.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
@@ -162,9 +162,9 @@ export const ContestArkav4FinalProblems = [
 export const ContestArkav5Qual: Contest = {
   id: '3',
   shortId: 'arkavidia-50-qualification',
-  title: 'Penyisihan Competitive Programming Arkavidia 5.0',
+  name: 'Penyisihan Competitive Programming Arkavidia 5.0',
   shortDescription:
-    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit... Lorem ipsum dos color sit amet and something i dont know what to write',
   description: ContestArkav4Qual.description,
   startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   freezed: true,
@@ -192,7 +192,7 @@ export const ContestArkav5QualProblems = [
 export const ContestArkav5Final: Contest = {
   id: '4',
   shortId: 'arkavidia-50-final',
-  title: 'Final Competitive Programming Arkavidia 5.0',
+  name: 'Final Competitive Programming Arkavidia 5.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
