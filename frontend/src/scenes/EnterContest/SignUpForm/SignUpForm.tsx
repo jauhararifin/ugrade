@@ -14,10 +14,16 @@ export interface SignUpFormValue {
   username: string
   name: string
   password: string
+  rememberMe: boolean
 }
 
 export interface SignUpFormProps {
-  onSubmit: (username: string, name: string, password: string) => Promise<any>
+  onSubmit: (
+    username: string,
+    name: string,
+    password: string,
+    rememberMe: boolean
+  ) => Promise<any>
   contestInfo: ContestInfo
 }
 
@@ -26,6 +32,7 @@ class SignUpForm extends React.Component<SignUpFormProps> {
     username: '',
     name: '',
     password: '',
+    rememberMe: false,
   }
 
   validationSchema = yup.object().shape({
@@ -45,6 +52,7 @@ class SignUpForm extends React.Component<SignUpFormProps> {
       .min(8)
       .max(255)
       .required(),
+    rememberMe: yup.boolean().required(),
   })
 
   handleSubmit = async (
@@ -52,7 +60,12 @@ class SignUpForm extends React.Component<SignUpFormProps> {
     { setSubmitting }: FormikActions<SignUpFormValue>
   ) => {
     try {
-      await this.props.onSubmit(values.username, values.name, values.password)
+      await this.props.onSubmit(
+        values.username,
+        values.name,
+        values.password,
+        values.rememberMe
+      )
     } finally {
       setSubmitting(false)
     }

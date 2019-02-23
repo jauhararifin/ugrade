@@ -2,14 +2,17 @@ import React, { FunctionComponent, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
 import logo from '../../assets/images/logo.svg'
-
 import BottomLink from '../../components/BottomLink'
+import { Page } from './EnterContest'
 
 export interface EnterContestViewProps {
   children: ReactNode
+  page: Page
 }
 
-export const EnterContestView: FunctionComponent = ({ children }) => (
+export const EnterContestView: FunctionComponent<EnterContestViewProps> = ({
+  children,
+}) => (
   <div className='plain-page'>
     <div>
       <Link to='/'>

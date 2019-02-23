@@ -16,3 +16,25 @@ export const enterUser = (
     return authService.isRegistered(contestId, email)
   }
 }
+
+export const signUp = (
+  contestId: string,
+  email: string,
+  username: string,
+  name: string,
+  password: string
+): AppThunkAction<string> => {
+  return async (_dispatch, _getState, { authService }) => {
+    return authService.signup(contestId, username, email, password, name)
+  }
+}
+
+export const signIn = (
+  contestId: string,
+  email: string,
+  password: string
+): AppThunkAction<string> => {
+  return async (_dispatch, _getState, { authService }) => {
+    return authService.signin(contestId, email, password)
+  }
+}

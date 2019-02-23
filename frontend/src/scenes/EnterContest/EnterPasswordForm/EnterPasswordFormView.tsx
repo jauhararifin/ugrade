@@ -1,4 +1,11 @@
-import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
+import {
+  Button,
+  Card,
+  FormGroup,
+  InputGroup,
+  Intent,
+  Switch,
+} from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
 
@@ -47,6 +54,17 @@ const EnterPasswordFormView: React.FunctionComponent<
           onBlur={handleBlur}
         />
       </FormGroup>
+      <div className='remember-me'>
+        <div>Remember Me</div>
+        <div>
+          <Switch
+            name='rememberMe'
+            checked={values.rememberMe}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        </div>
+      </div>
       <Button
         type='submit'
         disabled={isSubmitting}
