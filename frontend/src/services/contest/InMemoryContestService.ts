@@ -14,12 +14,7 @@ import {
   SubmissionSubscribeCallback,
   SubmissionUnsubscribeFunction,
 } from './ContestService'
-import {
-  ContestAlreadyStarted,
-  NoSuchClarification,
-  NoSuchContest,
-} from './errors'
-import { AlreadyRegistered } from './errors/AlreadyRegistered'
+import { NoSuchClarification, NoSuchContest } from './errors'
 import { NoSuchLanguage } from './errors/NoSuchLanguage'
 import {
   contestAnnouncementsMap,
@@ -67,75 +62,40 @@ export class InMemoryContestService implements ContestService {
     )
   }
 
-  async getContestDetailById(id: number): Promise<ContestDetail> {
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    if (id === 0) throw new Error('Connection Error')
-
+  async getMyContest(token: string): Promise<Contest> {
+    const user = await this.authService.getMe(token)
     const contest = contests
       .slice()
-      .filter(x => x.id === id)
+      .filter(x => x.id === user.contestId)
       .pop()
     if (contest) return contest
     throw new NoSuchContest('No Such Contest')
   }
 
-  async registerContest(token: string, contestId: number): Promise<void> {
-    await this.authService.getMe(token)
-    const contest = await this.getContestDetailById(contestId)
-    if (contest.registered) {
-      throw new AlreadyRegistered('Already Registered In The Contest')
-    }
-    if (contest.startTime > new Date()) contest.registered = true
-    else throw new ContestAlreadyStarted('Registration Is Closed')
+  async getAnnouncements(token: string): Promise<Announcement[]> {
+    const contest = await this.getMyContest(token)
+    return this.contestAnnouncementsMap[contest.id].slice()
   }
 
-  async unregisterContest(token: string, contestId: number): Promise<void> {
-    await this.authService.getMe(token)
-    const contest = await this.getContestDetailById(contestId)
-    if (!contest.registered) {
-      throw new ForbiddenActionError('Not Yet Registered To The Contest')
-    }
-    if (contest.startTime > new Date()) contest.registered = false
-    else throw new ContestAlreadyStarted('Contest Already Running')
-  }
-
-  async getContestAnnouncements(contestId: number): Promise<Announcement[]> {
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    if (contestId === 0) throw new Error('Connection Error')
-    await this.getContestDetailById(contestId)
-    return this.contestAnnouncementsMap[contestId].slice()
-  }
-
-  async readContestAnnouncements(
+  subscribeAnnouncements(
     token: string,
-    contestId: number,
-    id: number[]
-  ): Promise<void> {
-    await this.authService.getMe(token)
-    await this.getContestDetailById(contestId)
-    this.contestAnnouncementsMap[contestId]
-      .filter(i => id.includes(i.id))
-      .forEach(val => (val.read = true))
-  }
-
-  subscribeContestAnnouncements(
-    contestId: number,
     callback: AnnouncementSubscribeCallback
   ): AnnouncementUbsubscribeFunction {
     const runThis = async () => {
       const newAnnouncement: Announcement = {
-        id: Math.round(Math.random() * 300),
+        id: Math.round(Math.random() * 300).toString(),
         title: `Lorem Ipsum ${Math.random()}`,
         content: `Lorem ipsum dos color sit amet`,
         issuedTime: new Date(Date.now()),
         read: false,
       }
 
-      const arr = await this.getContestAnnouncements(contestId)
+      const contest = await this.getMyContest(token)
+      const arr = await this.getAnnouncements(token)
       arr.push(newAnnouncement)
-      this.contestAnnouncementsMap[contestId] = arr
+      this.contestAnnouncementsMap[contest.id] = arr
 
-      const announcements = await this.getContestAnnouncements(contestId)
+      const announcements = await this.getAnnouncements(token)
       callback(announcements)
     }
 
@@ -145,20 +105,32 @@ export class InMemoryContestService implements ContestService {
     }
   }
 
-  subscribeContestProblemIds(
+  async readAnnouncements(token: string, id: string[]): Promise<void> {
+    const contest = await this.getMyContest(token)
+    this.contestAnnouncementsMap[contest.id]
+      .filter(i => id.includes(i.id))
+      .forEach(val => (val.read = true))
+  }
+
+  async getProblemIds(token: string): Promise<string[]> {
+    const contest = await this.getMyContest(token)
+    return this.contestProblemsMap[contest.id].slice()
+  }
+
+  subscribeProblemIds(
     token: string,
-    contestId: number,
     callback: ProblemIdsSubscribeCallback
   ): ProblemIdsUnsubscribeFunction {
     const runThis = async () => {
-      const arr = await this.getContestProblemIds(token, contestId)
+      const contest = await this.getMyContest(token)
+      const arr = await this.getProblemIds(token)
       if (arr.length > 0) {
-        const first = arr.shift() as number
+        const first = arr.shift() as string
         arr.push(first)
       }
-      this.contestProblemsMap[contestId] = arr
+      this.contestProblemsMap[contest.id] = arr
 
-      const problemIds = await this.getContestProblemIds(token, contestId)
+      const problemIds = await this.getProblemIds(token)
       callback(problemIds)
     }
 
@@ -168,43 +140,20 @@ export class InMemoryContestService implements ContestService {
     }
   }
 
-  async getContestProblemIds(
-    token: string,
-    contestId: number
-  ): Promise<number[]> {
-    await this.authService.getMe(token)
-    const contest = await this.getContestDetailById(contestId)
-    if (!contest.registered) {
-      throw new ForbiddenActionError('Cannot access this contest problems')
-    }
-    return this.contestProblemsMap[contestId].slice()
+  async getClarifications(token: string): Promise<Clarification[]> {
+    const contest = await this.getMyContest(token)
+    return this.contestClarificationsMap[contest.id].slice()
   }
 
-  async getContestClarifications(
+  async subscribeClarifications(
     token: string,
-    contestId: number
-  ): Promise<Clarification[]> {
-    await this.authService.getMe(token)
-    await this.getContestDetailById(contestId)
-    return this.contestClarificationsMap[contestId].slice()
-  }
-
-  async subscribeContestClarifications(
-    token: string,
-    contestId: number,
     callback: ClarificationSubscribeCallback
   ): Promise<ClarificationUnsubscribeFunction> {
-    await this.authService.getMe(token)
-    const contest = await this.getContestDetailById(contestId)
-    if (!contest.registered) {
-      throw new ForbiddenActionError('Cannot access contest clarification')
-    }
-
     const runThis = async () => {
-      const arr = await this.getContestClarifications(token, contestId)
+      const arr = await this.getClarifications(token)
       for (const clarif of arr) {
         const newEntry: ClarificationEntry = {
-          id: Math.round(Math.random() * 100000),
+          id: Math.round(Math.random() * 100000).toString(),
           sender: 'jury',
           content: `Some random content ${Math.random()}`,
           read: false,
@@ -213,10 +162,7 @@ export class InMemoryContestService implements ContestService {
         clarif.entries.push(newEntry)
       }
 
-      const clarifications = await this.getContestClarifications(
-        token,
-        contestId
-      )
+      const clarifications = await this.getClarifications(token)
       callback(clarifications)
     }
 
@@ -226,27 +172,22 @@ export class InMemoryContestService implements ContestService {
     }
   }
 
-  async createContestClarification(
+  async createClarification(
     token: string,
-    contestId: number,
     title: string,
     subject: string,
     content: string
   ): Promise<Clarification> {
     const user = await this.authService.getMe(token)
-    const contest = await this.getContestDetailById(contestId)
-    if (!contest.registered) {
-      throw new ForbiddenActionError('Cannot access contest clarification')
-    }
-
+    const contest = await this.getMyContest(token)
     const clarification: Clarification = {
-      id: Math.round(Math.random() * 100000),
+      id: Math.round(Math.random() * 100000).toString(),
       title,
       subject,
       issuedTime: new Date(),
       entries: [
         {
-          id: Math.round(Math.random() * 100000),
+          id: Math.round(Math.random() * 100000).toString(),
           sender: user.username,
           content,
           read: true,
@@ -259,21 +200,14 @@ export class InMemoryContestService implements ContestService {
     return { ...clarification }
   }
 
-  async createContestClarificationEntry(
+  async createClarificationEntry(
     token: string,
-    contestId: number,
-    clarificationId: number,
+    clarificationId: string,
     content: string
   ): Promise<Clarification> {
     const user = await this.authService.getMe(token)
+    const contest = await this.getMyContest(token)
 
-    const contest = this.contests.filter(c => c.id === contestId).pop()
-    if (!contest) {
-      throw new NoSuchContest('No Such Contest')
-    }
-    if (!contest.registered) {
-      throw new ForbiddenActionError('You Are Not Registered To The Contest')
-    }
     if (new Date() >= contest.finishTime) {
       throw new ForbiddenActionError('Contest Already Finished')
     }
@@ -289,7 +223,7 @@ export class InMemoryContestService implements ContestService {
     }
 
     clarification.entries.push({
-      id: Math.round(Math.random() * 100000),
+      id: Math.round(Math.random() * 100000).toString(),
       sender: user.username,
       issuedTime: new Date(),
       read: true,
@@ -298,24 +232,13 @@ export class InMemoryContestService implements ContestService {
     return { ...clarification }
   }
 
-  async readContestClarificationEntries(
+  async readClarificationEntries(
     token: string,
-    contestId: number,
-    clarificationId: number,
-    entryIds: number[]
+    clarificationId: string,
+    entryIds: string[]
   ): Promise<Clarification> {
     await this.authService.getMe(token)
-
-    const contest = this.contests.filter(c => c.id === contestId).pop()
-    if (!contest) {
-      throw new NoSuchContest('No Such Contest')
-    }
-    if (!contest.registered) {
-      throw new ForbiddenActionError('You Are Not Registered To The Contest')
-    }
-    if (new Date() >= contest.finishTime) {
-      throw new ForbiddenActionError('Contest Already Finished')
-    }
+    const contest = await this.getMyContest(token)
 
     const clarification = Object.values(
       this.contestClarificationsMap[contest.id]
@@ -335,41 +258,26 @@ export class InMemoryContestService implements ContestService {
     return clarification
   }
 
-  async getContestSubmissions(
-    token: string,
-    contestId: number
-  ): Promise<Submission[]> {
-    await this.authService.getMe(token)
-    const contest = this.contests.filter(c => c.id === contestId).pop()
-    if (!contest) {
-      throw new NoSuchContest('No Such Contest')
+  async getSubmissions(token: string): Promise<Submission[]> {
+    const contest = await this.getMyContest(token)
+    if (!this.contestSubmissionsMap[contest.id]) {
+      this.contestSubmissionsMap[contest.id] = []
     }
-    if (!contest.registered) {
-      throw new ForbiddenActionError('You Are Not Registered To The Contest')
-    }
-    if (!this.contestSubmissionsMap[contestId]) {
-      this.contestSubmissionsMap[contestId] = []
-    }
-    return this.contestSubmissionsMap[contestId].slice()
+    return this.contestSubmissionsMap[contest.id].slice()
   }
 
-  async subscribeContestSubmissions(
+  async subscribeSubmissions(
     token: string,
-    contestId: number,
     callback: SubmissionSubscribeCallback
   ): Promise<SubmissionUnsubscribeFunction> {
-    await this.authService.getMe(token)
-    const contest = await this.getContestDetailById(contestId)
-    if (!contest.registered) {
-      throw new ForbiddenActionError('Cannot access contest submissions')
-    }
+    const contest = await this.getMyContest(token)
 
     const runThis = async () => {
-      if (!this.contestSubmissionsMap[contestId]) {
-        this.contestSubmissionsMap[contestId] = []
+      if (!this.contestSubmissionsMap[contest.id]) {
+        this.contestSubmissionsMap[contest.id] = []
       }
-      const newSubmission: SubmissionDetail = {
-        id: Math.round(Math.random() * 100000),
+      const newSubmission: Submission = {
+        id: Math.round(Math.random() * 100000).toString(),
         issuer: [
           'jauhar',
           'arifin',
@@ -380,9 +288,9 @@ export class InMemoryContestService implements ContestService {
           'sit',
           'amet',
         ][Math.floor(Math.random() * 8)],
-        contestId,
-        problemId: this.contestProblemsMap[contestId][
-          Math.floor(Math.random() * this.contestProblemsMap[contestId].length)
+        contestId: contest.id,
+        problemId: this.contestProblemsMap[contest.id][
+          Math.floor(Math.random() * this.contestProblemsMap[contest.id].length)
         ],
         languageId:
           contest.permittedLanguages[
@@ -394,7 +302,7 @@ export class InMemoryContestService implements ContestService {
           'https://raw.githubusercontent.com/jauhararifin/cp/master/atcoder_89_regular/c.cpp',
         gradings: [
           {
-            id: Math.round(Math.random() * 100000),
+            id: Math.round(Math.random() * 100000).toString(),
             issuedTime: new Date(),
             verdict: GradingVerdict.InternalError,
             message: '',
@@ -402,7 +310,7 @@ export class InMemoryContestService implements ContestService {
               'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
           },
           {
-            id: Math.round(Math.random() * 100000),
+            id: Math.round(Math.random() * 100000).toString(),
             issuedTime: new Date(),
             verdict: GradingVerdict.WrongAnswer,
             message: 'fixing compiler in worker',
@@ -410,7 +318,7 @@ export class InMemoryContestService implements ContestService {
               'https://raw.githubusercontent.com/jauhararifin/cp/master/.gitignore',
           },
           {
-            id: Math.round(Math.random() * 100000),
+            id: Math.round(Math.random() * 100000).toString(),
             issuedTime: new Date(),
             verdict: GradingVerdict.Accepted,
             message: 'fixing testcases',
@@ -419,9 +327,9 @@ export class InMemoryContestService implements ContestService {
           },
         ],
       }
-      this.contestSubmissionsMap[contestId].push(newSubmission)
+      this.contestSubmissionsMap[contest.id].push(newSubmission)
 
-      const submissions = await this.getContestSubmissions(token, contestId)
+      const submissions = await this.getSubmissions(token)
       callback(submissions)
     }
 
@@ -431,21 +339,14 @@ export class InMemoryContestService implements ContestService {
     }
   }
 
-  async submitContestSolution(
+  async submitSolution(
     token: string,
-    contestId: number,
-    problemId: number,
-    languageId: number,
+    problemId: string,
+    languageId: string,
     sourceCode: string
-  ): Promise<SubmissionDetail> {
+  ): Promise<Submission> {
     const me = await this.authService.getMe(token)
-    const contest = this.contests.filter(c => c.id === contestId).pop()
-    if (!contest) {
-      throw new NoSuchContest('No Such Contest')
-    }
-    if (!contest.registered) {
-      throw new ForbiddenActionError('You Are Not Registered To The Contest')
-    }
+    const contest = await this.getMyContest(token)
     if (new Date() >= contest.finishTime) {
       throw new ForbiddenActionError('Contest Already Finished')
     }
@@ -455,15 +356,15 @@ export class InMemoryContestService implements ContestService {
     if (!language) {
       throw new NoSuchLanguage('No Such Language')
     }
-    const problems = this.contestProblemsMap[contestId].slice()
+    const problems = this.contestProblemsMap[contest.id].slice()
     if (!problems.includes(problemId)) {
       throw new NoSuchProblem('No Such Problem')
     }
 
-    const submissionDetail: SubmissionDetail = {
-      id: Math.round(Math.random() * 100000),
+    const submissionDetail: Submission = {
+      id: Math.round(Math.random() * 100000).toString(),
       issuer: me.username,
-      contestId,
+      contestId: contest.id,
       problemId,
       languageId,
       issuedTime: new Date(),
@@ -471,14 +372,14 @@ export class InMemoryContestService implements ContestService {
       sourceCode,
       gradings: [
         {
-          id: Math.round(Math.random() * 100000),
+          id: Math.round(Math.random() * 100000).toString(),
           issuedTime: new Date(),
           verdict: GradingVerdict.Accepted,
           message: '',
           compilationOutput: 'some compilation output here',
         },
         {
-          id: Math.round(Math.random() * 100000),
+          id: Math.round(Math.random() * 100000).toString(),
           issuedTime: new Date(Date.now()),
           verdict: GradingVerdict.Pending,
           message: '',
@@ -487,16 +388,17 @@ export class InMemoryContestService implements ContestService {
       ],
     }
 
-    if (!this.contestSubmissionsMap[contestId]) {
-      this.contestSubmissionsMap[contestId] = []
+    if (!this.contestSubmissionsMap[contest.id]) {
+      this.contestSubmissionsMap[contest.id] = []
     }
-    this.contestSubmissionsMap[contestId].push(submissionDetail)
+    this.contestSubmissionsMap[contest.id].push(submissionDetail)
     return { ...submissionDetail }
   }
 
-  async getScoreboard(token: string, contestId: number): Promise<Scoreboard> {
+  async getScoreboard(token: string): Promise<Scoreboard> {
+    const contest = await this.getMyContest(token)
     return {
-      contestId,
+      contestId: contest.id,
       lastUpdated: new Date(),
       entries: [],
     }

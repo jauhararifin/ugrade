@@ -36,7 +36,7 @@ export interface ContestService {
 
   readAnnouncements(token: string, id: string[]): Promise<void>
 
-  getProblemIds(token: string): Promise<number[]>
+  getProblemIds(token: string): Promise<string[]>
 
   subscribeProblemIds(
     token: string,
