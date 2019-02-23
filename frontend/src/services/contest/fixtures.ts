@@ -15,10 +15,10 @@ import {
   problem9,
 } from '../problem/fixtures'
 import { Announcement } from './Announcement'
-import { ContestDetail } from './Contest'
+import { Contest } from './Contest'
 
 export const AnnouncementExample1: Announcement = {
-  id: 1,
+  id: '1',
   title: `Term and Condition`,
   content: `By competing in TLX contests, you agree that:
 
@@ -34,7 +34,7 @@ Enjoy the contest!`,
 }
 
 export const AnnouncementExample2: Announcement = {
-  id: 2,
+  id: '2',
   title: `Scoreboard`,
   content: `Ada masalah dengan scoreboard sehingga untuk sementara scoreboard tidak dapat ditampilkan. Kami sedang berusaha memperbaikinya, mohon maaf atas ketidaknyamanannya. Terima kasih.`,
   issuedTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
@@ -42,7 +42,7 @@ export const AnnouncementExample2: Announcement = {
 }
 
 export const AnnouncementExample3: Announcement = {
-  id: 3,
+  id: '3',
   title: `Scoreboard Sudah Muncul`,
   content: `Scoreboard sudah bisa ditampilkan. Terima kasih atas kesabarannya!`,
   issuedTime: new Date(Date.now() - 1 * 60 * 60 * 1000),
@@ -55,10 +55,10 @@ export const annoucements: Announcement[] = [
   AnnouncementExample3,
 ]
 
-export const ContestArkav4Qual: ContestDetail = {
-  id: 1,
-  slug: 'arkavidia-40-qualification',
-  name: 'Penyisihan Competitive Programming Arkavidia 4.0',
+export const ContestArkav4Qual: Contest = {
+  id: '1',
+  shortId: 'arkavidia-40-qualification',
+  title: 'Penyisihan Competitive Programming Arkavidia 4.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: `# Arkavidia
@@ -100,18 +100,17 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
 11. Panitia berhak mendiskualikasi tim yang melakukan tindak kecurangan maupun pelanggaran terhadap aturan kompetisi.
 12. Panitia berhak untuk mencabut gelar juara dari pemenang jika ditemukan kecurangan atau pelanggaran hukum dalam karya yang dilombakan ataupun dalam proses pelaksanaan perlombaan.
 13. Peserta dilarang bekerjasama dengan peserta/tim lain dalam bentuk apapun.`,
-  registered: true,
   startTime: new Date(
     Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 60 * 5
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
   permittedLanguages: [
-    { id: 1, name: 'C++11' },
-    { id: 2, name: 'C' },
-    { id: 3, name: 'Java' },
-    { id: 4, name: 'Python2' },
-    { id: 5, name: 'Python3' },
+    { id: '1', shortId: 'c++11', name: 'C++11' },
+    { id: '2', shortId: 'c', name: 'C' },
+    { id: '3', shortId: 'java', name: 'Java' },
+    { id: '4', shortId: 'python2', name: 'Python2' },
+    { id: '5', shortId: 'python3', name: 'Python3' },
   ],
 }
 
@@ -126,10 +125,10 @@ export const ContestArkav4QualProblems = [
   problem6.id,
 ]
 
-export const ContestArkav4Final: ContestDetail = {
-  id: 2,
-  slug: 'arkavidia-40-qualification',
-  name: 'Final Competitive Programming Arkavidia 4.0',
+export const ContestArkav4Final: Contest = {
+  id: '2',
+  shortId: 'arkavidia-40-qualification',
+  title: 'Final Competitive Programming Arkavidia 4.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
@@ -137,14 +136,13 @@ export const ContestArkav4Final: ContestDetail = {
     Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 60 * 5
   ),
   freezed: false,
-  registered: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
   permittedLanguages: [
-    { id: 1, name: 'C++11' },
-    { id: 2, name: 'C' },
-    { id: 3, name: 'Java' },
-    { id: 4, name: 'Python2' },
-    { id: 5, name: 'Python3' },
+    { id: '1', shortId: 'c++11', name: 'C++11' },
+    { id: '2', shortId: 'c', name: 'C' },
+    { id: '3', shortId: 'java', name: 'Java' },
+    { id: '4', shortId: 'python2', name: 'Python2' },
+    { id: '5', shortId: 'python3', name: 'Python3' },
   ],
 }
 
@@ -161,23 +159,22 @@ export const ContestArkav4FinalProblems = [
   problem14.id,
 ]
 
-const ContestArkav5Qual: ContestDetail = {
-  id: 3,
-  slug: 'arkavidia-50-qualification',
-  name: 'Penyisihan Competitive Programming Arkavidia 5.0',
+export const ContestArkav5Qual: Contest = {
+  id: '3',
+  shortId: 'arkavidia-50-qualification',
+  title: 'Penyisihan Competitive Programming Arkavidia 5.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
   startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   freezed: true,
-  registered: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
   permittedLanguages: [
-    { id: 1, name: 'C++11' },
-    { id: 2, name: 'C' },
-    { id: 3, name: 'Java' },
-    { id: 4, name: 'Python2' },
-    { id: 5, name: 'Python3' },
+    { id: '1', shortId: 'c++11', name: 'C++11' },
+    { id: '2', shortId: 'c', name: 'C' },
+    { id: '3', shortId: 'java', name: 'Java' },
+    { id: '4', shortId: 'python2', name: 'Python2' },
+    { id: '5', shortId: 'python3', name: 'Python3' },
   ],
 }
 
@@ -192,25 +189,24 @@ export const ContestArkav5QualProblems = [
   problem6.id,
 ]
 
-const ContestArkav5Final: ContestDetail = {
-  id: 4,
-  slug: 'arkavidia-50-final',
-  name: 'Final Competitive Programming Arkavidia 5.0',
+export const ContestArkav5Final: Contest = {
+  id: '4',
+  shortId: 'arkavidia-50-final',
+  title: 'Final Competitive Programming Arkavidia 5.0',
   shortDescription:
     'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
   startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
   freezed: false,
-  registered: false,
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
   permittedLanguages: [
-    { id: 1, name: 'C++11' },
-    { id: 2, name: 'C' },
-    { id: 3, name: 'Java' },
-    { id: 4, name: 'Python2' },
-    { id: 5, name: 'Python3' },
+    { id: '1', shortId: 'c++11', name: 'C++11' },
+    { id: '2', shortId: 'c', name: 'C' },
+    { id: '3', shortId: 'java', name: 'Java' },
+    { id: '4', shortId: 'python2', name: 'Python2' },
+    { id: '5', shortId: 'python3', name: 'Python3' },
   ],
 }
 
@@ -227,7 +223,7 @@ export const ContestArkav5FinalProblems = [
   problem14.id,
 ]
 
-export const contests: ContestDetail[] = [
+export const contests: Contest[] = [
   ContestArkav4Qual,
   ContestArkav4Final,
   ContestArkav5Qual,

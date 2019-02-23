@@ -3,16 +3,13 @@ import { Grading, GradingVerdict } from './Grading'
 export type SubmissionVerdict = GradingVerdict
 
 export interface Submission {
-  id: number
+  id: string
   issuer: string
-  contestId: number
-  problemId: number
-  languageId: number
+  contestId: string
+  problemId: string
+  languageId: string
   issuedTime: Date
   verdict: SubmissionVerdict
-}
-
-export interface SubmissionDetail extends Submission {
   sourceCode: string
   gradings: Grading[]
 }

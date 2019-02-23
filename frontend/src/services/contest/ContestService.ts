@@ -1,8 +1,8 @@
 import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
-import { Contest, ContestDetail } from './Contest'
+import { Contest } from './Contest'
 import { Scoreboard } from './Scoreboard'
-import { Submission, SubmissionDetail } from './Submission'
+import { Submission } from './Submission'
 
 export type AnnouncementSubscribeCallback = (
   announcements: Announcement[]
@@ -10,7 +10,7 @@ export type AnnouncementSubscribeCallback = (
 
 export type AnnouncementUbsubscribeFunction = () => any
 
-export type ProblemIdsSubscribeCallback = (problemIds: number[]) => any
+export type ProblemIdsSubscribeCallback = (problemIds: string[]) => any
 
 export type ProblemIdsUnsubscribeFunction = () => any
 
@@ -20,88 +20,68 @@ export type ClarificationSubscribeCallback = (
 
 export type ClarificationUnsubscribeFunction = () => any
 
-export type SubmissionSubscribeCallback = (
-  submissions: Array<Submission | SubmissionDetail>
-) => any
+export type SubmissionSubscribeCallback = (submissions: Submission[]) => any
 
 export type SubmissionUnsubscribeFunction = () => any
 
 export interface ContestService {
-  getAllContests(): Promise<Contest[]>
-  getContestDetailById(id: number): Promise<ContestDetail>
+  getMyContest(token: string): Promise<Contest>
 
-  registerContest(token: string, contestId: number): Promise<void>
-  unregisterContest(token: string, contestId: number): Promise<void>
+  getAnnouncements(token: string): Promise<Announcement[]>
 
-  getContestAnnouncements(contestId: number): Promise<Announcement[]>
-
-  subscribeContestAnnouncements(
-    contestId: number,
+  subscribeAnnouncements(
+    token: string,
     callback: AnnouncementSubscribeCallback
   ): AnnouncementUbsubscribeFunction
 
-  readContestAnnouncements(
-    token: string,
-    contestId: number,
-    id: number[]
-  ): Promise<void>
+  readAnnouncements(token: string, id: string[]): Promise<void>
 
-  getContestProblemIds(token: string, contestId: number): Promise<number[]>
+  getProblemIds(token: string): Promise<number[]>
 
-  subscribeContestProblemIds(
+  subscribeProblemIds(
     token: string,
-    contestId: number,
     callback: ProblemIdsSubscribeCallback
   ): ProblemIdsUnsubscribeFunction
 
-  getContestClarifications(
-    token: string,
-    contestId: number
-  ): Promise<Clarification[]>
+  getClarifications(token: string): Promise<Clarification[]>
 
-  subscribeContestClarifications(
+  subscribeClarifications(
     token: string,
-    contestId: number,
     callback: ClarificationSubscribeCallback
   ): Promise<ClarificationUnsubscribeFunction>
 
-  createContestClarification(
+  createClarification(
     token: string,
-    contestId: number,
     title: string,
     subject: string,
     content: string
   ): Promise<Clarification>
 
-  createContestClarificationEntry(
+  createClarificationEntry(
     token: string,
-    contestId: number,
-    clarificationId: number,
+    clarificationId: string,
     content: string
   ): Promise<Clarification>
 
-  readContestClarificationEntries(
+  readClarificationEntries(
     token: string,
-    contestId: number,
-    clarificationId: number,
-    entryIds: number[]
+    clarificationId: string,
+    entryIds: string[]
   ): Promise<Clarification>
 
-  getContestSubmissions(token: string, contestId: number): Promise<Submission[]>
+  getSubmissions(token: string): Promise<Submission[]>
 
-  subscribeContestSubmissions(
+  subscribeSubmissions(
     token: string,
-    contestId: number,
     callback: SubmissionSubscribeCallback
   ): Promise<SubmissionUnsubscribeFunction>
 
-  submitContestSolution(
+  submitSolution(
     token: string,
-    contestId: number,
-    problemId: number,
-    languageId: number,
+    problemId: string,
+    languageId: string,
     sourceCode: string
-  ): Promise<SubmissionDetail>
+  ): Promise<Submission>
 
-  getScoreboard(token: string, contestId: number): Promise<Scoreboard>
+  getScoreboard(token: string): Promise<Scoreboard>
 }

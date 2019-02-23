@@ -10,12 +10,9 @@ export enum GradingVerdict {
 }
 
 export interface Grading {
-  id: number
+  id: string
   issuedTime: Date
   verdict: GradingVerdict
-
-  // jury may regrade the contestant solution due to technical problem. The
-  // `message` field give contestant information about this.
   message: string
   compilationOutput: string
 }

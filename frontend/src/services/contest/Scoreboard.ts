@@ -1,5 +1,5 @@
 export interface ScoreboardProblemScore {
-  problemId: number
+  problemId: string
   attempt: number
   penalty: number
   passed: boolean
@@ -15,7 +15,7 @@ export interface ScoreboardEntry {
 }
 
 export interface Scoreboard {
-  contestId: number
+  contestId: string
   lastUpdated: Date
   entries: ScoreboardEntry[]
 }

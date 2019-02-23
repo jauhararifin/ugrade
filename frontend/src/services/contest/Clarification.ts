@@ -1,5 +1,5 @@
 export interface ClarificationEntry {
-  id: number
+  id: string
   sender: string
   content: string
   read: boolean
@@ -7,7 +7,7 @@ export interface ClarificationEntry {
 }
 
 export interface Clarification {
-  id: number
+  id: string
   title: string
   subject: string
   issuedTime: Date

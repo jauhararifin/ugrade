@@ -1,5 +1,5 @@
 export interface Announcement {
-  id: number
+  id: string
   title: string
   content: string
   issuedTime: Date

@@ -2,7 +2,7 @@ import { AuthService, ForbiddenActionError } from '../auth'
 import { NoSuchProblem } from '../problem'
 import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
-import { Contest, ContestDetail } from './Contest'
+import { Contest } from './Contest'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
@@ -28,15 +28,15 @@ import {
 } from './fixtures'
 import { GradingVerdict } from './Grading'
 import { Scoreboard } from './Scoreboard'
-import { Submission, SubmissionDetail } from './Submission'
+import { Submission } from './Submission'
 
 export class InMemoryContestService implements ContestService {
   private authService: AuthService
-  private contests: ContestDetail[] = []
-  private contestProblemsMap: { [id: number]: number[] } = {}
-  private contestAnnouncementsMap: { [id: number]: Announcement[] } = {}
-  private contestClarificationsMap: { [id: number]: Clarification[] } = {}
-  private contestSubmissionsMap: { [id: number]: SubmissionDetail[] } = {}
+  private contests: Contest[] = []
+  private contestProblemsMap: { [id: string]: string[] } = {}
+  private contestAnnouncementsMap: { [id: string]: Announcement[] } = {}
+  private contestClarificationsMap: { [id: string]: Clarification[] } = {}
+  private contestSubmissionsMap: { [id: string]: Submission[] } = {}
 
   constructor(authService: AuthService) {
     this.authService = authService
@@ -49,13 +49,13 @@ export class InMemoryContestService implements ContestService {
       contest =>
         (this.contestClarificationsMap[contest.id] = [
           {
-            id: Math.round(Math.random() * 100000),
+            id: Math.round(Math.random() * 100000).toString(),
             title: 'Lorem Ipsum',
             subject: 'General Issue',
             issuedTime: new Date(),
             entries: [
               {
-                id: Math.round(Math.random() * 100000),
+                id: Math.round(Math.random() * 100000).toString(),
                 sender: 'test',
                 read: true,
                 issuedTime: new Date(),
@@ -65,11 +65,6 @@ export class InMemoryContestService implements ContestService {
           },
         ])
     )
-  }
-
-  async getAllContests(): Promise<Contest[]> {
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    return this.contests
   }
 
   async getContestDetailById(id: number): Promise<ContestDetail> {
