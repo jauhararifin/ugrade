@@ -18,8 +18,8 @@ export class Setting extends React.Component<SettingProps> {
   render() {
     return (
       <SettingView
-        showSignIn={!this.props.signedIn}
-        showSignUp={!this.props.signedIn}
+        showCreateContest={!this.props.signedIn}
+        showEnterContest={!this.props.signedIn}
       />
     )
   }

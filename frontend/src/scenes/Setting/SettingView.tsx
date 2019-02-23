@@ -7,13 +7,13 @@ import BottomLink from '../../components/BottomLink'
 import ProxySettingForm from './ProxySettingForm'
 
 export interface SettingViewProps {
-  showSignIn: boolean
-  showSignUp: boolean
+  showCreateContest: boolean
+  showEnterContest: boolean
 }
 
 export const SettingView: FunctionComponent<SettingViewProps> = ({
-  showSignIn,
-  showSignUp,
+  showCreateContest,
+  showEnterContest,
 }) => (
   <div className='plain-page'>
     <div className='setting-page-panel'>
@@ -24,13 +24,13 @@ export const SettingView: FunctionComponent<SettingViewProps> = ({
     </div>
     <BottomLink>
       <Link to='/'>Home</Link>
-      {showSignUp && <Link to='/signup'>Sign Up</Link>}
-      {showSignIn && <Link to='/signin'>Sign In</Link>}
+      {showCreateContest && <Link to='#'>Create Contest</Link>}
+      {showEnterContest && <Link to='/signin'>Enter Contest</Link>}
     </BottomLink>
   </div>
 )
 
 SettingView.defaultProps = {
-  showSignIn: true,
-  showSignUp: true,
+  showCreateContest: true,
+  showEnterContest: true,
 }
