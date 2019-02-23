@@ -4,6 +4,7 @@ import { ContestAction } from './Contest'
 import { ServerStatusAction } from './ServerStatus'
 import { SettingAction } from './Setting'
 import { TitleAction } from './Title'
+import { UserProfileAction } from './UserProfile'
 
 export type AppAction =
   | TitleAction
@@ -12,3 +13,4 @@ export type AppAction =
   | SettingAction
   | ServerStatusAction
   | ContestAction
+  | UserProfileAction

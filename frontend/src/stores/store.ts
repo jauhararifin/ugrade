@@ -13,6 +13,7 @@ import { AuthService } from '../services/auth'
 import { ContestService } from '../services/contest/ContestService'
 import { ProblemService } from '../services/problem'
 import { ServerStatusService } from '../services/serverStatus'
+import { UserService } from '../services/user'
 import { AppAction } from './action'
 import { createReducer } from './reducer'
 import { AppState } from './state'
@@ -28,6 +29,7 @@ export interface ThunkExtraArguments {
   serverStatusService: ServerStatusService
   contestService: ContestService
   problemService: ProblemService
+  userService: UserService
 }
 
 export type AppThunkDispatch = ThunkDispatch<

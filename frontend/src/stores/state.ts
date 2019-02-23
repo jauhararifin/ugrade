@@ -5,6 +5,7 @@ import { ContestState } from './Contest'
 import { ServerStatusState } from './ServerStatus'
 import { SettingState } from './Setting'
 import { TitleState } from './Title'
+import { UserProfileState } from './UserProfile'
 
 export interface AppState {
   router: RouterState
@@ -13,4 +14,5 @@ export interface AppState {
   setting: SettingState
   server: ServerStatusState
   contest: ContestState
+  userProfile: UserProfileState
 }

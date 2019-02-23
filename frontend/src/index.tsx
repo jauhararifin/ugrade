@@ -14,16 +14,19 @@ import { InMemoryAuthService } from './services/auth'
 import { InMemoryContestService } from './services/contest/InMemoryContestService'
 import { InMemoryProblemService } from './services/problem'
 import { InMemoryServerStatusService } from './services/serverStatus'
+import { InMemoryUserService } from './services/user'
 import * as serviceWorker from './serviceWorker'
 import { createStore } from './stores'
 
 const history = createBrowserHistory()
 const authService = new InMemoryAuthService()
+const userService = new InMemoryUserService(authService)
 const problemService = new InMemoryProblemService()
 const serverStatusService = new InMemoryServerStatusService()
 const contestService = new InMemoryContestService(authService)
 const store = createStore(history, {
   authService,
+  userService,
   serverStatusService,
   contestService,
   problemService,

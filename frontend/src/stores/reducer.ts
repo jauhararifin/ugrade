@@ -8,6 +8,7 @@ import { serverStatusReducer } from './ServerStatus'
 import { settingReducer } from './Setting'
 import { AppState } from './state'
 import { titleReducer } from './Title'
+import { userProfileReducer } from './UserProfile'
 
 export type AppReducer = Reducer<AppState>
 
@@ -19,4 +20,5 @@ export const createReducer = (history: History) =>
     setting: settingReducer,
     server: serverStatusReducer,
     contest: contestReducer,
+    userProfile: userProfileReducer,
   })
