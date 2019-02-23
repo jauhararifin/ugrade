@@ -10,6 +10,7 @@ import './styles.css'
 import { AppState } from '../stores'
 import ContestDetail from './ContestDetail'
 import Contests from './Contests'
+import EnterContest from './EnterContest/EnterContest'
 import ForgotPassword from './ForgotPassword'
 import Home from './Home'
 import MyAccount from './MyAccount'
@@ -39,13 +40,18 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
         <CSSTransition timeout={300} classNames='fade' key={locationKey}>
           <Switch location={location}>
             <Route path='/' exact={true} component={Home} />
-            <Route path='/signin' component={SignIn} />
-            <Route path='/signup' component={SignUp} />
+            <Route
+              path='/enter-contest'
+              exact={true}
+              component={EnterContest}
+            />
+            {/* <Route path='/signin' component={SignIn} /> */}
+            {/* <Route path='/signup' component={SignUp} /> */}
             <Route path='/setting' component={Setting} />
-            <Route path='/account' exact={true} component={MyAccount} />
-            <Route path='/forgot-password' component={ForgotPassword} />
-            <Route path='/contests' exact={true} component={Contests} />
-            <Route path='/contests/:contestId' component={ContestDetail} />
+            {/* <Route path='/account' exact={true} component={MyAccount} /> */}
+            {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
+            {/* <Route path='/contests' exact={true} component={Contests} /> */}
+            {/* <Route path='/contests/:contestId' component={ContestDetail} /> */}
           </Switch>
         </CSSTransition>
       </TransitionGroup>

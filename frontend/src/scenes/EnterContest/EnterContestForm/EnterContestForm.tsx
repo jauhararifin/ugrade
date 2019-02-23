@@ -1,10 +1,9 @@
+import { push } from 'connected-react-router'
 import { Formik, FormikActions } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import * as yup from 'yup'
-
-import { push } from 'connected-react-router'
 
 import { publicOnly } from '../../../helpers/auth'
 import { AppThunkDispatch } from '../../../stores'
@@ -34,15 +33,13 @@ class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
       .required(),
   })
 
-  handleSubmit = (
+  handleSubmit = async (
     values: EnterContestFormValue,
     { setSubmitting }: FormikActions<EnterContestFormValue>
   ) => {
-    this.props
-      .dispatch(enterContest(values.contestId))
-      .then(() => this.props.dispatch(push('/signin')))
-      .catch(_ => null)
-      .then(() => setSubmitting(false))
+    await this.props.dispatch(enterContest(values.contestId))
+    this.props.dispatch(push('/signin'))
+    setSubmitting(false)
   }
 
   render() {

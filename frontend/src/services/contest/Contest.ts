@@ -7,7 +7,7 @@ export interface Language {
 export interface Contest {
   id: string
   shortId: string
-  title: string
+  name: string
   shortDescription: string
   description: string
   startTime: Date

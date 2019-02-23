@@ -19,12 +19,17 @@ export class InMemoryAuthService implements AuthService {
     this.usersToken = {}
   }
 
-  async isRegistered(contestId: string, email: string): Promise<boolean> {
+  async isRegistered(
+    contestId: string,
+    usernameOrEmail: string
+  ): Promise<boolean> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthenticationError('No Such Contest')
     const user = Object.values(userMap)
-      .filter(x => x.email === email)
+      .filter(
+        x => x.email === usernameOrEmail || x.username === usernameOrEmail
+      )
       .pop()
     return !!user
   }
