@@ -1,22 +1,23 @@
 import { Button, Intent } from '@blueprintjs/core'
 import React from 'react'
 
+import './styles.css'
+
 import logo from '../../assets/images/logo.svg'
 import BottomLink from '../../components/BottomLink'
-import './styles.css'
 
 export interface HomeViewProps {
   onLogoClick: () => any
   onSettingClick: () => any
-  onSignInClick: () => any
-  onSignUpClick: () => any
+  onEnterContest: () => any
+  onCreateContest: () => any
 }
 
 const HomeView: React.FunctionComponent<HomeViewProps> = ({
   onLogoClick,
   onSettingClick,
-  onSignInClick,
-  onSignUpClick,
+  onEnterContest,
+  onCreateContest,
 }) => (
   <div className='plain-page'>
     <div className='home-panel'>
@@ -33,18 +34,18 @@ const HomeView: React.FunctionComponent<HomeViewProps> = ({
           fill={true}
           large={true}
           className='item'
-          onClick={onSignUpClick}
+          onClick={onCreateContest}
         >
-          Sign Up
+          Create Contest
         </Button>
         <Button
           fill={true}
           large={true}
           className='item'
-          intent={Intent.SUCCESS}
-          onClick={onSignInClick}
+          intent={Intent.PRIMARY}
+          onClick={onEnterContest}
         >
-          Sign In
+          Enter Contest
         </Button>
       </div>
     </div>

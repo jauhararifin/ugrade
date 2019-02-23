@@ -18,12 +18,12 @@ export class Home extends Component<HomeProps> {
     this.props.dispatch(setTitle('UGrade | Home'))
   }
   render() {
-    const createPush = (to: string) => () => this.props.push(to)
+    const createPush = (to: string) => () => this.props.dispatch(push(to))
     return (
       <HomeView
         onLogoClick={createPush('/')}
-        onSignInClick={createPush('/signin')}
-        onSignUpClick={createPush('/signup')}
+        onEnterContest={createPush('/enter-contest')}
+        onCreateContest={createPush('/create-contest')}
         onSettingClick={createPush('/setting')}
       />
     )
@@ -31,9 +31,6 @@ export class Home extends Component<HomeProps> {
 }
 
 export default compose<ComponentType>(
-  publicOnly('/contests'),
-  connect(
-    null,
-    { push }
-  )
+  publicOnly('/contest'),
+  connect()
 )(Home)
