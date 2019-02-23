@@ -1,32 +1,31 @@
-import { GenderType, ShirtSizeType, User } from './User'
+import { User } from './User'
 
 export interface AuthService {
-  login(username: string, password: string): Promise<string>
+  isRegistered(contestId: string, email: string): Promise<boolean>
 
-  register(
-    username: string,
-    name: string,
-    email: string,
+  signin(
+    contestId: string,
+    usernameOrEmail: string,
     password: string
-  ): Promise<void>
+  ): Promise<string>
 
-  forgotPassword(usernameOrEmail: string): Promise<void>
+  signup(
+    contestId: string,
+    username: string,
+    email: string,
+    password: string,
+    name: string
+  ): Promise<string>
+
+  forgotPassword(contestId: string, usernameOrEmail: string): Promise<void>
 
   getMe(token: string): Promise<User>
-
-  getMyProfile(token: string): Promise<User>
-
-  setMyProfile(
-    token: string,
-    name?: string,
-    gender?: GenderType,
-    shirtSize?: ShirtSizeType,
-    address?: string
-  ): Promise<User>
 
   setMyPassword(
     token: string,
     oldPassword: string,
     newPassword: string
   ): Promise<void>
+
+  setMyName(token: string, name: string): Promise<void>
 }

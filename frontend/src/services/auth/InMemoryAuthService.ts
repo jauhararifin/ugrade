@@ -1,106 +1,110 @@
 import { AuthService } from './AuthService'
-import { AuthenticationError, UserRegistrationError } from './errors'
-import { GenderType, ShirtSizeType, User } from './User'
+import { contestUserMap, userPasswordMap } from './fixtures'
+import {
+  AuthenticationError,
+  UserRegistrationError,
+  ForbiddenActionError,
+} from './errors'
+import { User } from './User'
 
 export class InMemoryAuthService implements AuthService {
-  private users: { [username: string]: User }
-  private usersPassword: { [username: string]: string }
-  private usersToken: { [username: string]: string }
+  private userPasswordMap: { [id: string]: string }
+  private usersToken: { [id: string]: string }
+
+  private contestUserMap: { [contestId: string]: { [userId: string]: User } }
 
   constructor() {
-    const defaultUser: User = {
-      username: 'test',
-      name: 'Test',
-      email: 'test@example.com',
-    }
-    this.users = { [defaultUser.username]: defaultUser }
-    this.usersPassword = { [defaultUser.username]: 'test' }
-    this.usersToken = { [defaultUser.username]: 'test---somefaketoken' }
+    this.contestUserMap = contestUserMap
+    this.userPasswordMap = userPasswordMap
+    this.usersToken = {}
   }
 
-  async login(username: string, password: string): Promise<string> {
+  async isRegistered(contestId: string, email: string): Promise<boolean> {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    if (username[0] === '.') {
-      throw new Error('Connection Error')
-    }
-    if (
-      this.usersPassword[username] &&
-      this.usersPassword[username] === password
-    ) {
-      return this.usersToken[username]
-    }
-    throw new AuthenticationError('Wrong username or password')
+    const userMap = this.contestUserMap[contestId]
+    if (!userMap) throw new AuthenticationError('No Such Contest')
+    const user = Object.values(userMap)
+      .filter(x => x.email === email)
+      .pop()
+    return !!user
   }
 
-  async register(
-    username: string,
-    name: string,
-    email: string,
+  async signin(
+    contestId: string,
+    usernameOrEmail: string,
     password: string
+  ): Promise<string> {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    const userMap = this.contestUserMap[contestId]
+    if (!userMap) throw new AuthenticationError('No Such Contest')
+    const user = Object.values(userMap)
+      .filter(
+        x => x.username === usernameOrEmail || x.email === usernameOrEmail
+      )
+      .pop()
+    if (!user) throw new AuthenticationError('Wrong Username Or Password')
+    if (this.userPasswordMap[user.id] !== password)
+      throw new AuthenticationError('Wrong Username Or Password')
+    const token = `${contestId}---${user.id}---somefaketoken`
+    this.usersToken[user.id] = token
+    return token
+  }
+
+  async signup(
+    contestId: string,
+    username: string,
+    email: string,
+    password: string,
+    name: string
+  ): Promise<string> {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    const userMap = this.contestUserMap[contestId]
+    if (!userMap) throw new AuthenticationError('No Such Contest')
+    const user = Object.values(userMap)
+      .filter(x => x.email === email)
+      .pop()
+    if (!user) throw new ForbiddenActionError('Operation Not Allowed')
+    if (user.username && user.username.length > 0)
+      throw new UserRegistrationError('User Already Registered')
+    if (
+      Object.values(userMap)
+        .filter(x => x.username === username)
+        .pop()
+    )
+      throw new UserRegistrationError('Username Already Taken')
+    this.contestUserMap[contestId][user.id] = {
+      ...user,
+      username,
+      name,
+    }
+    this.userPasswordMap[user.id] = password
+    return this.signin(contestId, username, password)
+  }
+
+  async forgotPassword(
+    contestId: string,
+    usernameOrEmail: string
   ): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    if (username[0] === '.') {
-      throw new Error('Connection Error')
-    }
-
-    for (const userUsername in this.users) {
-      if (this.users.hasOwnProperty(userUsername)) {
-        if (userUsername === username) {
-          throw new UserRegistrationError('Username already taken')
-        }
-        if (this.users[userUsername].email === email) {
-          throw new UserRegistrationError('Email already taken')
-        }
-      }
-    }
-    this.users[username] = { username, name, email }
-    this.usersPassword[username] = password
-    this.usersToken[username] = `${username}---${Math.random()
-      .toString(36)
-      .substring(7)}`
-  }
-
-  async forgotPassword(usernameOrEmail: string): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    if (usernameOrEmail[0] === '.') {
-      throw new Error('Connection Error')
-    }
+    if (!this.contestUserMap[contestId])
+      throw new AuthenticationError('No Such Contest')
+    if (usernameOrEmail.length === 0)
+      throw new AuthenticationError('No Such User')
   }
 
   async getMe(token: string): Promise<User> {
-    const { username, name, email } = await this.getMyProfile(token)
-    return { username, name, email }
-  }
-
-  async getMyProfile(token: string): Promise<User> {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    if (token[0] === '.') {
-      throw new Error('Connection Error')
-    }
-
-    const matches = token.match(/^([a-zA-Z0-9_]+)---(.+)$/)
+    const matches = token.match(/^([a-zA-Z0-9_]+)---([a-zA-Z0-9_]+)---(.+)$/)
     if (matches) {
-      return this.users[matches[1]]
+      const contestId = matches[1]
+      const userId = matches[2]
+      const contest = this.contestUserMap[contestId]
+      if (!contest) throw new AuthenticationError('Invalid Token')
+      const user = contest[userId]
+      if (!user) throw new AuthenticationError('Invalid Token')
+      return user
     }
-    throw new AuthenticationError('Invalid token')
-  }
-
-  async setMyProfile(
-    token: string,
-    name?: string,
-    gender?: GenderType,
-    shirtSize?: ShirtSizeType,
-    address?: string
-  ): Promise<User> {
-    const me = { ...(await this.getMyProfile(token)) }
-
-    if (name) me.name = name
-    if (gender) me.gender = gender
-    if (shirtSize) me.shirtSize = shirtSize
-    if (address) me.address = address
-    this.users[me.username] = me
-
-    return me
+    throw new AuthenticationError('Invalid Token')
   }
 
   async setMyPassword(
@@ -108,11 +112,14 @@ export class InMemoryAuthService implements AuthService {
     oldPassword: string,
     newPassword: string
   ): Promise<void> {
-    const me = { ...(await this.getMyProfile(token)) }
-    if (this.usersPassword[me.username] === oldPassword) {
-      this.usersPassword[me.username] = newPassword
-      return
-    }
-    throw new AuthenticationError('Wrong password')
+    const user = await this.getMe(token)
+    if (this.userPasswordMap[user.id] !== oldPassword)
+      throw new AuthenticationError('Wrong Password')
+    this.userPasswordMap[user.id] = newPassword
+  }
+
+  async setMyName(token: string, name: string): Promise<void> {
+    const user = await this.getMe(token)
+    this.contestUserMap[user.contestId][user.id].name = name
   }
 }
