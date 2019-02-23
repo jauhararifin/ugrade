@@ -15,8 +15,6 @@ export enum ShirtSizeType {
 }
 
 export interface UserProfile extends User {
-  name: string
-
   gender?: GenderType
   shirtSize?: ShirtSizeType
   address?: string

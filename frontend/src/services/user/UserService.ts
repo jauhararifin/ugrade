@@ -9,5 +9,5 @@ export interface UserService {
     gender?: GenderType,
     shirtSize?: ShirtSizeType,
     address?: string
-  ): Promise<UserProfile>
+  ): Promise<void>
 }
