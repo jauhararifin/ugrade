@@ -4,8 +4,8 @@ export enum ProblemType {
 }
 
 export interface Problem {
-  id: number
-  slug: string
+  id: string
+  shortId: string
   name: string
   statement: string
   type: ProblemType
