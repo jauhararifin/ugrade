@@ -3,6 +3,7 @@ export const AUTH_TOKEN_KEY = 'auth.token'
 export const AUTH_REMEMBER_ME_KEY = 'auth.rememberMe'
 
 export interface User {
+  contestId: string
   username: string
   name: string
   email: string
