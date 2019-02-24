@@ -5,7 +5,10 @@
     display: flex;
     justify-content: space-between;
   }
-  .goto-another-contest {
+  .bottom-action {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 0;
   }
 }

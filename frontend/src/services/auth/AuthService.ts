@@ -54,6 +54,21 @@ export interface AuthService {
   forgotPassword(contestId: string, email: string): Promise<void>
 
   /**
+   * Reset user's password.
+   *
+   * @param contestId - The contest id
+   * @param email - User's email
+   * @param oneTimeCode - One time code for verifying user's email
+   * @param password - User's new password
+   */
+  resetPassword(
+    contestId: string,
+    email: string,
+    oneTimeCode: string,
+    password: string
+  ): Promise<void>
+
+  /**
    * Get user's information (id, contest id and username) from server.
    * @param token User's session token
    * @return User's information
