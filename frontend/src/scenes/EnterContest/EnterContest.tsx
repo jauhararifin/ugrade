@@ -1,8 +1,8 @@
+import { FormikActions } from 'formik'
 import React, { ComponentType, ReactNode } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 
-import { FormikActions } from 'formik'
 import { publicOnly } from '../../helpers/auth'
 import ActionToaster from '../../middlewares/ErrorToaster/ActionToaster'
 import { AuthError } from '../../services/auth'
@@ -18,6 +18,9 @@ import EnterEmailForm from './EnterEmailForm'
 import { EnterEmailFormValue } from './EnterEmailForm/EnterEmailForm'
 import EnterPasswordForm from './EnterPasswordForm'
 import { EnterPasswordFormValue } from './EnterPasswordForm/EnterPasswordForm'
+import ResetPasswordForm, {
+  ResetPasswordFormValue,
+} from './ResetPasswordForm/ResetPasswordForm'
 import SignUpForm from './SignUpForm'
 import { SignUpFormValue } from './SignUpForm/SignUpForm'
 
@@ -29,7 +32,8 @@ export enum Page {
   EnterContest = 0,
   EnterEmail = 1,
   EnterPassword = 2,
-  SignUp = 3,
+  PasswordReset = 3,
+  SignUp = 4,
 }
 
 export interface EnterContestState {
@@ -170,6 +174,73 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
     })
   }
 
+  handleResetPassword = async (
+    values: ResetPasswordFormValue,
+    { setSubmitting }: FormikActions<ResetPasswordFormValue>
+  ) => {
+    this.props.dispatch(async (_dispatch, _getState, { authService }) => {
+      try {
+        const contest = this.state.contest
+        const email = this.state.email
+        const { oneTimeCode, password } = values
+
+        if (contest && email) {
+          await authService.resetPassword(
+            contest.id,
+            email,
+            oneTimeCode,
+            password
+          )
+          this.setState({ page: Page.EnterPassword })
+          ActionToaster.showSuccessToast('Successfully Reset Password')
+        } else if (!contest) {
+          this.setState({
+            email: undefined,
+            page: Page.EnterContest,
+          })
+        } else if (!email) {
+          this.setState({
+            page: Page.EnterEmail,
+          })
+        }
+      } catch (error) {
+        if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+        else throw error
+      } finally {
+        setSubmitting(false)
+      }
+    })
+  }
+
+  handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
+    this.props.dispatch(async (_dispatch, _getState, { authService }) => {
+      try {
+        setSubmitting(true)
+        const contest = this.state.contest
+        const email = this.state.email
+
+        if (contest && email) {
+          await authService.forgotPassword(contest.id, email)
+          this.setState({ page: Page.PasswordReset })
+        } else if (!contest) {
+          this.setState({
+            email: undefined,
+            page: Page.EnterContest,
+          })
+        } else if (!email) {
+          this.setState({
+            page: Page.EnterEmail,
+          })
+        }
+      } catch (error) {
+        if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+        else throw error
+      } finally {
+        setSubmitting(false)
+      }
+    })
+  }
+
   getForm(): ReactNode {
     switch (this.state.page) {
       case Page.EnterContest:
@@ -186,6 +257,15 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
         return (
           <EnterPasswordForm
             onSubmit={this.handleEnterPasswordSubmit}
+            contestInfo={this.state.contest as Contest}
+            gotoAnotherContest={this.resetState}
+            forgotPassword={this.handleForgotPassword}
+          />
+        )
+      case Page.PasswordReset:
+        return (
+          <ResetPasswordForm
+            onSubmit={this.handleResetPassword}
             contestInfo={this.state.contest as Contest}
             gotoAnotherContest={this.resetState}
           />

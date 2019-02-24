@@ -95,6 +95,28 @@ export class InMemoryAuthService implements AuthService {
     }
   }
 
+  async resetPassword(
+    contestId: string,
+    email: string,
+    oneTimeCode: string,
+    password: string
+  ): Promise<void> {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    const userMap = this.contestUserMap[contestId]
+    if (!userMap) {
+      throw new AuthError('No Such Contest')
+    }
+    const user = Object.values(userMap)
+      .filter(val => val.email === email)
+      .pop()
+    if (!user) throw new AuthError('No Such User')
+    if (user.username.length === 0) {
+      throw new AuthError('User Is Not Signed Up Yet')
+    }
+    if (oneTimeCode !== '00000000') throw new AuthError('Wrong One Time Code')
+    this.userPasswordMap[user.id] = password
+  }
+
   async getMe(token: string): Promise<User> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const matches = token.match(/^([a-zA-Z0-9_]+)---([a-zA-Z0-9_]+)---(.+)$/)

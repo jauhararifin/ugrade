@@ -19,6 +19,7 @@ export interface EnterPasswordFormProps {
   ) => any
   contestInfo: ContestInfo
   gotoAnotherContest: () => any
+  forgotPassword: (setSubmitting: (val: boolean) => void) => any
 }
 
 class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
@@ -43,6 +44,7 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
         {...props}
         contestInfo={this.props.contestInfo}
         gotoAnotherContest={this.props.gotoAnotherContest}
+        forgotPassword={this.props.forgotPassword}
       />
     )
     return (
