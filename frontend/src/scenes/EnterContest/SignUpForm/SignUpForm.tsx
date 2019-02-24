@@ -24,6 +24,7 @@ export interface SignUpFormProps {
     { setSubmitting }: FormikActions<SignUpFormValue>
   ) => any
   contestInfo: ContestInfo
+  gotoAnotherContest: () => any
 }
 
 class SignUpForm extends React.Component<SignUpFormProps> {
@@ -65,7 +66,11 @@ class SignUpForm extends React.Component<SignUpFormProps> {
 
   render() {
     const renderView = (props: FormikProps<SignUpFormValue>) => (
-      <SignUpFormView {...props} contestInfo={this.props.contestInfo} />
+      <SignUpFormView
+        {...props}
+        contestInfo={this.props.contestInfo}
+        gotoAnotherContest={this.props.gotoAnotherContest}
+      />
     )
     return (
       <Formik

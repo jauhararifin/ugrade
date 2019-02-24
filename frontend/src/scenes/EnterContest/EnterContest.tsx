@@ -50,6 +50,14 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
     this.props.dispatch(setTitle('UGrade | Enter Contest'))
   }
 
+  resetState = () => {
+    this.setState({
+      page: Page.EnterContest,
+      email: undefined,
+      contest: undefined,
+    })
+  }
+
   handleEnterContestSubmit = (
     values: EnterContestFormValue,
     { setSubmitting }: FormikActions<EnterContestFormValue>
@@ -171,6 +179,7 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
           <EnterEmailForm
             onSubmit={this.handleEnterEmailSubmit}
             contestInfo={this.state.contest as Contest}
+            gotoAnotherContest={this.resetState}
           />
         )
       case Page.EnterPassword:
@@ -178,6 +187,7 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
           <EnterPasswordForm
             onSubmit={this.handleEnterPasswordSubmit}
             contestInfo={this.state.contest as Contest}
+            gotoAnotherContest={this.resetState}
           />
         )
       case Page.SignUp:
@@ -185,6 +195,7 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
           <SignUpForm
             onSubmit={this.handleUserSignUp}
             contestInfo={this.state.contest as Contest}
+            gotoAnotherContest={this.resetState}
           />
         )
       default:

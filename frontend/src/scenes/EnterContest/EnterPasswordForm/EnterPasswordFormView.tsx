@@ -17,6 +17,7 @@ import { EnterPasswordFormValue } from './EnterPasswordForm'
 export interface EnterPasswordFormViewProps
   extends FormikProps<EnterPasswordFormValue> {
   contestInfo: ContestInfo
+  gotoAnotherContest: () => any
 }
 
 const EnterPasswordFormView: React.FunctionComponent<
@@ -30,6 +31,7 @@ const EnterPasswordFormView: React.FunctionComponent<
   submitCount,
   isSubmitting,
   contestInfo,
+  gotoAnotherContest,
 }) => (
   <form className='enter-password-panel' onSubmit={handleSubmit}>
     <Card>
@@ -74,6 +76,9 @@ const EnterPasswordFormView: React.FunctionComponent<
       >
         {isSubmitting ? 'Signing in...' : 'Sign In'}
       </Button>
+      <div className='goto-another-contest'>
+        <a onClick={gotoAnotherContest}>Go To Another Contest</a>
+      </div>
     </Card>
   </form>
 )

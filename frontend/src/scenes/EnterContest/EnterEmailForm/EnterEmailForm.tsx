@@ -17,6 +17,7 @@ export interface EnterEmailFormProps {
     { setSubmitting }: FormikActions<EnterEmailFormValue>
   ) => any
   contestInfo: ContestInfo
+  gotoAnotherContest: () => any
 }
 
 class EnterEmailForm extends React.Component<EnterEmailFormProps> {
@@ -36,7 +37,11 @@ class EnterEmailForm extends React.Component<EnterEmailFormProps> {
 
   render() {
     const renderView = (props: FormikProps<EnterEmailFormValue>) => (
-      <EnterEmailFormView contestInfo={this.props.contestInfo} {...props} />
+      <EnterEmailFormView
+        contestInfo={this.props.contestInfo}
+        gotoAnotherContest={this.props.gotoAnotherContest}
+        {...props}
+      />
     )
     return (
       <Formik

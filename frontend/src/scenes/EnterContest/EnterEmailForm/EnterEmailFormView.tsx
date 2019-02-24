@@ -9,6 +9,7 @@ import { EnterEmailFormValue } from './EnterEmailForm'
 
 export interface EnterEmailFormViewOwnProps {
   contestInfo: ContestInfo
+  gotoAnotherContest: () => any
 }
 
 export type EnterEmailFormViewFormikProps = FormikProps<EnterEmailFormValue>
@@ -25,6 +26,7 @@ const EnterEmailFormView: React.FunctionComponent<EnterEmailFormViewProps> = ({
   submitCount,
   isSubmitting,
   contestInfo,
+  gotoAnotherContest,
 }) => (
   <form className='enter-email-panel' onSubmit={handleSubmit}>
     <Card>
@@ -58,6 +60,9 @@ const EnterEmailFormView: React.FunctionComponent<EnterEmailFormViewProps> = ({
       >
         {isSubmitting ? 'Entering...' : 'Enter Contest'}
       </Button>
+      <div className='goto-another-contest'>
+        <a onClick={gotoAnotherContest}>Go To Another Contest</a>
+      </div>
     </Card>
   </form>
 )

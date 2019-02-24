@@ -18,6 +18,7 @@ export interface EnterPasswordFormProps {
     { setSubmitting }: FormikActions<EnterPasswordFormValue>
   ) => any
   contestInfo: ContestInfo
+  gotoAnotherContest: () => any
 }
 
 class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
@@ -38,7 +39,11 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
 
   render() {
     const renderView = (props: FormikProps<EnterPasswordFormValue>) => (
-      <EnterPasswordFormView {...props} contestInfo={this.props.contestInfo} />
+      <EnterPasswordFormView
+        {...props}
+        contestInfo={this.props.contestInfo}
+        gotoAnotherContest={this.props.gotoAnotherContest}
+      />
     )
     return (
       <Formik
