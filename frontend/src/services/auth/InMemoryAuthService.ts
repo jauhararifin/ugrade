@@ -19,7 +19,7 @@ export class InMemoryAuthService implements AuthService {
     this.usersToken = {}
   }
 
-  async isRegistered(contestId: string, email: string): Promise<boolean> {
+  async getUserByEmail(contestId: string, email: string): Promise<User> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
@@ -27,7 +27,7 @@ export class InMemoryAuthService implements AuthService {
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new AuthError('No Such User')
-    return user.username.length > 0
+    return user
   }
 
   async signin(
