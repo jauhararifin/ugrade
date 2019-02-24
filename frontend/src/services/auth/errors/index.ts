@@ -1,3 +1,3 @@
-export * from './AuthenticationError'
+export * from './AuthError'
 export * from './ForbiddenActionError'
 export * from './UserRegistrationError'

@@ -1,6 +1,6 @@
 import { AuthService } from './AuthService'
 import {
-  AuthenticationError,
+  AuthError,
   ForbiddenActionError,
   UserRegistrationError,
 } from './errors'
@@ -22,11 +22,11 @@ export class InMemoryAuthService implements AuthService {
   async isRegistered(contestId: string, email: string): Promise<boolean> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
-    if (!userMap) throw new AuthenticationError('No Such Contest')
+    if (!userMap) throw new AuthError('No Such Contest')
     const user = Object.values(userMap)
       .filter(x => x.email === email)
       .pop()
-    if (!user) throw new AuthenticationError('No Such User')
+    if (!user) throw new AuthError('No Such User')
     return user.username.length > 0
   }
 
@@ -37,13 +37,13 @@ export class InMemoryAuthService implements AuthService {
   ): Promise<string> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
-    if (!userMap) throw new AuthenticationError('No Such Contest')
+    if (!userMap) throw new AuthError('No Such Contest')
     const user = Object.values(userMap)
       .filter(x => x.email === email)
       .pop()
-    if (!user) throw new AuthenticationError('Wrong Username Or Password')
+    if (!user) throw new AuthError('Wrong Email Or Password')
     if (this.userPasswordMap[user.id] !== password) {
-      throw new AuthenticationError('Wrong Username Or Password')
+      throw new AuthError('Wrong Email Or Password')
     }
     const token = `${contestId}---${user.id}---somefaketoken`
     this.usersToken[user.id] = token
@@ -59,7 +59,7 @@ export class InMemoryAuthService implements AuthService {
   ): Promise<string> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     const userMap = this.contestUserMap[contestId]
-    if (!userMap) throw new AuthenticationError('No Such Contest')
+    if (!userMap) throw new AuthError('No Such Contest')
     const user = Object.values(userMap)
       .filter(x => x.email === email)
       .pop()
@@ -89,10 +89,10 @@ export class InMemoryAuthService implements AuthService {
   ): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     if (!this.contestUserMap[contestId]) {
-      throw new AuthenticationError('No Such Contest')
+      throw new AuthError('No Such Contest')
     }
     if (usernameOrEmail.length === 0) {
-      throw new AuthenticationError('No Such User')
+      throw new AuthError('No Such User')
     }
   }
 
@@ -103,12 +103,12 @@ export class InMemoryAuthService implements AuthService {
       const contestId = matches[1]
       const userId = matches[2]
       const contest = this.contestUserMap[contestId]
-      if (!contest) throw new AuthenticationError('Invalid Token')
+      if (!contest) throw new AuthError('Invalid Token')
       const user = contest[userId]
-      if (!user) throw new AuthenticationError('Invalid Token')
+      if (!user) throw new AuthError('Invalid Token')
       return user
     }
-    throw new AuthenticationError('Invalid Token')
+    throw new AuthError('Invalid Token')
   }
 
   async setMyPassword(
@@ -118,7 +118,7 @@ export class InMemoryAuthService implements AuthService {
   ): Promise<void> {
     const user = await this.getMe(token)
     if (this.userPasswordMap[user.id] !== oldPassword) {
-      throw new AuthenticationError('Wrong Password')
+      throw new AuthError('Wrong Password')
     }
     this.userPasswordMap[user.id] = newPassword
   }
