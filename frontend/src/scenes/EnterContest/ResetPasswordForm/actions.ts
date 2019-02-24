@@ -1,0 +1,25 @@
+import { push } from 'connected-react-router'
+import { AppThunkAction } from '../../../stores'
+
+export function resetPasswordAction(
+  oneTimeCode: string,
+  password: string
+): AppThunkAction {
+  return async (dispatch, getState, { authService }) => {
+    const contest = getState().contest.info
+    const user = getState().auth.me
+    if (contest && user) {
+      await authService.resetPassword(
+        contest.id,
+        user.email,
+        oneTimeCode,
+        password
+      )
+      dispatch(push('/enter-contest/enter-password'))
+    } else if (!contest) {
+      dispatch(push('/enter-contest/'))
+    } else if (!user) {
+      dispatch(push('/enter-contest/enter-email'))
+    }
+  }
+}

@@ -26,11 +26,7 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
         <CSSTransition timeout={300} classNames='fade' key={locationKey}>
           <Switch location={location}>
             <Route path='/' exact={true} component={Home} />
-            <Route
-              path='/enter-contest'
-              exact={true}
-              component={EnterContest}
-            />
+            <Route path='/enter-contest' component={EnterContest} />
             <Route path='/setting' component={Setting} />
             {/* <Route path='/account' exact={true} component={MyAccount} /> */}
             {/* <Route path='/forgot-password' component={ForgotPassword} /> */}

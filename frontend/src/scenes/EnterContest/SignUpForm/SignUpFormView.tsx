@@ -12,7 +12,7 @@ import { ContestInfo } from '../../../stores/Contest'
 import { SignUpFormValue } from './SignUpForm'
 
 export interface SignUpFormViewProps extends FormikProps<SignUpFormValue> {
-  contestInfo: ContestInfo
+  contest: ContestInfo
   gotoAnotherContest: () => any
 }
 
@@ -25,14 +25,14 @@ export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
   submitCount,
   isSubmitting,
   touched,
-  contestInfo,
+  contest,
   gotoAnotherContest,
 }) => (
   <form onSubmit={handleSubmit}>
     <Card className='signup-panel'>
       <h2>Sign Up To</h2>
-      <h3>{contestInfo.name}</h3>
-      <p>{contestInfo.shortDescription}</p>
+      <h3>{contest.name}</h3>
+      <p>{contest.shortDescription}</p>
       <FormGroup
         helperText={submitCount > 0 && errors && errors.username}
         labelFor='signup-page-input-username'

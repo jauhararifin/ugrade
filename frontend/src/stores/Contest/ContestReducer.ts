@@ -12,7 +12,7 @@ import {
   ContestSetClarifications,
   setClarrificationsReducer,
 } from './ContestSetClarrifications'
-import { ContestSetInfo, setContestReducer } from './ContestSetInfo'
+import { ContestSetInfo, setInfoReducer } from './ContestSetInfo'
 import { ContestSetProblems, setProblemsReducer } from './ContestSetProblems'
 import {
   ContestSetRegistered,
@@ -31,7 +31,7 @@ export const contestReducer: Reducer<ContestState> = (
 ): ContestState => {
   switch (action.type) {
     case ContestActionType.SetInfo:
-      return setContestReducer(state, action as ContestSetInfo)
+      return setInfoReducer(state, action as ContestSetInfo)
 
     case ContestActionType.SetRegistered:
       return setRegisteredReducer(state, action as ContestSetRegistered)

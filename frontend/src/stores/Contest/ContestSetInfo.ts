@@ -6,14 +6,14 @@ export interface ContestSetInfo {
   contestInfo: ContestInfo
 }
 
-export function setContest(contestInfo: ContestInfo): ContestSetInfo {
+export function setInfo(contestInfo: ContestInfo): ContestSetInfo {
   return {
     type: ContestActionType.SetInfo,
     contestInfo,
   }
 }
 
-export function setContestReducer(
+export function setInfoReducer(
   state: ContestState,
   action: ContestSetInfo
 ): ContestState {
