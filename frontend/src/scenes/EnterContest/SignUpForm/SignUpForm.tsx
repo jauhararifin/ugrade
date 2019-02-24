@@ -13,6 +13,7 @@ import { SignUpFormView } from './SignUpFormView'
 export interface SignUpFormValue {
   username: string
   name: string
+  oneTimeCode: string
   password: string
   rememberMe: boolean
 }
@@ -29,6 +30,7 @@ class SignUpForm extends React.Component<SignUpFormProps> {
   initialValues = {
     username: '',
     name: '',
+    oneTimeCode: '',
     password: '',
     rememberMe: false,
   }
@@ -36,7 +38,10 @@ class SignUpForm extends React.Component<SignUpFormProps> {
   validationSchema = yup.object().shape({
     username: yup
       .string()
-      .matches(/[a-zA-Z0-9\-]+/)
+      .matches(
+        /[a-zA-Z0-9\-]+/,
+        'Should contain alphanumeric and dash character only'
+      )
       .min(4)
       .max(255)
       .required(),
@@ -44,6 +49,11 @@ class SignUpForm extends React.Component<SignUpFormProps> {
       .string()
       .min(4)
       .max(255)
+      .required(),
+    oneTimeCode: yup
+      .string()
+      .label('One Time Code')
+      .matches(/.{8}/, 'Invalid One Time Code')
       .required(),
     password: yup
       .string()

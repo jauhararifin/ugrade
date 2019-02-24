@@ -66,7 +66,28 @@ export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
           value={values.name}
         />
       </FormGroup>
-
+      <FormGroup
+        helperText={
+          (touched.oneTimeCode && errors && errors.oneTimeCode) ||
+          `Please check your email. We sent you an email containing one time code.`
+        }
+        labelFor='signup-page-input-one-time-code'
+        intent={
+          touched.oneTimeCode && errors && errors.oneTimeCode
+            ? Intent.DANGER
+            : Intent.NONE
+        }
+      >
+        <InputGroup
+          name='oneTimeCode'
+          id='signup-page-input-one-time-code'
+          large={true}
+          placeholder='One Time Code'
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.oneTimeCode}
+        />
+      </FormGroup>
       <FormGroup
         helperText={touched.password && errors && errors.password}
         labelFor='signup-page-input-password'

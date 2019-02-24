@@ -9,6 +9,7 @@ export interface AuthService {
     contestId: string,
     username: string,
     email: string,
+    oneTimeCode: string,
     password: string,
     name: string
   ): Promise<string>

@@ -99,15 +99,16 @@ class SignIn extends React.Component<EnterContestProps, EnterContestState> {
       try {
         const contest = this.state.contest
         const email = this.state.email
-        const { username, name, password, rememberMe } = values
+        const { username, name, oneTimeCode, password, rememberMe } = values
 
         if (contest && email) {
           const token = await authService.signup(
             contest.id,
             username,
             email,
-            name,
-            password
+            oneTimeCode,
+            password,
+            name
           )
           dispatch(setSignedIn(token, rememberMe))
         } else if (!contest) {

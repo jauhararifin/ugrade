@@ -54,6 +54,7 @@ export class InMemoryAuthService implements AuthService {
     contestId: string,
     username: string,
     email: string,
+    oneTimeCode: string,
     password: string,
     name: string
   ): Promise<string> {
@@ -64,6 +65,7 @@ export class InMemoryAuthService implements AuthService {
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new ForbiddenActionError('Operation Not Allowed')
+    if (oneTimeCode !== '00000000') throw new AuthError('Wrong One Time Code')
     if (user.username && user.username.length > 0) {
       throw new UserRegistrationError('User Already Registered')
     }
