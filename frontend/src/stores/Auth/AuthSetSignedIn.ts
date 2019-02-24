@@ -1,7 +1,6 @@
 import { AuthActionType } from './AuthAction'
 import {
   AUTH_IS_SIGNED_IN_KEY,
-  AUTH_REMEMBER_ME_KEY,
   AUTH_TOKEN_KEY,
   AuthState,
   initialState,
@@ -30,25 +29,16 @@ export function setSignedInReducer(
     ...state,
     isSignedIn: true,
     token: action.token,
-    rememberMe: action.rememberMe,
   }
 
   sessionStorage.setItem(AUTH_TOKEN_KEY, nextState.token)
   sessionStorage.setItem(AUTH_IS_SIGNED_IN_KEY, 'true')
-  sessionStorage.setItem(
-    AUTH_REMEMBER_ME_KEY,
-    nextState.rememberMe ? 'true' : 'false'
-  )
 
-  if (nextState.rememberMe) {
+  if (action.rememberMe) {
     localStorage.setItem(AUTH_TOKEN_KEY, nextState.token)
     localStorage.setItem(
       AUTH_IS_SIGNED_IN_KEY,
       nextState.isSignedIn ? 'true' : 'false'
-    )
-    localStorage.setItem(
-      AUTH_REMEMBER_ME_KEY,
-      nextState.rememberMe ? 'true' : 'false'
     )
   }
 
