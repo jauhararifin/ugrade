@@ -24,8 +24,8 @@ export const SettingView: FunctionComponent<SettingViewProps> = ({
     </div>
     <BottomLink>
       <Link to='/'>Home</Link>
-      {showCreateContest && <Link to='#'>Create Contest</Link>}
-      {showEnterContest && <Link to='/signin'>Enter Contest</Link>}
+      {showCreateContest && <Link to='/create-contest'>Create Contest</Link>}
+      {showEnterContest && <Link to='/enter-contest'>Enter Contest</Link>}
     </BottomLink>
   </div>
 )

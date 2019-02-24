@@ -12,7 +12,10 @@ export interface EnterEmailFormValue {
 }
 
 export interface EnterEmailFormProps {
-  onSubmit: (email: string) => Promise<any>
+  onSubmit: (
+    values: EnterEmailFormValue,
+    { setSubmitting }: FormikActions<EnterEmailFormValue>
+  ) => any
   contestInfo: ContestInfo
 }
 
@@ -31,17 +34,6 @@ class EnterEmailForm extends React.Component<EnterEmailFormProps> {
       .required(),
   })
 
-  handleSubmit = async (
-    values: EnterEmailFormValue,
-    { setSubmitting }: FormikActions<EnterEmailFormValue>
-  ) => {
-    try {
-      await this.props.onSubmit(values.email)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   render() {
     const renderView = (props: FormikProps<EnterEmailFormValue>) => (
       <EnterEmailFormView contestInfo={this.props.contestInfo} {...props} />
@@ -50,7 +42,7 @@ class EnterEmailForm extends React.Component<EnterEmailFormProps> {
       <Formik
         initialValues={this.initialValue}
         validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
+        onSubmit={this.props.onSubmit}
         render={renderView}
       />
     )

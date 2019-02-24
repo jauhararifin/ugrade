@@ -11,7 +11,10 @@ export interface EnterContestFormValue {
 }
 
 export interface EnterContestFormProps {
-  onSubmit: (contestId: string) => Promise<any>
+  onSubmit: (
+    values: EnterContestFormValue,
+    { setSubmitting }: FormikActions<EnterContestFormValue>
+  ) => any
 }
 
 class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
@@ -29,23 +32,12 @@ class EnterContestForm extends React.Component<EnterContestFormProps, {}> {
       .required(),
   })
 
-  handleSubmit = async (
-    values: EnterContestFormValue,
-    { setSubmitting }: FormikActions<EnterContestFormValue>
-  ) => {
-    try {
-      await this.props.onSubmit(values.contestId)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   render() {
     return (
       <Formik
         initialValues={this.initialValue}
         validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
+        onSubmit={this.props.onSubmit}
         component={EnterContestFormView}
       />
     )

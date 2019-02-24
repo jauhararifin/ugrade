@@ -19,11 +19,9 @@ export interface SignUpFormValue {
 
 export interface SignUpFormProps {
   onSubmit: (
-    username: string,
-    name: string,
-    password: string,
-    rememberMe: boolean
-  ) => Promise<any>
+    values: SignUpFormValue,
+    { setSubmitting }: FormikActions<SignUpFormValue>
+  ) => any
   contestInfo: ContestInfo
 }
 
@@ -55,22 +53,6 @@ class SignUpForm extends React.Component<SignUpFormProps> {
     rememberMe: yup.boolean().required(),
   })
 
-  handleSubmit = async (
-    values: SignUpFormValue,
-    { setSubmitting }: FormikActions<SignUpFormValue>
-  ) => {
-    try {
-      await this.props.onSubmit(
-        values.username,
-        values.name,
-        values.password,
-        values.rememberMe
-      )
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   render() {
     const renderView = (props: FormikProps<SignUpFormValue>) => (
       <SignUpFormView {...props} contestInfo={this.props.contestInfo} />
@@ -78,7 +60,7 @@ class SignUpForm extends React.Component<SignUpFormProps> {
     return (
       <Formik
         validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
+        onSubmit={this.props.onSubmit}
         initialValues={this.initialValues}
         render={renderView}
       />

@@ -13,7 +13,10 @@ export interface EnterPasswordFormValue {
 }
 
 export interface EnterPasswordFormProps {
-  onSubmit: (password: string, rememberMe: boolean) => Promise<any>
+  onSubmit: (
+    values: EnterPasswordFormValue,
+    { setSubmitting }: FormikActions<EnterPasswordFormValue>
+  ) => any
   contestInfo: ContestInfo
 }
 
@@ -33,17 +36,6 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
     rememberMe: yup.boolean().required(),
   })
 
-  handleSubmit = async (
-    values: EnterPasswordFormValue,
-    { setSubmitting }: FormikActions<EnterPasswordFormValue>
-  ) => {
-    try {
-      await this.props.onSubmit(values.password, values.rememberMe)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   render() {
     const renderView = (props: FormikProps<EnterPasswordFormValue>) => (
       <EnterPasswordFormView {...props} contestInfo={this.props.contestInfo} />
@@ -52,7 +44,7 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
       <Formik
         initialValues={this.initialValue}
         validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
+        onSubmit={this.props.onSubmit}
         render={renderView}
       />
     )
