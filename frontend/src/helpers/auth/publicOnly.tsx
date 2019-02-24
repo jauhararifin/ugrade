@@ -4,9 +4,7 @@ import { Redirect } from 'react-router'
 
 import { AppState } from '../../stores'
 
-export const publicOnly = (redirect: string = '/contests') => <
-  P extends object
->(
+export const publicOnly = (redirect: string = '/contest') => <P extends object>(
   Component: ComponentType<P>
 ) => {
   interface Props {

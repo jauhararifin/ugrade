@@ -8,15 +8,9 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import './styles.css'
 
 import { AppState } from '../stores'
-import ContestDetail from './ContestDetail'
-import Contests from './Contests'
 import EnterContest from './EnterContest/EnterContest'
-import ForgotPassword from './ForgotPassword'
 import Home from './Home'
-import MyAccount from './MyAccount'
 import Setting from './Setting'
-import SignIn from './SignIn'
-import SignUp from './SignUp'
 
 export interface AppProps {
   title?: string
@@ -24,15 +18,7 @@ export interface AppProps {
 }
 
 const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
-  let locationKey = '/'
-  if (location.pathname.match('/signin')) locationKey = 'signin'
-  else if (location.pathname.match('/signup')) locationKey = 'signup'
-  else if (location.pathname.match('/setting')) locationKey = 'setting'
-  else if (location.pathname.match('/account')) locationKey = 'account'
-  else if (location.pathname.match('/forgot-password')) {
-    locationKey = 'forgot-password'
-  } else if (location.pathname.match('/contests/.+')) locationKey = 'contests/'
-  else if (location.pathname.match('/contests/?')) locationKey = 'contests'
+  const locationKey = location.pathname.split('/', 2).join('/')
 
   return (
     <DocumentTitle title={title || 'UGrade'}>
@@ -45,8 +31,6 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
               exact={true}
               component={EnterContest}
             />
-            {/* <Route path='/signin' component={SignIn} /> */}
-            {/* <Route path='/signup' component={SignUp} /> */}
             <Route path='/setting' component={Setting} />
             {/* <Route path='/account' exact={true} component={MyAccount} /> */}
             {/* <Route path='/forgot-password' component={ForgotPassword} /> */}

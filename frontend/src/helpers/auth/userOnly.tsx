@@ -4,7 +4,9 @@ import { Redirect } from 'react-router'
 
 import { AppState } from '../../stores'
 
-export const userOnly = (redirect: string = '/signin') => <P extends object>(
+export const userOnly = (redirect: string = '/enter-contest') => <
+  P extends object
+>(
   Component: ComponentType<P>
 ) => {
   interface Props {
