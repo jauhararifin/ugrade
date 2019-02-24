@@ -85,15 +85,12 @@ export class InMemoryAuthService implements AuthService {
     return this.signin(contestId, email, password)
   }
 
-  async forgotPassword(
-    contestId: string,
-    usernameOrEmail: string
-  ): Promise<void> {
+  async forgotPassword(contestId: string, email: string): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000))
     if (!this.contestUserMap[contestId]) {
       throw new AuthError('No Such Contest')
     }
-    if (usernameOrEmail.length === 0) {
+    if (email.length === 0) {
       throw new AuthError('No Such User')
     }
   }

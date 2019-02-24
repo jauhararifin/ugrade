@@ -1,10 +1,41 @@
 import { User } from './User'
 
 export interface AuthService {
+  /**
+   * Check whether the specified email is registered in a contest. Email is
+   * registered when invited by contest administrator.
+   *
+   * @param contestId - The contest id
+   * @param email - The email
+   * @returns True if email is registered, false otherwise.
+   */
   isRegistered(contestId: string, email: string): Promise<boolean>
 
+  /**
+   * Sign in to specific contest. This will create session for user.
+   * @param contestId - The contest id
+   * @param email - User email
+   * @param password - User password
+   * @return string contains token that identified user's session
+   */
   signin(contestId: string, email: string, password: string): Promise<string>
 
+  /**
+   * Sign up to specific contest. When contest administrator invited a user to
+   * a contest, that user is considered as 'registered' to the contest, but not
+   * yet signed up. User need to signed up and fill some information like
+   * username, password and fullname. The user will get one time code in their
+   * email to verify the email address. After signed up, user automatically
+   * signed in.
+   *
+   * @param contestId - The contest id
+   * @param username - User's username
+   * @param email - User's email
+   * @param oneTimeCode - One time code for verifying user's email
+   * @param password - User's password
+   * @param name - User's name
+   * @return String contains token that identified user's session
+   */
   signup(
     contestId: string,
     username: string,
@@ -14,15 +45,40 @@ export interface AuthService {
     name: string
   ): Promise<string>
 
-  forgotPassword(contestId: string, usernameOrEmail: string): Promise<void>
+  /**
+   * Send forgot password request. User will get an email containing one time
+   * code to reset the password.
+   *
+   * @param contestId - The contest id
+   * @param email - User's email
+   */
+  forgotPassword(contestId: string, email: string): Promise<void>
 
+  /**
+   * Get user's information (id, contest id and username) from server.
+   * @param token User's session token
+   * @return User's information
+   */
   getMe(token: string): Promise<User>
 
+  /**
+   * Change user's password.
+   *
+   * @param token User's session token
+   * @param oldPassword User's old password
+   * @param newPassword User's new password
+   */
   setMyPassword(
     token: string,
     oldPassword: string,
     newPassword: string
   ): Promise<void>
 
+  /**
+   * Set users's fullname
+   *
+   * @param token User's session token
+   * @param name New user's name
+   */
   setMyName(token: string, name: string): Promise<void>
 }
