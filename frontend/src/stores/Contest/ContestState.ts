@@ -73,11 +73,13 @@ export interface Submission {
   languageId: number
   issuedTime: Date
   verdict: SubmissionVerdict
-  sourceCode: string
+  sourceCode?: string
   gradings?: Grading[]
 }
 
 export interface ContestInfo {
+  id: string
+  shortId: string
   name: string
   shortDescription: string
   startTime: Date
@@ -88,10 +90,8 @@ export interface ContestInfo {
 }
 
 export interface ContestState {
-  id?: string
-  shortId?: string
-  registered?: boolean
   info?: ContestInfo
+  registered?: boolean
   problems?: { [problemId: string]: Problem }
   announcements?: { [announcementId: string]: Announcement }
   clarifications?: { [clarificationId: string]: Clarification }

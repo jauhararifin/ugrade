@@ -17,11 +17,8 @@ export function setRegisteredReducer(
   state: ContestState,
   action: ContestSetRegistered
 ): ContestState {
-  if (state.id) {
-    return {
-      ...state,
-      registered: action.registered,
-    }
+  return {
+    ...state,
+    registered: action.registered,
   }
-  return { ...state }
 }
