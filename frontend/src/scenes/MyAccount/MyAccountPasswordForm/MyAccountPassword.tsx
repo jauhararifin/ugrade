@@ -1,9 +1,11 @@
 import { Formik, FormikActions } from 'formik'
-import React from 'react'
+import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import * as yup from 'yup'
 
 import ActionToaster from '../../../helpers/ActionToaster'
+import { contestOnly } from '../../../helpers/auth'
 import { AuthError } from '../../../services/auth'
 import { AppThunkDispatch } from '../../../stores'
 import { setPassword } from './actions'
@@ -66,4 +68,7 @@ export class MyAccountPassword extends React.Component<MyAccountPasswordProps> {
   }
 }
 
-export default connect()(MyAccountPassword as any)
+export default compose<ComponentType>(
+  contestOnly(),
+  connect()
+)(MyAccountPassword as any)

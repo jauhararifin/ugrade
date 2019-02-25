@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 
-import { userOnly } from '../../helpers/auth'
+import { contestOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
 import { User } from '../../stores/Auth'
 import { getMyProfile } from './actions'
@@ -32,5 +32,5 @@ export class MyAccount extends React.Component<MyAccountProps, MyAccountState> {
 
 export default compose<ComponentType>(
   connect(),
-  userOnly()
+  contestOnly()
 )(MyAccount)

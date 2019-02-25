@@ -5,7 +5,7 @@ import * as yup from 'yup'
 
 import { compose } from 'redux'
 import ActionToaster from '../../../helpers/ActionToaster'
-import { userOnly } from '../../../helpers/auth'
+import { contestOnly } from '../../../helpers/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { User } from '../../../stores/Auth'
 import { setTitle } from '../../../stores/Title'
@@ -97,6 +97,6 @@ const mapStateToProps = (state: AppState) => ({
   profile: state.userProfile,
 })
 export default compose<ComponentType>(
-  userOnly(),
+  contestOnly(),
   connect(mapStateToProps)
 )(MyAccountProfileForm)
