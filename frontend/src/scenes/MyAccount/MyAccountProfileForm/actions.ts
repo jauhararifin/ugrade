@@ -1,25 +1,28 @@
-import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
-import { User } from '../../../services/auth'
 import { AppThunkAction } from '../../../stores'
-import { GenderType, setMe, ShirtSizeType } from '../../../stores/Auth'
+import { setMe } from '../../../stores/Auth'
+import {
+  GenderType,
+  setUserProfile,
+  ShirtSizeType,
+} from '../../../stores/UserProfile'
 
 export const setProfile = (
   name: string,
   shirtSize?: ShirtSizeType,
   gender?: GenderType,
   address?: string
-): AppThunkAction<User> => {
-  return async (dispatch, getState, { authService }) => {
+): AppThunkAction => {
+  return async (dispatch, getState, { authService, userService }) => {
     const token = getState().auth.token
-    const me = await authService.setMyProfile(
-      token,
-      name,
-      gender,
-      shirtSize,
-      address
-    )
-    dispatch(setMe(me))
-    ActionToaster.showSuccessToast('Profile Changed')
-    return me
+    let currentMe = getState().auth.me
+    if (!currentMe) {
+      currentMe = await authService.getMe(token)
+      dispatch(setMe(currentMe))
+    }
+
+    await userService.setMyProfile(token, name, gender, shirtSize, address)
+
+    dispatch(setMe({ ...currentMe, name }))
+    dispatch(setUserProfile(gender, shirtSize, address))
   }
 }

@@ -3,6 +3,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as yup from 'yup'
 
+import ActionToaster from '../../../helpers/ActionToaster'
+import { AuthError } from '../../../services/auth'
 import { AppThunkDispatch } from '../../../stores'
 import { setPassword } from './actions'
 import MyAccountPasswordFormView from './MyAccountPasswordFormView'
@@ -34,17 +36,22 @@ export class MyAccountPassword extends React.Component<MyAccountPasswordProps> {
       .oneOf([yup.ref('newPassword'), null], "Passwords don't match"),
   })
 
-  handleSubmit = (
+  handleSubmit = async (
     values: MyAccountPasswordFormValue,
     { setSubmitting, resetForm }: FormikActions<MyAccountPasswordFormValue>
   ) => {
-    this.props
-      .dispatch(setPassword(values.oldPassword, values.newPassword))
-      .finally(() => {
-        setSubmitting(false)
-        resetForm()
-      })
-      .catch(_ => null)
+    try {
+      await this.props.dispatch(
+        setPassword(values.oldPassword, values.newPassword)
+      )
+      ActionToaster.showSuccessToast('Password Changed')
+    } catch (error) {
+      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      else throw error
+    } finally {
+      setSubmitting(false)
+      resetForm()
+    }
   }
 
   render() {

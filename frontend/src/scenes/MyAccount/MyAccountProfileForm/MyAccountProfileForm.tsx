@@ -1,11 +1,19 @@
 import { Formik, FormikActions } from 'formik'
-import React from 'react'
+import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import * as yup from 'yup'
 
+import { compose } from 'redux'
+import ActionToaster from '../../../helpers/ActionToaster'
+import { userOnly } from '../../../helpers/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
-import { GenderType, ShirtSizeType, User } from '../../../stores/Auth'
+import { User } from '../../../stores/Auth'
 import { setTitle } from '../../../stores/Title'
+import {
+  GenderType,
+  ShirtSizeType,
+  UserProfileState,
+} from '../../../stores/UserProfile'
 import { setProfile } from './actions'
 import { genderValues, shirtSizeValues } from './helpers'
 import MyAccountProfileFormView from './MyAccountProfileFormView'
@@ -20,6 +28,7 @@ export interface MyAccountProfileFormValue {
 export interface MyAccountProfileFormProps {
   dispatch: AppThunkDispatch
   me: User
+  profile: UserProfileState
 }
 
 export class MyAccountProfileForm extends React.Component<
@@ -45,13 +54,13 @@ export class MyAccountProfileForm extends React.Component<
     this.props.dispatch(setTitle('UGrade | My Account'))
   }
 
-  handleSubmit = (
+  handleSubmit = async (
     values: MyAccountProfileFormValue,
     { setSubmitting }: FormikActions<MyAccountProfileFormValue>
   ) => {
     const { name, shirtSize, gender, address } = values
-    this.props
-      .dispatch(
+    try {
+      await this.props.dispatch(
         setProfile(
           name,
           shirtSize as ShirtSizeType,
@@ -59,14 +68,22 @@ export class MyAccountProfileForm extends React.Component<
           address
         )
       )
-      .finally(() => setSubmitting(false))
-      .catch(_ => null)
+      ActionToaster.showSuccessToast('Profile Changed')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   render() {
+    const initialValues = {
+      name: this.props.me.name,
+      gender: this.props.profile.gender,
+      address: this.props.profile.address,
+      shirtSize: this.props.profile.shirtSize,
+    }
     return (
       <Formik
-        initialValues={this.props.me}
+        initialValues={initialValues}
         onSubmit={this.handleSubmit}
         validationSchema={this.validationSchema}
         render={MyAccountProfileFormView}
@@ -77,5 +94,9 @@ export class MyAccountProfileForm extends React.Component<
 
 const mapStateToProps = (state: AppState) => ({
   me: state.auth.me,
+  profile: state.userProfile,
 })
-export default connect(mapStateToProps)(MyAccountProfileForm as any)
+export default compose<ComponentType>(
+  userOnly(),
+  connect(mapStateToProps)
+)(MyAccountProfileForm)

@@ -11,6 +11,7 @@ import { AppState } from '../stores'
 import CreateContest from './CreateContest'
 import EnterContest from './EnterContest/EnterContest'
 import Home from './Home'
+import MyAccount from './MyAccount'
 import Setting from './Setting'
 
 export interface AppProps {
@@ -30,7 +31,7 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
             <Route path='/enter-contest' component={EnterContest} />
             <Route path='/create-contest' component={CreateContest} />
             <Route path='/setting' component={Setting} />
-            {/* <Route path='/account' exact={true} component={MyAccount} /> */}
+            <Route path='/account' exact={true} component={MyAccount} />
             {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
             {/* <Route path='/contests' exact={true} component={Contests} /> */}
             {/* <Route path='/contests/:contestId' component={ContestDetail} /> */}

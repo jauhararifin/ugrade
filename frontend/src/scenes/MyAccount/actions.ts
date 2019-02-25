@@ -1,19 +1,20 @@
-import { AuthenticationError, User } from '../../services/auth'
 import { AppThunkAction } from '../../stores'
-import { setMe, setSignedOut } from '../../stores/Auth'
+import { setMe, User } from '../../stores/Auth'
+import { setUserProfile } from '../../stores/UserProfile'
 
-export const getProfile = (): AppThunkAction<User> => {
-  return async (dispatch, getState, { authService }) => {
-    try {
-      const token = getState().auth.token
-      const me = await authService.getMyProfile(token)
+export const getMyProfile = (): AppThunkAction<User> => {
+  return async (dispatch, getState, { authService, userService }) => {
+    const token = getState().auth.token
+    let me = getState().auth.me
+    if (!me) {
+      me = await authService.getMe(token)
       dispatch(setMe(me))
-      return me
-    } catch (error) {
-      if (error instanceof AuthenticationError) {
-        dispatch(setSignedOut())
-      }
-      throw error
     }
+
+    const myProfile = await userService.getMyProfile(token)
+    dispatch(
+      setUserProfile(myProfile.gender, myProfile.shirtSize, myProfile.address)
+    )
+    return me
   }
 }

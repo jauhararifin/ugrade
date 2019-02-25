@@ -5,7 +5,7 @@ import { compose } from 'redux'
 import { userOnly } from '../../helpers/auth'
 import { AppThunkDispatch } from '../../stores'
 import { User } from '../../stores/Auth'
-import { getProfile } from './actions'
+import { getMyProfile } from './actions'
 import { MyAccountView } from './MyAccountView'
 
 export interface MyAccountProps {
@@ -22,7 +22,7 @@ export class MyAccount extends React.Component<MyAccountProps, MyAccountState> {
     this.state = { me: undefined }
   }
   async componentDidMount() {
-    const me = await this.props.dispatch(getProfile())
+    const me = await this.props.dispatch(getMyProfile())
     this.setState({ me })
   }
   render() {

@@ -1,4 +1,3 @@
-import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
 import { AppThunkAction } from '../../../stores'
 
 export const setPassword = (
@@ -8,6 +7,5 @@ export const setPassword = (
   return async (_, getState, { authService }) => {
     const token = getState().auth.token
     await authService.setMyPassword(token, oldPassword, newPassword)
-    ActionToaster.showSuccessToast('Password Changed')
   }
 }
