@@ -1,6 +1,6 @@
 import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
-import { Contest } from './Contest'
+import { Contest, Language } from './Contest'
 import { Scoreboard } from './Scoreboard'
 import { Submission } from './Submission'
 
@@ -25,6 +25,8 @@ export type SubmissionSubscribeCallback = (submissions: Submission[]) => any
 export type SubmissionUnsubscribeFunction = () => any
 
 export interface ContestService {
+  getAvailableLanguages(): Promise<Language[]>
+
   getContestByShortId(shortId: string): Promise<Contest>
 
   getMyContest(token: string): Promise<Contest>

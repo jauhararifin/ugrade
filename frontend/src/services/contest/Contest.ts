@@ -1,6 +1,5 @@
 export interface Language {
   id: string
-  shortId: string
   name: string
 }
 

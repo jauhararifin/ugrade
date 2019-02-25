@@ -15,7 +15,21 @@ import {
   problem9,
 } from '../problem/fixtures'
 import { Announcement } from './Announcement'
-import { Contest } from './Contest'
+import { Contest, Language } from './Contest'
+
+export const Language1: Language = { id: '1', name: 'C++11' }
+export const Language2: Language = { id: '2', name: 'C' }
+export const Language3: Language = { id: '3', name: 'Java' }
+export const Language4: Language = { id: '4', name: 'Python2' }
+export const Language5: Language = { id: '5', name: 'Python3' }
+
+export const availableLanguages: Language[] = [
+  Language1,
+  Language2,
+  Language3,
+  Language4,
+  Language5,
+]
 
 export const AnnouncementExample1: Announcement = {
   id: '1',
@@ -105,13 +119,7 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
-  permittedLanguages: [
-    { id: '1', shortId: 'c++11', name: 'C++11' },
-    { id: '2', shortId: 'c', name: 'C' },
-    { id: '3', shortId: 'java', name: 'Java' },
-    { id: '4', shortId: 'python2', name: 'Python2' },
-    { id: '5', shortId: 'python3', name: 'Python3' },
-  ],
+  permittedLanguages: availableLanguages.slice(),
 }
 
 export const ContestArkav4QualAnnouncements = annoucements.slice()
@@ -137,13 +145,7 @@ export const ContestArkav4Final: Contest = {
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
-  permittedLanguages: [
-    { id: '1', shortId: 'c++11', name: 'C++11' },
-    { id: '2', shortId: 'c', name: 'C' },
-    { id: '3', shortId: 'java', name: 'Java' },
-    { id: '4', shortId: 'python2', name: 'Python2' },
-    { id: '5', shortId: 'python3', name: 'Python3' },
-  ],
+  permittedLanguages: availableLanguages.slice(),
 }
 
 export const ContestArkav4FinalAnnouncements = annoucements.slice()
@@ -169,13 +171,7 @@ export const ContestArkav5Qual: Contest = {
   startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   freezed: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
-  permittedLanguages: [
-    { id: '1', shortId: 'c++11', name: 'C++11' },
-    { id: '2', shortId: 'c', name: 'C' },
-    { id: '3', shortId: 'java', name: 'Java' },
-    { id: '4', shortId: 'python2', name: 'Python2' },
-    { id: '5', shortId: 'python3', name: 'Python3' },
-  ],
+  permittedLanguages: availableLanguages.slice(),
 }
 
 export const ContestArkav5QualAnnouncements = annoucements.slice()
@@ -201,13 +197,7 @@ export const ContestArkav5Final: Contest = {
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
-  permittedLanguages: [
-    { id: '1', shortId: 'c++11', name: 'C++11' },
-    { id: '2', shortId: 'c', name: 'C' },
-    { id: '3', shortId: 'java', name: 'Java' },
-    { id: '4', shortId: 'python2', name: 'Python2' },
-    { id: '5', shortId: 'python3', name: 'Python3' },
-  ],
+  permittedLanguages: availableLanguages.slice(),
 }
 
 export const ContestArkav5FinalAnnouncements = annoucements.slice()
@@ -242,4 +232,12 @@ export const contestProblemsMap = {
   [ContestArkav4Final.id]: ContestArkav4FinalProblems,
   [ContestArkav5Qual.id]: ContestArkav5QualProblems,
   [ContestArkav5Final.id]: ContestArkav5FinalProblems,
+}
+
+export const languages = {
+  [Language1.id]: Language1,
+  [Language2.id]: Language2,
+  [Language3.id]: Language3,
+  [Language4.id]: Language4,
+  [Language5.id]: Language5,
 }

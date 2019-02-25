@@ -2,7 +2,7 @@ import { AuthService, ForbiddenActionError } from '../auth'
 import { NoSuchProblem } from '../problem'
 import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
-import { Contest } from './Contest'
+import { Contest, Language } from './Contest'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
@@ -20,6 +20,7 @@ import {
   contestAnnouncementsMap,
   contestProblemsMap,
   contests,
+  languages,
 } from './fixtures'
 import { GradingVerdict } from './Grading'
 import { Scoreboard } from './Scoreboard'
@@ -27,11 +28,14 @@ import { Submission } from './Submission'
 
 export class InMemoryContestService implements ContestService {
   private authService: AuthService
+
   private contests: Contest[] = []
   private contestProblemsMap: { [id: string]: string[] } = {}
   private contestAnnouncementsMap: { [id: string]: Announcement[] } = {}
   private contestClarificationsMap: { [id: string]: Clarification[] } = {}
   private contestSubmissionsMap: { [id: string]: Submission[] } = {}
+
+  private languages: { [id: string]: Language } = {}
 
   constructor(authService: AuthService) {
     this.authService = authService
@@ -60,6 +64,12 @@ export class InMemoryContestService implements ContestService {
           },
         ])
     )
+
+    this.languages = languages
+  }
+
+  async getAvailableLanguages(): Promise<Language[]> {
+    return Object.values(this.languages).slice()
   }
 
   async getContestByShortId(shortId: string): Promise<Contest> {
