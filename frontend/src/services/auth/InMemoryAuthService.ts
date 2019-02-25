@@ -148,4 +148,18 @@ export class InMemoryAuthService implements AuthService {
     const user = await this.getMe(token)
     this.contestUserMap[user.contestId][user.id].name = name
   }
+
+  async registerContestAdmin(contestId: string, email: string): Promise<User> {
+    const newUser: User = {
+      id: Math.round(Math.random() * 100000).toString(),
+      contestId,
+      username: '',
+      email,
+      name: '',
+    }
+    this.contestUserMap[contestId] = {
+      [newUser.id]: newUser,
+    }
+    return newUser
+  }
 }

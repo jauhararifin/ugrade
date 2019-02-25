@@ -88,4 +88,15 @@ export interface ContestService {
   ): Promise<Submission>
 
   getScoreboard(token: string): Promise<Scoreboard>
+
+  createContest(
+    email: string,
+    shortId: string,
+    name: string,
+    shortDescription: string,
+    description: string,
+    startTime: Date,
+    finishTime: Date,
+    permittedLanguages?: string[]
+  ): Promise<Contest>
 }

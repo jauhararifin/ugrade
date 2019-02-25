@@ -1,4 +1,4 @@
-import { AuthService, ForbiddenActionError } from '../auth'
+import { ForbiddenActionError, InMemoryAuthService } from '../auth'
 import { NoSuchProblem } from '../problem'
 import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
@@ -27,7 +27,7 @@ import { Scoreboard } from './Scoreboard'
 import { Submission } from './Submission'
 
 export class InMemoryContestService implements ContestService {
-  private authService: AuthService
+  private authService: InMemoryAuthService
 
   private contests: Contest[] = []
   private contestProblemsMap: { [id: string]: string[] } = {}
@@ -37,7 +37,7 @@ export class InMemoryContestService implements ContestService {
 
   private languages: { [id: string]: Language } = {}
 
-  constructor(authService: AuthService) {
+  constructor(authService: InMemoryAuthService) {
     this.authService = authService
 
     this.contests = contests.slice()
@@ -422,5 +422,37 @@ export class InMemoryContestService implements ContestService {
       lastUpdated: new Date(),
       entries: [],
     }
+  }
+
+  async createContest(
+    email: string,
+    shortId: string,
+    name: string,
+    shortDescription: string,
+    description: string,
+    startTime: Date,
+    finishTime: Date,
+    permittedLanguages?: string[]
+  ): Promise<Contest> {
+    if (!permittedLanguages) permittedLanguages = Object.keys(this.languages)
+    if (permittedLanguages.filter(id => !this.languages[id]).pop()) {
+      throw new NoSuchLanguage('No Such Language')
+    }
+    const langs = permittedLanguages.map(id => this.languages[id])
+
+    const newContest: Contest = {
+      id: (Math.random() * 100000).toString(),
+      shortId,
+      name,
+      shortDescription,
+      description,
+      startTime,
+      finishTime,
+      freezed: false,
+      permittedLanguages: langs,
+    }
+    this.contests.push(newContest)
+    await this.authService.registerContestAdmin(newContest.id, email)
+    return newContest
   }
 }
