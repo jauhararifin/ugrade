@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
@@ -10,7 +9,7 @@ import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
 import { AuthError } from '../../../services/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { ContestInfo } from '../../../stores/Contest'
-import { resetAction } from '../actions'
+import { resetAccountAction, resetAction } from '../actions'
 import { forgotPasswordAction, signinAction } from './actions'
 import EnterPasswordFormView from './EnterPasswordFormView'
 
@@ -82,6 +81,10 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
         {...props}
         contest={contest}
         gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
+        gotoAnotherAccount={this.props.dispatch.bind(
+          this,
+          resetAccountAction()
+        )}
         forgotPassword={this.handleForgotPassword}
       />
     )

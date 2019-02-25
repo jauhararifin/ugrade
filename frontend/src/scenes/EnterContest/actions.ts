@@ -10,3 +10,10 @@ export function resetAction(): AppThunkAction {
     dispatch(setSignedOut())
   }
 }
+
+export function resetAccountAction(): AppThunkAction {
+  return async (dispatch, _getState, _extras) => {
+    dispatch(push('/enter-contest/enter-email'))
+    dispatch(setSignedOut())
+  }
+}

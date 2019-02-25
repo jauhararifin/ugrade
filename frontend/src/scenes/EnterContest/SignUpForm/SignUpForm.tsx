@@ -12,7 +12,7 @@ import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
 import { AuthError } from '../../../services/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { ContestInfo } from '../../../stores/Contest'
-import { resetAction } from '../actions'
+import { resetAccountAction, resetAction } from '../actions'
 import { signupAction } from './actions'
 import { SignUpFormValue } from './SignUpForm'
 import { SignUpFormView } from './SignUpFormView'
@@ -102,6 +102,10 @@ class SignUpForm extends React.Component<SignUpFormProps> {
         {...props}
         contest={contest}
         gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
+        gotoAnotherAccount={this.props.dispatch.bind(
+          this,
+          resetAccountAction()
+        )}
       />
     )
     return (

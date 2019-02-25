@@ -1,10 +1,10 @@
 import {
   Button,
   Card,
+  Divider,
   FormGroup,
   InputGroup,
   Intent,
-  Switch,
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
@@ -15,6 +15,7 @@ export interface ResetPasswordFormViewProps
   extends FormikProps<ResetPasswordFormValue> {
   contest: ContestInfo
   gotoAnotherContest: () => any
+  gotoAnotherAccount: () => any
 }
 
 export const ResetPasswordFormView: React.FunctionComponent<
@@ -29,6 +30,7 @@ export const ResetPasswordFormView: React.FunctionComponent<
   touched,
   contest,
   gotoAnotherContest,
+  gotoAnotherAccount,
 }) => (
   <form onSubmit={handleSubmit}>
     <Card className='reset-password-panel'>
@@ -86,8 +88,10 @@ export const ResetPasswordFormView: React.FunctionComponent<
       >
         {isSubmitting ? 'Resetting...' : 'Reset'}
       </Button>
-      <div className='goto-another-contest'>
+      <div className='bottom-action'>
         <a onClick={gotoAnotherContest}>Go To Another Contest</a>
+        <Divider />
+        <a onClick={gotoAnotherAccount}>Change Account</a>
       </div>
     </Card>
   </form>

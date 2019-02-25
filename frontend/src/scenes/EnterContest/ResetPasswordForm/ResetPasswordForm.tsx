@@ -12,7 +12,7 @@ import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
 import { AuthError } from '../../../services/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { ContestInfo } from '../../../stores/Contest'
-import { resetAction } from '../actions'
+import { resetAccountAction, resetAction } from '../actions'
 import { resetPasswordAction } from './actions'
 import { ResetPasswordFormValue } from './ResetPasswordForm'
 import { ResetPasswordFormView } from './ResetPasswordFormView'
@@ -75,6 +75,10 @@ class ResetPasswordForm extends React.Component<ResetPasswordFormProps> {
         {...props}
         contest={contest}
         gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
+        gotoAnotherAccount={this.props.dispatch.bind(
+          this,
+          resetAccountAction()
+        )}
       />
     )
     return (

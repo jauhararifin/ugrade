@@ -19,6 +19,7 @@ export interface EnterPasswordFormViewProps
   extends FormikProps<EnterPasswordFormValue> {
   contest: ContestInfo
   gotoAnotherContest: () => any
+  gotoAnotherAccount: () => any
   forgotPassword: (setSubmitting: (isSubmitting: boolean) => void) => any
 }
 
@@ -37,7 +38,12 @@ const EnterPasswordFormView: React.FunctionComponent<
     contest,
     gotoAnotherContest,
     forgotPassword,
+    gotoAnotherAccount,
   } = props
+  const forgotPasswordClick = () => {
+    setSubmitting(true)
+    forgotPassword(setSubmitting)
+  }
   return (
     <form className='enter-password-panel' onSubmit={handleSubmit}>
       <Card>
@@ -84,12 +90,19 @@ const EnterPasswordFormView: React.FunctionComponent<
         >
           {isSubmitting ? 'Signing in...' : 'Sign In'}
         </Button>
+        <Button
+          className='forgot-password-button'
+          disabled={isSubmitting}
+          fill={true}
+          large={true}
+          onClick={forgotPasswordClick}
+        >
+          {isSubmitting ? 'Resetting...' : 'I Forgot My Password'}
+        </Button>
         <div className='bottom-action'>
-          <a onClick={forgotPassword.bind(null, setSubmitting)}>
-            I Forgot My Password
-          </a>
-          <Divider />
           <a onClick={gotoAnotherContest}>Go To Another Contest</a>
+          <Divider />
+          <a onClick={gotoAnotherAccount}>Change Account</a>
         </div>
       </Card>
     </form>

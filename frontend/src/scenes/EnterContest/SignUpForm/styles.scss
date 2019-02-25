@@ -5,7 +5,9 @@
     display: flex;
     justify-content: space-between;
   }
-  .goto-another-contest {
+  .bottom-action {
+    display: flex;
+    justify-content: center;
     margin-top: 10px;
   }
 }

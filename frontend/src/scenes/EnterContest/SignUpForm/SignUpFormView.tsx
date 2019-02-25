@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  Divider,
   FormGroup,
   InputGroup,
   Intent,
@@ -14,6 +15,7 @@ import { SignUpFormValue } from './SignUpForm'
 export interface SignUpFormViewProps extends FormikProps<SignUpFormValue> {
   contest: ContestInfo
   gotoAnotherContest: () => any
+  gotoAnotherAccount: () => any
 }
 
 export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
@@ -27,6 +29,7 @@ export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
   touched,
   contest,
   gotoAnotherContest,
+  gotoAnotherAccount,
 }) => (
   <form onSubmit={handleSubmit}>
     <Card className='signup-panel'>
@@ -130,8 +133,10 @@ export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
       >
         {isSubmitting ? 'Signing Up...' : 'Sign Up'}
       </Button>
-      <div className='goto-another-contest'>
+      <div className='bottom-action'>
         <a onClick={gotoAnotherContest}>Go To Another Contest</a>
+        <Divider />
+        <a onClick={gotoAnotherAccount}>Change Account</a>
       </div>
     </Card>
   </form>
