@@ -1,6 +1,6 @@
-import { UserService } from './UserService'
-import { UserProfile, GenderType, ShirtSizeType } from './UserProfile'
 import { AuthService } from '../auth'
+import { GenderType, ShirtSizeType, UserProfile } from './UserProfile'
+import { UserService } from './UserService'
 
 export class InMemoryUserService implements UserService {
   private authService: AuthService

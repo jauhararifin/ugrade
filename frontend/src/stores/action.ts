@@ -1,4 +1,5 @@
 import { RouterAction } from 'connected-react-router'
+
 import { AuthAction } from './Auth'
 import { ContestAction } from './Contest'
 import { ServerStatusAction } from './ServerStatus'

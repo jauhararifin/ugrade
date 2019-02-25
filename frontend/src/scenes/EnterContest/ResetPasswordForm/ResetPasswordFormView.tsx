@@ -8,6 +8,7 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
+
 import { ContestInfo } from '../../../stores/Contest'
 import { ResetPasswordFormValue } from './ResetPasswordForm'
 

@@ -1,10 +1,10 @@
-import { User } from './User'
 import {
-  ContestArkav4Qual,
   ContestArkav4Final,
-  ContestArkav5Qual,
+  ContestArkav4Qual,
   ContestArkav5Final,
+  ContestArkav5Qual,
 } from '../contest/fixtures'
+import { User } from './User'
 
 export const UserTest1: User = {
   id: '1',

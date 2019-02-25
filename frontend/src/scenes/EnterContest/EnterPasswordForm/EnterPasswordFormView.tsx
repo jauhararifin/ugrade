@@ -8,7 +8,7 @@ import {
   Switch,
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 
 import './styles.css'
 
@@ -39,11 +39,18 @@ const EnterPasswordFormView: React.FunctionComponent<
     gotoAnotherContest,
     forgotPassword,
     gotoAnotherAccount,
+    submitForm,
   } = props
   const forgotPasswordClick = () => {
     setSubmitting(true)
     forgotPassword(setSubmitting)
+    setforgotPasswordSubmit(true)
   }
+  const signinClick = () => {
+    setforgotPasswordSubmit(false)
+    submitForm()
+  }
+  const [forgotPasswordSubmit, setforgotPasswordSubmit] = useState(false)
   return (
     <form className='enter-password-panel' onSubmit={handleSubmit}>
       <Card>
@@ -82,13 +89,13 @@ const EnterPasswordFormView: React.FunctionComponent<
           </div>
         </div>
         <Button
-          type='submit'
           disabled={isSubmitting}
           fill={true}
           large={true}
           intent={Intent.SUCCESS}
+          onClick={signinClick}
         >
-          {isSubmitting ? 'Signing in...' : 'Sign In'}
+          {isSubmitting && !forgotPasswordSubmit ? 'Signing in...' : 'Sign In'}
         </Button>
         <Button
           className='forgot-password-button'
@@ -97,7 +104,9 @@ const EnterPasswordFormView: React.FunctionComponent<
           large={true}
           onClick={forgotPasswordClick}
         >
-          {isSubmitting ? 'Resetting...' : 'I Forgot My Password'}
+          {isSubmitting && forgotPasswordSubmit
+            ? 'Resetting...'
+            : 'I Forgot My Password'}
         </Button>
         <div className='bottom-action'>
           <a onClick={gotoAnotherContest}>Go To Another Contest</a>

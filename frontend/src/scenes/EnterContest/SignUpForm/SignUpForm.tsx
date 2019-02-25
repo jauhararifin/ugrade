@@ -1,14 +1,13 @@
-import { push } from 'connected-react-router'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
+import { connect } from 'react-redux'
 import { compose } from 'redux'
 import * as yup from 'yup'
 
 import './styles.css'
 
-import { connect } from 'react-redux'
+import ActionToaster from '../../../helpers/ActionToaster/ActionToaster'
 import { publicOnly } from '../../../helpers/auth'
-import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
 import { AuthError } from '../../../services/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { ContestInfo } from '../../../stores/Contest'

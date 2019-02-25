@@ -1,4 +1,5 @@
 import { push } from 'connected-react-router'
+
 import { AppThunkAction } from '../../../stores'
 import { setMe } from '../../../stores/Auth'
 import { setRegistered } from '../../../stores/Contest'

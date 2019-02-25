@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import * as yup from 'yup'
 
-import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
+import ActionToaster from '../../../helpers/ActionToaster/ActionToaster'
 import { AppState } from '../../../stores'
 import { setProxy } from '../../../stores/Setting'
 import { ProxySettingFormView } from './ProxySettingFormView'

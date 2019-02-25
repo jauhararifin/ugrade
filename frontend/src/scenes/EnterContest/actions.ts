@@ -1,4 +1,5 @@
 import { push } from 'connected-react-router'
+
 import { AppThunkAction } from '../../stores'
 import { setSignedOut } from '../../stores/Auth'
 import { unsetContest } from '../../stores/Contest'

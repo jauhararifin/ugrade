@@ -8,7 +8,6 @@ import logger from 'redux-logger'
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
 import { History } from 'history'
-import ErrorToaster from '../middlewares/ErrorToaster/ErrorToaster'
 import { AuthService } from '../services/auth'
 import { ContestService } from '../services/contest/ContestService'
 import { ProblemService } from '../services/problem'
@@ -53,7 +52,6 @@ export const createStore = (
     compose(
       applyMiddleware(
         routerMiddleware(history),
-        // ErrorToaster,
         logger,
         thunk.withExtraArgument(thunkExtraArguments)
       ),
