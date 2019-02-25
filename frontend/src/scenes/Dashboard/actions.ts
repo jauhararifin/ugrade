@@ -1,3 +1,7 @@
+import {
+  ProblemIdsSubscribeCallback,
+  ProblemIdsUnsubscribeFunction,
+} from '../../services/contest/ContestService'
 import { AppThunkAction } from '../../stores'
 import {
   ContestInfo,
@@ -70,7 +74,7 @@ export const getMyContestAction = (): AppThunkAction<ContestInfo> => {
 //   }
 // }
 
-export const getContestProblems = (): AppThunkAction<Problem[]> => {
+export const getProblemsAction = (): AppThunkAction<Problem[]> => {
   return async (dispatch, getState, { problemService, contestService }) => {
     const token = getState().auth.token
     const problemIds = await contestService.getProblemIds(token)
@@ -81,23 +85,17 @@ export const getContestProblems = (): AppThunkAction<Problem[]> => {
         order: problemIds.indexOf(prob.id),
       })
     )
-    console.log(result)
     dispatch(setProblems(result))
     return result
   }
 }
 
-// export const subscribeContestProblemIds = (
-//   contest: Contest,
+// export const subscribeProblemIds = (
 //   callback: ProblemIdsSubscribeCallback
 // ): AppThunkAction<ProblemIdsUnsubscribeFunction> => {
 //   return async (_dispatch, getState, { contestService }) => {
 //     const token = getState().auth.token
-//     return contestService.subscribeContestProblemIds(
-//       token,
-//       contest.id,
-//       callback
-//     )
+//     return contestService.subscribeProblemIds(token, contest.id, callback)
 //   }
 // }
 

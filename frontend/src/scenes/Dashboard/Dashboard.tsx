@@ -8,8 +8,9 @@ import { contestOnly } from '../../helpers/auth'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import { ContestInfo } from '../../stores/Contest'
 import { setTitle } from '../../stores/Title'
-import { getContestProblems, getMyContestAction } from './actions'
+import { getMyContestAction, getProblemsAction } from './actions'
 import { DashboardView } from './DashboardView'
+import Overview from './Overview'
 
 export interface DashboardSceneRoute {
   contestId: string
@@ -63,7 +64,7 @@ export class DashboardScene extends Component<DashboardSceneProps> {
   // }
 
   initializeProblems = async () => {
-    await this.props.dispatch(getContestProblems())
+    await this.props.dispatch(getProblemsAction())
     // this.loadCurrentProblem()
     // this.unsubscribeContestProblemIds = await this.props.dispatch(
     //   subscribeContestProblemIds(contest, this.problemIdsUpdated)
@@ -125,12 +126,12 @@ export class DashboardScene extends Component<DashboardSceneProps> {
             key={this.props.location.pathname}
           >
             <Switch location={this.props.location}>
-              {/* <Route path='/contest/' exact={true} component={Overview} /> */}
-              {/* <Route
+              <Route path='/contest/' exact={true} component={Overview} />
+              <Route
                 path='/contest/overview'
                 exact={true}
                 component={Overview}
-              /> */}
+              />
               {/* <Route
                 path='/contest/announcements'
                 exact={true}
