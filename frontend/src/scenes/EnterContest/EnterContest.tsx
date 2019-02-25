@@ -14,7 +14,7 @@ export interface EnterContestProps {
   location: Location
 }
 
-class SignIn extends React.Component<EnterContestProps> {
+class EnterContest extends React.Component<EnterContestProps> {
   componentDidMount() {
     this.props.dispatch(setTitle('UGrade | Enter Contest'))
   }
@@ -27,4 +27,4 @@ export default compose<ComponentType>(
   publicOnly(),
   connect(),
   withRouter
-)(SignIn)
+)(EnterContest)

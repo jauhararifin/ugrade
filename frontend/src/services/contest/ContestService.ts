@@ -1,3 +1,4 @@
+import { User } from '../auth'
 import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
 import { Contest, Language } from './Contest'
@@ -98,5 +99,5 @@ export interface ContestService {
     startTime: Date,
     finishTime: Date,
     permittedLanguages?: string[]
-  ): Promise<Contest>
+  ): Promise<[Contest, User]>
 }

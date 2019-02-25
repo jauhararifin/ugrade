@@ -1,4 +1,4 @@
-import { ForbiddenActionError, InMemoryAuthService } from '../auth'
+import { ForbiddenActionError, InMemoryAuthService, User } from '../auth'
 import { NoSuchProblem } from '../problem'
 import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
@@ -14,7 +14,7 @@ import {
   SubmissionSubscribeCallback,
   SubmissionUnsubscribeFunction,
 } from './ContestService'
-import { NoSuchClarification, NoSuchContest } from './errors'
+import { ContestIdTaken, NoSuchClarification, NoSuchContest } from './errors'
 import { NoSuchLanguage } from './errors/NoSuchLanguage'
 import {
   contestAnnouncementsMap,
@@ -433,15 +433,18 @@ export class InMemoryContestService implements ContestService {
     startTime: Date,
     finishTime: Date,
     permittedLanguages?: string[]
-  ): Promise<Contest> {
+  ): Promise<[Contest, User]> {
     if (!permittedLanguages) permittedLanguages = Object.keys(this.languages)
     if (permittedLanguages.filter(id => !this.languages[id]).pop()) {
       throw new NoSuchLanguage('No Such Language')
     }
+    if (this.contests.filter(c => c.shortId === shortId).pop()) {
+      throw new ContestIdTaken('Contest ID Already Taken')
+    }
     const langs = permittedLanguages.map(id => this.languages[id])
 
     const newContest: Contest = {
-      id: (Math.random() * 100000).toString(),
+      id: Math.round(Math.random() * 100000).toString(),
       shortId,
       name,
       shortDescription,
@@ -452,7 +455,10 @@ export class InMemoryContestService implements ContestService {
       permittedLanguages: langs,
     }
     this.contests.push(newContest)
-    await this.authService.registerContestAdmin(newContest.id, email)
-    return newContest
+    const user = await this.authService.registerContestAdmin(
+      newContest.id,
+      email
+    )
+    return [newContest, user]
   }
 }

@@ -8,6 +8,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import './styles.css'
 
 import { AppState } from '../stores'
+import CreateContest from './CreateContest'
 import EnterContest from './EnterContest/EnterContest'
 import Home from './Home'
 import Setting from './Setting'
@@ -27,6 +28,7 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
           <Switch location={location}>
             <Route path='/' exact={true} component={Home} />
             <Route path='/enter-contest' component={EnterContest} />
+            <Route path='/create-contest' component={CreateContest} />
             <Route path='/setting' component={Setting} />
             {/* <Route path='/account' exact={true} component={MyAccount} /> */}
             {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
