@@ -1,0 +1,40 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
+.contest-panel {
+  .contest-sidebar {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 360px;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    .contest-status-bottom {
+      display: flex;
+      .freezed > * {
+        color: $pt-intent-warning;
+      }
+      .contest-status-rank {
+        margin-right: 10px;
+        padding: 10px 40px;
+      }
+      .contest-status-time {
+        flex-grow: 1;
+        padding: 10px;
+      }
+    }
+    .contest-menu,
+    .contest-submit-solution,
+    .contest-menu {
+      margin-top: 10px;
+      .menu-item {
+        display: flex;
+        justify-content: space-between;
+        .menu-title {
+          text-align: left;
+        }
+        .menu-tag {
+          text-align: right;
+        }
+      }
+    }
+  }
+}

@@ -6,9 +6,7 @@ export interface ContestSetProblems {
   problems: Problem[]
 }
 
-export function setCurrentContestProblems(
-  problems: Problem[]
-): ContestSetProblems {
+export function setProblems(problems: Problem[]): ContestSetProblems {
   return {
     type: ContestActionType.SetProblems,
     problems,

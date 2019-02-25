@@ -2,6 +2,7 @@ export const AUTH_IS_SIGNED_IN_KEY = 'auth.isSignedIn'
 export const AUTH_TOKEN_KEY = 'auth.token'
 
 export interface User {
+  id: string
   contestId: string
   username: string
   name: string

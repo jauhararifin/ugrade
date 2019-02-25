@@ -9,6 +9,7 @@ import './styles.css'
 
 import { AppState } from '../stores'
 import CreateContest from './CreateContest'
+import Dashboard from './Dashboard'
 import EnterContest from './EnterContest/EnterContest'
 import Home from './Home'
 import MyAccount from './MyAccount'
@@ -34,7 +35,7 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
             <Route path='/account' exact={true} component={MyAccount} />
             {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
             {/* <Route path='/contests' exact={true} component={Contests} /> */}
-            {/* <Route path='/contests/:contestId' component={ContestDetail} /> */}
+            <Route path='/contest' component={Dashboard} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>

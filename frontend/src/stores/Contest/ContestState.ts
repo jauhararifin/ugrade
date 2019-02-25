@@ -5,7 +5,7 @@ export enum ProblemType {
 
 export interface Problem {
   id: string
-  slug: string
+  shortId: string
   name: string
   statement: string
   order: number
@@ -68,9 +68,9 @@ export interface Grading {
 
 export interface Submission {
   id: string
-  contestId: number
-  problemId: number
-  languageId: number
+  contestId: string
+  problemId: string
+  languageId: string
   issuedTime: Date
   verdict: SubmissionVerdict
   sourceCode?: string

@@ -10,7 +10,7 @@ export class InMemoryProblemService implements ProblemService {
     this.problems = problems
   }
 
-  async getProblemById(id: string): Promise<Problem> {
+  async getProblemById(_token: string, id: string): Promise<Problem> {
     await new Promise(resolve => setTimeout(resolve, 1500))
     if (id.length === 0) throw new Error('Connection Error')
 
@@ -22,7 +22,7 @@ export class InMemoryProblemService implements ProblemService {
     throw new NoSuchProblem('No Such Problem')
   }
 
-  async getProblemByIds(ids: string[]): Promise<Problem[]> {
+  async getProblemByIds(_token: string, ids: string[]): Promise<Problem[]> {
     await new Promise(resolve => setTimeout(resolve, 1500))
     if (ids.length === 0) throw new Error('Connection Error')
 
