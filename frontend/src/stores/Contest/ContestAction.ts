@@ -1,14 +1,14 @@
 import { ContestReadAnnouncements } from './ContestReadAnnouncements'
 import { ContestSetAnnouncements } from './ContestSetAnnouncements'
 import { ContestSetClarifications } from './ContestSetClarrifications'
-import { ContestSetContest } from './ContestSetContest'
+import { ContestSetInfo } from './ContestSetInfo'
 import { ContestSetProblems } from './ContestSetProblems'
 import { ContestSetRegistered } from './ContestSetRegistered'
 import { ContestSetSubmissions } from './ContestSetSubmissions'
 import { ContestUnsetContest } from './ContestUnsetContest'
 
 export enum ContestActionType {
-  SetContest = 'CONTEST_SET_CONTEST',
+  SetInfo = 'CONTEST_SET_INFO',
   SetRegistered = 'CONTEST_SET_REGISTERED',
   UnsetContest = 'CONTEST_UNSET_CONTEST',
   SetAnnouncements = 'CONTEST_SET_ANNOUNCEMENTS',
@@ -19,7 +19,7 @@ export enum ContestActionType {
 }
 
 export type ContestAction =
-  | ContestSetContest
+  | ContestSetInfo
   | ContestSetRegistered
   | ContestUnsetContest
   | ContestSetAnnouncements

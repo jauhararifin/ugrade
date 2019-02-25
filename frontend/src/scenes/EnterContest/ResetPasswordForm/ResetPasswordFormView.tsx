@@ -13,7 +13,7 @@ import { ResetPasswordFormValue } from './ResetPasswordForm'
 
 export interface ResetPasswordFormViewProps
   extends FormikProps<ResetPasswordFormValue> {
-  contestInfo: ContestInfo
+  contest: ContestInfo
   gotoAnotherContest: () => any
 }
 
@@ -27,14 +27,14 @@ export const ResetPasswordFormView: React.FunctionComponent<
   errors,
   isSubmitting,
   touched,
-  contestInfo,
+  contest,
   gotoAnotherContest,
 }) => (
   <form onSubmit={handleSubmit}>
     <Card className='reset-password-panel'>
       <h2>Reset Password</h2>
-      <h3>{contestInfo.name}</h3>
-      <p>{contestInfo.shortDescription}</p>
+      <h3>{contest.name}</h3>
+      <p>{contest.shortDescription}</p>
       <FormGroup
         helperText={
           (touched.oneTimeCode && errors && errors.oneTimeCode) ||

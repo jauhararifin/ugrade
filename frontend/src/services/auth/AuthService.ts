@@ -2,14 +2,13 @@ import { User } from './User'
 
 export interface AuthService {
   /**
-   * Check whether the specified email is registered in a contest. Email is
-   * registered when invited by contest administrator.
+   * Get user information in a contest by their email.
    *
    * @param contestId - The contest id
    * @param email - The email
-   * @returns True if email is registered, false otherwise.
+   * @returns User's information.
    */
-  isRegistered(contestId: string, email: string): Promise<boolean>
+  getUserByEmail(contestId: string, email: string): Promise<User>
 
   /**
    * Sign in to specific contest. This will create session for user.

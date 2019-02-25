@@ -17,7 +17,7 @@ import { EnterPasswordFormValue } from './EnterPasswordForm'
 
 export interface EnterPasswordFormViewProps
   extends FormikProps<EnterPasswordFormValue> {
-  contestInfo: ContestInfo
+  contest: ContestInfo
   gotoAnotherContest: () => any
   forgotPassword: (setSubmitting: (isSubmitting: boolean) => void) => any
 }
@@ -34,7 +34,7 @@ const EnterPasswordFormView: React.FunctionComponent<
     submitCount,
     isSubmitting,
     setSubmitting,
-    contestInfo,
+    contest,
     gotoAnotherContest,
     forgotPassword,
   } = props
@@ -42,8 +42,8 @@ const EnterPasswordFormView: React.FunctionComponent<
     <form className='enter-password-panel' onSubmit={handleSubmit}>
       <Card>
         <h2>Sign In To</h2>
-        <h3>{contestInfo.name}</h3>
-        <p>{contestInfo.shortDescription}</p>
+        <h3>{contest.name}</h3>
+        <p>{contest.shortDescription}</p>
         <FormGroup
           helperText={submitCount > 0 && errors && errors.password}
           labelFor='enter-contest-input-password'

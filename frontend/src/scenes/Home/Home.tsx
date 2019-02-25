@@ -31,6 +31,6 @@ export class Home extends Component<HomeProps> {
 }
 
 export default compose<ComponentType>(
-  publicOnly('/contest'),
+  publicOnly(),
   connect()
 )(Home)

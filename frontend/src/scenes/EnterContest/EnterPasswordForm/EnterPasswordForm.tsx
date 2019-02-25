@@ -1,10 +1,17 @@
+import { push } from 'connected-react-router'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
+import { connect } from 'react-redux'
 import { compose } from 'redux'
 import * as yup from 'yup'
 
 import { publicOnly } from '../../../helpers/auth'
+import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
+import { AuthError } from '../../../services/auth'
+import { AppState, AppThunkDispatch } from '../../../stores'
 import { ContestInfo } from '../../../stores/Contest'
+import { resetAction } from '../actions'
+import { forgotPasswordAction, signinAction } from './actions'
 import EnterPasswordFormView from './EnterPasswordFormView'
 
 export interface EnterPasswordFormValue {
@@ -13,11 +20,8 @@ export interface EnterPasswordFormValue {
 }
 
 export interface EnterPasswordFormProps {
-  onSubmit: (
-    values: EnterPasswordFormValue,
-    { setSubmitting }: FormikActions<EnterPasswordFormValue>
-  ) => any
-  contestInfo: ContestInfo
+  contest?: ContestInfo
+  dispatch: AppThunkDispatch
   gotoAnotherContest: () => any
   forgotPassword: (setSubmitting: (val: boolean) => void) => any
 }
@@ -38,26 +42,65 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
     rememberMe: yup.boolean().required(),
   })
 
+  handleSubmit = async (
+    values: EnterPasswordFormValue,
+    { setSubmitting }: FormikActions<EnterPasswordFormValue>
+  ) => {
+    try {
+      await this.props.dispatch(
+        signinAction(values.password, values.rememberMe)
+      )
+    } catch (error) {
+      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      else throw error
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  componentDidMount() {
+    if (!this.props.contest) this.props.dispatch(resetAction())
+  }
+
+  handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
+    try {
+      await this.props.dispatch(forgotPasswordAction())
+    } catch (error) {
+      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      else throw error
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   render() {
+    const contest = this.props.contest
+    if (!contest) return <React.Fragment />
+
     const renderView = (props: FormikProps<EnterPasswordFormValue>) => (
       <EnterPasswordFormView
         {...props}
-        contestInfo={this.props.contestInfo}
-        gotoAnotherContest={this.props.gotoAnotherContest}
-        forgotPassword={this.props.forgotPassword}
+        contest={contest}
+        gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
+        forgotPassword={this.handleForgotPassword}
       />
     )
     return (
       <Formik
         initialValues={this.initialValue}
         validationSchema={this.validationSchema}
-        onSubmit={this.props.onSubmit}
+        onSubmit={this.handleSubmit}
         render={renderView}
       />
     )
   }
 }
 
-export default compose<ComponentType<EnterPasswordFormProps>>(publicOnly())(
-  EnterPasswordForm
-)
+const mapStateToProps = (state: AppState) => ({
+  contest: state.contest.info,
+})
+
+export default compose<ComponentType>(
+  publicOnly(),
+  connect(mapStateToProps)
+)(EnterPasswordForm)

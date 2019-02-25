@@ -53,7 +53,7 @@ export const createStore = (
     compose(
       applyMiddleware(
         routerMiddleware(history),
-        ErrorToaster,
+        // ErrorToaster,
         logger,
         thunk.withExtraArgument(thunkExtraArguments)
       ),

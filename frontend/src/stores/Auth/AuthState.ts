@@ -1,6 +1,5 @@
 export const AUTH_IS_SIGNED_IN_KEY = 'auth.isSignedIn'
 export const AUTH_TOKEN_KEY = 'auth.token'
-export const AUTH_REMEMBER_ME_KEY = 'auth.rememberMe'
 
 export interface User {
   contestId: string
@@ -12,7 +11,6 @@ export interface User {
 export interface AuthState {
   isSignedIn: boolean
   token: string
-  rememberMe: boolean
   me?: User
 }
 
@@ -24,7 +22,4 @@ export const initialState: AuthState = {
     sessionStorage.getItem(AUTH_TOKEN_KEY) ||
     localStorage.getItem(AUTH_TOKEN_KEY) ||
     '',
-  rememberMe:
-    (sessionStorage.getItem(AUTH_REMEMBER_ME_KEY) ||
-      localStorage.getItem(AUTH_REMEMBER_ME_KEY)) === 'true',
 }

@@ -8,7 +8,7 @@ import { ContestInfo } from '../../../stores/Contest'
 import { EnterEmailFormValue } from './EnterEmailForm'
 
 export interface EnterEmailFormViewOwnProps {
-  contestInfo: ContestInfo
+  contest: ContestInfo
   gotoAnotherContest: () => any
 }
 
@@ -25,14 +25,14 @@ const EnterEmailFormView: React.FunctionComponent<EnterEmailFormViewProps> = ({
   errors,
   submitCount,
   isSubmitting,
-  contestInfo,
+  contest,
   gotoAnotherContest,
 }) => (
   <form className='enter-email-panel' onSubmit={handleSubmit}>
     <Card>
       <h2>Sign In To</h2>
-      <h3>{contestInfo.name}</h3>
-      <p>{contestInfo.shortDescription}</p>
+      <h3>{contest.name}</h3>
+      <p>{contest.shortDescription}</p>
       <FormGroup
         helperText={submitCount > 0 && errors && errors.email}
         labelFor='enter-contest-input-email'

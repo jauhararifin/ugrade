@@ -1,12 +1,19 @@
+import { push } from 'connected-react-router'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
+import { compose } from 'redux'
 import * as yup from 'yup'
 
 import './styles.css'
 
-import { compose } from 'redux'
+import { connect } from 'react-redux'
 import { publicOnly } from '../../../helpers/auth'
+import ActionToaster from '../../../middlewares/ErrorToaster/ActionToaster'
+import { AuthError } from '../../../services/auth'
+import { AppState, AppThunkDispatch } from '../../../stores'
 import { ContestInfo } from '../../../stores/Contest'
+import { resetAction } from '../actions'
+import { signupAction } from './actions'
 import { SignUpFormValue } from './SignUpForm'
 import { SignUpFormView } from './SignUpFormView'
 
@@ -19,12 +26,8 @@ export interface SignUpFormValue {
 }
 
 export interface SignUpFormProps {
-  onSubmit: (
-    values: SignUpFormValue,
-    { setSubmitting }: FormikActions<SignUpFormValue>
-  ) => any
-  contestInfo: ContestInfo
-  gotoAnotherContest: () => any
+  dispatch: AppThunkDispatch
+  contest: ContestInfo
 }
 
 class SignUpForm extends React.Component<SignUpFormProps> {
@@ -64,18 +67,47 @@ class SignUpForm extends React.Component<SignUpFormProps> {
     rememberMe: yup.boolean().required(),
   })
 
+  componentDidMount() {
+    if (!this.props.contest) this.props.dispatch(resetAction())
+  }
+
+  handleSubmit = async (
+    values: SignUpFormValue,
+    { setSubmitting }: FormikActions<SignUpFormValue>
+  ) => {
+    try {
+      await this.props.dispatch(
+        signupAction(
+          values.username,
+          values.oneTimeCode,
+          values.password,
+          values.name,
+          values.rememberMe
+        )
+      )
+    } catch (error) {
+      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      else throw error
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   render() {
+    const contest = this.props.contest
+    if (!contest) return <React.Fragment />
+
     const renderView = (props: FormikProps<SignUpFormValue>) => (
       <SignUpFormView
         {...props}
-        contestInfo={this.props.contestInfo}
-        gotoAnotherContest={this.props.gotoAnotherContest}
+        contest={contest}
+        gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
       />
     )
     return (
       <Formik
         validationSchema={this.validationSchema}
-        onSubmit={this.props.onSubmit}
+        onSubmit={this.handleSubmit}
         initialValues={this.initialValues}
         render={renderView}
       />
@@ -83,4 +115,11 @@ class SignUpForm extends React.Component<SignUpFormProps> {
   }
 }
 
-export default compose<ComponentType<SignUpFormProps>>(publicOnly())(SignUpForm)
+const mapStateToProps = (state: AppState) => ({
+  contest: state.contest.info,
+})
+
+export default compose<ComponentType<SignUpFormProps>>(
+  publicOnly(),
+  connect(mapStateToProps)
+)(SignUpForm)
