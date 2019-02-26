@@ -1,0 +1,3 @@
+import CreateClarificationEntryForm from './CreateClarificationEntryForm'
+
+export default CreateClarificationEntryForm

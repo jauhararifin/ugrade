@@ -9,6 +9,7 @@ import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import { ContestInfo } from '../../stores/Contest'
 import { setTitle } from '../../stores/Title'
 import Announcements from './Announcements'
+import Clarifications from './Clarifications'
 import DashboardView from './DashboardView'
 import { useInfo } from './helpers'
 import Overview from './Overview/Overview'
@@ -45,6 +46,11 @@ export const Dashboard: FunctionComponent<DashboardProps> = ({
             <Route
               path='/contest/problems/:problemId'
               component={ProblemDetail}
+            />
+            <Route
+              path='/contest/clarifications'
+              exact={true}
+              component={Clarifications}
             />
           </Switch>
         </CSSTransition>
