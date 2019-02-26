@@ -8,6 +8,7 @@ import { contestOnly } from '../../helpers/auth'
 import { AppAction, AppState, AppThunkDispatch } from '../../stores'
 import { ContestInfo } from '../../stores/Contest'
 import { setTitle } from '../../stores/Title'
+import Announcements from './Announcements'
 import DashboardView from './DashboardView'
 import { useInfo } from './helpers'
 import Overview from './Overview/Overview'
@@ -35,6 +36,11 @@ export const Dashboard: FunctionComponent<DashboardProps> = ({
           <Switch location={location}>
             <Route path='/contest/' exact={true} component={Overview} />
             <Route path='/contest/overview' exact={true} component={Overview} />
+            <Route
+              path='/contest/announcements'
+              exact={true}
+              component={Announcements}
+            />
             <Route path='/contest/problems' exact={true} component={Problems} />
             <Route
               path='/contest/problems/:problemId'
