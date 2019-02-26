@@ -15,14 +15,18 @@ export const setProfile = (
   return async (dispatch, getState, { authService, userService }) => {
     const token = getState().auth.token
     let currentMe = getState().auth.me
+    let stillRelevant = true
     if (!currentMe) {
       currentMe = await authService.getMe(token)
-      dispatch(setMe(currentMe))
+      stillRelevant = getState().auth.token === token
+      if (stillRelevant) dispatch(setMe(currentMe))
     }
 
-    await userService.setMyProfile(token, name, gender, shirtSize, address)
+    if (stillRelevant) {
+      await userService.setMyProfile(token, name, gender, shirtSize, address)
 
-    dispatch(setMe({ ...currentMe, name }))
-    dispatch(setUserProfile(gender, shirtSize, address))
+      dispatch(setMe({ ...currentMe, name }))
+      dispatch(setUserProfile(gender, shirtSize, address))
+    }
   }
 }

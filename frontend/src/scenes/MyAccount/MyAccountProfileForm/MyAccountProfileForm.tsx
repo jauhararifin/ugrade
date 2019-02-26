@@ -8,7 +8,6 @@ import ActionToaster from '../../../helpers/ActionToaster'
 import { contestOnly } from '../../../helpers/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { User } from '../../../stores/Auth'
-import { setTitle } from '../../../stores/Title'
 import {
   GenderType,
   ShirtSizeType,
@@ -49,10 +48,6 @@ export class MyAccountProfileForm extends React.Component<
       .oneOf(genderValues),
     address: yup.string().label('Name'),
   })
-
-  componentDidMount() {
-    this.props.dispatch(setTitle('UGrade | My Account'))
-  }
 
   handleSubmit = async (
     values: MyAccountProfileFormValue,

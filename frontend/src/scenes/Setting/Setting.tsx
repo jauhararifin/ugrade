@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
@@ -11,18 +11,16 @@ export interface SettingProps {
   signedIn: boolean
 }
 
-export class Setting extends React.Component<SettingProps> {
-  componentDidMount() {
-    this.props.dispatch(setTitle('UGrade | Settings'))
-  }
-  render() {
-    return (
-      <SettingView
-        showCreateContest={!this.props.signedIn}
-        showEnterContest={!this.props.signedIn}
-      />
-    )
-  }
+export const Setting: FunctionComponent<SettingProps> = ({
+  signedIn,
+  dispatch,
+}) => {
+  useEffect(() => {
+    dispatch(setTitle('UGrade | Settings'))
+  })
+  return (
+    <SettingView showCreateContest={!signedIn} showEnterContest={!signedIn} />
+  )
 }
 
 const mapStateToProps = (state: AppState) => ({

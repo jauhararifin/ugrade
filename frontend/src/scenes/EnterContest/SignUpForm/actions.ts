@@ -22,7 +22,16 @@ export function signupAction(
         password,
         name
       )
-      dispatch(setSignedIn(token, rememberMe))
+      const nowContest = getState().contest.info
+      const nowUser = getState().auth.me
+      const stillRelevant =
+        nowContest &&
+        nowUser &&
+        nowContest.id === contest.id &&
+        nowUser.id === user.id
+      if (stillRelevant) {
+        dispatch(setSignedIn(token, rememberMe))
+      }
       dispatch(push('/contest'))
     } else if (!contest) {
       dispatch(push('/enter-contest/'))

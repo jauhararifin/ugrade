@@ -16,7 +16,8 @@ export const getMyContestAction = (): AppThunkAction<ContestInfo> => {
     if (!contest) {
       const token = getState().auth.token
       const myContest = await contestService.getMyContest(token)
-      dispatch(setInfo(myContest))
+      const stillRelevant = getState().auth.token === token
+      if (stillRelevant) dispatch(setInfo(myContest))
       return myContest
     }
     return contest
