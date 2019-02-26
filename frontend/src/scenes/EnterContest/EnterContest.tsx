@@ -1,5 +1,5 @@
 import { Location } from 'history'
-import React, { ComponentType } from 'react'
+import React, { ComponentType, FunctionComponent, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { compose } from 'redux'
@@ -14,13 +14,14 @@ export interface EnterContestProps {
   location: Location
 }
 
-class EnterContest extends React.Component<EnterContestProps> {
-  componentDidMount() {
-    this.props.dispatch(setTitle('UGrade | Enter Contest'))
-  }
-  render() {
-    return <EnterContestView location={this.props.location} />
-  }
+const EnterContest: FunctionComponent<EnterContestProps> = ({
+  dispatch,
+  location,
+}) => {
+  useEffect(() => {
+    dispatch(setTitle('UGrade | Enter Contest'))
+  })
+  return <EnterContestView location={location} />
 }
 
 export default compose<ComponentType>(

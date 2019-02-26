@@ -15,22 +15,18 @@ export interface MyAccountViewProps {
 
 const MyAccountViewFormSkeleton: FunctionComponent = () => (
   <React.Fragment>
-    {[0, 0, 0].map(() => (
-      <React.Fragment>
-        <h3 className='bp3-skeleton'>Account Profile</h3>
-        <FormGroup className='bp3-skeleton' label='Fake'>
-          <Label>
-            <InputGroup placeholder='Name' />
-          </Label>
-          <Label>
-            <InputGroup placeholder='Name' />
-          </Label>
-          <Label>
-            <InputGroup placeholder='Name' />
-          </Label>
-        </FormGroup>
-      </React.Fragment>
-    ))}
+    <h3 className='bp3-skeleton'>Account Profile</h3>
+    <FormGroup className='bp3-skeleton' label='Fake'>
+      <Label>
+        <InputGroup placeholder='Name' />
+      </Label>
+      <Label>
+        <InputGroup placeholder='Name' />
+      </Label>
+      <Label>
+        <InputGroup placeholder='Name' />
+      </Label>
+    </FormGroup>
   </React.Fragment>
 )
 
