@@ -18,8 +18,8 @@ import { push } from 'connected-react-router'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-
 import { compose } from 'redux'
+
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { User } from '../../../stores/Auth'
 import { useMe } from '../helpers'

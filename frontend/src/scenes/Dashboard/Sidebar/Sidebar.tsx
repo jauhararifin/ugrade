@@ -36,7 +36,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   location,
 }) => {
   const getCurrentMenu = (): Menu => {
-    const match = location.pathname.match(/contests\/([a-z]+)/)
+    const match = location.pathname.match(/contest\/([a-z]+)/)
     if (match && match[1]) {
       switch (match[1]) {
         case 'announcements':

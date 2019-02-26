@@ -11,6 +11,7 @@ import { setTitle } from '../../stores/Title'
 import DashboardView from './DashboardView'
 import { useInfo } from './helpers'
 import Overview from './Overview/Overview'
+import Problems from './Problems/Problems'
 
 export interface DashboardProps extends RouteComponentProps {
   contest?: ContestInfo
@@ -33,6 +34,7 @@ export const Dashboard: FunctionComponent<DashboardProps> = ({
           <Switch location={location}>
             <Route path='/contest/' exact={true} component={Overview} />
             <Route path='/contest/overview' exact={true} component={Overview} />
+            <Route path='/contest/problems' exact={true} component={Problems} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>

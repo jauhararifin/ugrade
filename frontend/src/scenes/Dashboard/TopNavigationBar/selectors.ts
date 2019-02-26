@@ -13,7 +13,7 @@ export const selectBreadcrumb = (state: AppState): IBreadcrumbProps[] => {
 
   if (item === 'contest' && state.contest.info) {
     result.push({
-      href: `contest/`,
+      href: `/contest`,
       text: state.contest.info.name,
     })
     const menu = location.pop()
