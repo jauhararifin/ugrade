@@ -14,7 +14,8 @@ export const submitSolutionAction = (
       languageId,
       sourceCode
     )
-    dispatch(setSubmissions([submission]))
+    const stillRelevant = token === getState().auth.token
+    if (stillRelevant) dispatch(setSubmissions([submission]))
     return submission
   }
 }

@@ -16,7 +16,16 @@ export function resetPasswordAction(
         oneTimeCode,
         password
       )
-      dispatch(push('/enter-contest/enter-password'))
+      const nowContest = getState().contest.info
+      const nowUser = getState().auth.me
+      const stillRelevant =
+        nowContest &&
+        nowUser &&
+        nowContest.id === contest.id &&
+        nowUser.id === user.id
+      if (stillRelevant) {
+        dispatch(push('/enter-contest/enter-password'))
+      }
     } else if (!contest) {
       dispatch(push('/enter-contest/'))
     } else if (!user) {

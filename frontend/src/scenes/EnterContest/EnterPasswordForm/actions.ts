@@ -12,8 +12,11 @@ export function signinAction(
     const user = getState().auth.me
     if (contest && user) {
       const token = await authService.signin(contest.id, user.email, password)
-      dispatch(setSignedIn(token, rememberMe))
-      dispatch(push('/contest'))
+      const nowContest = getState().contest.info
+      if (nowContest && nowContest.id === contest.id) {
+        dispatch(setSignedIn(token, rememberMe))
+        dispatch(push('/contest'))
+      }
     } else if (!contest) {
       dispatch(push('/enter-contest/'))
     } else if (!user) {
@@ -28,7 +31,16 @@ export function forgotPasswordAction(): AppThunkAction {
     const user = getState().auth.me
     if (contest && user) {
       await authService.forgotPassword(contest.id, user.email)
-      dispatch(push('/enter-contest/reset-password'))
+      const nowContest = getState().contest.info
+      const nowUser = getState().auth.me
+      const stillRelevant =
+        nowContest &&
+        nowUser &&
+        nowContest.id === contest.id &&
+        nowUser.id === user.id
+      if (stillRelevant) {
+        dispatch(push('/enter-contest/reset-password'))
+      }
     } else if (!contest) {
       dispatch(push('/enter-contest/'))
     } else if (!user) {
