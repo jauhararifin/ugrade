@@ -24,13 +24,17 @@ const getServerClockAction = (): AppThunkAction => {
   }
 }
 
-export interface WithServerProps {
+export interface WSProps {
   localClock: Date
   serverClock?: Date
   dispatch: AppThunkDispatch
 }
 
-export interface WithServerState {
+export interface WSState {
+  serverClock?: Date
+}
+
+export interface WithServerProps {
   serverClock?: Date
 }
 
@@ -38,14 +42,11 @@ export const withServer = <P extends object>(
   Component: ComponentType<P>
 ): ComponentType<{ serverClock?: Date }> => {
   const reloadMs = 3 * 1000 // refetch every 5 minutes
-  class WithServer extends React.Component<
-    P & WithServerProps,
-    WithServerState
-  > {
+  class WithServer extends React.Component<P & WSProps, WSState> {
     private timer?: NodeJS.Timeout
     private timeToRefresh = reloadMs
 
-    constructor(props: P & WithServerProps) {
+    constructor(props: P & WSProps) {
       super(props)
       if (this.props.serverClock && this.props.localClock) {
         const currentServerClock =

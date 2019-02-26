@@ -1,13 +1,15 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { Component, ComponentType } from 'react'
-import * as yup from 'yup'
-
+import React, { ComponentType, Fragment, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import * as yup from 'yup'
+
 import ActionToaster from '../../../../helpers/ActionToaster'
+import { withServer, WithServerProps } from '../../../../helpers/server'
 import { ContestError } from '../../../../services/contest/errors'
 import { AppState, AppThunkDispatch } from '../../../../stores'
 import { ContestState } from '../../../../stores/Contest'
+import { useInfo, useProblems } from '../../helpers'
 import { submitSolutionAction } from './actions'
 import ContestSubmitFormView from './ContestSubmitFormView'
 
@@ -22,10 +24,18 @@ export interface ContestSubmitFormReduxProps {
   contest: ContestState
 }
 
-export type ContestSubmitFormProps = ContestSubmitFormReduxProps
+export type ContestSubmitFormProps = ContestSubmitFormReduxProps &
+  WithServerProps
 
-export class ContestSubmitForm extends Component<ContestSubmitFormProps> {
-  validationSchema = yup.object().shape({
+export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
+  dispatch,
+  contest,
+  serverClock,
+}) => {
+  useInfo(dispatch)
+  useProblems(dispatch)
+
+  const validationSchema = yup.object().shape({
     language: yup.string().required(),
     problem: yup.string().required(),
     sourceCode: yup
@@ -34,10 +44,9 @@ export class ContestSubmitForm extends Component<ContestSubmitFormProps> {
       .required(),
   })
 
-  getInitialValue = () => {
-    const langs =
-      this.props.contest.info && this.props.contest.info.permittedLanguages
-    const probs = this.props.contest.problems
+  const getInitialValue = () => {
+    const langs = contest.info && contest.info.permittedLanguages
+    const probs = contest.problems
     const prob =
       probs &&
       Object.values(probs)
@@ -51,15 +60,15 @@ export class ContestSubmitForm extends Component<ContestSubmitFormProps> {
     }
   }
 
-  handleSubmit = async (
+  const handleSubmit = async (
     values: ContestSubmitFormValue,
     { setSubmitting, resetForm }: FormikActions<ContestSubmitFormValue>
   ) => {
     try {
-      const { dispatch } = this.props
       await dispatch(
         submitSolutionAction(values.problem, values.language, values.sourceCode)
-      ).then(() => ActionToaster.showSuccessToast('Solution Submitted'))
+      )
+      ActionToaster.showSuccessToast('Solution Submitted')
     } catch (error) {
       if (error instanceof ContestError) ActionToaster.showErrorToast(error)
       else throw error
@@ -69,8 +78,11 @@ export class ContestSubmitForm extends Component<ContestSubmitFormProps> {
     }
   }
 
-  getProblems = (): Array<{ label: string; value: string }> => {
-    const problems = Object.values(this.props.contest.problems || {})
+  const getProblems = ():
+    | Array<{ label: string; value: string }>
+    | undefined => {
+    if (!contest.problems) return undefined
+    const problems = Object.values(contest.problems)
     return problems
       .sort((a, b) => a.order - b.order)
       .map(problem => ({
@@ -79,41 +91,51 @@ export class ContestSubmitForm extends Component<ContestSubmitFormProps> {
       }))
   }
 
-  getLanguages = (): Array<{ label: string; value: string }> => {
-    const info = this.props.contest.info
+  const getLanguages = ():
+    | Array<{ label: string; value: string }>
+    | undefined => {
+    const info = contest.info
     if (info) {
-      const languages = info.permittedLanguages || []
+      const languages = info.permittedLanguages
       return languages.map(lang => ({
         label: lang.name,
         value: lang.id,
       }))
     }
-    return []
+    return undefined
   }
 
-  render() {
-    const renderView = (props: FormikProps<ContestSubmitFormValue>) => (
-      <ContestSubmitFormView
-        avaiableLanguages={this.getLanguages()}
-        avaiableProblems={this.getProblems()}
-        {...props}
-      />
-    )
+  const renderView = (props: FormikProps<ContestSubmitFormValue>) => (
+    <ContestSubmitFormView
+      avaiableLanguages={getLanguages()}
+      avaiableProblems={getProblems()}
+      {...props}
+    />
+  )
+
+  const started =
+    serverClock && contest.info && serverClock >= contest.info.startTime
+  const ended =
+    serverClock && contest.info && serverClock >= contest.info.finishTime
+
+  if (started && !ended) {
     return (
       <Formik
-        initialValues={this.getInitialValue()}
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
+        initialValues={getInitialValue()}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
         render={renderView}
       />
     )
   }
+  return <Fragment />
 }
 
 const mapStateToProps = (state: AppState) => ({
   contest: state.contest,
 })
 
-export default compose<ComponentType>(connect(mapStateToProps))(
-  ContestSubmitForm
-)
+export default compose<ComponentType>(
+  withServer,
+  connect(mapStateToProps)
+)(ContestSubmitForm)

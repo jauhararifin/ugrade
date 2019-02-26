@@ -289,15 +289,8 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
         )}
       </div>
 
-      <div className={classnames(skeletonClass, 'contest-submit-solution')}>
-        {loading ? (
-          <p>{'Lorem ipsum'.repeat(30)}</p>
-        ) : (
-          contest &&
-          started &&
-          !ended &&
-          contest.problems && <ContestSubmitForm />
-        )}
+      <div className='contest-submit-solution'>
+        <ContestSubmitForm />
       </div>
     </div>
   )

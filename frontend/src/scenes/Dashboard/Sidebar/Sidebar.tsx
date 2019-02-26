@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router'
-import React, { Component, ComponentType } from 'react'
+import React, { ComponentType, FunctionComponent, useState } from 'react'
 import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { compose } from 'redux'
@@ -28,66 +28,58 @@ export interface SidebarState {
   menu: Menu
 }
 
-export class Sidebar extends Component<SidebarProps, SidebarState> {
-  constructor(props: SidebarProps) {
-    super(props)
-    this.state = { menu: this.getCurrentMenu() }
-  }
-
-  getCurrentMenu = () => {
-    let menu = Menu.Overview
-    const match = this.props.location.pathname.match(/contests\/([a-z]+)/)
+export const Sidebar: FunctionComponent<SidebarProps> = ({
+  contest,
+  me,
+  dispatch,
+  serverClock,
+  location,
+}) => {
+  const getCurrentMenu = (): Menu => {
+    const match = location.pathname.match(/contests\/([a-z]+)/)
     if (match && match[1]) {
       switch (match[1]) {
         case 'announcements':
-          menu = Menu.Announcements
-          break
+          return Menu.Announcements
         case 'problems':
-          menu = Menu.Problems
-          break
+          return Menu.Problems
         case 'clarifications':
-          menu = Menu.Clarifications
-          break
+          return Menu.Clarifications
         case 'submissions':
-          menu = Menu.Submissions
-          break
+          return Menu.Submissions
         case 'scoreboard':
-          menu = Menu.Scoreboard
-          break
+          return Menu.Scoreboard
       }
     }
-    return menu
+    return Menu.Overview
   }
 
-  onMenuChoosed = (menu: Menu) => {
-    this.setState({ menu })
+  const onMenuChoosed = (menu: Menu) => {
+    setCurrentMenu(menu)
     switch (menu) {
       case Menu.Overview:
-        return this.props.dispatch(push(`/contest`))
+        return dispatch(push(`/contest`))
       case Menu.Announcements:
-        return this.props.dispatch(push(`/contest/announcements`))
+        return dispatch(push(`/contest/announcements`))
       case Menu.Problems:
-        return this.props.dispatch(push(`/contest/problems`))
+        return dispatch(push(`/contest/problems`))
       case Menu.Clarifications:
-        return this.props.dispatch(push(`/contest/clarifications`))
+        return dispatch(push(`/contest/clarifications`))
       case Menu.Submissions:
-        return this.props.dispatch(push(`/contest/submissions`))
+        return dispatch(push(`/contest/submissions`))
       case Menu.Scoreboard:
-        return this.props.dispatch(push(`/contest/scoreboard`))
+        return dispatch(push(`/contest/scoreboard`))
     }
   }
 
-  newAnnouncementCount = () => {
-    const contest = this.props.contest
+  const newAnnouncementCount = () => {
     if (contest && contest.announcements) {
       return Object.values(contest.announcements).filter(x => !x.read).length
     }
     return 0
   }
 
-  newClarificationCount = () => {
-    const contest = this.props.contest
-    const me = this.props.me
+  const newClarificationCount = () => {
     if (me && contest && contest.clarifications) {
       const clarifs = Object.values(contest.clarifications)
       const clarifsCount = clarifs.map(
@@ -101,22 +93,20 @@ export class Sidebar extends Component<SidebarProps, SidebarState> {
     return 0
   }
 
-  render() {
-    const menu = this.state.menu
-    const rank = 21
+  const [currentMenu, setCurrentMenu] = useState(getCurrentMenu())
+  const rank = 21
 
-    return (
-      <SidebarView
-        contest={this.props.contest}
-        rank={rank}
-        serverClock={this.props.serverClock}
-        menu={menu}
-        onChoose={this.onMenuChoosed}
-        newAnnouncementCount={this.newAnnouncementCount()}
-        newClarificationCount={this.newClarificationCount()}
-      />
-    )
-  }
+  return (
+    <SidebarView
+      contest={contest}
+      rank={rank}
+      serverClock={serverClock}
+      menu={currentMenu}
+      onChoose={onMenuChoosed}
+      newAnnouncementCount={newAnnouncementCount()}
+      newClarificationCount={newClarificationCount()}
+    />
+  )
 }
 
 const mapStateToProps = (state: AppState) => ({

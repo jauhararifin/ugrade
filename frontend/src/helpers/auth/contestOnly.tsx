@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 
 import { AppState } from '../../stores'
-import { ContestState } from '../../stores/Contest'
 
 export const contestOnly = (redirect: string = '/enter-contest') => <
   P extends object
@@ -12,7 +11,6 @@ export const contestOnly = (redirect: string = '/enter-contest') => <
 ) => {
   interface Props {
     signedIn: boolean
-    contest: ContestState
   }
   const result: FunctionComponent<P & Props> = props => {
     const { signedIn } = props
@@ -21,7 +19,6 @@ export const contestOnly = (redirect: string = '/enter-contest') => <
   }
   const mapStateToProps = (state: AppState): Props => ({
     signedIn: state.auth.isSignedIn,
-    contest: state.contest,
   })
   return connect(mapStateToProps)(result as any)
 }
