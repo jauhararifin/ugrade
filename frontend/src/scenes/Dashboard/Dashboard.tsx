@@ -15,6 +15,7 @@ import { useInfo } from './helpers'
 import Overview from './Overview/Overview'
 import Problems from './Problems'
 import ProblemDetail from './Problems/ProblemDetail'
+import Scoreboard from './Scoreboard'
 import Submissions from './Submissions'
 
 export interface DashboardProps extends RouteComponentProps {
@@ -57,6 +58,11 @@ export const Dashboard: FunctionComponent<DashboardProps> = ({
               path='/contest/submissions'
               exact={true}
               component={Submissions}
+            />
+            <Route
+              path='/contest/scoreboard'
+              exact={true}
+              component={Scoreboard}
             />
           </Switch>
         </CSSTransition>
