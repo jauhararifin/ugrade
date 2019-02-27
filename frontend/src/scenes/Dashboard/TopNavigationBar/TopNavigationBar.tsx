@@ -48,6 +48,8 @@ export const TopNavigationBar: FunctionComponent<TopNavigationBarProps> = ({
     href: undefined,
   }))
   const handleSignOut = () => dispatch(signOutAction())
+  const handleMyAccount = () => dispatch(push('/account'))
+  const handleSetting = () => dispatch(push('/setting'))
   return (
     <Navbar>
       <NavbarGroup align={Alignment.LEFT}>
@@ -62,12 +64,8 @@ export const TopNavigationBar: FunctionComponent<TopNavigationBarProps> = ({
           disabled={!user}
           content={
             <Menu>
-              <Link to='/account'>
-                <MenuItem text='My Account' />
-              </Link>
-              <Link to='/setting'>
-                <MenuItem text='Setting' />
-              </Link>
+              <MenuItem onClick={handleMyAccount} text='My Account' />
+              <MenuItem onClick={handleSetting} text='Setting' />
               <MenuItem onClick={handleSignOut} text='Sign Out' />
             </Menu>
           }

@@ -9,14 +9,16 @@ export const publicOnly = (redirect: string = '/contest') => <P extends object>(
 ) => {
   interface Props {
     signedIn: boolean
+    location: string
   }
   const result: FunctionComponent<P & Props> = props => {
-    const { signedIn } = props
-    if (signedIn) return <Redirect to={redirect} />
+    const { signedIn, location } = props
+    if (signedIn && location !== redirect) return <Redirect to={redirect} />
     return <Component {...props} />
   }
   const mapStateToProps = (state: AppState): Props => ({
     signedIn: state.auth.isSignedIn,
+    location: state.router.location.pathname,
   })
   return connect(mapStateToProps)(result as any)
 }

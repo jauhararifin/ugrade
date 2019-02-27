@@ -52,8 +52,8 @@ export const createStore = (
     compose(
       applyMiddleware(
         routerMiddleware(history),
-        logger,
-        thunk.withExtraArgument(thunkExtraArguments)
+        thunk.withExtraArgument(thunkExtraArguments),
+        logger
       ),
       (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()) ||

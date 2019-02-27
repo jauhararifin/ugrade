@@ -75,7 +75,7 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
 
   return (
     <React.Fragment>
-      {serverClock && (
+      {serverClock && currSubmission && (
         <SubmissionDetail
           submission={currSubmission}
           handleClose={genhandleClose()}

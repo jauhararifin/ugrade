@@ -49,6 +49,7 @@ export const MyAccountPasswordFormView: React.FunctionComponent<
           <InputGroup
             type='password'
             name='oldPassword'
+            autoComplete='current-password'
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.oldPassword}
@@ -75,6 +76,7 @@ export const MyAccountPasswordFormView: React.FunctionComponent<
           <InputGroup
             type='password'
             name='newPassword'
+            autoComplete='new-password'
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.newPassword}
@@ -101,6 +103,7 @@ export const MyAccountPasswordFormView: React.FunctionComponent<
           <InputGroup
             type='password'
             name='confirmation'
+            autoComplete='confirmation-password'
             placeholder='Repeat Your New Password'
             onChange={handleChange}
             onBlur={handleBlur}

@@ -63,7 +63,7 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
         </thead>
         <tbody>
           {entries.map(entry => (
-            <tr>
+            <tr key={entry.username}>
               <td className='rank'>{entry.rank}</td>
               <td>
                 <Tooltip

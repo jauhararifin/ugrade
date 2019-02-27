@@ -45,7 +45,7 @@ export const MyAccountView: FunctionComponent<MyAccountViewProps> = ({
       {!loading && <MyAccountPasswordForm />}
     </div>
     <BottomLink>
-      <Link to='/'>Home</Link>
+      <Link to='/contest'>Dashboard</Link>
     </BottomLink>
   </div>
 )
