@@ -27,8 +27,6 @@ export const subscribeAnnouncementsAction = (
 }
 
 export async function useAnnouncements(dispatch: AppThunkDispatch) {
-  const [started, setStarted] = useState(false)
-
   useEffect(() => {
     const subs = dispatch(
       subscribeAnnouncementsAction(newAnnouncements => {
@@ -42,8 +40,7 @@ export async function useAnnouncements(dispatch: AppThunkDispatch) {
     }
   }, [])
 
-  if (!started) {
-    setStarted(true)
-    await dispatch(getAnnouncementsAction())
-  }
+  useEffect(() => {
+    dispatch(getAnnouncementsAction())
+  }, [])
 }

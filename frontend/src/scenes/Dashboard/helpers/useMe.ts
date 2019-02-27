@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 
 import { AppThunkAction, AppThunkDispatch } from '../../../stores'
 import { setMe, User } from '../../../stores/Auth'
@@ -13,9 +13,7 @@ export const getMeAction = (): AppThunkAction<User> => {
 }
 
 export async function useMe(dispatch: AppThunkDispatch) {
-  const [started, setStarted] = useState(false)
-  if (!started) {
-    setStarted(true)
-    await dispatch(getMeAction())
-  }
+  useEffect(() => {
+    dispatch(getMeAction())
+  }, [])
 }

@@ -48,8 +48,6 @@ export const subscribeProblemIdsAction = (
 }
 
 export async function useProblems(dispatch: AppThunkDispatch) {
-  const [started, setStarted] = useState(false)
-
   useEffect(() => {
     const subs = dispatch(
       subscribeProblemIdsAction(newIds => {
@@ -63,8 +61,7 @@ export async function useProblems(dispatch: AppThunkDispatch) {
     }
   }, [])
 
-  if (!started) {
-    setStarted(true)
-    await dispatch(getProblemsAction())
-  }
+  useEffect(() => {
+    dispatch(getProblemsAction())
+  }, [])
 }

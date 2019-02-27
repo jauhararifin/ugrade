@@ -30,8 +30,6 @@ export const subscribeClarificationsAction = (
 }
 
 export async function useClarifications(dispatch: AppThunkDispatch) {
-  const [started, setStarted] = useState(false)
-
   useEffect(() => {
     const subs = dispatch(
       subscribeClarificationsAction(newClarifs => {
@@ -46,8 +44,7 @@ export async function useClarifications(dispatch: AppThunkDispatch) {
     }
   }, [])
 
-  if (!started) {
-    setStarted(true)
-    await dispatch(getClarificationsAction())
-  }
+  useEffect(() => {
+    dispatch(getClarificationsAction())
+  }, [])
 }

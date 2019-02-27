@@ -5,9 +5,9 @@ import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
-import SidebarMiniCard from '../../../components/SidebarMiniCard'
 import { ContestState } from '../../../stores/Contest'
 import ContestSubmitForm from './ContestSubmitForm'
+import SidebarMiniCard from './SidebarMiniCard'
 
 export enum Menu {
   Overview = 'Overview',

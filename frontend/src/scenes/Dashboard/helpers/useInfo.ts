@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { AppThunkAction, AppThunkDispatch } from '../../../stores'
 import { ContestInfo, setInfo } from '../../../stores/Contest'
@@ -18,9 +18,7 @@ export const getMyContestAction = (): AppThunkAction<ContestInfo> => {
 }
 
 export async function useInfo(dispatch: AppThunkDispatch) {
-  const [started, setStarted] = useState(false)
-  if (!started) {
-    setStarted(true)
-    await dispatch(getMyContestAction())
-  }
+  useEffect(() => {
+    dispatch(getMyContestAction())
+  }, [])
 }

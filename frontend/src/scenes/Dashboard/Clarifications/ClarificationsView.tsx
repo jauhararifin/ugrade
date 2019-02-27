@@ -62,11 +62,11 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
         {!loading &&
           clarifications &&
           clarifications.map(clarification => {
-            const entries = Object.keys(clarification.entries).map(
-              k => clarification.entries[k]
-            )
+            const entries = Object.keys(clarification.entries)
+              .map(k => clarification.entries[k])
+              .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
             const notReadCount = entries.filter(entry => !entry.read).length
-            const content = entries[entries.length - 1]
+            const content = entries[0]
             return (
               <Card
                 key={clarification.id}

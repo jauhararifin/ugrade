@@ -46,28 +46,32 @@ export const ClarificationDetailView: FunctionComponent<
                 </p>
               </div>
               <div className='content'>
-                {entries.map(entry => (
-                  <Card
-                    key={entry.id}
-                    className='entry'
-                    elevation={entry.read ? 0 : 2}
-                  >
-                    <div className='info'>
-                      <H5>From: {entry.sender}</H5>
-                      <p>
-                        <Tooltip
-                          className={Classes.TOOLTIP_INDICATOR}
-                          content={moment(entry.issuedTime).format(
-                            'dddd, MMMM Do YYYY, h:mm:ss a'
-                          )}
-                        >
-                          {moment(entry.issuedTime).from(currentMoment)}
-                        </Tooltip>
-                      </p>
-                    </div>
-                    <p>{entry.content}</p>
-                  </Card>
-                ))}
+                {entries
+                  .sort(
+                    (a, b) => b.issuedTime.getTime() - a.issuedTime.getTime()
+                  )
+                  .map(entry => (
+                    <Card
+                      key={entry.id}
+                      className='entry'
+                      elevation={entry.read ? 0 : 2}
+                    >
+                      <div className='info'>
+                        <H5>From: {entry.sender}</H5>
+                        <p>
+                          <Tooltip
+                            className={Classes.TOOLTIP_INDICATOR}
+                            content={moment(entry.issuedTime).format(
+                              'dddd, MMMM Do YYYY, h:mm:ss a'
+                            )}
+                          >
+                            {moment(entry.issuedTime).from(currentMoment)}
+                          </Tooltip>
+                        </p>
+                      </div>
+                      <p>{entry.content}</p>
+                    </Card>
+                  ))}
               </div>
             </div>
           </div>

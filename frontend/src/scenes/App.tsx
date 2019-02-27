@@ -33,8 +33,6 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
             <Route path='/create-contest' component={CreateContest} />
             <Route path='/setting' component={Setting} />
             <Route path='/account' exact={true} component={MyAccount} />
-            {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
-            {/* <Route path='/contests' exact={true} component={Contests} /> */}
             <Route path='/contest' component={Dashboard} />
           </Switch>
         </CSSTransition>

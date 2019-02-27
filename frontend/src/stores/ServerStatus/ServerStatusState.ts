@@ -5,8 +5,10 @@
 export interface ServerStatusState {
   clock?: Date
   localClock: Date
+  online: boolean
 }
 
 export const initialState: ServerStatusState = {
   localClock: new Date(),
+  online: true,
 }
