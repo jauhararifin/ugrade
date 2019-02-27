@@ -11,9 +11,9 @@ import { contestOnly } from '../../../helpers/auth'
 import { withServer, WithServerProps } from '../../../helpers/server'
 import { AppAction, AppState, AppThunkDispatch } from '../../../stores'
 import { Announcement, getAnnouncementList } from '../../../stores/Contest'
+import { useAnnouncements } from '../helpers/useAnnouncements'
 import { readAnnouncementsAction } from './actions'
 import { AnnouncementsView } from './AnnouncementsView'
-import { useAnnouncements } from './useAnnouncements'
 
 export interface AnnouncementsSceneProps extends WithServerProps {
   announcements?: Announcement[]
@@ -25,7 +25,6 @@ export const AnnouncementsScene: FunctionComponent<AnnouncementsSceneProps> = ({
   dispatch,
   serverClock,
 }) => {
-  console.log('render')
   const readAllAnnouncements = async () => {
     if (announcements) {
       await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds

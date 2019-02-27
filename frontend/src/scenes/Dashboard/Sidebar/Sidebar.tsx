@@ -8,6 +8,7 @@ import { withServer } from '../../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { User } from '../../../stores/Auth'
 import { ContestState } from '../../../stores/Contest'
+import { useAnnouncements } from '../helpers/useAnnouncements'
 import { Menu, SidebarView } from './SidebarView'
 
 export interface SidebarReduxProps {
@@ -35,6 +36,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   serverClock,
   location,
 }) => {
+  useAnnouncements(dispatch)
+
   const getCurrentMenu = (): Menu => {
     const match = location.pathname.match(/contest\/([a-z]+)/)
     if (match && match[1]) {

@@ -29,18 +29,18 @@ export const subscribeAnnouncementsAction = (
 export async function useAnnouncements(dispatch: AppThunkDispatch) {
   const [started, setStarted] = useState(false)
 
-  // useEffect(() => {
-  //   const subs = dispatch(
-  //     subscribeAnnouncementsAction(newAnnouncements => {
-  //       dispatch(setAnnouncements(newAnnouncements))
-  //     })
-  //   )
-  //   return () => {
-  //     subs.then(unsub => {
-  //       unsub()
-  //     })
-  //   }
-  // })
+  useEffect(() => {
+    const subs = dispatch(
+      subscribeAnnouncementsAction(newAnnouncements => {
+        dispatch(setAnnouncements(newAnnouncements))
+      })
+    )
+    return () => {
+      subs.then(unsub => {
+        unsub()
+      })
+    }
+  }, [])
 
   if (!started) {
     setStarted(true)
