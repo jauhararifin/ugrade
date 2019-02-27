@@ -19,11 +19,14 @@ import * as serviceWorker from './serviceWorker'
 import { createStore } from './stores'
 
 const history = createBrowserHistory()
-const authService = new InMemoryAuthService()
-const userService = new InMemoryUserService(authService)
-const problemService = new InMemoryProblemService()
 const serverStatusService = new InMemoryServerStatusService()
-const contestService = new InMemoryContestService(authService)
+const authService = new InMemoryAuthService(serverStatusService)
+const userService = new InMemoryUserService(authService)
+const problemService = new InMemoryProblemService(serverStatusService)
+const contestService = new InMemoryContestService(
+  serverStatusService,
+  authService
+)
 const store = createStore(history, {
   authService,
   userService,

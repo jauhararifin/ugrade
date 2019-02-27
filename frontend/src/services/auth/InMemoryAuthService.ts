@@ -1,3 +1,4 @@
+import { ServerStatusService } from '../serverStatus'
 import { AuthService } from './AuthService'
 import {
   AuthError,
@@ -8,19 +9,21 @@ import { contestUserMap, userPasswordMap } from './fixtures'
 import { User } from './User'
 
 export class InMemoryAuthService implements AuthService {
+  private serverStatusService: ServerStatusService
   private userPasswordMap: { [id: string]: string }
   private usersToken: { [id: string]: string }
 
   private contestUserMap: { [contestId: string]: { [userId: string]: User } }
 
-  constructor() {
+  constructor(serverStatusService: ServerStatusService) {
     this.contestUserMap = contestUserMap
     this.userPasswordMap = userPasswordMap
     this.usersToken = {}
+    this.serverStatusService = serverStatusService
   }
 
   async getUserByEmail(contestId: string, email: string): Promise<User> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
     const user = Object.values(userMap)
@@ -35,7 +38,7 @@ export class InMemoryAuthService implements AuthService {
     email: string,
     password: string
   ): Promise<string> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
     const user = Object.values(userMap)
@@ -58,7 +61,7 @@ export class InMemoryAuthService implements AuthService {
     password: string,
     name: string
   ): Promise<string> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
     const user = Object.values(userMap)
@@ -86,7 +89,7 @@ export class InMemoryAuthService implements AuthService {
   }
 
   async forgotPassword(contestId: string, email: string): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     if (!this.contestUserMap[contestId]) {
       throw new AuthError('No Such Contest')
     }
@@ -101,7 +104,7 @@ export class InMemoryAuthService implements AuthService {
     oneTimeCode: string,
     password: string
   ): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) {
       throw new AuthError('No Such Contest')
@@ -118,7 +121,7 @@ export class InMemoryAuthService implements AuthService {
   }
 
   async getMe(token: string): Promise<User> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     const matches = token.match(/^([a-zA-Z0-9_]+)---([a-zA-Z0-9_]+)---(.+)$/)
     if (matches) {
       const contestId = matches[1]

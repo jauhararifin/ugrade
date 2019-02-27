@@ -1,17 +1,23 @@
+import { ServerStatusService } from '../serverStatus'
 import { NoSuchProblem } from './errors'
 import { problems as fixture } from './fixtures'
 import { Problem } from './Problem'
 import { ProblemService } from './ProblemService'
 
 export class InMemoryProblemService implements ProblemService {
+  private serverStatusService: ServerStatusService
   private problems: Problem[] = []
 
-  constructor(problems: Problem[] = fixture) {
+  constructor(
+    serverStatusService: ServerStatusService,
+    problems: Problem[] = fixture
+  ) {
     this.problems = problems
+    this.serverStatusService = serverStatusService
   }
 
   async getProblemById(_token: string, id: string): Promise<Problem> {
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    await this.serverStatusService.ping()
     if (id.length === 0) throw new Error('Connection Error')
 
     const problem = this.problems
@@ -23,7 +29,7 @@ export class InMemoryProblemService implements ProblemService {
   }
 
   async getProblemByIds(_token: string, ids: string[]): Promise<Problem[]> {
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    await this.serverStatusService.ping()
     if (ids.length === 0) throw new Error('Connection Error')
 
     return this.problems.filter(x => ids.includes(x.id)).slice()

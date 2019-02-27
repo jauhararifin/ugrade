@@ -1,5 +1,6 @@
 import { ForbiddenActionError, InMemoryAuthService, User } from '../auth'
 import { NoSuchProblem } from '../problem'
+import { ServerStatusService } from '../serverStatus'
 import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
 import { Contest, Language } from './Contest'
@@ -28,6 +29,7 @@ import { Submission } from './Submission'
 
 export class InMemoryContestService implements ContestService {
   private authService: InMemoryAuthService
+  private serverStatusService: ServerStatusService
 
   private contests: Contest[] = []
   private contestProblemsMap: { [id: string]: string[] } = {}
@@ -37,7 +39,11 @@ export class InMemoryContestService implements ContestService {
 
   private languages: { [id: string]: Language } = {}
 
-  constructor(authService: InMemoryAuthService) {
+  constructor(
+    serverStatusService: ServerStatusService,
+    authService: InMemoryAuthService
+  ) {
+    this.serverStatusService = serverStatusService
     this.authService = authService
 
     this.contests = contests.slice()
@@ -73,7 +79,7 @@ export class InMemoryContestService implements ContestService {
   }
 
   async getContestByShortId(shortId: string): Promise<Contest> {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await this.serverStatusService.ping()
     const contest = this.contests
       .slice()
       .filter(x => x.shortId === shortId)
