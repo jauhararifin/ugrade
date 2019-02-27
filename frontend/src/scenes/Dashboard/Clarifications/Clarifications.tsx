@@ -12,8 +12,8 @@ import {
   Problem,
 } from '../../../stores/Contest'
 import { useProblems } from '../helpers'
+import { useClarifications } from '../helpers/useClarifications'
 import { ClarificationsView } from './ClarificationsView'
-import { useClarifications } from './useClarifications'
 
 export interface ClarificationsSceneProps extends WithServerProps {
   clarifications?: Clarification[]

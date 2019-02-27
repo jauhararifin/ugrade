@@ -6,7 +6,7 @@ import { contestOnly } from '../../../../helpers/auth'
 import { withServer, WithServerProps } from '../../../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../../../stores'
 import { Clarification } from '../../../../stores/Contest'
-import { useClarifications } from '../useClarifications'
+import { useClarifications } from '../../helpers/useClarifications'
 import { readClarificationEntriesAction } from './actions'
 import { ClarificationDetailView } from './ClarificationDetailView'
 
@@ -41,9 +41,9 @@ export const ClarificationDetailScene: FunctionComponent<
   const readAllEntries = async () => {
     if (clarification) {
       await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
-      const entries = Object.keys(clarification.entries).map(
-        k => clarification.entries[k]
-      )
+      const entries = Object.keys(clarification.entries)
+        .map(k => clarification.entries[k])
+        .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
       const unreadEntries = entries.filter(entry => !entry.read)
       if (unreadEntries.length > 0) {
         dispatch(
