@@ -25,6 +25,7 @@ export const AnnouncementsScene: FunctionComponent<AnnouncementsSceneProps> = ({
   dispatch,
   serverClock,
 }) => {
+  console.log('render')
   const readAllAnnouncements = async () => {
     if (announcements) {
       await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
@@ -38,7 +39,7 @@ export const AnnouncementsScene: FunctionComponent<AnnouncementsSceneProps> = ({
   useAnnouncements(dispatch)
   useEffect(() => {
     readAllAnnouncements()
-  })
+  }, [announcements])
 
   return (
     <AnnouncementsView
