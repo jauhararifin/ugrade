@@ -13,6 +13,7 @@ import Dashboard from './Dashboard'
 import EnterContest from './EnterContest/EnterContest'
 import Home from './Home'
 import MyAccount from './MyAccount'
+import NetworkStatus from './NetworkStatus'
 import Setting from './Setting'
 
 export interface AppProps {
@@ -25,18 +26,20 @@ const App: React.FunctionComponent<AppProps> = ({ title, location }) => {
 
   return (
     <DocumentTitle title={title || 'UGrade'}>
-      <TransitionGroup className='eat-them-all'>
-        <CSSTransition timeout={300} classNames='fade' key={locationKey}>
-          <Switch location={location}>
-            <Route path='/' exact={true} component={Home} />
-            <Route path='/enter-contest' component={EnterContest} />
-            <Route path='/create-contest' component={CreateContest} />
-            <Route path='/setting' component={Setting} />
-            <Route path='/account' exact={true} component={MyAccount} />
-            <Route path='/contest' component={Dashboard} />
-          </Switch>
-        </CSSTransition>
-      </TransitionGroup>
+      <NetworkStatus>
+        <TransitionGroup className='eat-them-all'>
+          <CSSTransition timeout={300} classNames='fade' key={locationKey}>
+            <Switch location={location}>
+              <Route path='/' exact={true} component={Home} />
+              <Route path='/enter-contest' component={EnterContest} />
+              <Route path='/create-contest' component={CreateContest} />
+              <Route path='/setting' component={Setting} />
+              <Route path='/account' exact={true} component={MyAccount} />
+              <Route path='/contest' component={Dashboard} />
+            </Switch>
+          </CSSTransition>
+        </TransitionGroup>
+      </NetworkStatus>
     </DocumentTitle>
   )
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { AppThunkAction, AppThunkDispatch } from '../../../stores'
 import { ContestInfo, setInfo } from '../../../stores/Contest'
