@@ -8,7 +8,12 @@ import ActionToaster from '../../../../helpers/ActionToaster'
 import { withServer, WithServerProps } from '../../../../helpers/server'
 import { ContestError } from '../../../../services/contest/errors'
 import { AppState, AppThunkDispatch } from '../../../../stores'
-import { ContestState } from '../../../../stores/Contest'
+import {
+  ContestInfo,
+  getProblemList,
+  Language,
+  Problem,
+} from '../../../../stores/Contest'
 import { useInfo, useProblems } from '../../helpers'
 import { submitSolutionAction } from './actions'
 import ContestSubmitFormView from './ContestSubmitFormView'
@@ -21,7 +26,9 @@ export interface ContestSubmitFormValue {
 
 export interface ContestSubmitFormReduxProps {
   dispatch: AppThunkDispatch
-  contest: ContestState
+  problems?: Problem[]
+  languages?: Language[]
+  info?: ContestInfo
 }
 
 export type ContestSubmitFormProps = ContestSubmitFormReduxProps &
@@ -29,7 +36,9 @@ export type ContestSubmitFormProps = ContestSubmitFormReduxProps &
 
 export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
   dispatch,
-  contest,
+  problems,
+  languages,
+  info,
   serverClock,
 }) => {
   useInfo(dispatch)
@@ -45,16 +54,9 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
   })
 
   const getInitialValue = () => {
-    const langs = contest.info && contest.info.permittedLanguages
-    const probs = contest.problems
-    const prob =
-      probs &&
-      Object.values(probs)
-        .sort((a, b) => a.order - b.order)
-        .shift()
     return {
-      language: langs && langs.length > 0 ? langs[0].id : '',
-      problem: prob ? prob.id : '',
+      language: languages && languages.length > 0 ? languages[0].id : '',
+      problem: problems && problems.length > 0 ? problems[0].id : '',
       sourceCode:
         'https://raw.githubusercontent.com/jauhararifin/cp/master/uva/820.cpp',
     }
@@ -81,22 +83,17 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
   const getProblems = ():
     | Array<{ label: string; value: string }>
     | undefined => {
-    if (!contest.problems) return undefined
-    const problems = Object.values(contest.problems)
-    return problems
-      .sort((a, b) => a.order - b.order)
-      .map(problem => ({
-        label: problem.name,
-        value: problem.id,
-      }))
+    if (!problems) return undefined
+    return problems.map(problem => ({
+      label: problem.name,
+      value: problem.id,
+    }))
   }
 
   const getLanguages = ():
     | Array<{ label: string; value: string }>
     | undefined => {
-    const info = contest.info
-    if (info) {
-      const languages = info.permittedLanguages
+    if (languages) {
       return languages.map(lang => ({
         label: lang.name,
         value: lang.id,
@@ -113,12 +110,10 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
     />
   )
 
-  const started =
-    serverClock && contest.info && serverClock >= contest.info.startTime
-  const ended =
-    serverClock && contest.info && serverClock >= contest.info.finishTime
+  const started = serverClock && info && serverClock >= info.startTime
+  const ended = serverClock && info && serverClock >= info.finishTime
 
-  if (started && !ended) {
+  if (languages && problems && started && !ended) {
     return (
       <Formik
         initialValues={getInitialValue()}
@@ -132,7 +127,11 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
 }
 
 const mapStateToProps = (state: AppState) => ({
-  contest: state.contest,
+  info: state.contest.info,
+  problems: getProblemList(state),
+  languages: state.contest.info
+    ? state.contest.info.permittedLanguages
+    : undefined,
 })
 
 export default compose<ComponentType>(

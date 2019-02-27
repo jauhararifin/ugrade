@@ -2,9 +2,25 @@ import { AppState } from '../state'
 import {
   Announcement,
   Clarification,
+  Language,
   Problem,
   Submission,
 } from './ContestState'
+
+export function getLanguagesMap(
+  state: AppState
+): { [id: string]: Language } | undefined {
+  const info = state.contest.info
+  if (info) {
+    const languages = info.permittedLanguages
+    if (languages) {
+      const result: { [id: string]: Language } = {}
+      languages.forEach(l => (result[l.id] = l))
+      return result
+    }
+  }
+  return undefined
+}
 
 export function getProblemList(state: AppState): Problem[] | undefined {
   const problems = state.contest.problems
