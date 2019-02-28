@@ -1,16 +1,12 @@
 import { Formik, FormikActions } from 'formik'
-import React, { Component, ComponentType } from 'react'
+import React, { FunctionComponent } from 'react'
+import { usePublicOnly } from 'ugrade/auth'
+import { useCreateContest } from 'ugrade/contest'
+import ActionToaster from 'ugrade/helpers/ActionToaster'
+import { AuthError } from 'ugrade/services/auth'
+import { ContestError } from 'ugrade/services/contest/errors'
 import * as yup from 'yup'
-
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import ActionToaster from '../../../helpers/ActionToaster'
-import { publicOnly } from '../../../helpers/auth'
-import { AuthError } from '../../../services/auth'
-import { ContestError } from '../../../services/contest/errors'
-import { AppThunkDispatch } from '../../../stores'
-import { createContestAction } from './actions'
-import CreateContestFormView from './CreateContestFormView'
+import { CreateContestFormView } from './CreateContestFormView'
 
 export interface CreateContestFormValue {
   email: string
@@ -19,19 +15,17 @@ export interface CreateContestFormValue {
   contestShortDescription: string
 }
 
-export interface ContestFormProps {
-  dispatch: AppThunkDispatch
-}
+export const CreateContestForm: FunctionComponent = () => {
+  usePublicOnly()
 
-export class ContestForm extends Component<ContestFormProps> {
-  initialValue: CreateContestFormValue = {
+  const initialValue: CreateContestFormValue = {
     email: '',
     contestShortId: '',
     contestName: '',
     contestShortDescription: '',
   }
 
-  validationSchema = yup.object().shape({
+  const validationSchema = yup.object().shape({
     email: yup
       .string()
       .min(4)
@@ -59,18 +53,18 @@ export class ContestForm extends Component<ContestFormProps> {
       .label('Short Description'),
   })
 
-  handleSubmit = async (
+  const createContest = useCreateContest()
+
+  const handleSubmit = async (
     values: CreateContestFormValue,
     { setSubmitting }: FormikActions<CreateContestFormValue>
   ) => {
     try {
-      await this.props.dispatch(
-        createContestAction(
-          values.email,
-          values.contestShortId,
-          values.contestName,
-          values.contestShortDescription
-        )
+      await createContest(
+        values.email,
+        values.contestShortId,
+        values.contestName,
+        values.contestShortDescription
       )
       ActionToaster.showSuccessToast('Contest Created')
     } catch (error) {
@@ -82,19 +76,12 @@ export class ContestForm extends Component<ContestFormProps> {
     }
   }
 
-  render() {
-    return (
-      <Formik
-        initialValues={this.initialValue}
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
-        component={CreateContestFormView}
-      />
-    )
-  }
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      component={CreateContestFormView}
+    />
+  )
 }
-
-export default compose<ComponentType>(
-  publicOnly(),
-  connect()
-)(ContestForm)

@@ -1,11 +1,10 @@
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
+import logo from 'ugrade/assets/images/logo.svg'
+import BottomLink from 'ugrade/components/BottomLink'
+import { CreateContestForm } from './CreateContestForm'
 
 import './styles.css'
-
-import logo from '../../assets/images/logo.svg'
-import BottomLink from '../../components/BottomLink'
-import CreateContestForm from './CreateContestForm'
 
 export const CreateContestView: FunctionComponent = () => (
   <div className='plain-page'>

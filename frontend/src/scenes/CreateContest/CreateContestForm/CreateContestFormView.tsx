@@ -1,14 +1,13 @@
 import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
+import { CreateContestFormValue } from './CreateContestForm'
 
 import './styles.css'
 
-import { CreateContestFormValue } from './CreateContestForm'
-
 export type CreateContestFormViewProps = FormikProps<CreateContestFormValue>
 
-const CreateContestFormView: React.FunctionComponent<
+export const CreateContestFormView: React.FunctionComponent<
   CreateContestFormViewProps
 > = ({
   handleSubmit,
@@ -83,7 +82,7 @@ const CreateContestFormView: React.FunctionComponent<
         />
       </FormGroup>
       <FormGroup
-        helperText={submitCount > 0 && errors && errors.contestName}
+        helperText={submitCount > 0 && errors && errors.contestShortDescription}
         labelFor='create-contest-input-contest-short-desc'
         intent={
           submitCount && errors && errors.contestShortDescription
@@ -113,5 +112,3 @@ const CreateContestFormView: React.FunctionComponent<
     </Card>
   </form>
 )
-
-export default CreateContestFormView

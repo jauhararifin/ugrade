@@ -1,3 +1,2 @@
-import CreateContest from './CreateContest'
-
-export default CreateContest
+export * from './CreateContest'
+export * from './CreateContestView'

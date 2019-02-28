@@ -1,3 +1,2 @@
-import CreateContestForm from './CreateContestForm'
-
-export default CreateContestForm
+export * from './CreateContestForm'
+export * from './CreateContestFormView'

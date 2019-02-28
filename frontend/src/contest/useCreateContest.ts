@@ -1,9 +1,9 @@
 import { push } from 'connected-react-router'
 import moment from 'moment'
-
-import { AppThunkAction } from '../../../stores'
-import { setMe } from '../../../stores/Auth'
-import { setInfo } from '../../../stores/Contest'
+import { useAppThunkDispatch } from 'ugrade/common'
+import { AppThunkAction } from 'ugrade/stores'
+import { setMe } from 'ugrade/stores/Auth'
+import { setInfo } from 'ugrade/stores/Contest'
 
 export function createContestAction(
   email: string,
@@ -36,5 +36,19 @@ export function createContestAction(
     dispatch(setInfo(contest))
     dispatch(setMe(user))
     dispatch(push('/enter-contest/signup'))
+  }
+}
+
+export function useCreateContest() {
+  const dispatch = useAppThunkDispatch()
+  return (
+    email: string,
+    contestShortId: string,
+    contestName: string,
+    shortDescription?: string
+  ) => {
+    return dispatch(
+      createContestAction(email, contestShortId, contestName, shortDescription)
+    )
   }
 }
