@@ -33,14 +33,11 @@ export function setProxy(
 export function setProxyReducer(state: SettingState, action: SettingAction) {
   const nextState = {
     ...state,
-    proxyHost: action.host,
-    proxyPort: action.port,
-    proxyUsername: action.username,
-    proxyPassword: action.password,
+    proxy: action,
   }
-  localStorage.setItem(SETTING_PROXY_HOST_KEY, nextState.proxyHost)
-  localStorage.setItem(SETTING_PROXY_PORT_KEY, nextState.proxyPort.toString())
-  localStorage.setItem(SETTING_PROXY_USERNAME_KEY, nextState.proxyUsername)
-  localStorage.setItem(SETTING_PROXY_PASSWORD_KEY, nextState.proxyPassword)
+  localStorage.setItem(SETTING_PROXY_HOST_KEY, nextState.proxy.host)
+  localStorage.setItem(SETTING_PROXY_PORT_KEY, nextState.proxy.port.toString())
+  localStorage.setItem(SETTING_PROXY_USERNAME_KEY, nextState.proxy.username)
+  localStorage.setItem(SETTING_PROXY_PASSWORD_KEY, nextState.proxy.password)
   return nextState
 }

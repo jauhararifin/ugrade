@@ -1,3 +1,2 @@
-import ProxySettingForm from './ProxySettingForm'
-
-export default ProxySettingForm
+export * from './ProxySettingForm'
+export * from './ProxySettingFormView'

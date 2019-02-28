@@ -1,12 +1,8 @@
 import { Formik, FormikActions } from 'formik'
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
+import React, { FunctionComponent } from 'react'
+import ActionToaster from 'ugrade/helpers/ActionToaster/ActionToaster'
+import { useProxySetting } from 'ugrade/settings'
 import * as yup from 'yup'
-
-import ActionToaster from '../../../helpers/ActionToaster/ActionToaster'
-import { AppState } from '../../../stores'
-import { setProxy } from '../../../stores/Setting'
 import { ProxySettingFormView } from './ProxySettingFormView'
 
 export interface ProxySettingFormValue {
@@ -16,13 +12,15 @@ export interface ProxySettingFormValue {
   password: string
 }
 
-export interface ProxySettingFormProps {
-  dispatch: Dispatch
-  initialValue: ProxySettingFormValue
-}
+export const ProxySettingForm: FunctionComponent = () => {
+  const [proxySetting, setProxySetting] = useProxySetting()
 
-export class ProxySettingForm extends Component<ProxySettingFormProps> {
-  validationSchema = yup.object().shape({
+  const initialValue = {
+    ...proxySetting,
+    port: (proxySetting.port || '').toString(),
+  }
+
+  const validationSchema = yup.object().shape({
     host: yup.string(),
     port: yup
       .number()
@@ -37,36 +35,21 @@ export class ProxySettingForm extends Component<ProxySettingFormProps> {
     password: yup.string(),
   })
 
-  handleSubmit = (
+  const handleSubmit = (
     values: ProxySettingFormValue,
     { setSubmitting }: FormikActions<ProxySettingFormValue>
   ) => {
-    this.props.dispatch(
-      setProxy(values.host, values.port, values.username, values.password)
-    )
+    setProxySetting(values.host, values.port, values.username, values.password)
     setSubmitting(false)
     ActionToaster.showSuccessToast('Proxy Setting Saved')
   }
 
-  render() {
-    return (
-      <Formik
-        initialValues={this.props.initialValue}
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
-        component={ProxySettingFormView}
-      />
-    )
-  }
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      component={ProxySettingFormView}
+    />
+  )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  initialValue: {
-    host: state.setting.proxyHost,
-    port: state.setting.proxyPort ? state.setting.proxyPort.toString() : '',
-    username: state.setting.proxyUsername,
-    password: state.setting.proxyPassword,
-  },
-})
-
-export default connect(mapStateToProps)(ProxySettingForm)

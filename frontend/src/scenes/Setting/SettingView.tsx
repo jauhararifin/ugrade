@@ -1,10 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
+import BottomLink from 'ugrade/components/BottomLink'
+import { ProxySettingForm } from './ProxySettingForm'
 
 import './styles.css'
-
-import BottomLink from '../../components/BottomLink'
-import ProxySettingForm from './ProxySettingForm'
 
 export interface SettingViewProps {
   showCreateContest: boolean
@@ -29,8 +28,3 @@ export const SettingView: FunctionComponent<SettingViewProps> = ({
     </BottomLink>
   </div>
 )
-
-SettingView.defaultProps = {
-  showCreateContest: true,
-  showEnterContest: true,
-}

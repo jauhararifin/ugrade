@@ -1,10 +1,9 @@
 import { Button, Intent } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
-
-import './styles.css'
-
 import logo from 'ugrade/assets/images/logo.svg'
 import BottomLink from 'ugrade/components/BottomLink'
+
+import './styles.css'
 
 export interface HomeViewProps {
   onLogoClick: () => any

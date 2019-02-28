@@ -1,10 +1,8 @@
-import React, { FunctionComponent, useEffect } from 'react'
-import { connect } from 'react-redux'
+import React, { FunctionComponent } from 'react'
 import { Dispatch } from 'redux'
-
-import { AppAction, AppState } from '../../stores'
-import { getIsSignedIn } from '../../stores/Auth'
-import { setTitle } from '../../stores/Title'
+import { useIsSignedIn } from 'ugrade/auth'
+import { useTitle } from 'ugrade/common'
+import { AppAction } from 'ugrade/stores'
 import { SettingView } from './SettingView'
 
 export interface SettingProps {
@@ -12,20 +10,10 @@ export interface SettingProps {
   signedIn: boolean
 }
 
-export const Setting: FunctionComponent<SettingProps> = ({
-  signedIn,
-  dispatch,
-}) => {
-  useEffect(() => {
-    dispatch(setTitle('UGrade | Settings'))
-  })
+export const Setting: FunctionComponent<SettingProps> = () => {
+  useTitle('UGrade | Settings')
+  const signedIn = useIsSignedIn()
   return (
     <SettingView showCreateContest={!signedIn} showEnterContest={!signedIn} />
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  signedIn: getIsSignedIn(state),
-})
-
-export default connect(mapStateToProps)(Setting)

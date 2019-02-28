@@ -1,3 +1,3 @@
-import Setting from './Setting'
-
-export default Setting
+export * from './Setting'
+export * from './ProxySettingForm'
+export * from './SettingView'

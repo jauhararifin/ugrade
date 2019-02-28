@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react'
-
 import { usePublicOnly } from 'ugrade/auth'
 import { useTitle } from 'ugrade/common'
 import { usePush } from 'ugrade/router'
