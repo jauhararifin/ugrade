@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 
-import { getIsSignedIn } from '../stores/Auth'
-import usePush from './usePush'
+import { usePush } from 'ugrade/router/usePush'
+import { getIsSignedIn } from 'ugrade/stores/Auth'
 
-export default function usePublicOnly(to: string = '/contest') {
+export function usePublicOnly(to: string = '/contest') {
   const push = usePush()
   const isSignedIn = useMappedState(getIsSignedIn)
   useEffect(() => {

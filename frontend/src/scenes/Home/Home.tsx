@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react'
 
-import usePublicOnly from '../../helpers/usePublicOnly'
-import usePush from '../../helpers/usePush'
-import useTitle from '../../helpers/useTitle'
+import { usePublicOnly } from 'ugrade/auth'
+import { useTitle } from 'ugrade/common'
+import { usePush } from 'ugrade/router'
 import { HomeView } from './HomeView'
 
 export const Home: FunctionComponent = () => {

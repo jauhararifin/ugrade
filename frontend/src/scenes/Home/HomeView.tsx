@@ -3,8 +3,8 @@ import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
-import logo from '../../assets/images/logo.svg'
-import BottomLink from '../../components/BottomLink'
+import logo from 'ugrade/assets/images/logo.svg'
+import BottomLink from 'ugrade/components/BottomLink'
 
 export interface HomeViewProps {
   onLogoClick: () => any

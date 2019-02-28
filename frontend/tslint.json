@@ -10,7 +10,8 @@
   "rules": {
     "member-access": false,
     "object-literal-sort-keys": false,
-    "no-implicit-dependencies": [true, ["src"]],
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false,
     "ordered-imports": true,
     "interface-name": false,
     "no-console": false
