@@ -1,13 +1,6 @@
 import { Intent, IToaster, Position, Toaster } from '@blueprintjs/core'
 
-export interface IActionToaster {
-  showToast(message: string): void
-  showSuccessToast(message: string): void
-  showAlertToast(message: string): void
-  showErrorToast(error: Error): void
-}
-
-export class ActionToaster implements IActionToaster {
+export class ActionToaster {
   constructor(
     private toaster: IToaster = Toaster.create({
       position: Position.TOP,
