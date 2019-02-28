@@ -58,6 +58,7 @@ export const ResetPasswordFormView: React.FunctionComponent<
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.oneTimeCode}
+          autoFocus={true}
         />
       </FormGroup>
       <FormGroup

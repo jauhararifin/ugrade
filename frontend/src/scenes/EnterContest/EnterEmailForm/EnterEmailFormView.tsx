@@ -50,6 +50,7 @@ export const EnterEmailFormView: React.FunctionComponent<
           value={values.email}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoFocus={true}
         />
       </FormGroup>
       <Button

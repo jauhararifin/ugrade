@@ -75,6 +75,7 @@ const EnterPasswordFormView: React.FunctionComponent<
             value={values.password}
             onChange={handleChange}
             onBlur={handleBlur}
+            autoFocus={true}
           />
         </FormGroup>
         <div className='remember-me'>

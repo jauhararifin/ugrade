@@ -38,6 +38,7 @@ export const CreateContestFormView: React.FunctionComponent<
           value={values.email}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoFocus={true}
         />
       </FormGroup>
       <FormGroup

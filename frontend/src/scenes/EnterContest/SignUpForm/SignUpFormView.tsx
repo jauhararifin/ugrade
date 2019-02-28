@@ -52,6 +52,7 @@ export const SignUpFormView: React.FunctionComponent<SignUpFormViewProps> = ({
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.username}
+          autoFocus={true}
         />
       </FormGroup>
 

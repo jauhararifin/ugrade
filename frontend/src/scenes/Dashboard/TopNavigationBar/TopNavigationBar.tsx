@@ -20,6 +20,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { compose } from 'redux'
 
+import ActionToaster from 'ugrade/helpers/ActionToaster'
 import { AppState, AppThunkDispatch } from '../../../stores'
 import { getMe, User } from '../../../stores/Auth'
 import { useMe } from '../helpers'
@@ -47,7 +48,10 @@ export const TopNavigationBar: FunctionComponent<TopNavigationBarProps> = ({
     },
     href: undefined,
   }))
-  const handleSignOut = () => dispatch(signOutAction())
+  const handleSignOut = async () => {
+    await dispatch(signOutAction())
+    ActionToaster.showSuccessToast('Signed Out')
+  }
   const handleMyAccount = () => dispatch(push('/account'))
   const handleSetting = () => dispatch(push('/setting'))
   return (

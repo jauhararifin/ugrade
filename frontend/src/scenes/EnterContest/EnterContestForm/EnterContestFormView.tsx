@@ -39,6 +39,7 @@ const EnterContestFormView: React.FunctionComponent<
           value={values.contestId}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoFocus={true}
         />
       </FormGroup>
       <Button
