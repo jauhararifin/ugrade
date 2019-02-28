@@ -1,10 +1,5 @@
 import { AuthActionType } from './AuthAction'
-import {
-  AUTH_IS_SIGNED_IN_KEY,
-  AUTH_TOKEN_KEY,
-  AuthState,
-  initialState,
-} from './AuthState'
+import { AUTH_IS_SIGNED_IN_KEY, AUTH_TOKEN_KEY, AuthState } from './AuthState'
 
 export interface AuthSetSignedIn {
   type: AuthActionType.SetSignedIn
@@ -22,7 +17,7 @@ export const setSignedIn = (
 })
 
 export function setSignedInReducer(
-  state: AuthState = initialState,
+  state: AuthState,
   action: AuthSetSignedIn
 ): AuthState {
   const nextState = {
