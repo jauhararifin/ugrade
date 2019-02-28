@@ -1,8 +1,8 @@
 import { push } from 'connected-react-router'
-import { useDispatch } from 'redux-react-hook'
+import { useAppDispatch } from 'ugrade/common'
 
 export function usePush() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   return (location: string) => {
     dispatch(push(location))
   }

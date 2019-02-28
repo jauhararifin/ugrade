@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
-import { AppThunkAction, AppThunkDispatch } from '../../stores'
-import { setOnline } from '../../stores/ServerStatus'
+import { useMappedState } from 'redux-react-hook'
+import { useAppThunkDispatch } from 'ugrade/common'
+import { AppThunkAction } from 'ugrade/stores'
+import { getIsOnline, setOnline } from 'ugrade/stores/ServerStatus'
 
 export type CancelFunction = () => any
 
@@ -29,12 +31,12 @@ export const pingingAction = (
   return [action, cancel]
 }
 
-export function useOnlineStatus(dispatch: AppThunkDispatch) {
+export function useOnlineStatus() {
+  const dispatch = useAppThunkDispatch()
   useEffect(() => {
     const [action, cancel] = pingingAction()
     dispatch(action).catch(() => null)
-    return () => {
-      cancel()
-    }
+    return cancel
   }, [])
+  return useMappedState(getIsOnline)
 }
