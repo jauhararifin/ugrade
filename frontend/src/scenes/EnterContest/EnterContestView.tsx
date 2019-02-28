@@ -20,7 +20,7 @@ export const EnterContestView: FunctionComponent<EnterContestViewProps> = ({
   location,
 }) => (
   <div className='plain-page'>
-    <div>
+    <div className='enter-contest'>
       <Link to='/'>
         <img src={logo} width={100} alt='logo' />
       </Link>

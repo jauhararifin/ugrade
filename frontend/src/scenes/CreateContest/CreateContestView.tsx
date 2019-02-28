@@ -4,8 +4,6 @@ import logo from 'ugrade/assets/images/logo.svg'
 import BottomLink from 'ugrade/components/BottomLink'
 import { CreateContestForm } from './CreateContestForm'
 
-import './styles.css'
-
 export const CreateContestView: FunctionComponent = () => (
   <div className='plain-page'>
     <div>
