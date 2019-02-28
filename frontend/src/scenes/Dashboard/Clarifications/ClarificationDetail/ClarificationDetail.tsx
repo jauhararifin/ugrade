@@ -5,7 +5,10 @@ import { compose } from 'redux'
 import { contestOnly } from '../../../../helpers/auth'
 import { withServer, WithServerProps } from '../../../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../../../stores'
-import { Clarification } from '../../../../stores/Contest'
+import {
+  Clarification,
+  getUnReadClarification,
+} from '../../../../stores/Contest'
 import { useClarifications } from '../../helpers/useClarifications'
 import { readClarificationEntriesAction } from './actions'
 import { ClarificationDetailView } from './ClarificationDetailView'
@@ -17,6 +20,7 @@ export interface ClarificationDetailSceneOwnProps {
 
 export interface ClarificationDetailSceneReduxProps {
   clarifications?: { [id: string]: Clarification }
+  unreadClarificationList: { [id: string]: string[] }
   dispatch: AppThunkDispatch
 }
 
@@ -30,6 +34,7 @@ export const ClarificationDetailScene: FunctionComponent<
   clarificationId,
   handleClose,
   clarifications,
+  unreadClarificationList,
   dispatch,
   serverClock,
 }) => {
@@ -38,21 +43,12 @@ export const ClarificationDetailScene: FunctionComponent<
   const clarification = clarifications
     ? clarifications[clarificationId]
     : undefined
+
   const readAllEntries = async () => {
-    if (clarification) {
-      await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
-      const entries = Object.keys(clarification.entries)
-        .map(k => clarification.entries[k])
-        .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
-      const unreadEntries = entries.filter(entry => !entry.read)
-      if (unreadEntries.length > 0) {
-        dispatch(
-          readClarificationEntriesAction(
-            clarification.id,
-            unreadEntries.map(entry => entry.id)
-          )
-        )
-      }
+    await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
+    const unreadEntries = unreadClarificationList[clarificationId] || []
+    if (unreadEntries.length > 0) {
+      dispatch(readClarificationEntriesAction(clarificationId, unreadEntries))
     }
   }
 
@@ -71,6 +67,7 @@ export const ClarificationDetailScene: FunctionComponent<
 
 const mapStateToProps = (state: AppState) => ({
   clarifications: state.contest.clarifications,
+  unreadClarificationList: getUnReadClarification(state),
 })
 
 export default compose<ComponentType<ClarificationDetailSceneOwnProps>>(
