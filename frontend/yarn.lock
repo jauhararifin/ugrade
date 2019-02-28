@@ -8956,6 +8956,11 @@ redux-logger@^3.0.6:
   dependencies:
     deep-diff "^0.3.5"
 
+redux-react-hook@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/redux-react-hook/-/redux-react-hook-3.2.0.tgz#a0793054aa6554007094cd6dc6f47082c089b0b9"
+  integrity sha512-GibqTO/Cgl2nRuhw2wacyfd2Nds8pYAPU/eYuTqXZ9v01CT7s7LSwDfPdtQua7TBqE8XNjrwKZqfDyEtfXt7vQ==
+
 redux-thunk@*, redux-thunk@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"

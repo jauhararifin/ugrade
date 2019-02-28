@@ -25,6 +25,7 @@
     "react-transition-group": "^2.5.3",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
+    "redux-react-hook": "^3.2.0",
     "redux-thunk": "^2.3.0",
     "remark-math": "^1.0.5",
     "reselect": "^4.0.0",

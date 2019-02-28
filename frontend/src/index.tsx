@@ -3,6 +3,7 @@ import { createBrowserHistory } from 'history'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
+import { StoreContext } from 'redux-react-hook'
 
 // tslint:disable-next-line:no-submodule-imports
 import '@blueprintjs/core/lib/css/blueprint.css'
@@ -37,9 +38,11 @@ const store = createStore(history, {
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
+    <StoreContext.Provider value={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </StoreContext.Provider>
   </Provider>,
   document.getElementById('root')
 )

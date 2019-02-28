@@ -1,5 +1,5 @@
 import { Button, Intent } from '@blueprintjs/core'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 
 import './styles.css'
 
@@ -13,7 +13,7 @@ export interface HomeViewProps {
   onCreateContest: () => any
 }
 
-const HomeView: React.FunctionComponent<HomeViewProps> = ({
+export const HomeView: FunctionComponent<HomeViewProps> = ({
   onLogoClick,
   onSettingClick,
   onEnterContest,
@@ -54,5 +54,3 @@ const HomeView: React.FunctionComponent<HomeViewProps> = ({
     </BottomLink>
   </div>
 )
-
-export default HomeView
