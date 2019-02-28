@@ -6,6 +6,11 @@ export function getContest(state: AppState): ContestState {
   return state.contest
 }
 
+export const getContestInfo = createSelector(
+  getContest,
+  contest => contest.info
+)
+
 export const getLanguagesMap = createSelector(
   getContest,
   contest => {

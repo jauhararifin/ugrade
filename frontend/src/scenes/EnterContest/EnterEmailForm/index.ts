@@ -1,3 +1,2 @@
-import EnterEmailForm from './EnterEmailForm'
-
-export default EnterEmailForm
+export * from './EnterEmailForm'
+export * from './EnterEmailFormView'

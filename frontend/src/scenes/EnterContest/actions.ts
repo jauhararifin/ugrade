@@ -15,7 +15,9 @@ export function resetAction(): AppThunkAction {
 
 export function useReset() {
   const dispatch = useAppThunkDispatch()
-  return () => dispatch(resetAction())
+  return () => {
+    dispatch(resetAction()).catch(() => null)
+  }
 }
 
 export function resetAccountAction(): AppThunkAction {
@@ -27,5 +29,7 @@ export function resetAccountAction(): AppThunkAction {
 
 export function useResetAccount() {
   const dispatch = useAppThunkDispatch()
-  return () => dispatch(resetAccountAction())
+  return () => {
+    dispatch(resetAccountAction()).catch(() => null)
+  }
 }

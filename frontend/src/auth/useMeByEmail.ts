@@ -1,10 +1,10 @@
 import { push } from 'connected-react-router'
+import { useAppThunkDispatch } from 'ugrade/common'
+import { AppThunkAction } from 'ugrade/stores'
+import { setMe } from 'ugrade/stores/Auth'
+import { setRegistered } from 'ugrade/stores/Contest'
 
-import { AppThunkAction } from '../../../stores'
-import { setMe } from '../../../stores/Auth'
-import { setRegistered } from '../../../stores/Contest'
-
-export function setEmailAction(email: string): AppThunkAction {
+export function SetMeByEmailAction(email: string): AppThunkAction {
   return async (dispatch, getState, { authService }) => {
     const contest = getState().contest.info
     if (!contest) dispatch(push('/enter-contest'))
@@ -20,4 +20,9 @@ export function setEmailAction(email: string): AppThunkAction {
       }
     }
   }
+}
+
+export function useSetMeByEmail() {
+  const dispatch = useAppThunkDispatch()
+  return (email: string) => dispatch(SetMeByEmailAction(email))
 }

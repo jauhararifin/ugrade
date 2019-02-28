@@ -1,11 +1,10 @@
 import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
+import { ContestInfo } from 'ugrade/stores/Contest'
+import { EnterEmailFormValue } from './EnterEmailForm'
 
 import './styles.css'
-
-import { ContestInfo } from '../../../stores/Contest'
-import { EnterEmailFormValue } from './EnterEmailForm'
 
 export interface EnterEmailFormViewOwnProps {
   contest: ContestInfo
@@ -17,7 +16,9 @@ export type EnterEmailFormViewFormikProps = FormikProps<EnterEmailFormValue>
 export type EnterEmailFormViewProps = EnterEmailFormViewOwnProps &
   EnterEmailFormViewFormikProps
 
-const EnterEmailFormView: React.FunctionComponent<EnterEmailFormViewProps> = ({
+export const EnterEmailFormView: React.FunctionComponent<
+  EnterEmailFormViewProps
+> = ({
   handleSubmit,
   handleChange,
   handleBlur,
@@ -66,5 +67,3 @@ const EnterEmailFormView: React.FunctionComponent<EnterEmailFormViewProps> = ({
     </Card>
   </form>
 )
-
-export default EnterEmailFormView

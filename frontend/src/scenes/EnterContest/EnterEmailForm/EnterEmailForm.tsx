@@ -1,17 +1,15 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { ComponentType } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent, useEffect } from 'react'
+import { useSetMeByEmail } from 'ugrade/auth'
+import { useContestInfo } from 'ugrade/contest'
+import ActionToaster from 'ugrade/helpers/ActionToaster/ActionToaster'
+import { publicOnly } from 'ugrade/helpers/auth'
+import { useReset } from 'ugrade/scenes/EnterContest'
+import { AuthError } from 'ugrade/services/auth'
+import { AppThunkDispatch } from 'ugrade/stores'
+import { ContestInfo } from 'ugrade/stores/Contest'
 import * as yup from 'yup'
-
-import ActionToaster from '../../../helpers/ActionToaster/ActionToaster'
-import { publicOnly } from '../../../helpers/auth'
-import { AuthError } from '../../../services/auth'
-import { AppState, AppThunkDispatch } from '../../../stores'
-import { ContestInfo } from '../../../stores/Contest'
-import { resetAction } from '../actions'
-import { setEmailAction } from './actions'
-import EnterEmailFormView from './EnterEmailFormView'
+import { EnterEmailFormView } from './EnterEmailFormView'
 
 export interface EnterEmailFormValue {
   email: string
@@ -22,12 +20,14 @@ export interface EnterEmailFormProps {
   dispatch: AppThunkDispatch
 }
 
-class EnterEmailForm extends React.Component<EnterEmailFormProps> {
-  initialValue: EnterEmailFormValue = {
+export const EnterEmailForm: FunctionComponent = () => {
+  publicOnly()
+
+  const initialValue: EnterEmailFormValue = {
     email: '',
   }
 
-  validationSchema = yup.object().shape({
+  const validationSchema = yup.object().shape({
     email: yup
       .string()
       .min(4)
@@ -37,12 +37,14 @@ class EnterEmailForm extends React.Component<EnterEmailFormProps> {
       .required(),
   })
 
-  handleSubmit = async (
+  const setEmail = useSetMeByEmail()
+
+  const handleSubmit = async (
     values: EnterEmailFormValue,
     { setSubmitting }: FormikActions<EnterEmailFormValue>
   ) => {
     try {
-      await this.props.dispatch(setEmailAction(values.email))
+      await setEmail(values.email)
     } catch (error) {
       if (error instanceof AuthError) ActionToaster.showErrorToast(error)
       else throw error
@@ -51,37 +53,28 @@ class EnterEmailForm extends React.Component<EnterEmailFormProps> {
     }
   }
 
-  componentDidMount() {
-    if (!this.props.contest) this.props.dispatch(resetAction())
-  }
+  const [contestInfo] = useContestInfo()
+  const resetContest = useReset()
 
-  render() {
-    const contest = this.props.contest
-    if (!contest) return <React.Fragment />
+  useEffect(() => {
+    if (!contestInfo) resetContest()
+  }, [])
 
-    const renderView = (props: FormikProps<EnterEmailFormValue>) => (
-      <EnterEmailFormView
-        contest={contest}
-        gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
-        {...props}
-      />
-    )
-    return (
-      <Formik
-        initialValues={this.initialValue}
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
-        render={renderView}
-      />
-    )
-  }
+  if (!contestInfo) return <React.Fragment />
+
+  const renderView = (props: FormikProps<EnterEmailFormValue>) => (
+    <EnterEmailFormView
+      contest={contestInfo}
+      gotoAnotherContest={resetContest}
+      {...props}
+    />
+  )
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      render={renderView}
+    />
+  )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  contest: state.contest.info,
-})
-
-export default compose<ComponentType>(
-  publicOnly(),
-  connect(mapStateToProps)
-)(EnterEmailForm)
