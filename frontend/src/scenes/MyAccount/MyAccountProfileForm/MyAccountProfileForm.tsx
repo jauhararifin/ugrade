@@ -7,7 +7,7 @@ import { compose } from 'redux'
 import ActionToaster from '../../../helpers/ActionToaster'
 import { contestOnly } from '../../../helpers/auth'
 import { AppState, AppThunkDispatch } from '../../../stores'
-import { User } from '../../../stores/Auth'
+import { getMe, User } from '../../../stores/Auth'
 import {
   GenderType,
   ShirtSizeType,
@@ -88,7 +88,7 @@ export class MyAccountProfileForm extends React.Component<
 }
 
 const mapStateToProps = (state: AppState) => ({
-  me: state.auth.me,
+  me: getMe(state),
   profile: state.userProfile,
 })
 export default compose<ComponentType>(

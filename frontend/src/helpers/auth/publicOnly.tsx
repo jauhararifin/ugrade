@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 
 import { AppState } from '../../stores'
+import { getIsSignedIn } from '../../stores/Auth'
 
 export const publicOnly = (redirect: string = '/contest') => <P extends object>(
   Component: ComponentType<P>
@@ -17,7 +18,7 @@ export const publicOnly = (redirect: string = '/contest') => <P extends object>(
     return <Component {...props} />
   }
   const mapStateToProps = (state: AppState): Props => ({
-    signedIn: state.auth.isSignedIn,
+    signedIn: getIsSignedIn(state),
     location: state.router.location.pathname,
   })
   return connect(mapStateToProps)(result as any)

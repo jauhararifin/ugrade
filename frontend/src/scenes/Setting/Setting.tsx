@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
 import { AppAction, AppState } from '../../stores'
+import { getIsSignedIn } from '../../stores/Auth'
 import { setTitle } from '../../stores/Title'
 import { SettingView } from './SettingView'
 
@@ -24,7 +25,7 @@ export const Setting: FunctionComponent<SettingProps> = ({
 }
 
 const mapStateToProps = (state: AppState) => ({
-  signedIn: state.auth.isSignedIn,
+  signedIn: getIsSignedIn(state),
 })
 
 export default connect(mapStateToProps)(Setting)

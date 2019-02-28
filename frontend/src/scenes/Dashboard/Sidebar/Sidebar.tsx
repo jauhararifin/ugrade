@@ -6,7 +6,7 @@ import { compose } from 'redux'
 
 import { withServer } from '../../../helpers/server'
 import { AppState, AppThunkDispatch } from '../../../stores'
-import { User } from '../../../stores/Auth'
+import { getMe, User } from '../../../stores/Auth'
 import { ContestState } from '../../../stores/Contest'
 import { useAnnouncements } from '../helpers/useAnnouncements'
 import { Menu, SidebarView } from './SidebarView'
@@ -114,7 +114,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
 
 const mapStateToProps = (state: AppState) => ({
   contest: state.contest,
-  me: state.auth.me,
+  me: getMe(state),
 })
 
 export default compose<ComponentType>(

@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom'
 import { compose } from 'redux'
 
 import { AppState, AppThunkDispatch } from '../../../stores'
-import { User } from '../../../stores/Auth'
+import { getMe, User } from '../../../stores/Auth'
 import { useMe } from '../helpers'
 import { signOutAction } from './actions'
 import { selectBreadcrumb } from './selectors'
@@ -88,7 +88,7 @@ export const TopNavigationBar: FunctionComponent<TopNavigationBarProps> = ({
 
 const mapStateToProps = (state: AppState) => ({
   breadcrumbs: selectBreadcrumb(state),
-  user: state.auth.me,
+  user: getMe(state),
 })
 
 export default compose<ComponentType>(connect(mapStateToProps))(
