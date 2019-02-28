@@ -1,6 +1,7 @@
 import { push } from 'connected-react-router'
-import { AppThunkAction } from '../../../stores'
-import { setInfo } from '../../../stores/Contest'
+import { useAppThunkDispatch } from 'ugrade/common'
+import { AppThunkAction } from 'ugrade/stores'
+import { setInfo } from 'ugrade/stores/Contest'
 
 export function setContestAction(contestId: string): AppThunkAction {
   return async (dispatch, _getState, { contestService }) => {
@@ -8,4 +9,9 @@ export function setContestAction(contestId: string): AppThunkAction {
     dispatch(setInfo(contest))
     dispatch(push('/enter-contest/enter-email'))
   }
+}
+
+export function useSetContest() {
+  const dispatch = useAppThunkDispatch()
+  return (contestId: string) => dispatch(setContestAction(contestId))
 }

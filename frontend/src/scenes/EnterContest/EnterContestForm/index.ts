@@ -1,3 +1,2 @@
-import EnterContestForm from './EnterContestForm'
-
-export default EnterContestForm
+export * from './EnterContestForm'
+export * from './EnterContestFormView'

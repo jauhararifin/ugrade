@@ -1,30 +1,24 @@
 import { Formik, FormikActions } from 'formik'
-import React, { ComponentType } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent } from 'react'
+import { usePublicOnly } from 'ugrade/auth'
+import { useSetContest } from 'ugrade/contest'
+import ActionToaster from 'ugrade/helpers/ActionToaster/ActionToaster'
+import { ContestError } from 'ugrade/services/contest/errors'
 import * as yup from 'yup'
-
-import ActionToaster from '../../../helpers/ActionToaster/ActionToaster'
-import { publicOnly } from '../../../helpers/auth'
-import { ContestError } from '../../../services/contest/errors'
-import { AppThunkDispatch } from '../../../stores'
-import { setContestAction } from './actions'
 import EnterContestFormView from './EnterContestFormView'
 
 export interface EnterContestFormValue {
   contestId: string
 }
 
-export interface EnterContestFormProps {
-  dispatch: AppThunkDispatch
-}
+export const EnterContestForm: FunctionComponent = () => {
+  usePublicOnly()
 
-class EnterContestForm extends React.Component<EnterContestFormProps> {
-  initialValue: EnterContestFormValue = {
+  const initialValue: EnterContestFormValue = {
     contestId: '',
   }
 
-  validationSchema = yup.object().shape({
+  const validationSchema = yup.object().shape({
     contestId: yup
       .string()
       .min(4)
@@ -37,12 +31,14 @@ class EnterContestForm extends React.Component<EnterContestFormProps> {
       .required(),
   })
 
-  handleSubmit = async (
+  const setContest = useSetContest()
+
+  const handleSubmit = async (
     values: EnterContestFormValue,
     { setSubmitting }: FormikActions<EnterContestFormValue>
   ) => {
     try {
-      await this.props.dispatch(setContestAction(values.contestId))
+      await setContest(values.contestId)
     } catch (error) {
       if (error instanceof ContestError) ActionToaster.showErrorToast(error)
       else throw error
@@ -51,19 +47,12 @@ class EnterContestForm extends React.Component<EnterContestFormProps> {
     }
   }
 
-  render() {
-    return (
-      <Formik
-        initialValues={this.initialValue}
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
-        component={EnterContestFormView}
-      />
-    )
-  }
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      component={EnterContestFormView}
+    />
+  )
 }
-
-export default compose<ComponentType<EnterContestFormProps>>(
-  publicOnly(),
-  connect()
-)(EnterContestForm)

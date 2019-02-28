@@ -1,10 +1,9 @@
 import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
+import { EnterContestFormValue } from './EnterContestForm'
 
 import './styles.css'
-
-import { EnterContestFormValue } from './EnterContestForm'
 
 export type EnterContestFormViewProps = FormikProps<EnterContestFormValue>
 

@@ -2,16 +2,15 @@ import { Location } from 'history'
 import React, { FunctionComponent } from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-
-import './styles.css'
-
-import logo from '../../assets/images/logo.svg'
-import BottomLink from '../../components/BottomLink'
-import EnterContestForm from './EnterContestForm'
+import logo from 'ugrade/assets/images/logo.svg'
+import BottomLink from 'ugrade/components/BottomLink'
+import { EnterContestForm } from './EnterContestForm'
 import EnterEmailForm from './EnterEmailForm'
 import EnterPasswordForm from './EnterPasswordForm'
 import ResetPasswordForm from './ResetPasswordForm/ResetPasswordForm'
 import SignUpForm from './SignUpForm'
+
+import './styles.css'
 
 export interface EnterContestViewProps {
   location: Location
