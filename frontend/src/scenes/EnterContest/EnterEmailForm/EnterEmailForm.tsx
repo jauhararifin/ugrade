@@ -52,7 +52,7 @@ export const EnterEmailForm: FunctionComponent = () => {
     }
   }
 
-  const [contestInfo] = useContestInfo()
+  const contestInfo = useContestInfo()
   const resetContest = useReset()
 
   useEffect(() => {

@@ -47,7 +47,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     }
   }
 
-  const [contestInfo] = useContestInfo()
+  const contestInfo = useContestInfo()
   const resetContest = useReset()
   const resetAccount = useResetAccount()
 
