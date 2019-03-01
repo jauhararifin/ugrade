@@ -1,5 +1,5 @@
+import { setClarifications } from 'ugrade/contest/store/ContestSetClarrifications'
 import { AppThunkAction } from 'ugrade/store'
-import { setClarifications } from 'ugrade/stores/Contest/ContestSetClarrifications'
 import { normalizeClarification } from '../util'
 
 export const readClarificationEntriesAction = (

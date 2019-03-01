@@ -1,7 +1,7 @@
 import { Card, Classes, Drawer, H5, Tooltip } from '@blueprintjs/core'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { Clarification } from 'ugrade/stores/Contest'
+import { Clarification } from 'ugrade/contest/store'
 import CreateClarificationEntryForm from './CreateClarificationEntryForm'
 
 import './styles.scss'

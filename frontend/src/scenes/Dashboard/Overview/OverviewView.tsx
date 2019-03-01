@@ -1,7 +1,7 @@
 import { H2 } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Markdown } from 'ugrade/components/Markdown'
-import { ContestInfo } from 'ugrade/stores/Contest'
+import { ContestInfo } from 'ugrade/contest/store'
 
 import './styles.css'
 

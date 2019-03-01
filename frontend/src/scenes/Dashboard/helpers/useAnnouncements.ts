@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
+import { Announcement, setAnnouncements } from 'ugrade/contest/store'
 import {
   AnnouncementSubscribeCallback,
   AnnouncementUbsubscribeFunction,
 } from 'ugrade/services/contest/ContestService'
 import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
-import { Announcement, setAnnouncements } from 'ugrade/stores/Contest'
 
 export const getAnnouncementsAction = (): AppThunkAction<Announcement[]> => {
   return async (dispatch, getState, { contestService }) => {

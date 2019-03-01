@@ -18,7 +18,7 @@ import {
   Problem,
   Submission,
   SubmissionVerdict,
-} from 'ugrade/stores/Contest'
+} from 'ugrade/contest/store'
 import SubmissionDetail from './SubmissionDetail'
 
 import './styles.css'

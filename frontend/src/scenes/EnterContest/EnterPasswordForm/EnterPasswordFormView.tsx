@@ -9,11 +9,10 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { useState } from 'react'
+import { ContestInfo } from 'ugrade/contest/store'
+import { EnterPasswordFormValue } from './EnterPasswordForm'
 
 import './styles.css'
-
-import { ContestInfo } from 'ugrade/stores/Contest'
-import { EnterPasswordFormValue } from './EnterPasswordForm'
 
 export interface EnterPasswordFormViewProps
   extends FormikProps<EnterPasswordFormValue> {

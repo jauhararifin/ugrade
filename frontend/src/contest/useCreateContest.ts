@@ -1,9 +1,9 @@
 import { push } from 'connected-react-router'
 import moment from 'moment'
 import { useAppThunkDispatch } from 'ugrade/common'
+import { setInfo } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
 import { setMe } from 'ugrade/stores/Auth'
-import { setInfo } from 'ugrade/stores/Contest'
 
 export function createContestAction(
   email: string,

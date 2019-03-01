@@ -1,9 +1,6 @@
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { contestOnly } from 'ugrade/helpers/auth'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
 import {
   getLanguagesMap,
   getSubmissionList,
@@ -11,7 +8,10 @@ import {
   Problem,
   ProblemType,
   Submission,
-} from 'ugrade/stores/Contest'
+} from 'ugrade/contest/store'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { withServer, WithServerProps } from 'ugrade/helpers/server'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
 import { useInfo, useProblems } from '../helpers'
 import SubmissionsView, { ISubmission } from './SubmissionsView'
 import { useSubmissions } from './useSubmissions'

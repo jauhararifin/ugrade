@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
+import { ContestInfo, setInfo } from 'ugrade/contest/store'
 import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
-import { ContestInfo, setInfo } from 'ugrade/stores/Contest'
 
 export const getMyContestAction = (): AppThunkAction<ContestInfo> => {
   return async (dispatch, getState, { contestService }) => {

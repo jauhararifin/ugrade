@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Announcement } from 'ugrade/stores/Contest'
+import { Announcement } from 'ugrade/contest/store'
 
 import 'github-markdown-css'
 import './styles.css'

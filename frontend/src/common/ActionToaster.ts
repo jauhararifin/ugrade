@@ -45,3 +45,5 @@ export class ActionToaster {
     })
   }
 }
+
+export const TopToaster = new ActionToaster()

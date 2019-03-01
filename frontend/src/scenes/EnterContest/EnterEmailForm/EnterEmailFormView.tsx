@@ -1,7 +1,7 @@
 import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-import { ContestInfo } from 'ugrade/stores/Contest'
+import { ContestInfo } from 'ugrade/contest/store'
 import { EnterEmailFormValue } from './EnterEmailForm'
 
 import './styles.css'

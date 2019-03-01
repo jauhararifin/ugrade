@@ -14,7 +14,7 @@ import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
-import { Clarification, Problem } from 'ugrade/stores/Contest'
+import { Clarification, Problem } from 'ugrade/contest/store'
 import ClarificationDetail from './ClarificationDetail'
 import CreateClarificationForm from './CreateClarificationForm'
 

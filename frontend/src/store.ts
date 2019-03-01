@@ -14,17 +14,17 @@ import {
 } from 'redux'
 import logger from 'redux-logger'
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import {
+  ContestAction,
+  contestReducer,
+  ContestState,
+} from 'ugrade/contest/store'
 import { AuthService } from 'ugrade/services/auth'
 import { ContestService } from 'ugrade/services/contest/ContestService'
 import { ProblemService } from 'ugrade/services/problem'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { UserService } from 'ugrade/services/user'
 import { AuthAction, authReducer, AuthState } from 'ugrade/stores/Auth'
-import {
-  ContestAction,
-  contestReducer,
-  ContestState,
-} from 'ugrade/stores/Contest'
 import {
   ServerStatusAction,
   serverStatusReducer,

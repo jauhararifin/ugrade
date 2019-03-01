@@ -1,8 +1,8 @@
 import { push } from 'connected-react-router'
 import { useAppThunkDispatch } from 'ugrade/common'
+import { setRegistered } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
 import { setMe } from 'ugrade/stores/Auth'
-import { setRegistered } from 'ugrade/stores/Contest'
 
 export function SetMeByEmailAction(email: string): AppThunkAction {
   return async (dispatch, getState, { authService }) => {

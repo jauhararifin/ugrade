@@ -2,9 +2,9 @@ import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
 import { compose } from 'redux'
+import { Problem } from 'ugrade/contest/store'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { AppState } from 'ugrade/store'
-import { Problem } from 'ugrade/stores/Contest'
 import { ProblemDetailView } from './ProblemDetailView'
 
 export interface ProblemDetailRoute {

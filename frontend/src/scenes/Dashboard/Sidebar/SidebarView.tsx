@@ -2,7 +2,7 @@ import { Alignment, Button, H2, H5, H6, Intent, Tag } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { ContestState } from 'ugrade/stores/Contest'
+import { ContestState } from 'ugrade/contest/store'
 import ContestSubmitForm from './ContestSubmitForm'
 import SidebarMiniCard from './SidebarMiniCard'
 

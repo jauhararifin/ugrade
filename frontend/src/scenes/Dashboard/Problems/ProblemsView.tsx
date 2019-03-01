@@ -1,7 +1,7 @@
 import { Card, H1, H3, H4 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
-import { Problem } from 'ugrade/stores/Contest'
+import { Problem } from 'ugrade/contest/store'
 
 import './styles.css'
 

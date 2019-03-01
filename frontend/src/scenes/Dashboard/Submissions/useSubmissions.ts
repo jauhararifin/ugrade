@@ -1,7 +1,6 @@
 import { useState } from 'react'
-
+import { setSubmissions, Submission } from 'ugrade/contest/store'
 import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
-import { setSubmissions, Submission } from 'ugrade/stores/Contest'
 
 export const getSubmissionsAction = (): AppThunkAction<Submission[]> => {
   return async (dispatch, getState, { contestService }) => {

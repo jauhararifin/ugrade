@@ -2,11 +2,11 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { ActionToaster } from 'ugrade/common/ActionToaster'
+import { TopToaster } from 'ugrade/common/ActionToaster'
+import { ContestInfo } from 'ugrade/contest/store'
 import { publicOnly } from 'ugrade/helpers/auth'
 import { AuthError } from 'ugrade/services/auth'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { ContestInfo } from 'ugrade/stores/Contest'
 import * as yup from 'yup'
 import { resetAccountAction, resetAction } from '../actions'
 import { forgotPasswordAction, signinAction } from './actions'
@@ -49,7 +49,7 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
         signinAction(values.password, values.rememberMe)
       )
     } catch (error) {
-      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
     } finally {
       setSubmitting(false)
@@ -64,7 +64,7 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
     try {
       await this.props.dispatch(forgotPasswordAction())
     } catch (error) {
-      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
     } finally {
       setSubmitting(false)

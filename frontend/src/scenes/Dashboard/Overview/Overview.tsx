@@ -1,9 +1,9 @@
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { ContestInfo } from 'ugrade/contest/store'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { ContestInfo } from 'ugrade/stores/Contest'
 import { useInfo } from '../helpers'
 import OverviewView from './OverviewView'
 

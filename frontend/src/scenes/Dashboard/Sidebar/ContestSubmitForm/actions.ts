@@ -1,5 +1,5 @@
+import { setSubmissions, Submission } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
-import { setSubmissions, Submission } from 'ugrade/stores/Contest'
 
 export const submitSolutionAction = (
   problemId: string,

@@ -2,16 +2,16 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType, Fragment, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import ActionToaster from 'ugrade/helpers/ActionToaster'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { ContestError } from 'ugrade/services/contest/errors'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
 import {
   ContestInfo,
   getProblemList,
   Language,
   Problem,
-} from 'ugrade/stores/Contest'
+} from 'ugrade/contest/store'
+import ActionToaster from 'ugrade/helpers/ActionToaster'
+import { withServer, WithServerProps } from 'ugrade/helpers/server'
+import { ContestError } from 'ugrade/services/contest/errors'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
 import { useInfo, useProblems } from '../../helpers'
 import { submitSolutionAction } from './actions'
