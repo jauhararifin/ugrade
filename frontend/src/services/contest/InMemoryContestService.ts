@@ -5,15 +5,9 @@ import { Announcement } from './Announcement'
 import { Clarification, ClarificationEntry } from './Clarification'
 import { Contest, Language } from './Contest'
 import {
-  AnnouncementSubscribeCallback,
-  AnnouncementUbsubscribeFunction,
-  ClarificationSubscribeCallback,
-  ClarificationUnsubscribeFunction,
   ContestService,
-  ProblemIdsSubscribeCallback,
-  ProblemIdsUnsubscribeFunction,
-  SubmissionSubscribeCallback,
-  SubmissionUnsubscribeFunction,
+  SubscriptionCallback,
+  UnsubscriptionFunction,
 } from './ContestService'
 import { ContestIdTaken, NoSuchClarification, NoSuchContest } from './errors'
 import { NoSuchLanguage } from './errors/NoSuchLanguage'
@@ -105,8 +99,8 @@ export class InMemoryContestService implements ContestService {
 
   subscribeAnnouncements(
     token: string,
-    callback: AnnouncementSubscribeCallback
-  ): AnnouncementUbsubscribeFunction {
+    callback: SubscriptionCallback<Announcement[]>
+  ): UnsubscriptionFunction {
     const runThis = async () => {
       const newAnnouncement: Announcement = {
         id: Math.round(Math.random() * 300).toString(),
@@ -145,8 +139,8 @@ export class InMemoryContestService implements ContestService {
 
   subscribeProblemIds(
     token: string,
-    callback: ProblemIdsSubscribeCallback
-  ): ProblemIdsUnsubscribeFunction {
+    callback: SubscriptionCallback<string[]>
+  ): UnsubscriptionFunction {
     const runThis = async () => {
       const contest = await this.getMyContest(token)
       const arr = await this.getProblemIds(token)
@@ -173,8 +167,8 @@ export class InMemoryContestService implements ContestService {
 
   async subscribeClarifications(
     token: string,
-    callback: ClarificationSubscribeCallback
-  ): Promise<ClarificationUnsubscribeFunction> {
+    callback: SubscriptionCallback<Clarification[]>
+  ): Promise<UnsubscriptionFunction> {
     const runThis = async () => {
       const arr = await this.getClarifications(token)
       for (const clarif of arr) {
@@ -294,8 +288,8 @@ export class InMemoryContestService implements ContestService {
 
   async subscribeSubmissions(
     token: string,
-    callback: SubmissionSubscribeCallback
-  ): Promise<SubmissionUnsubscribeFunction> {
+    callback: SubscriptionCallback<Submission[]>
+  ): Promise<UnsubscriptionFunction> {
     const contest = await this.getMyContest(token)
 
     const runThis = async () => {

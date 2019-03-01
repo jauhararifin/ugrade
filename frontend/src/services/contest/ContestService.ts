@@ -5,25 +5,8 @@ import { Contest, Language } from './Contest'
 import { Scoreboard } from './Scoreboard'
 import { Submission } from './Submission'
 
-export type AnnouncementSubscribeCallback = (
-  announcements: Announcement[]
-) => any
-
-export type AnnouncementUbsubscribeFunction = () => any
-
-export type ProblemIdsSubscribeCallback = (problemIds: string[]) => any
-
-export type ProblemIdsUnsubscribeFunction = () => any
-
-export type ClarificationSubscribeCallback = (
-  clarifications: Clarification[]
-) => any
-
-export type ClarificationUnsubscribeFunction = () => any
-
-export type SubmissionSubscribeCallback = (submissions: Submission[]) => any
-
-export type SubmissionUnsubscribeFunction = () => any
+export type SubscriptionCallback<T> = (newItem: T) => any
+export type UnsubscriptionFunction = () => any
 
 export interface ContestService {
   getAvailableLanguages(): Promise<Language[]>
@@ -36,8 +19,8 @@ export interface ContestService {
 
   subscribeAnnouncements(
     token: string,
-    callback: AnnouncementSubscribeCallback
-  ): AnnouncementUbsubscribeFunction
+    callback: SubscriptionCallback<Announcement[]>
+  ): UnsubscriptionFunction
 
   readAnnouncements(token: string, id: string[]): Promise<void>
 
@@ -45,15 +28,15 @@ export interface ContestService {
 
   subscribeProblemIds(
     token: string,
-    callback: ProblemIdsSubscribeCallback
-  ): ProblemIdsUnsubscribeFunction
+    callback: SubscriptionCallback<string[]>
+  ): UnsubscriptionFunction
 
   getClarifications(token: string): Promise<Clarification[]>
 
   subscribeClarifications(
     token: string,
-    callback: ClarificationSubscribeCallback
-  ): Promise<ClarificationUnsubscribeFunction>
+    callback: SubscriptionCallback<Clarification[]>
+  ): Promise<UnsubscriptionFunction>
 
   createClarification(
     token: string,
@@ -78,8 +61,8 @@ export interface ContestService {
 
   subscribeSubmissions(
     token: string,
-    callback: SubmissionSubscribeCallback
-  ): Promise<SubmissionUnsubscribeFunction>
+    callback: SubscriptionCallback<Submission[]>
+  ): Promise<UnsubscriptionFunction>
 
   submitSolution(
     token: string,
