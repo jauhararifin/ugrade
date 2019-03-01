@@ -1,3 +1,2 @@
-import ResetPasswordForm from './ResetPasswordForm'
-
-export default ResetPasswordForm
+export * from './ResetPasswordForm'
+export * from './ResetPasswordFormView'

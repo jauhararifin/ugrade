@@ -1,15 +1,11 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { ComponentType } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent, useEffect } from 'react'
+import { usePublicOnly, useResetPassword } from 'ugrade/auth'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { ContestInfo } from 'ugrade/contest/store'
-import { publicOnly } from 'ugrade/helpers/auth'
+import { useContestInfo } from 'ugrade/contest'
 import { AuthError } from 'ugrade/services/auth'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
-import { resetAccountAction, resetAction } from '../actions'
-import { resetPasswordAction } from './actions'
+import { useReset, useResetAccount } from '../actions'
 import { ResetPasswordFormValue } from './ResetPasswordForm'
 import { ResetPasswordFormView } from './ResetPasswordFormView'
 
@@ -20,18 +16,15 @@ export interface ResetPasswordFormValue {
   password: string
 }
 
-export interface ResetPasswordFormProps {
-  dispatch: AppThunkDispatch
-  contest: ContestInfo
-}
+export const ResetPasswordForm: FunctionComponent = () => {
+  usePublicOnly()
 
-class ResetPasswordForm extends React.Component<ResetPasswordFormProps> {
-  initialValues = {
+  const initialValues = {
     oneTimeCode: '',
     password: '',
   }
 
-  validationSchema = yup.object().shape({
+  const validationSchema = yup.object().shape({
     oneTimeCode: yup
       .string()
       .label('One Time Code')
@@ -44,14 +37,17 @@ class ResetPasswordForm extends React.Component<ResetPasswordFormProps> {
       .required(),
   })
 
-  handleSubmit = async (
+  const resetPassword = useResetPassword()
+  const resetContest = useReset()
+  const resetAccount = useResetAccount()
+  const contestInfo = useContestInfo()
+
+  const handleSubmit = async (
     values: ResetPasswordFormValue,
     { setSubmitting }: FormikActions<ResetPasswordFormValue>
   ) => {
     try {
-      await this.props.dispatch(
-        resetPasswordAction(values.oneTimeCode, values.password)
-      )
+      await resetPassword(values.oneTimeCode, values.password)
     } catch (error) {
       if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
@@ -60,41 +56,26 @@ class ResetPasswordForm extends React.Component<ResetPasswordFormProps> {
     }
   }
 
-  componentDidMount() {
-    if (!this.props.contest) this.props.dispatch(resetAction())
-  }
+  useEffect(() => {
+    if (!contestInfo) resetContest()
+  }, [])
 
-  render() {
-    const contest = this.props.contest
-    if (!contest) return <React.Fragment />
+  if (!contestInfo) return <React.Fragment />
 
-    const renderView = (props: FormikProps<ResetPasswordFormValue>) => (
-      <ResetPasswordFormView
-        {...props}
-        contest={contest}
-        gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
-        gotoAnotherAccount={this.props.dispatch.bind(
-          this,
-          resetAccountAction()
-        )}
-      />
-    )
-    return (
-      <Formik
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
-        initialValues={this.initialValues}
-        render={renderView}
-      />
-    )
-  }
+  const renderView = (props: FormikProps<ResetPasswordFormValue>) => (
+    <ResetPasswordFormView
+      {...props}
+      contest={contestInfo}
+      gotoAnotherContest={resetContest}
+      gotoAnotherAccount={resetAccount}
+    />
+  )
+  return (
+    <Formik
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      render={renderView}
+    />
+  )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  contest: state.contest.info,
-})
-
-export default compose<ComponentType>(
-  publicOnly(),
-  connect(mapStateToProps)
-)(ResetPasswordForm)

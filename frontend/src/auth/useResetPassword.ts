@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router'
-
+import { useDispatch } from 'redux-react-hook'
 import { AppThunkAction } from 'ugrade/store'
 
 export function resetPasswordAction(
@@ -32,4 +32,10 @@ export function resetPasswordAction(
       dispatch(push('/enter-contest/enter-email'))
     }
   }
+}
+
+export function useResetPassword() {
+  const dispatch = useDispatch()
+  return (oneTimeCode: string, password: string) =>
+    dispatch(resetPasswordAction(oneTimeCode, password))
 }
