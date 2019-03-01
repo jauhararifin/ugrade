@@ -1,12 +1,9 @@
 import { setMe } from 'ugrade/auth/store'
+import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
-import {
-  GenderType,
-  setUserProfile,
-  ShirtSizeType,
-} from 'ugrade/userprofile/store'
+import { GenderType, setUserProfile, ShirtSizeType } from './store'
 
-export const setProfile = (
+export const setProfileAction = (
   name: string,
   shirtSize?: ShirtSizeType,
   gender?: GenderType,
@@ -29,4 +26,14 @@ export const setProfile = (
       dispatch(setUserProfile(gender, shirtSize, address))
     }
   }
+}
+
+export function useSetProfile() {
+  const dispatch = useAppThunkDispatch()
+  return (
+    name: string,
+    shirtSize?: ShirtSizeType,
+    gender?: GenderType,
+    address?: string
+  ) => dispatch(setProfileAction(name, shirtSize, gender, address))
 }

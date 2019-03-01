@@ -1,3 +1,3 @@
-import MyAccountProfileForm from './MyAccountProfileForm'
-
-export default MyAccountProfileForm
+export * from './MyAccountProfileForm'
+export * from './MyAccountProfileFormView'
+export * from './helpers'

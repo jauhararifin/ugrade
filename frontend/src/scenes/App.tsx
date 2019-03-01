@@ -10,7 +10,7 @@ import { CreateContest } from './CreateContest'
 import { Dashboard } from './Dashboard'
 import { EnterContest } from './EnterContest/EnterContest'
 import { Home } from './Home'
-import MyAccount from './MyAccount'
+import { MyAccount } from './MyAccount'
 import { Setting } from './Setting'
 
 import './styles.css'

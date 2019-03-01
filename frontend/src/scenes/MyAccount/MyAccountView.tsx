@@ -3,8 +3,8 @@ import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 import BottomLink from 'ugrade/components/BottomLink'
-import MyAccountPasswordForm from './MyAccountPasswordForm'
-import MyAccountProfileForm from './MyAccountProfileForm'
+import { MyAccountPasswordForm } from './MyAccountPasswordForm'
+import { MyAccountProfileForm } from './MyAccountProfileForm'
 
 import './styles.css'
 
@@ -48,5 +48,3 @@ export const MyAccountView: FunctionComponent<MyAccountViewProps> = ({
     </BottomLink>
   </div>
 )
-
-export default MyAccountView

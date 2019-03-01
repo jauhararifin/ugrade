@@ -8,7 +8,7 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-import { MyAccountPasswordFormValue } from './MyAccountPassword'
+import { MyAccountPasswordFormValue } from './MyAccountPasswordForm'
 
 export type MyAccountPasswordFormViewProps = FormikProps<
   MyAccountPasswordFormValue
@@ -120,5 +120,3 @@ export const MyAccountPasswordFormView: React.FunctionComponent<
     </div>
   </form>
 )
-
-export default MyAccountPasswordFormView

@@ -123,5 +123,3 @@ export const MyAccountProfileFormView: React.FunctionComponent<
     </div>
   </form>
 )
-
-export default MyAccountProfileFormView

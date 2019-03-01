@@ -6,5 +6,5 @@ export function useTitle(title: string) {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(setTitle(title))
-  })
+  }, [])
 }

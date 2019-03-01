@@ -1,3 +1,2 @@
-import MyAccountPassword from './MyAccountPassword'
-
-export default MyAccountPassword
+export * from './MyAccountPasswordForm'
+export * from './MyAccountPasswordFormView'

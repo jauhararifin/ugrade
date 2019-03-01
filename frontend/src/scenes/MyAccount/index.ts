@@ -1,3 +1,2 @@
-import MyAccount from './MyAccount'
-
-export default MyAccount
+export * from './MyAccount'
+export * from './MyAccountView'

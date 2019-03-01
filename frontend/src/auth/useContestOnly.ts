@@ -9,5 +9,5 @@ export function useContestOnly(to: string = '/enter-contest') {
   const token = useToken()
   useEffect(() => {
     if (!isSignedIn || token.length === 0) push(to)
-  }, [isSignedIn])
+  }, [isSignedIn, token])
 }
