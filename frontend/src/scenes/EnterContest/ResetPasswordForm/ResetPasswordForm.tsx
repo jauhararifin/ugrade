@@ -1,9 +1,8 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import { usePublicOnly, useResetPassword } from 'ugrade/auth'
-import { TopToaster } from 'ugrade/common/ActionToaster'
+import { handleCommonError } from 'ugrade/common'
 import { useContestInfo } from 'ugrade/contest'
-import { AuthError } from 'ugrade/services/auth'
 import * as yup from 'yup'
 import { useReset, useResetAccount } from '../actions'
 import { ResetPasswordFormValue } from './ResetPasswordForm'
@@ -49,8 +48,7 @@ export const ResetPasswordForm: FunctionComponent = () => {
     try {
       await resetPassword(values.oneTimeCode, values.password)
     } catch (error) {
-      if (error instanceof AuthError) TopToaster.showErrorToast(error)
-      else throw error
+      if (!handleCommonError(error)) throw error
     } finally {
       setSubmitting(false)
     }

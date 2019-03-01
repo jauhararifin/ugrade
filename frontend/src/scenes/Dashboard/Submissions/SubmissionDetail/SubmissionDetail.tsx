@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { ISubmission } from '../SubmissionsView'
 import { getSourceCodeFromUrl } from './actions'
@@ -25,7 +26,11 @@ export const SubmissionDetail: FunctionComponent<SubmissionDetailProps> = ({
         const code = await getSourceCodeFromUrl(submission.sourceCode)
         setSourceCodeContent(code)
       } catch (error) {
-        TopToaster.showErrorToast(new Error('Cannot Fetch Source Code Content'))
+        if (!handleCommonError(error)) {
+          TopToaster.showErrorToast(
+            new Error('Cannot Fetch Source Code Content')
+          )
+        }
       }
     }
   }

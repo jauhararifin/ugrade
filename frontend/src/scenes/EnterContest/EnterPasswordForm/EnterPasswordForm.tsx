@@ -1,6 +1,7 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import { useForgotPassword, usePublicOnly, useSignIn } from 'ugrade/auth'
+import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useContestInfo } from 'ugrade/contest'
 import { AuthError } from 'ugrade/services/auth'
@@ -40,8 +41,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     try {
       await signIn(values.password, values.rememberMe)
     } catch (error) {
-      if (error instanceof AuthError) TopToaster.showErrorToast(error)
-      else throw error
+      if (!handleCommonError(error)) throw error
     } finally {
       setSubmitting(false)
     }
@@ -63,8 +63,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     try {
       await forgotPassword()
     } catch (error) {
-      if (error instanceof AuthError) TopToaster.showErrorToast(error)
-      else throw error
+      if (!handleCommonError(error)) throw error
     } finally {
       setSubmitting(false)
     }

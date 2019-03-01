@@ -3,8 +3,8 @@ import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { useContestOnly } from 'ugrade/auth'
+import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { ContestError } from 'ugrade/services/contest/errors'
 import { AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
 import { createClarificationEntryAction } from './actions'
@@ -49,8 +49,7 @@ export const CreateClarificationEntryForm: FunctionComponent<
       )
       TopToaster.showSuccessToast('Clarification Reply Submitted')
     } catch (error) {
-      if (error instanceof ContestError) TopToaster.showErrorToast(error)
-      else throw error
+      if (!handleCommonError(error)) throw error
     } finally {
       setSubmitting(false)
       resetForm()

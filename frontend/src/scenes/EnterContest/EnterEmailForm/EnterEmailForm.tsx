@@ -1,11 +1,10 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import { usePublicOnly, useSetMeByEmail } from 'ugrade/auth'
-import { TopToaster } from 'ugrade/common/ActionToaster'
+import { handleCommonError } from 'ugrade/common'
 import { useContestInfo } from 'ugrade/contest'
 import { ContestInfo } from 'ugrade/contest/store'
 import { useReset } from 'ugrade/scenes/EnterContest'
-import { AuthError } from 'ugrade/services/auth'
 import { AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
 import { EnterEmailFormView } from './EnterEmailFormView'
@@ -45,8 +44,7 @@ export const EnterEmailForm: FunctionComponent = () => {
     try {
       await setEmail(values.email)
     } catch (error) {
-      if (error instanceof AuthError) TopToaster.showErrorToast(error)
-      else throw error
+      if (!handleCommonError(error)) throw error
     } finally {
       setSubmitting(false)
     }
