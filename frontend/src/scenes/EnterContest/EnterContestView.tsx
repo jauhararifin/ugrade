@@ -6,9 +6,9 @@ import logo from 'ugrade/assets/images/logo.svg'
 import BottomLink from 'ugrade/components/BottomLink'
 import { EnterContestForm } from './EnterContestForm'
 import { EnterEmailForm } from './EnterEmailForm'
-import EnterPasswordForm from './EnterPasswordForm'
-import ResetPasswordForm from './ResetPasswordForm/ResetPasswordForm'
-import SignUpForm from './SignUpForm'
+import { EnterPasswordForm } from './EnterPasswordForm'
+import { ResetPasswordForm } from './ResetPasswordForm/ResetPasswordForm'
+import { SignUpForm } from './SignUpForm'
 
 import './styles.css'
 

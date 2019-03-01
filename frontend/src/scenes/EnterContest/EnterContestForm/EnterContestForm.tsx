@@ -4,7 +4,7 @@ import { usePublicOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { useSetContest } from 'ugrade/contest'
 import * as yup from 'yup'
-import EnterContestFormView from './EnterContestFormView'
+import { EnterContestFormView } from './EnterContestFormView'
 
 export interface EnterContestFormValue {
   contestId: string

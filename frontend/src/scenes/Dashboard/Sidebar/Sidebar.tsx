@@ -5,7 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { compose } from 'redux'
 import { getMe, User } from 'ugrade/auth/store'
 import { ContestState } from 'ugrade/contest/store'
-import { withServer } from 'ugrade/helpers/server'
+import { useServerClock } from 'ugrade/server'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
 import { useAnnouncements } from '../helpers/useAnnouncements'
 import { Menu, SidebarView } from './SidebarView'
@@ -16,13 +16,7 @@ export interface SidebarReduxProps {
   dispatch: AppThunkDispatch
 }
 
-export interface SidebarServerProps {
-  serverClock?: Date
-}
-
-export type SidebarProps = RouteComponentProps &
-  SidebarReduxProps &
-  SidebarServerProps
+export type SidebarProps = RouteComponentProps & SidebarReduxProps
 
 export interface SidebarState {
   menu: Menu
@@ -32,10 +26,10 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   contest,
   me,
   dispatch,
-  serverClock,
   location,
 }) => {
   useAnnouncements(dispatch)
+  const serverClock = useServerClock()
 
   const getCurrentMenu = (): Menu => {
     const match = location.pathname.match(/contest\/([a-z]+)/)
@@ -118,6 +112,5 @@ const mapStateToProps = (state: AppState) => ({
 
 export default compose<ComponentType>(
   connect(mapStateToProps),
-  withRouter,
-  withServer
+  withRouter
 )(Sidebar)

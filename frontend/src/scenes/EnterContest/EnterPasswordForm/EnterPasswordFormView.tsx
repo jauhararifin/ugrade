@@ -17,6 +17,7 @@ import './styles.css'
 export interface EnterPasswordFormViewProps
   extends FormikProps<EnterPasswordFormValue> {
   contest: ContestInfo
+  username: string
   gotoAnotherContest: () => any
   gotoAnotherAccount: () => any
   forgotPassword: (setSubmitting: (isSubmitting: boolean) => void) => any
@@ -39,6 +40,7 @@ export const EnterPasswordFormView: React.FunctionComponent<
     forgotPassword,
     gotoAnotherAccount,
     submitForm,
+    username,
   } = props
   const forgotPasswordClick = () => {
     setSubmitting(true)
@@ -52,6 +54,7 @@ export const EnterPasswordFormView: React.FunctionComponent<
   const [forgotPasswordSubmit, setforgotPasswordSubmit] = useState(false)
   return (
     <form className='enter-password-panel' onSubmit={handleSubmit}>
+      <input name='username' type='hidden' value={username} />
       <Card>
         <h2>Sign In To</h2>
         <h3>{contest.name}</h3>

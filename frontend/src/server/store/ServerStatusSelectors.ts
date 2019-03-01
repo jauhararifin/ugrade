@@ -9,3 +9,11 @@ export const getIsOnline = createSelector(
   getServerStatus,
   serverStatus => serverStatus.online
 )
+
+export const getClock = createSelector(
+  getServerStatus,
+  serverStatus => ({
+    clock: serverStatus.clock,
+    localClock: serverStatus.localClock,
+  })
+)

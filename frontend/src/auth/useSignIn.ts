@@ -28,5 +28,5 @@ export function signinAction(
 export function useSignIn() {
   const dispatch = useAppThunkDispatch()
   return (password: string, rememberMe: boolean) =>
-    dispatch(setSignedIn(password, rememberMe))
+    dispatch(signinAction(password, rememberMe))
 }

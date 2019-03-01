@@ -3,7 +3,7 @@ import { usePush } from 'ugrade/router/usePush'
 import { useIsSignedIn } from './useIsSignedIn'
 import { useToken } from './useToken'
 
-export function useContestOnly(to: string = '/contest') {
+export function useContestOnly(to: string = '/enter-contest') {
   const push = usePush()
   const isSignedIn = useIsSignedIn()
   const token = useToken()

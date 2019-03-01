@@ -7,7 +7,7 @@ import './styles.css'
 
 export type EnterContestFormViewProps = FormikProps<EnterContestFormValue>
 
-const EnterContestFormView: React.FunctionComponent<
+export const EnterContestFormView: React.FunctionComponent<
   EnterContestFormViewProps
 > = ({
   handleSubmit,
@@ -54,5 +54,3 @@ const EnterContestFormView: React.FunctionComponent<
     </Card>
   </form>
 )
-
-export default EnterContestFormView
