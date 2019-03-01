@@ -1,8 +1,8 @@
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { ContestInfo } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
 import { useInfo } from '../helpers'
 import OverviewView from './OverviewView'
@@ -16,6 +16,7 @@ export const Overview: FunctionComponent<OverviewProps> = ({
   contest,
   dispatch,
 }) => {
+  useContestOnly()
   useInfo(dispatch)
   return <OverviewView contest={contest} />
 }
@@ -24,7 +25,4 @@ const mapStateToProps = (state: AppState) => ({
   contest: state.contest.info,
 })
 
-export default compose<ComponentType>(
-  contestOnly(),
-  connect(mapStateToProps)
-)(Overview)
+export default compose<ComponentType>(connect(mapStateToProps))(Overview)

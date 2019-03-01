@@ -7,12 +7,12 @@ import {
   getProblemList,
   Problem,
 } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { withServer, WithServerProps } from 'ugrade/helpers/server'
 import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
 import { useProblems } from '../helpers'
 import { useClarifications } from '../helpers/useClarifications'
 import { ClarificationsView } from './ClarificationsView'
+import { useContestOnly } from 'ugrade/auth'
 
 export interface ClarificationsSceneProps extends WithServerProps {
   clarifications?: Clarification[]
@@ -23,6 +23,7 @@ export interface ClarificationsSceneProps extends WithServerProps {
 export const ClarificationsScene: FunctionComponent<
   ClarificationsSceneProps
 > = ({ clarifications, dispatch, problems, serverClock }) => {
+  useContestOnly()
   useProblems(dispatch)
   useClarifications(dispatch)
   return (
@@ -40,7 +41,6 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 export default compose<ComponentType>(
-  contestOnly(),
   connect(mapStateToProps),
   withServer
 )(ClarificationsScene)

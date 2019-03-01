@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { compose, Dispatch } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { setTitle } from 'ugrade/common/title/store'
 import { ContestInfo } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
 import Announcements from './Announcements'
 import Clarifications from './Clarifications'
@@ -27,6 +27,7 @@ export const Dashboard: FunctionComponent<DashboardProps> = ({
   location,
   contest,
 }) => {
+  useContestOnly()
   useInfo(dispatch)
   useEffect(() => {
     if (contest) dispatch(setTitle(`UGrade | ${contest.name}`))
@@ -75,7 +76,6 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 export default compose<ComponentType>(
-  contestOnly(),
   withRouter,
   connect(mapStateToProps)
 )(Dashboard)

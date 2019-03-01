@@ -2,8 +2,8 @@ import { Formik, FormikActions } from 'formik'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { ContestError } from 'ugrade/services/contest/errors'
 import { AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
@@ -28,6 +28,8 @@ export type CreateClarificationEntryFormProps = CreateClarificationEntryFormOwnP
 export const CreateClarificationEntryForm: FunctionComponent<
   CreateClarificationEntryFormProps
 > = ({ clarificationId, dispatch }) => {
+  useContestOnly()
+
   const validationSchema = yup.object().shape({
     content: yup.string().required(),
   })
@@ -66,6 +68,5 @@ export const CreateClarificationEntryForm: FunctionComponent<
 }
 
 export default compose<ComponentType<CreateClarificationEntryFormOwnProps>>(
-  contestOnly(),
   connect()
 )(CreateClarificationEntryForm)

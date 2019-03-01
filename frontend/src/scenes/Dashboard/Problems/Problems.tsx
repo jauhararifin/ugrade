@@ -2,8 +2,8 @@ import { push } from 'connected-react-router'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose, Dispatch } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { getProblemList, Problem } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
 import { useProblems } from '../helpers'
 import ProblemsView from './ProblemsView'
@@ -17,6 +17,7 @@ export const Problems: FunctionComponent<ProblemsProps> = ({
   problems,
   dispatch,
 }) => {
+  useContestOnly()
   useProblems(dispatch)
   const handleProblemChoose = (problem: Problem) => {
     dispatch(push(`/contest/problems/${problem.id}`))
@@ -28,7 +29,4 @@ const mapStateToProps = (state: AppState) => ({
   problems: getProblemList(state),
 })
 
-export default compose<ComponentType>(
-  contestOnly(),
-  connect(mapStateToProps)
-)(Problems)
+export default compose<ComponentType>(connect(mapStateToProps))(Problems)

@@ -1,6 +1,7 @@
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import {
   getLanguagesMap,
   getSubmissionList,
@@ -9,7 +10,6 @@ import {
   ProblemType,
   Submission,
 } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { withServer, WithServerProps } from 'ugrade/helpers/server'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
 import { useInfo, useProblems } from '../helpers'
@@ -32,6 +32,7 @@ export const Submissions: FunctionComponent<SubmissionProps> = ({
   dispatch,
   serverClock,
 }) => {
+  useContestOnly()
   useSubmissions(dispatch)
   useInfo(dispatch)
   useProblems(dispatch)
@@ -79,7 +80,6 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 export default compose<ComponentType>(
-  contestOnly(),
   connect(mapStateToProps),
   withServer
 )(Submissions)

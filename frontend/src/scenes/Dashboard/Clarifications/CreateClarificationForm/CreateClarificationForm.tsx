@@ -2,9 +2,9 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { getProblemList, Problem } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { ContestError } from 'ugrade/services/contest/errors'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
@@ -26,6 +26,7 @@ export interface CreateClarificationFormProps {
 export const CreateClarificationForm: FunctionComponent<
   CreateClarificationFormProps
 > = ({ problems, dispatch }) => {
+  useContestOnly()
   useProblems(dispatch)
 
   const validationSchema = yup.object().shape({
@@ -87,7 +88,6 @@ const mapStateToProps = (state: AppState) => ({
   problems: getProblemList(state),
 })
 
-export default compose<ComponentType>(
-  contestOnly(),
-  connect(mapStateToProps)
-)(CreateClarificationForm)
+export default compose<ComponentType>(connect(mapStateToProps))(
+  CreateClarificationForm
+)

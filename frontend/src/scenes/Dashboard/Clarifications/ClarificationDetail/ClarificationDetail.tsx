@@ -1,6 +1,7 @@
 import React, { ComponentType, FunctionComponent, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { Clarification, getUnReadClarification } from 'ugrade/contest/store'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { withServer, WithServerProps } from 'ugrade/helpers/server'
@@ -34,6 +35,7 @@ export const ClarificationDetailScene: FunctionComponent<
   dispatch,
   serverClock,
 }) => {
+  useContestOnly()
   useClarifications(dispatch)
 
   const clarification = clarifications
@@ -67,7 +69,6 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 export default compose<ComponentType<ClarificationDetailSceneOwnProps>>(
-  contestOnly(),
   connect(mapStateToProps),
   withServer
 )(ClarificationDetailScene)

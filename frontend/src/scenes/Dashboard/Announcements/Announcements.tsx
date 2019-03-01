@@ -1,8 +1,8 @@
 import React, { ComponentType, FunctionComponent, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { compose, Dispatch } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import { Announcement, getAnnouncementList } from 'ugrade/contest/store'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { withServer, WithServerProps } from 'ugrade/helpers/server'
 import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
 import { useAnnouncements } from '../helpers/useAnnouncements'
@@ -19,6 +19,7 @@ export const AnnouncementsScene: FunctionComponent<AnnouncementsSceneProps> = ({
   dispatch,
   serverClock,
 }) => {
+  useContestOnly()
   const readAllAnnouncements = async () => {
     if (announcements) {
       await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
@@ -47,7 +48,6 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 export default compose<ComponentType>(
-  contestOnly(),
   connect(mapStateToProps),
   withServer
 )(AnnouncementsScene)
