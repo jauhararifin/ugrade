@@ -1,8 +1,8 @@
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import { usePublicOnly } from 'ugrade/auth'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useCreateContest } from 'ugrade/contest'
-import ActionToaster from 'ugrade/helpers/ActionToaster'
 import { AuthError } from 'ugrade/services/auth'
 import { ContestError } from 'ugrade/services/contest/errors'
 import * as yup from 'yup'
@@ -66,10 +66,10 @@ export const CreateContestForm: FunctionComponent = () => {
         values.contestName,
         values.contestShortDescription
       )
-      ActionToaster.showSuccessToast('Contest Created')
+      TopToaster.showSuccessToast('Contest Created')
     } catch (error) {
       if (error instanceof AuthError || error instanceof ContestError) {
-        ActionToaster.showErrorToast(error)
+        TopToaster.showErrorToast(error)
       } else throw error
     } finally {
       setSubmitting(false)

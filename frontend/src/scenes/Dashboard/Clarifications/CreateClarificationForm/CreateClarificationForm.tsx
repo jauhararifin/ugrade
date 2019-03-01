@@ -2,8 +2,8 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import { getProblemList, Problem } from 'ugrade/contest/store'
-import ActionToaster from 'ugrade/helpers/ActionToaster'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { ContestError } from 'ugrade/services/contest/errors'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
@@ -48,9 +48,9 @@ export const CreateClarificationForm: FunctionComponent<
       await dispatch(
         createClarificationAction(values.title, values.subject, values.content)
       )
-      ActionToaster.showSuccessToast('Clarification Sent')
+      TopToaster.showSuccessToast('Clarification Sent')
     } catch (error) {
-      if (error instanceof ContestError) ActionToaster.showErrorToast(error)
+      if (error instanceof ContestError) TopToaster.showErrorToast(error)
       else throw error
     } finally {
       setSubmitting(false)

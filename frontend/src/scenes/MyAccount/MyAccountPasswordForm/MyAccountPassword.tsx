@@ -2,7 +2,7 @@ import { Formik, FormikActions } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import ActionToaster from 'ugrade/helpers/ActionToaster'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { AuthError } from 'ugrade/services/auth'
 import { AppThunkDispatch } from 'ugrade/store'
@@ -45,9 +45,9 @@ export class MyAccountPassword extends React.Component<MyAccountPasswordProps> {
       await this.props.dispatch(
         setPassword(values.oldPassword, values.newPassword)
       )
-      ActionToaster.showSuccessToast('Password Changed')
+      TopToaster.showSuccessToast('Password Changed')
     } catch (error) {
-      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
     } finally {
       setSubmitting(false)

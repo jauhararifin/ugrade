@@ -3,7 +3,7 @@ import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { getMe, User } from 'ugrade/auth/store'
-import ActionToaster from 'ugrade/helpers/ActionToaster'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
 import {
@@ -62,7 +62,7 @@ export class MyAccountProfileForm extends React.Component<
           address
         )
       )
-      ActionToaster.showSuccessToast('Profile Changed')
+      TopToaster.showSuccessToast('Profile Changed')
     } finally {
       setSubmitting(false)
     }

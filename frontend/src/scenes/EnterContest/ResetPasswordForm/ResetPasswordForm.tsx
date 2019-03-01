@@ -2,8 +2,8 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import { ContestInfo } from 'ugrade/contest/store'
-import ActionToaster from 'ugrade/helpers/ActionToaster/ActionToaster'
 import { publicOnly } from 'ugrade/helpers/auth'
 import { AuthError } from 'ugrade/services/auth'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
@@ -53,7 +53,7 @@ class ResetPasswordForm extends React.Component<ResetPasswordFormProps> {
         resetPasswordAction(values.oneTimeCode, values.password)
       )
     } catch (error) {
-      if (error instanceof AuthError) ActionToaster.showErrorToast(error)
+      if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
     } finally {
       setSubmitting(false)

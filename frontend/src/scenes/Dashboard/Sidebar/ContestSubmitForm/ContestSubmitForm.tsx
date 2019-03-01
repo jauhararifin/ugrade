@@ -2,13 +2,13 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType, Fragment, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import {
   ContestInfo,
   getProblemList,
   Language,
   Problem,
 } from 'ugrade/contest/store'
-import ActionToaster from 'ugrade/helpers/ActionToaster'
 import { withServer, WithServerProps } from 'ugrade/helpers/server'
 import { ContestError } from 'ugrade/services/contest/errors'
 import { AppState, AppThunkDispatch } from 'ugrade/store'
@@ -69,9 +69,9 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
       await dispatch(
         submitSolutionAction(values.problem, values.language, values.sourceCode)
       )
-      ActionToaster.showSuccessToast('Solution Submitted')
+      TopToaster.showSuccessToast('Solution Submitted')
     } catch (error) {
-      if (error instanceof ContestError) ActionToaster.showErrorToast(error)
+      if (error instanceof ContestError) TopToaster.showErrorToast(error)
       else throw error
     } finally {
       setSubmitting(false)

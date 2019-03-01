@@ -1,6 +1,6 @@
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
-import ActionToaster from 'ugrade/helpers/ActionToaster/ActionToaster'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useProxySetting } from 'ugrade/settings'
 import * as yup from 'yup'
 import { ProxySettingFormView } from './ProxySettingFormView'
@@ -41,7 +41,7 @@ export const ProxySettingForm: FunctionComponent = () => {
   ) => {
     setProxySetting(values.host, values.port, values.username, values.password)
     setSubmitting(false)
-    ActionToaster.showSuccessToast('Proxy Setting Saved')
+    TopToaster.showSuccessToast('Proxy Setting Saved')
   }
 
   return (
