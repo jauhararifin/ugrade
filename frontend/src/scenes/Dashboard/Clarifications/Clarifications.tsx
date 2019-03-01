@@ -1,6 +1,7 @@
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose, Dispatch } from 'redux'
+import { useContestOnly } from 'ugrade/auth'
 import {
   Clarification,
   getClarificationList,
@@ -12,7 +13,6 @@ import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
 import { useProblems } from '../helpers'
 import { useClarifications } from '../helpers/useClarifications'
 import { ClarificationsView } from './ClarificationsView'
-import { useContestOnly } from 'ugrade/auth'
 
 export interface ClarificationsSceneProps extends WithServerProps {
   clarifications?: Clarification[]
