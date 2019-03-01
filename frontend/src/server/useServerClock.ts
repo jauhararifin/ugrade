@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { clearInterval } from 'timers'
 import { getClock } from './store'
+import { useLoadServerClock } from './useLoadServerClock'
 
 export function useServerClock() {
+  useLoadServerClock()
   const [clock, setClock] = useState(undefined as Date | undefined)
   const clockStat = useMappedState(getClock)
   useEffect(() => {
