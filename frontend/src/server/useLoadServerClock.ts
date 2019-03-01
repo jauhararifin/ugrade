@@ -4,7 +4,7 @@ import { AppThunkAction } from 'ugrade/store'
 import { setServerClock } from './store'
 
 export function getServerClockAction(): AppThunkAction {
-  return async (dispatch, _state, { serverStatusService }) => {
+  return async (dispatch, _getState, { serverStatusService }) => {
     const begin = new Date()
     const serverClock = await serverStatusService.getClock()
     const finish = new Date()
@@ -17,10 +17,9 @@ export function getServerClockAction(): AppThunkAction {
 export function useLoadServerClock() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
-    let cancel = false
     const loadFunction = async () => {
       let success = false
-      while (!success && !cancel) {
+      while (!success) {
         try {
           await dispatch(getServerClockAction())
           success = true
@@ -30,8 +29,5 @@ export function useLoadServerClock() {
       }
     }
     loadFunction().catch(() => null)
-    return () => {
-      cancel = true
-    }
   }, [])
 }
