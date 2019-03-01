@@ -1,53 +1,39 @@
-import React, { ComponentType, FunctionComponent, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { compose, Dispatch } from 'redux'
+import React, { FunctionComponent, useEffect } from 'react'
 import { useContestOnly } from 'ugrade/auth'
-import { Announcement, getAnnouncementList } from 'ugrade/contest/store'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
-import { useAnnouncements } from '../helpers/useAnnouncements'
-import { readAnnouncementsAction } from './actions'
+import {
+  useAnnouncementList,
+  useReadAnnouncements,
+} from 'ugrade/contest/announcement'
+import { useServerClock } from 'ugrade/server'
 import { AnnouncementsView } from './AnnouncementsView'
 
-export interface AnnouncementsSceneProps extends WithServerProps {
-  announcements?: Announcement[]
-  dispatch: AppThunkDispatch & Dispatch<AppAction>
-}
-
-export const AnnouncementsScene: FunctionComponent<AnnouncementsSceneProps> = ({
-  announcements,
-  dispatch,
-  serverClock,
-}) => {
+export const Announcements: FunctionComponent = () => {
   useContestOnly()
+
+  const announcementList = useAnnouncementList()
+  const serverClock = useServerClock()
+  const readAnnouncements = useReadAnnouncements()
+
   const readAllAnnouncements = async () => {
-    if (announcements) {
+    if (announcementList) {
       await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
-      const unReads = announcements.filter(ann => !ann.read).map(ann => ann.id)
+      const unReads = announcementList
+        .filter(ann => !ann.read)
+        .map(ann => ann.id)
       if (unReads.length > 0) {
-        dispatch(readAnnouncementsAction(unReads))
+        await readAnnouncements(unReads)
       }
     }
   }
 
-  useAnnouncements(dispatch)
   useEffect(() => {
-    readAllAnnouncements()
-  }, [announcements])
+    readAllAnnouncements().catch(_ => null)
+  }, [announcementList])
 
   return (
     <AnnouncementsView
-      announcements={announcements}
+      announcements={announcementList}
       serverClock={serverClock}
     />
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  announcements: getAnnouncementList(state),
-})
-
-export default compose<ComponentType>(
-  connect(mapStateToProps),
-  withServer
-)(AnnouncementsScene)

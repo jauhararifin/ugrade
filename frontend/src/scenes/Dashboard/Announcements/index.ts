@@ -1,3 +1,2 @@
-import Announcements from './Announcements'
-
-export default Announcements
+export * from './Announcements'
+export * from './AnnouncementsView'

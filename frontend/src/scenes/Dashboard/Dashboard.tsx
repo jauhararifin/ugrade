@@ -1,34 +1,25 @@
-import React, { ComponentType, FunctionComponent, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { Route, RouteComponentProps, Switch, withRouter } from 'react-router'
+import React, { FunctionComponent, useEffect } from 'react'
+import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { compose, Dispatch } from 'redux'
 import { useContestOnly } from 'ugrade/auth'
+import { useAppDispatch } from 'ugrade/common'
 import { setTitle } from 'ugrade/common/title/store'
-import { ContestInfo } from 'ugrade/contest/store'
-import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
-import Announcements from './Announcements'
+import { useContestInfo } from 'ugrade/contest'
+import { useLocation } from 'ugrade/router'
+import { Announcements } from './Announcements'
 import Clarifications from './Clarifications'
-import DashboardView from './DashboardView'
-import { useInfo } from './helpers'
+import { DashboardView } from './DashboardView'
 import Overview from './Overview/Overview'
 import Problems from './Problems'
 import ProblemDetail from './Problems/ProblemDetail'
 import Scoreboard from './Scoreboard'
 import Submissions from './Submissions'
 
-export interface DashboardProps extends RouteComponentProps {
-  contest?: ContestInfo
-  dispatch: AppThunkDispatch & Dispatch<AppAction>
-}
-
-export const Dashboard: FunctionComponent<DashboardProps> = ({
-  dispatch,
-  location,
-  contest,
-}) => {
+export const Dashboard: FunctionComponent = () => {
   useContestOnly()
-  useInfo(dispatch)
+  const location = useLocation()
+  const contest = useContestInfo()
+  const dispatch = useAppDispatch()
   useEffect(() => {
     if (contest) dispatch(setTitle(`UGrade | ${contest.name}`))
   }, [contest])
@@ -70,12 +61,3 @@ export const Dashboard: FunctionComponent<DashboardProps> = ({
     </DashboardView>
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  contest: state.contest.info,
-})
-
-export default compose<ComponentType>(
-  withRouter,
-  connect(mapStateToProps)
-)(Dashboard)

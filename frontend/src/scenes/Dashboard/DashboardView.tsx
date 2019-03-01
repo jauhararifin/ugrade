@@ -23,5 +23,3 @@ export const DashboardView: FunctionComponent<DashboardViewProps> = ({
     </div>
   )
 }
-
-export default DashboardView
