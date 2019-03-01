@@ -40,7 +40,7 @@ import {
   UserProfileAction,
   userProfileReducer,
   UserProfileState,
-} from 'ugrade/stores/UserProfile'
+} from 'ugrade/userprofile/store'
 
 declare global {
   interface Window {

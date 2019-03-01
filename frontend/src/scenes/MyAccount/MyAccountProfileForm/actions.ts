@@ -4,7 +4,7 @@ import {
   GenderType,
   setUserProfile,
   ShirtSizeType,
-} from 'ugrade/stores/UserProfile'
+} from 'ugrade/userprofile/store'
 
 export const setProfile = (
   name: string,

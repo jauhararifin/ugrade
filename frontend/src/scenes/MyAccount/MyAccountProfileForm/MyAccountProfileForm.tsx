@@ -10,7 +10,7 @@ import {
   GenderType,
   ShirtSizeType,
   UserProfileState,
-} from 'ugrade/stores/UserProfile'
+} from 'ugrade/userprofile/store'
 import * as yup from 'yup'
 import { setProfile } from './actions'
 import { genderValues, shirtSizeValues } from './helpers'
