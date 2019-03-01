@@ -2,10 +2,9 @@ import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
 import { compose } from 'redux'
-
-import { contestOnly } from '../../../../helpers/auth'
-import { AppState } from '../../../../stores'
-import { Problem } from '../../../../stores/Contest'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { AppState } from 'ugrade/store'
+import { Problem } from 'ugrade/stores/Contest'
 import { ProblemDetailView } from './ProblemDetailView'
 
 export interface ProblemDetailRoute {

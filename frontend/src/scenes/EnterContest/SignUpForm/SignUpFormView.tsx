@@ -9,8 +9,7 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-
-import { ContestInfo } from '../../../stores/Contest'
+import { ContestInfo } from 'ugrade/stores/Contest'
 import { SignUpFormValue } from './SignUpForm'
 
 export interface SignUpFormViewProps extends FormikProps<SignUpFormValue> {

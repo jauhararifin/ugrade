@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { AppState } from 'ugrade/stores'
+import { AppState } from 'ugrade/store'
 
 export function getServerStatus(state: AppState) {
   return state.server

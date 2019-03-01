@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
-
 import {
   ClarificationSubscribeCallback,
   ClarificationUnsubscribeFunction,
-} from '../../../services/contest/ContestService'
-import { AppThunkAction, AppThunkDispatch } from '../../../stores'
-import { Clarification } from '../../../stores/Contest'
-import { setClarifications } from '../../../stores/Contest/ContestSetClarrifications'
+} from 'ugrade/services/contest/ContestService'
+import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
+import { Clarification } from 'ugrade/stores/Contest'
+import { setClarifications } from 'ugrade/stores/Contest/ContestSetClarrifications'
 import { normalizeClarification } from '../Clarifications/util'
 
 export const getClarificationsAction = (): AppThunkAction<Clarification[]> => {

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { AppState } from '../state'
+import { AppState } from 'ugrade/store'
 import { ClarificationEntry, ContestState, Language } from './ContestState'
 
 export function getContest(state: AppState): ContestState {

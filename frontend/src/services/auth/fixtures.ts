@@ -3,7 +3,7 @@ import {
   ContestArkav4Qual,
   ContestArkav5Final,
   ContestArkav5Qual,
-} from '../contest/fixtures'
+} from 'ugrade/services/contest/fixtures'
 import { User } from './User'
 
 export const UserTest1: User = {

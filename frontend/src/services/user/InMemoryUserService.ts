@@ -1,4 +1,4 @@
-import { AuthService } from '../auth'
+import { AuthService } from 'ugrade/services/auth'
 import { GenderType, ShirtSizeType, UserProfile } from './UserProfile'
 import { UserService } from './UserService'
 

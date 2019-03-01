@@ -2,12 +2,11 @@ import { Alignment, Button, H2, H5, H6, Intent, Tag } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-
-import './styles.css'
-
-import { ContestState } from '../../../stores/Contest'
+import { ContestState } from 'ugrade/stores/Contest'
 import ContestSubmitForm from './ContestSubmitForm'
 import SidebarMiniCard from './SidebarMiniCard'
+
+import './styles.css'
 
 export enum Menu {
   Overview = 'Overview',

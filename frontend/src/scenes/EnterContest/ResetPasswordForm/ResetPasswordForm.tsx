@@ -2,19 +2,18 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import ActionToaster from 'ugrade/helpers/ActionToaster/ActionToaster'
+import { publicOnly } from 'ugrade/helpers/auth'
+import { AuthError } from 'ugrade/services/auth'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
+import { ContestInfo } from 'ugrade/stores/Contest'
 import * as yup from 'yup'
-
-import './styles.css'
-
-import ActionToaster from '../../../helpers/ActionToaster/ActionToaster'
-import { publicOnly } from '../../../helpers/auth'
-import { AuthError } from '../../../services/auth'
-import { AppState, AppThunkDispatch } from '../../../stores'
-import { ContestInfo } from '../../../stores/Contest'
 import { resetAccountAction, resetAction } from '../actions'
 import { resetPasswordAction } from './actions'
 import { ResetPasswordFormValue } from './ResetPasswordForm'
 import { ResetPasswordFormView } from './ResetPasswordFormView'
+
+import './styles.css'
 
 export interface ResetPasswordFormValue {
   oneTimeCode: string

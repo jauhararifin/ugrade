@@ -1,9 +1,8 @@
 import React, { FunctionComponent, ReactNode } from 'react'
-
-import './styles.css'
-
 import Sidebar from './Sidebar'
 import TopNavigationBar from './TopNavigationBar'
+
+import './styles.css'
 
 export interface DashboardViewProps {
   children?: ReactNode

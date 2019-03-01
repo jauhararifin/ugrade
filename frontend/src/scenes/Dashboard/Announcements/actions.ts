@@ -1,5 +1,5 @@
-import { AppThunkAction } from '../../../stores'
-import { readAnnouncements } from '../../../stores/Contest'
+import { AppThunkAction } from 'ugrade/store'
+import { readAnnouncements } from 'ugrade/stores/Contest'
 
 export const readAnnouncementsAction = (ids: string[]): AppThunkAction => {
   return async (dispatch, getState, { contestService }) => {

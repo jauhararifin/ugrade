@@ -1,11 +1,10 @@
 import { Card, Classes, Drawer, H5, Tooltip } from '@blueprintjs/core'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
+import { Clarification } from 'ugrade/stores/Contest'
+import CreateClarificationEntryForm from './CreateClarificationEntryForm'
 
 import './styles.scss'
-
-import { Clarification } from '../../../../stores/Contest'
-import CreateClarificationEntryForm from './CreateClarificationEntryForm'
 
 export interface ClarificationDetailViewProps {
   clarification?: Clarification

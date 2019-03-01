@@ -1,4 +1,4 @@
-import { User } from '../auth'
+import { User } from 'ugrade/services/auth'
 import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
 import { Contest, Language } from './Contest'

@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 
 import './styles.css'
 
-import { ContestInfo } from '../../../stores/Contest'
+import { ContestInfo } from 'ugrade/stores/Contest'
 import { EnterPasswordFormValue } from './EnterPasswordForm'
 
 export interface EnterPasswordFormViewProps

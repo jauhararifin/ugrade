@@ -1,5 +1,5 @@
 import { useAppThunkDispatch } from 'ugrade/common'
-import { AppThunkAction } from 'ugrade/stores'
+import { AppThunkAction } from 'ugrade/store'
 import { setMe, User } from 'ugrade/stores/Auth'
 
 export const getMeAction = (): AppThunkAction<User> => {

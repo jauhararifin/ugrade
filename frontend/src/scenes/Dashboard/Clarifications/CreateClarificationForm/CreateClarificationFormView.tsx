@@ -8,8 +8,8 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
-
 import { CreateClarificationFormValue } from './CreateClarificationForm'
+
 import './styles.css'
 
 export interface SubjectOption {

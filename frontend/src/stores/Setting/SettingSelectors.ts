@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { AppState } from 'ugrade/stores'
+import { AppState } from 'ugrade/store'
 
 export function getSetting(state: AppState) {
   return state.setting

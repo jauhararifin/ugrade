@@ -1,10 +1,9 @@
 import { Button, Intent, TextArea } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
+import { CreateClarificationEntryFormValues } from './CreateClarificationEntryForm'
 
 import './styles.css'
-
-import { CreateClarificationEntryFormValues } from './CreateClarificationEntryForm'
 
 export interface CreateClarificationEntryFormViewOwnProps {
   clarificationId: number

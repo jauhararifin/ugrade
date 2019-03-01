@@ -2,10 +2,9 @@ import { push } from 'connected-react-router'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose, Dispatch } from 'redux'
-
-import { contestOnly } from '../../../helpers/auth'
-import { AppState, AppThunkDispatch } from '../../../stores'
-import { getProblemList, Problem } from '../../../stores/Contest'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
+import { getProblemList, Problem } from 'ugrade/stores/Contest'
 import { useProblems } from '../helpers'
 import ProblemsView from './ProblemsView'
 

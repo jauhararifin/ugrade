@@ -1,9 +1,8 @@
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
-
-import { AppState } from '../../stores'
-import { getIsSignedIn } from '../../stores/Auth'
+import { AppState } from 'ugrade/store'
+import { getIsSignedIn } from 'ugrade/stores/Auth'
 
 export const publicOnly = (redirect: string = '/contest') => <P extends object>(
   Component: ComponentType<P>

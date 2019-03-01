@@ -14,12 +14,11 @@ import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
-
-import './styles.css'
-
-import { Clarification, Problem } from '../../../stores/Contest'
+import { Clarification, Problem } from 'ugrade/stores/Contest'
 import ClarificationDetail from './ClarificationDetail'
 import CreateClarificationForm from './CreateClarificationForm'
+
+import './styles.css'
 
 export interface ClarificationsViewProps {
   clarifications?: Clarification[]

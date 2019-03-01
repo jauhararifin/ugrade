@@ -1,4 +1,4 @@
-import { AppThunkAction } from '../../../stores'
+import { AppThunkAction } from 'ugrade/store'
 
 export const setPassword = (
   oldPassword: string,

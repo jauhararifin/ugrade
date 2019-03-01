@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router'
 
-import { AppThunkAction } from '../../../stores'
+import { AppThunkAction } from 'ugrade/store'
 
 export function resetPasswordAction(
   oneTimeCode: string,

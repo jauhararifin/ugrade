@@ -1,4 +1,4 @@
-import { ServerStatusService } from '../serverStatus'
+import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { NoSuchProblem } from './errors'
 import { problems as fixture } from './fixtures'
 import { Problem } from './Problem'

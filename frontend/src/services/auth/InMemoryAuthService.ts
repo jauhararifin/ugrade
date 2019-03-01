@@ -1,4 +1,4 @@
-import { ServerStatusService } from '../serverStatus'
+import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { AuthService } from './AuthService'
 import {
   AuthError,

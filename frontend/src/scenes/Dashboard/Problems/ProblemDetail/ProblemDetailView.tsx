@@ -1,11 +1,10 @@
 import { H1, H2 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
+import { Markdown } from 'ugrade/components/Markdown'
+import { Problem } from 'ugrade/stores/Contest'
 
 import './styles.css'
-
-import { Markdown } from '../../../../components/Markdown'
-import { Problem } from '../../../../stores/Contest'
 
 export interface ProblemDetailViewProps {
   problem?: Problem

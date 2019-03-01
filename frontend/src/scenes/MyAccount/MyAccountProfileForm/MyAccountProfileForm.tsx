@@ -1,18 +1,17 @@
 import { Formik, FormikActions } from 'formik'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
-import * as yup from 'yup'
-
 import { compose } from 'redux'
-import ActionToaster from '../../../helpers/ActionToaster'
-import { contestOnly } from '../../../helpers/auth'
-import { AppState, AppThunkDispatch } from '../../../stores'
-import { getMe, User } from '../../../stores/Auth'
+import ActionToaster from 'ugrade/helpers/ActionToaster'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
+import { getMe, User } from 'ugrade/stores/Auth'
 import {
   GenderType,
   ShirtSizeType,
   UserProfileState,
-} from '../../../stores/UserProfile'
+} from 'ugrade/stores/UserProfile'
+import * as yup from 'yup'
 import { setProfile } from './actions'
 import { genderValues, shirtSizeValues } from './helpers'
 import MyAccountProfileFormView from './MyAccountProfileFormView'

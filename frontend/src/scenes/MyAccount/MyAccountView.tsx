@@ -2,12 +2,11 @@ import { FormGroup, InputGroup, Label } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-
-import './styles.css'
-
-import BottomLink from '../../components/BottomLink'
+import BottomLink from 'ugrade/components/BottomLink'
 import MyAccountPasswordForm from './MyAccountPasswordForm'
 import MyAccountProfileForm from './MyAccountProfileForm'
+
+import './styles.css'
 
 export interface MyAccountViewProps {
   loading: boolean

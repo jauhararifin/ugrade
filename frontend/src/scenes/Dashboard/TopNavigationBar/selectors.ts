@@ -1,5 +1,5 @@
 import { IBreadcrumbProps } from '@blueprintjs/core'
-import { AppState } from '../../../stores'
+import { AppState } from 'ugrade/store'
 
 export const selectBreadcrumb = (state: AppState): IBreadcrumbProps[] => {
   const location = state.router.location.pathname

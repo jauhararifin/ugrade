@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-import { AppState } from '../state'
+import { AppState } from 'ugrade/store'
 import { AuthState } from './AuthState'
 
 function getAuth(state: AppState): AuthState {

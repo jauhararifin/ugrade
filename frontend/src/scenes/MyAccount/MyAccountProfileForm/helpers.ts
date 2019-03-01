@@ -1,4 +1,4 @@
-import { GenderType, ShirtSizeType } from '../../../stores/UserProfile'
+import { GenderType, ShirtSizeType } from 'ugrade/stores/UserProfile'
 
 export const genderToString = (gender?: GenderType): string => {
   return gender === GenderType.GENDER_TYPE_FEMALE ? 'Female' : 'Male'

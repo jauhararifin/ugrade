@@ -8,7 +8,6 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-
 import { ProxySettingFormValue } from './ProxySettingForm'
 
 export type ProxySettingFormViewProps = FormikProps<ProxySettingFormValue>

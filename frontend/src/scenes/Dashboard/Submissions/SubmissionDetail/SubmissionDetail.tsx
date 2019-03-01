@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-
-import ActionToaster from '../../../../helpers/ActionToaster'
+import ActionToaster from 'ugrade/helpers/ActionToaster'
 import { ISubmission } from '../SubmissionsView'
 import { getSourceCodeFromUrl } from './actions'
 import { SubmissionDetailView } from './SubmissionDetailView'

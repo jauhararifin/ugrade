@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react'
-
 import { ScoreboardView } from './ScoreboardView'
 
 export const Scoreboard: FunctionComponent = () => {

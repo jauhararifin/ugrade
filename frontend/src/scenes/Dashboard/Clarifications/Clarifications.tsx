@@ -2,15 +2,15 @@ import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose, Dispatch } from 'redux'
 
-import { contestOnly } from '../../../helpers/auth'
-import { withServer, WithServerProps } from '../../../helpers/server'
-import { AppAction, AppState, AppThunkDispatch } from '../../../stores'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { withServer, WithServerProps } from 'ugrade/helpers/server'
+import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
 import {
   Clarification,
   getClarificationList,
   getProblemList,
   Problem,
-} from '../../../stores/Contest'
+} from 'ugrade/stores/Contest'
 import { useProblems } from '../helpers'
 import { useClarifications } from '../helpers/useClarifications'
 import { ClarificationsView } from './ClarificationsView'

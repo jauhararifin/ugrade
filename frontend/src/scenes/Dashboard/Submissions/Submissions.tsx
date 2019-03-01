@@ -1,11 +1,9 @@
-import { push } from 'connected-react-router'
 import React, { ComponentType, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-
-import { contestOnly } from '../../../helpers/auth'
-import { withServer, WithServerProps } from '../../../helpers/server'
-import { AppState, AppThunkDispatch } from '../../../stores'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { withServer, WithServerProps } from 'ugrade/helpers/server'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
 import {
   getLanguagesMap,
   getSubmissionList,
@@ -13,7 +11,7 @@ import {
   Problem,
   ProblemType,
   Submission,
-} from '../../../stores/Contest'
+} from 'ugrade/stores/Contest'
 import { useInfo, useProblems } from '../helpers'
 import SubmissionsView, { ISubmission } from './SubmissionsView'
 import { useSubmissions } from './useSubmissions'

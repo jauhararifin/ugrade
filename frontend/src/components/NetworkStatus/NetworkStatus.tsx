@@ -1,9 +1,8 @@
 import classnames from 'classnames'
 import React, { Fragment, FunctionComponent, ReactElement } from 'react'
+import { useOnlineStatus } from 'ugrade/server/useOnlineStatus'
 
 import './styles.css'
-
-import { useOnlineStatus } from 'ugrade/server/useOnlineStatus'
 
 export interface NetworkStatusProps {
   children?: ReactElement<any> | null

@@ -1,5 +1,4 @@
 import { Reducer } from 'redux'
-
 import { UserProfileActionType } from './UserProfileAction'
 import {
   setUserProfileReducer,

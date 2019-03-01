@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
 import moment from 'moment'
 import { useAppThunkDispatch } from 'ugrade/common'
-import { AppThunkAction } from 'ugrade/stores'
+import { AppThunkAction } from 'ugrade/store'
 import { setMe } from 'ugrade/stores/Auth'
 import { setInfo } from 'ugrade/stores/Contest'
 

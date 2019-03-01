@@ -11,9 +11,6 @@ import classnames from 'classnames'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
-
-import './styles.css'
-
 import { Link } from 'react-router-dom'
 import {
   GradingVerdict,
@@ -21,8 +18,10 @@ import {
   Problem,
   Submission,
   SubmissionVerdict,
-} from '../../../stores/Contest'
+} from 'ugrade/stores/Contest'
 import SubmissionDetail from './SubmissionDetail'
+
+import './styles.css'
 
 export interface ISubmission extends Submission {
   problem: Problem

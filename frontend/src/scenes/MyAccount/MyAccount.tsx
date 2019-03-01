@@ -7,10 +7,10 @@ import React, {
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 
-import { contestOnly } from '../../helpers/auth'
-import { AppThunkDispatch } from '../../stores'
-import { User } from '../../stores/Auth'
-import { setTitle } from '../../stores/Title'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { AppThunkDispatch } from 'ugrade/store'
+import { User } from 'ugrade/stores/Auth'
+import { setTitle } from 'ugrade/stores/Title'
 import { getMyProfile } from './actions'
 import { MyAccountView } from './MyAccountView'
 

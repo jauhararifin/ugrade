@@ -1,16 +1,10 @@
-import React, {
-  Component,
-  ComponentType,
-  FunctionComponent,
-  useEffect,
-} from 'react'
+import React, { ComponentType, FunctionComponent, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { compose, Dispatch } from 'redux'
-
-import { contestOnly } from '../../../helpers/auth'
-import { withServer, WithServerProps } from '../../../helpers/server'
-import { AppAction, AppState, AppThunkDispatch } from '../../../stores'
-import { Announcement, getAnnouncementList } from '../../../stores/Contest'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { withServer, WithServerProps } from 'ugrade/helpers/server'
+import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
+import { Announcement, getAnnouncementList } from 'ugrade/stores/Contest'
 import { useAnnouncements } from '../helpers/useAnnouncements'
 import { readAnnouncementsAction } from './actions'
 import { AnnouncementsView } from './AnnouncementsView'

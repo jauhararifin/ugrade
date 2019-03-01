@@ -1,5 +1,5 @@
-import { AppThunkAction } from '../../../../../stores'
-import { setClarifications } from '../../../../../stores/Contest/ContestSetClarrifications'
+import { AppThunkAction } from 'ugrade/store'
+import { setClarifications } from 'ugrade/stores/Contest/ContestSetClarrifications'
 import { normalizeClarification } from '../../util'
 
 export const createClarificationEntryAction = (

@@ -1,5 +1,5 @@
-import { AppThunkAction } from '../../../../stores'
-import { setSubmissions, Submission } from '../../../../stores/Contest'
+import { AppThunkAction } from 'ugrade/store'
+import { setSubmissions, Submission } from 'ugrade/stores/Contest'
 
 export const submitSolutionAction = (
   problemId: string,

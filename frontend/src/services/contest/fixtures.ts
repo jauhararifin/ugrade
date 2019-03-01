@@ -13,7 +13,7 @@ import {
   problem7,
   problem8,
   problem9,
-} from '../problem/fixtures'
+} from 'ugrade/services/problem/fixtures'
 import { Announcement } from './Announcement'
 import { Contest, Language } from './Contest'
 

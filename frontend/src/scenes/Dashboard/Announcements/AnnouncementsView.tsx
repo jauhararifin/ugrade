@@ -1,13 +1,12 @@
 import { Card, Classes, Elevation, H1, H3, Tooltip } from '@blueprintjs/core'
 import classnames from 'classnames'
-import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { Announcement } from 'ugrade/stores/Contest'
 
+import 'github-markdown-css'
 import './styles.css'
-
-import { Announcement } from '../../../stores/Contest'
 
 export interface AnnouncementsViewProps {
   announcements?: Announcement[]

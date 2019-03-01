@@ -1,10 +1,10 @@
-import { AppThunkAction } from '../../../stores'
-import { setMe } from '../../../stores/Auth'
+import { AppThunkAction } from 'ugrade/store'
+import { setMe } from 'ugrade/stores/Auth'
 import {
   GenderType,
   setUserProfile,
   ShirtSizeType,
-} from '../../../stores/UserProfile'
+} from 'ugrade/stores/UserProfile'
 
 export const setProfile = (
   name: string,

@@ -1,4 +1,4 @@
-import { User } from '../auth'
+import { User } from 'ugrade/services/auth'
 
 export enum GenderType {
   GENDER_TYPE_MALE = 'Male',

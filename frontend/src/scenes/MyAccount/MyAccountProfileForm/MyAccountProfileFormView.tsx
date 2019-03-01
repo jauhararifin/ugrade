@@ -9,7 +9,6 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-
 import {
   genderToString,
   genderValues,

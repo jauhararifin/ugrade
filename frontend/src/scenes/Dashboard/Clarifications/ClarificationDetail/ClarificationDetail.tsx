@@ -1,14 +1,10 @@
 import React, { ComponentType, FunctionComponent, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-
-import { contestOnly } from '../../../../helpers/auth'
-import { withServer, WithServerProps } from '../../../../helpers/server'
-import { AppState, AppThunkDispatch } from '../../../../stores'
-import {
-  Clarification,
-  getUnReadClarification,
-} from '../../../../stores/Contest'
+import { contestOnly } from 'ugrade/helpers/auth'
+import { withServer, WithServerProps } from 'ugrade/helpers/server'
+import { AppState, AppThunkDispatch } from 'ugrade/store'
+import { Clarification, getUnReadClarification } from 'ugrade/stores/Contest'
 import { useClarifications } from '../../helpers/useClarifications'
 import { readClarificationEntriesAction } from './actions'
 import { ClarificationDetailView } from './ClarificationDetailView'

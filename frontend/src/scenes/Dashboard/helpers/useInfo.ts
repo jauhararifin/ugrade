@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-
-import { AppThunkAction, AppThunkDispatch } from '../../../stores'
-import { ContestInfo, setInfo } from '../../../stores/Contest'
+import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
+import { ContestInfo, setInfo } from 'ugrade/stores/Contest'
 
 export const getMyContestAction = (): AppThunkAction<ContestInfo> => {
   return async (dispatch, getState, { contestService }) => {

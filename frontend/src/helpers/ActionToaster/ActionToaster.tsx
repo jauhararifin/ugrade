@@ -1,6 +1,6 @@
 import { Intent, IToaster, Position, Toaster } from '@blueprintjs/core'
 
-import { ForbiddenActionError } from '../../services/auth'
+import { ForbiddenActionError } from 'ugrade/services/auth'
 
 export interface ActionToaster {
   showToast(message: string): void

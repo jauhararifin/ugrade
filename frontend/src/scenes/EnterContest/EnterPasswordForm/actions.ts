@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
 
-import { AppThunkAction } from '../../../stores'
-import { setSignedIn } from '../../../stores/Auth'
+import { AppThunkAction } from 'ugrade/store'
+import { setSignedIn } from 'ugrade/stores/Auth'
 
 export function signinAction(
   password: string,

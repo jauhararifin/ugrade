@@ -1,6 +1,6 @@
-import { AppThunkAction } from '../../stores'
-import { setMe, User } from '../../stores/Auth'
-import { setUserProfile } from '../../stores/UserProfile'
+import { AppThunkAction } from 'ugrade/store'
+import { setMe, User } from 'ugrade/stores/Auth'
+import { setUserProfile } from 'ugrade/stores/UserProfile'
 
 export const getMyProfile = (): AppThunkAction<User> => {
   return async (dispatch, getState, { authService, userService }) => {

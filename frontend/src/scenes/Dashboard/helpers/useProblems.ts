@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
-
 import {
   ProblemIdsSubscribeCallback,
   ProblemIdsUnsubscribeFunction,
-} from '../../../services/contest/ContestService'
-import { AppThunkAction, AppThunkDispatch } from '../../../stores'
-import { Problem, setProblems } from '../../../stores/Contest'
+} from 'ugrade/services/contest/ContestService'
+import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
+import { Problem, setProblems } from 'ugrade/stores/Contest'
 
 export const getProblemByIdsAction = (
   ids: string[]

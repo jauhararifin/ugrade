@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router'
 import { useAppThunkDispatch } from 'ugrade/common'
-import { AppThunkAction } from 'ugrade/stores'
+import { AppThunkAction } from 'ugrade/store'
 import { setMe } from 'ugrade/stores/Auth'
 import { setRegistered } from 'ugrade/stores/Contest'
 
