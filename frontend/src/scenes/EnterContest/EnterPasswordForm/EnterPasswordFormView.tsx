@@ -22,7 +22,7 @@ export interface EnterPasswordFormViewProps
   forgotPassword: (setSubmitting: (isSubmitting: boolean) => void) => any
 }
 
-const EnterPasswordFormView: React.FunctionComponent<
+export const EnterPasswordFormView: React.FunctionComponent<
   EnterPasswordFormViewProps
 > = props => {
   const {
@@ -117,5 +117,3 @@ const EnterPasswordFormView: React.FunctionComponent<
     </form>
   )
 }
-
-export default EnterPasswordFormView

@@ -1,3 +1,2 @@
-import EnterPasswordForm from './EnterPasswordForm'
-
-export default EnterPasswordForm
+export * from './EnterPasswordForm'
+export * from './EnterPasswordFormView'

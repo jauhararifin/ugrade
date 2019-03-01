@@ -1,36 +1,27 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { ComponentType } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent, useEffect } from 'react'
+import { useForgotPassword, usePublicOnly, useSignIn } from 'ugrade/auth'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { ContestInfo } from 'ugrade/contest/store'
-import { publicOnly } from 'ugrade/helpers/auth'
+import { useContestInfo } from 'ugrade/contest'
 import { AuthError } from 'ugrade/services/auth'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
-import { resetAccountAction, resetAction } from '../actions'
-import { forgotPasswordAction, signinAction } from './actions'
-import EnterPasswordFormView from './EnterPasswordFormView'
+import { useReset, useResetAccount } from '../actions'
+import { EnterPasswordFormView } from './EnterPasswordFormView'
 
 export interface EnterPasswordFormValue {
   password: string
   rememberMe: boolean
 }
 
-export interface EnterPasswordFormProps {
-  contest?: ContestInfo
-  dispatch: AppThunkDispatch
-  gotoAnotherContest: () => any
-  forgotPassword: (setSubmitting: (val: boolean) => void) => any
-}
+export const EnterPasswordForm: FunctionComponent = () => {
+  usePublicOnly()
 
-class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
-  initialValue: EnterPasswordFormValue = {
+  const initialValue: EnterPasswordFormValue = {
     password: '',
     rememberMe: false,
   }
 
-  validationSchema = yup.object().shape({
+  const validationSchema = yup.object().shape({
     password: yup
       .string()
       .min(4)
@@ -40,14 +31,14 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
     rememberMe: yup.boolean().required(),
   })
 
-  handleSubmit = async (
+  const signIn = useSignIn()
+
+  const handleSubmit = async (
     values: EnterPasswordFormValue,
     { setSubmitting }: FormikActions<EnterPasswordFormValue>
   ) => {
     try {
-      await this.props.dispatch(
-        signinAction(values.password, values.rememberMe)
-      )
+      await signIn(values.password, values.rememberMe)
     } catch (error) {
       if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
@@ -56,13 +47,21 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
     }
   }
 
-  componentDidMount() {
-    if (!this.props.contest) this.props.dispatch(resetAction())
-  }
+  const [contestInfo] = useContestInfo()
+  const resetContest = useReset()
+  const resetAccount = useResetAccount()
 
-  handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
+  useEffect(() => {
+    if (!contestInfo) resetContest()
+  }, [])
+
+  const forgotPassword = useForgotPassword()
+
+  const handleForgotPassword = async (
+    setSubmitting: (val: boolean) => void
+  ) => {
     try {
-      await this.props.dispatch(forgotPasswordAction())
+      await forgotPassword()
     } catch (error) {
       if (error instanceof AuthError) TopToaster.showErrorToast(error)
       else throw error
@@ -71,38 +70,23 @@ class EnterPasswordForm extends React.Component<EnterPasswordFormProps, {}> {
     }
   }
 
-  render() {
-    const contest = this.props.contest
-    if (!contest) return <React.Fragment />
+  if (!contestInfo) return <React.Fragment />
 
-    const renderView = (props: FormikProps<EnterPasswordFormValue>) => (
-      <EnterPasswordFormView
-        {...props}
-        contest={contest}
-        gotoAnotherContest={this.props.dispatch.bind(this, resetAction())}
-        gotoAnotherAccount={this.props.dispatch.bind(
-          this,
-          resetAccountAction()
-        )}
-        forgotPassword={this.handleForgotPassword}
-      />
-    )
-    return (
-      <Formik
-        initialValues={this.initialValue}
-        validationSchema={this.validationSchema}
-        onSubmit={this.handleSubmit}
-        render={renderView}
-      />
-    )
-  }
+  const renderView = (props: FormikProps<EnterPasswordFormValue>) => (
+    <EnterPasswordFormView
+      {...props}
+      contest={contestInfo}
+      gotoAnotherContest={resetContest}
+      gotoAnotherAccount={resetAccount}
+      forgotPassword={handleForgotPassword}
+    />
+  )
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      render={renderView}
+    />
+  )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  contest: state.contest.info,
-})
-
-export default compose<ComponentType>(
-  publicOnly(),
-  connect(mapStateToProps)
-)(EnterPasswordForm)
