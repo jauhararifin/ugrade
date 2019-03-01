@@ -1,3 +1,2 @@
-import SignUpForm from './SignUpForm'
-
-export default SignUpForm
+export * from './SignUpForm'
+export * from './SignUpFormView'

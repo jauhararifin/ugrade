@@ -1,6 +1,7 @@
 import { push } from 'connected-react-router'
-import { setSignedIn } from 'ugrade/auth/store'
+import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
+import { setSignedIn } from './store'
 
 export function signupAction(
   username: string,
@@ -38,4 +39,15 @@ export function signupAction(
       dispatch(push('/enter-contest/enter-email'))
     }
   }
+}
+
+export function useSignUp() {
+  const dispatch = useAppThunkDispatch()
+  return (
+    username: string,
+    oneTimeCode: string,
+    password: string,
+    name: string,
+    rememberMe: boolean
+  ) => dispatch(signupAction(username, oneTimeCode, password, name, rememberMe))
 }
