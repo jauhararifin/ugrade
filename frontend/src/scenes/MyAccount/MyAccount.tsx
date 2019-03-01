@@ -6,11 +6,10 @@ import React, {
 } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-
+import { setTitle } from 'ugrade/common/title/store'
 import { contestOnly } from 'ugrade/helpers/auth'
 import { AppThunkDispatch } from 'ugrade/store'
 import { User } from 'ugrade/stores/Auth'
-import { setTitle } from 'ugrade/stores/Title'
 import { getMyProfile } from './actions'
 import { MyAccountView } from './MyAccountView'
 

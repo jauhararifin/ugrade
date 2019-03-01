@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { usePublicOnly } from 'ugrade/auth'
-import { useTitle } from 'ugrade/common'
+import { useTitle } from 'ugrade/common/title'
 import { usePush } from 'ugrade/router'
 import { HomeView } from './HomeView'
 

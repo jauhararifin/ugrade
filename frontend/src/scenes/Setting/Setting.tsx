@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { Dispatch } from 'redux'
 import { useIsSignedIn } from 'ugrade/auth'
-import { useTitle } from 'ugrade/common'
+import { useTitle } from 'ugrade/common/title'
 import { AppAction } from 'ugrade/store'
 import { SettingView } from './SettingView'
 

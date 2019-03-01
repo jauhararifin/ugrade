@@ -15,6 +15,11 @@ import {
 import logger from 'redux-logger'
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
 import {
+  TitleAction,
+  titleReducer,
+  TitleState,
+} from 'ugrade/common/title/store'
+import {
   ContestAction,
   contestReducer,
   ContestState,
@@ -35,7 +40,6 @@ import {
   settingReducer,
   SettingState,
 } from 'ugrade/stores/Setting'
-import { TitleAction, titleReducer, TitleState } from 'ugrade/stores/Title'
 import {
   UserProfileAction,
   userProfileReducer,
