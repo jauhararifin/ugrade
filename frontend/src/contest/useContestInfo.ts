@@ -1,6 +1,6 @@
 import { useMappedState } from 'redux-react-hook'
 import { useAppDispatch } from 'ugrade/common'
-import { ContestInfo, getContestInfo, setInfo } from 'ugrade/contest/store'
+import { ContestInfo, getContestInfo, setInfo } from './store'
 
 export function useContestInfo(): [
   ContestInfo | undefined,

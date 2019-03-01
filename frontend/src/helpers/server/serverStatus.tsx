@@ -1,8 +1,8 @@
 import moment from 'moment'
 import React, { ComponentType } from 'react'
 import { connect } from 'react-redux'
+import { setServerClock } from 'ugrade/server/store'
 import { AppState, AppThunkAction, AppThunkDispatch } from 'ugrade/store'
-import { setServerClock } from 'ugrade/stores/ServerStatus'
 
 const getServerClockAction = (): AppThunkAction => {
   return async (dispatch, _, { serverStatusService }) => {

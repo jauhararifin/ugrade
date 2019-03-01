@@ -1,6 +1,6 @@
 import { useMappedState } from 'redux-react-hook'
 import { useAppDispatch } from 'ugrade/common'
-import { getProxySetting, ProxySetting, setProxy } from 'ugrade/stores/Setting'
+import { getProxySetting, ProxySetting, setProxy } from './store'
 
 export function useProxySetting(): [
   ProxySetting,

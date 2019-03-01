@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
-import { getIsOnline, setOnline } from 'ugrade/stores/ServerStatus'
+import { getIsOnline, setOnline } from './store'
 
 export type CancelFunction = () => any
 

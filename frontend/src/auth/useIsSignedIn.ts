@@ -1,5 +1,5 @@
 import { useMappedState } from 'redux-react-hook'
-import { getIsSignedIn } from 'ugrade/auth/store'
+import { getIsSignedIn } from './store'
 
 export function useIsSignedIn() {
   return useMappedState(getIsSignedIn)

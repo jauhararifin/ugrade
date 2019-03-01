@@ -25,21 +25,21 @@ import {
   contestReducer,
   ContestState,
 } from 'ugrade/contest/store'
+import {
+  ServerStatusAction,
+  serverStatusReducer,
+  ServerStatusState,
+} from 'ugrade/server/store'
 import { AuthService } from 'ugrade/services/auth'
 import { ContestService } from 'ugrade/services/contest/ContestService'
 import { ProblemService } from 'ugrade/services/problem'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { UserService } from 'ugrade/services/user'
 import {
-  ServerStatusAction,
-  serverStatusReducer,
-  ServerStatusState,
-} from 'ugrade/stores/ServerStatus'
-import {
   SettingAction,
   settingReducer,
   SettingState,
-} from 'ugrade/stores/Setting'
+} from 'ugrade/settings/store'
 import {
   UserProfileAction,
   userProfileReducer,

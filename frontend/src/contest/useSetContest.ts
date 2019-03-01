@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
 import { useAppThunkDispatch } from 'ugrade/common'
-import { setInfo } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
+import { setInfo } from './store'
 
 export function setContestAction(contestId: string): AppThunkAction {
   return async (dispatch, _getState, { contestService }) => {
