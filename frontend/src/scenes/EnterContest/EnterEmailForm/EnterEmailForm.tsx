@@ -1,10 +1,9 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
-import { useSetMeByEmail } from 'ugrade/auth'
+import { usePublicOnly, useSetMeByEmail } from 'ugrade/auth'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useContestInfo } from 'ugrade/contest'
 import { ContestInfo } from 'ugrade/contest/store'
-import { publicOnly } from 'ugrade/helpers/auth'
 import { useReset } from 'ugrade/scenes/EnterContest'
 import { AuthError } from 'ugrade/services/auth'
 import { AppThunkDispatch } from 'ugrade/store'
@@ -21,7 +20,7 @@ export interface EnterEmailFormProps {
 }
 
 export const EnterEmailForm: FunctionComponent = () => {
-  publicOnly()
+  usePublicOnly()
 
   const initialValue: EnterEmailFormValue = {
     email: '',
