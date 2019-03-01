@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router'
+import { setSignedOut } from 'ugrade/auth/store'
 import { AppThunkAction } from 'ugrade/store'
-import { setSignedOut } from 'ugrade/stores/Auth'
 
 export const signOutAction = (): AppThunkAction => {
   return async dispatch => {

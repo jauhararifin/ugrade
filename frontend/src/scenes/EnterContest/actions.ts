@@ -1,8 +1,8 @@
 import { push } from 'connected-react-router'
+import { setSignedOut } from 'ugrade/auth/store'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { unsetContest } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
-import { setSignedOut } from 'ugrade/stores/Auth'
 
 export function resetAction(): AppThunkAction {
   return async (dispatch, _getState, _extras) => {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
+import { setMe, User } from 'ugrade/auth/store'
 import { AppThunkAction, AppThunkDispatch } from 'ugrade/store'
-import { setMe, User } from 'ugrade/stores/Auth'
 
 export const getMeAction = (): AppThunkAction<User> => {
   return async (dispatch, getState, { authService }) => {

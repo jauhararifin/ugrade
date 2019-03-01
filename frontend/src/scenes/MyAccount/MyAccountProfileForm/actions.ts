@@ -1,5 +1,5 @@
+import { setMe } from 'ugrade/auth/store'
 import { AppThunkAction } from 'ugrade/store'
-import { setMe } from 'ugrade/stores/Auth'
 import {
   GenderType,
   setUserProfile,

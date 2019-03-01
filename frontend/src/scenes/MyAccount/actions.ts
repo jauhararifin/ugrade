@@ -1,5 +1,5 @@
+import { setMe, User } from 'ugrade/auth/store'
 import { AppThunkAction } from 'ugrade/store'
-import { setMe, User } from 'ugrade/stores/Auth'
 import { setUserProfile } from 'ugrade/userprofile/store'
 
 export const getMyProfile = (): AppThunkAction<User> => {
