@@ -1,38 +1,37 @@
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
-import { Scoreboard } from 'ugrade/services/contest'
+import { UnsubscriptionFunction } from 'ugrade/services/contest'
 import { AppThunkAction } from 'ugrade/store'
 import { getScoreboard, setScoreboard } from '../store'
 
-export function getScoreboardAction(): AppThunkAction<Scoreboard> {
+export function subscribeScoreboardAction(): AppThunkAction<
+  UnsubscriptionFunction
+> {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    const scoreboard = await contestService.getScoreboard(token)
-    const stillRelevant = getState().auth.token === token
-    if (stillRelevant) dispatch(setScoreboard(scoreboard))
-    return scoreboard
+    const unsub = await contestService.subscribeScoreboard(token, contest => {
+      const stillRelevant = getState().auth.token === token
+      if (stillRelevant) {
+        dispatch(setScoreboard(contest))
+      }
+    })
+    return unsub
   }
 }
 
+let alreadyRun = false
+
 export function useScoreboard() {
   const dispatch = useAppThunkDispatch()
-
   useEffect(() => {
-    let cancel = false
-    const func = async () => {
-      while (!cancel) {
-        try {
-          await dispatch(getScoreboardAction())
-          break
-        } catch (error) {
-          await new Promise(r => setTimeout(r, 5000))
-        }
+    if (!alreadyRun) {
+      alreadyRun = true
+      const unsub = dispatch(subscribeScoreboardAction())
+      return () => {
+        alreadyRun = false
+        unsub.then(func => func()).catch(_ => null)
       }
-    }
-    func().catch(_ => null)
-    return () => {
-      cancel = true
     }
   }, [])
 

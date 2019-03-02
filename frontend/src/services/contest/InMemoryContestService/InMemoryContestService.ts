@@ -213,20 +213,17 @@ export class InMemoryContestService implements ContestService {
         const entr = Math.floor(Math.random() * scoreboard.entries.length)
         const prob = problemArr[Math.floor(Math.random() * problemArr.length)]
         const probScore = scoreboard.entries[entr].problemScores[prob]
-        const probS = Object.keys(scoreboard.entries[entr].problemScores).map(
-          k => scoreboard.entries[entr].problemScores[k]
-        )
         probScore.attempt++
         probScore.first = Math.random() > 0.5
         probScore.frozen = Math.random() > 0.5
         probScore.passed = Math.random() > 0.5
         probScore.penalty += Math.round(Math.random() * 120)
+        const probS = lodash.values(scoreboard.entries[entr].problemScores)
         scoreboard.entries[entr].totalPassed = probS.filter(
           p => p.passed
         ).length
-        scoreboard.entries[entr].totalPenalty = probS.reduce(
-          (a, b) => a + b.penalty,
-          0
+        scoreboard.entries[entr].totalPenalty = lodash.sum(
+          probS.map(s => s.penalty)
         )
         scoreboard.entries.sort((a, b) => {
           if (a.totalPassed === b.totalPassed) {
@@ -276,10 +273,10 @@ export class InMemoryContestService implements ContestService {
     throw new NoSuchContest('No Such Contest')
   }
 
-  async subscribeMyContest(
+  subscribeMyContest(
     token: string,
     callback: SubscriptionCallback<Contest>
-  ): Promise<UnsubscriptionFunction> {
+  ): UnsubscriptionFunction {
     let lastMyContest = undefined as Contest | undefined
     const timeout = setInterval(async () => {
       const myContest = await this.getMyContest(token)
@@ -305,10 +302,10 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestAnnouncementsMap[contest.id])
   }
 
-  async subscribeAnnouncements(
+  subscribeAnnouncements(
     token: string,
     callback: SubscriptionCallback<Announcement[]>
-  ): Promise<UnsubscriptionFunction> {
+  ): UnsubscriptionFunction {
     const timeout = setInterval(async () => {
       const announcements = await this.getAnnouncements(token)
       callback(announcements)
@@ -333,11 +330,10 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestProblemsMap[contest.id])
   }
 
-  async subscribeProblemIds(
+  subscribeProblemIds(
     token: string,
     callback: SubscriptionCallback<string[]>
-  ): Promise<UnsubscriptionFunction> {
-    await this.getMyContest(token)
+  ): UnsubscriptionFunction {
     const timeout = setInterval(async () => {
       const ids = await this.getProblemIds(token)
       callback(ids)
@@ -355,11 +351,10 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestClarificationsMap[contest.id])
   }
 
-  async subscribeClarifications(
+  subscribeClarifications(
     token: string,
     callback: SubscriptionCallback<Clarification[]>
-  ): Promise<UnsubscriptionFunction> {
-    await this.getMyContest(token)
+  ): UnsubscriptionFunction {
     const timeout = setInterval(async () => {
       const clarifs = await this.getClarifications(token)
       callback(clarifs)
@@ -464,11 +459,10 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestSubmissionsMap[contest.id])
   }
 
-  async subscribeSubmissions(
+  subscribeSubmissions(
     token: string,
     callback: SubscriptionCallback<Submission[]>
-  ): Promise<UnsubscriptionFunction> {
-    await this.getMyContest(token)
+  ): UnsubscriptionFunction {
     const timeout = setInterval(async () => {
       const submissions = await this.getSubmissions(token)
       callback(submissions)
@@ -540,6 +534,30 @@ export class InMemoryContestService implements ContestService {
   async getScoreboard(token: string): Promise<Scoreboard> {
     const contest = await this.getMyContest(token)
     return lodash.cloneDeep(this.contestScoreboardMap[contest.id])
+  }
+
+  subscribeScoreboard(
+    token: string,
+    callback: SubscriptionCallback<Scoreboard>
+  ): UnsubscriptionFunction {
+    let lastScoreboard = undefined as Scoreboard | undefined
+    const timeout = setInterval(async () => {
+      const scoreboard = await this.getScoreboard(token)
+      if (!lodash.isEqual(scoreboard, lastScoreboard)) {
+        callback(scoreboard)
+        lastScoreboard = scoreboard
+      }
+    }, 5500)
+    this.getScoreboard(token)
+      .then(scoreboard => {
+        lastScoreboard = scoreboard
+        return scoreboard
+      })
+      .then(callback)
+      .catch(_ => null)
+    return () => {
+      clearInterval(timeout)
+    }
   }
 
   async createContest(

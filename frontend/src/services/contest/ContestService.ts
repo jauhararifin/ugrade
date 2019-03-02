@@ -18,14 +18,14 @@ export interface ContestService {
   subscribeMyContest(
     token: string,
     callback: SubscriptionCallback<Contest>
-  ): Promise<UnsubscriptionFunction>
+  ): UnsubscriptionFunction
 
   getAnnouncements(token: string): Promise<Announcement[]>
 
   subscribeAnnouncements(
     token: string,
     callback: SubscriptionCallback<Announcement[]>
-  ): Promise<UnsubscriptionFunction>
+  ): UnsubscriptionFunction
 
   readAnnouncements(token: string, id: string[]): Promise<void>
 
@@ -34,14 +34,14 @@ export interface ContestService {
   subscribeProblemIds(
     token: string,
     callback: SubscriptionCallback<string[]>
-  ): Promise<UnsubscriptionFunction>
+  ): UnsubscriptionFunction
 
   getClarifications(token: string): Promise<Clarification[]>
 
   subscribeClarifications(
     token: string,
     callback: SubscriptionCallback<Clarification[]>
-  ): Promise<UnsubscriptionFunction>
+  ): UnsubscriptionFunction
 
   createClarification(
     token: string,
@@ -67,7 +67,7 @@ export interface ContestService {
   subscribeSubmissions(
     token: string,
     callback: SubscriptionCallback<Submission[]>
-  ): Promise<UnsubscriptionFunction>
+  ): UnsubscriptionFunction
 
   submitSolution(
     token: string,
@@ -77,6 +77,11 @@ export interface ContestService {
   ): Promise<Submission>
 
   getScoreboard(token: string): Promise<Scoreboard>
+
+  subscribeScoreboard(
+    token: string,
+    callback: SubscriptionCallback<Scoreboard>
+  ): UnsubscriptionFunction
 
   createContest(
     email: string,
