@@ -4,6 +4,7 @@ export interface ScoreboardProblemScore {
   penalty: number
   passed: boolean
   frozen: boolean
+  first: boolean
 }
 
 export interface ScoreboardEntry {
@@ -11,7 +12,7 @@ export interface ScoreboardEntry {
   contestant: string
   totalPassed: number
   totalPenalty: number
-  problemScores: ScoreboardProblemScore[]
+  problemScores: { [problemId: string]: ScoreboardProblemScore }
 }
 
 export interface Scoreboard {

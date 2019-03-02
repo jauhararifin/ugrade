@@ -1,3 +1,4 @@
+import lodash from 'lodash'
 import loremIpsum from 'lorem-ipsum'
 import { ForbiddenActionError, User } from 'ugrade/services/auth'
 import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
@@ -14,7 +15,7 @@ import {
 import { ContestIdTaken, NoSuchClarification, NoSuchContest } from '../errors'
 import { NoSuchLanguage } from '../errors/NoSuchLanguage'
 import { GradingVerdict } from '../Grading'
-import { Scoreboard } from '../Scoreboard'
+import { Scoreboard, ScoreboardProblemScore } from '../Scoreboard'
 import { Submission } from '../Submission'
 import {
   contestAnnouncementsMap,
@@ -33,6 +34,8 @@ export class InMemoryContestService implements ContestService {
   private contestClarificationsMap: { [id: string]: Clarification[] } = {}
   private contestSubmissionsMap: { [id: string]: Submission[] } = {}
 
+  private contestScoreboardMap: { [id: string]: Scoreboard } = {}
+
   private languages: { [id: string]: Language } = {}
 
   constructor(
@@ -46,26 +49,60 @@ export class InMemoryContestService implements ContestService {
     this.contestProblemsMap = { ...contestProblemsMap }
     this.contestAnnouncementsMap = { ...contestAnnouncementsMap }
 
-    this.contests.forEach(
-      contest =>
-        (this.contestClarificationsMap[contest.id] = [
-          {
-            id: Math.round(Math.random() * 100000).toString(),
-            title: loremIpsum({ count: 4, units: 'words' }),
-            subject: 'General Issue',
-            issuedTime: new Date(),
-            entries: [
-              {
-                id: Math.round(Math.random() * 100000).toString(),
-                sender: 'test',
-                read: true,
-                issuedTime: new Date(),
-                content: loremIpsum({ count: 1, units: 'paragraphs' }),
-              },
-            ],
-          },
-        ])
-    )
+    for (const contest of this.contests) {
+      this.contestClarificationsMap[contest.id] = [
+        {
+          id: Math.round(Math.random() * 100000).toString(),
+          title: loremIpsum({ count: 4, units: 'words' }),
+          subject: 'General Issue',
+          issuedTime: new Date(),
+          entries: [
+            {
+              id: Math.round(Math.random() * 100000).toString(),
+              sender: 'test',
+              read: true,
+              issuedTime: new Date(),
+              content: loremIpsum({ count: 1, units: 'paragraphs' }),
+            },
+          ],
+        },
+      ]
+
+      const genDefaultProbScore = () => {
+        const result: { [id: string]: ScoreboardProblemScore } = {}
+        for (const problemId of this.contestProblemsMap[contest.id]) {
+          result[problemId] = {
+            problemId,
+            attempt: 0,
+            penalty: 0,
+            passed: false,
+            frozen: false,
+            first: false,
+          }
+        }
+        return result
+      }
+      this.contestScoreboardMap[contest.id] = {
+        contestId: contest.id,
+        lastUpdated: new Date(),
+        entries: [
+          'test',
+          'newtest',
+          'lorem',
+          'ipsum',
+          'dos',
+          'color',
+          'sit',
+          'amet',
+        ].map(uname => ({
+          rank: 1,
+          contestant: uname,
+          totalPassed: 0,
+          totalPenalty: 0,
+          problemScores: genDefaultProbScore(),
+        })),
+      }
+    }
 
     this.languages = languages
 
@@ -169,6 +206,48 @@ export class InMemoryContestService implements ContestService {
           ],
         }
         this.contestSubmissionsMap[contest.id].push(newSubmission)
+
+        // update scoreboard
+        const scoreboard = this.contestScoreboardMap[contest.id]
+        scoreboard.lastUpdated = new Date()
+        const entr = Math.floor(Math.random() * scoreboard.entries.length)
+        const prob = problemArr[Math.floor(Math.random() * problemArr.length)]
+        const probScore = scoreboard.entries[entr].problemScores[prob]
+        const probS = Object.keys(scoreboard.entries[entr].problemScores).map(
+          k => scoreboard.entries[entr].problemScores[k]
+        )
+        probScore.attempt++
+        probScore.first = Math.random() > 0.5
+        probScore.frozen = Math.random() > 0.5
+        probScore.passed = Math.random() > 0.5
+        probScore.penalty += Math.round(Math.random() * 120)
+        scoreboard.entries[entr].totalPassed = probS.filter(
+          p => p.passed
+        ).length
+        scoreboard.entries[entr].totalPenalty = probS.reduce(
+          (a, b) => a + b.penalty,
+          0
+        )
+        scoreboard.entries.sort((a, b) => {
+          if (a.totalPassed === b.totalPassed) {
+            return a.totalPenalty - b.totalPenalty
+          }
+          return b.totalPassed - a.totalPassed
+        })
+        let lastRank = 0
+        let lastPassed = -1
+        let lastPenalty = -1
+        for (const en of scoreboard.entries) {
+          if (
+            en.totalPassed !== lastPassed ||
+            en.totalPenalty !== lastPenalty
+          ) {
+            lastRank++
+          }
+          en.rank = lastRank
+          lastPassed = en.totalPassed
+          lastPenalty = en.totalPenalty
+        }
       }
     }, 5000)
   }
@@ -184,7 +263,7 @@ export class InMemoryContestService implements ContestService {
       .filter(x => x.shortId === shortId)
       .pop()
     if (!contest) throw new NoSuchContest('No Such Contest')
-    return contest
+    return lodash.cloneDeep(contest)
   }
 
   async getMyContest(token: string): Promise<Contest> {
@@ -193,13 +272,13 @@ export class InMemoryContestService implements ContestService {
       .slice()
       .filter(x => x.id === user.contestId)
       .pop()
-    if (contest) return contest
+    if (contest) return lodash.cloneDeep(contest)
     throw new NoSuchContest('No Such Contest')
   }
 
   async getAnnouncements(token: string): Promise<Announcement[]> {
     const contest = await this.getMyContest(token)
-    return this.contestAnnouncementsMap[contest.id].slice()
+    return lodash.cloneDeep(this.contestAnnouncementsMap[contest.id])
   }
 
   subscribeAnnouncements(
@@ -208,7 +287,7 @@ export class InMemoryContestService implements ContestService {
   ): UnsubscriptionFunction {
     const timeout = setInterval(async () => {
       const announcements = await this.getAnnouncements(token)
-      callback(announcements)
+      callback(lodash.cloneDeep(announcements))
     }, 5500)
     return () => {
       clearInterval(timeout)
@@ -224,7 +303,7 @@ export class InMemoryContestService implements ContestService {
 
   async getProblemIds(token: string): Promise<string[]> {
     const contest = await this.getMyContest(token)
-    return this.contestProblemsMap[contest.id].slice()
+    return lodash.cloneDeep(this.contestProblemsMap[contest.id])
   }
 
   subscribeProblemIds(
@@ -242,7 +321,7 @@ export class InMemoryContestService implements ContestService {
 
   async getClarifications(token: string): Promise<Clarification[]> {
     const contest = await this.getMyContest(token)
-    return this.contestClarificationsMap[contest.id].slice()
+    return lodash.cloneDeep(this.contestClarificationsMap[contest.id])
   }
 
   async subscribeClarifications(
@@ -251,7 +330,7 @@ export class InMemoryContestService implements ContestService {
   ): Promise<UnsubscriptionFunction> {
     const timeout = setInterval(async () => {
       const clarifs = await this.getClarifications(token)
-      callback(clarifs)
+      callback(lodash.cloneDeep(clarifs))
     }, 5500)
     return () => {
       clearInterval(timeout)
@@ -283,7 +362,7 @@ export class InMemoryContestService implements ContestService {
     }
 
     this.contestClarificationsMap[contest.id].push(clarification)
-    return { ...clarification }
+    return lodash.cloneDeep(clarification)
   }
 
   async createClarificationEntry(
@@ -315,7 +394,7 @@ export class InMemoryContestService implements ContestService {
       read: true,
       content,
     })
-    return { ...clarification }
+    return lodash.cloneDeep(clarification)
   }
 
   async readClarificationEntries(
@@ -341,7 +420,7 @@ export class InMemoryContestService implements ContestService {
         entry.read = true
       }
     })
-    return { ...clarification }
+    return lodash.cloneDeep(clarification)
   }
 
   async getSubmissions(token: string): Promise<Submission[]> {
@@ -349,7 +428,7 @@ export class InMemoryContestService implements ContestService {
     if (!this.contestSubmissionsMap[contest.id]) {
       this.contestSubmissionsMap[contest.id] = []
     }
-    return this.contestSubmissionsMap[contest.id].slice()
+    return lodash.cloneDeep(this.contestSubmissionsMap[contest.id])
   }
 
   async subscribeSubmissions(
@@ -359,7 +438,7 @@ export class InMemoryContestService implements ContestService {
     await this.getMyContest(token)
     const timeout = setInterval(async () => {
       const submissions = await this.getSubmissions(token)
-      callback(submissions)
+      callback(lodash.cloneDeep(submissions))
     }, 5500)
     return () => {
       clearInterval(timeout)
@@ -419,16 +498,12 @@ export class InMemoryContestService implements ContestService {
       this.contestSubmissionsMap[contest.id] = []
     }
     this.contestSubmissionsMap[contest.id].push(submissionDetail)
-    return { ...submissionDetail }
+    return lodash.cloneDeep(submissionDetail)
   }
 
   async getScoreboard(token: string): Promise<Scoreboard> {
     const contest = await this.getMyContest(token)
-    return {
-      contestId: contest.id,
-      lastUpdated: new Date(),
-      entries: [],
-    }
+    return lodash.cloneDeep(this.contestScoreboardMap[contest.id])
   }
 
   async createContest(
@@ -466,6 +541,6 @@ export class InMemoryContestService implements ContestService {
       newContest.id,
       email
     )
-    return [{ ...newContest }, { ...user }]
+    return lodash.cloneDeep<[Contest, User]>([newContest, user])
   }
 }

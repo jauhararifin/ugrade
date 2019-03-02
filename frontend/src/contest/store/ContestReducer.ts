@@ -19,6 +19,10 @@ import {
   setRegisteredReducer,
 } from './ContestSetRegistered'
 import {
+  ContestSetScoreboard,
+  setScoreboardReducer,
+} from './ContestSetScoreboard'
+import {
   ContestSetSubmissions,
   setSubmissionReducer,
 } from './ContestSetSubmissions'
@@ -56,6 +60,9 @@ export const contestReducer: Reducer<ContestState> = (
 
     case ContestActionType.SetSubmissions:
       return setSubmissionReducer(state, action as ContestSetSubmissions)
+
+    case ContestActionType.SetScoreboard:
+      return setScoreboardReducer(state, action as ContestSetScoreboard)
   }
   return state
 }

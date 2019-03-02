@@ -1,14 +1,10 @@
 import { createSelector } from 'reselect'
-import { annoucements } from 'ugrade/services/contest/InMemoryContestService'
 import { AppState } from 'ugrade/store'
 import {
-  Announcement,
-  Clarification,
   ClarificationEntry,
   ContestInfo,
   ContestState,
   Language,
-  Problem,
 } from './ContestState'
 
 export function getContest(state: AppState): ContestState {
@@ -138,3 +134,7 @@ export const getSubmissionList = createSelector(
     return undefined
   }
 )
+
+export function getScoreboard(state: AppState) {
+  return state.contest.scoreboard
+}

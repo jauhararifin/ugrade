@@ -9,5 +9,6 @@ export * from './ContestSetProblems'
 export * from './ContestUnsetContest'
 export * from './ContestSetSubmissions'
 export * from './ContestSetRegistered'
+export * from './ContestSetScoreboard'
 
 export * from './ContestSelectors'

@@ -1,3 +1,26 @@
+export interface ScoreboardProblemScore {
+  problemId: string
+  attempt: number
+  penalty: number
+  passed: boolean
+  frozen: boolean
+  first: boolean
+}
+
+export interface ScoreboardEntry {
+  rank: number
+  contestant: string
+  totalPassed: number
+  totalPenalty: number
+  problemScores: { [problemId: string]: ScoreboardProblemScore }
+}
+
+export interface Scoreboard {
+  contestId: string
+  lastUpdated: Date
+  entries: ScoreboardEntry[]
+}
+
 export enum ProblemType {
   PROBLEM_TYPE_BATCH = 0,
   PROBLEM_TYPE_INTERACTIVE = 1,
@@ -96,6 +119,7 @@ export interface ContestState {
   announcements?: { [announcementId: string]: Announcement }
   clarifications?: { [clarificationId: string]: Clarification }
   submissions?: { [submissionId: string]: Submission }
+  scoreboard?: Scoreboard
 }
 
 export const initialValue: ContestState = {}

@@ -4,6 +4,7 @@ import { ContestSetClarifications } from './ContestSetClarrifications'
 import { ContestSetInfo } from './ContestSetInfo'
 import { ContestSetProblems } from './ContestSetProblems'
 import { ContestSetRegistered } from './ContestSetRegistered'
+import { ContestSetScoreboard } from './ContestSetScoreboard'
 import { ContestSetSubmissions } from './ContestSetSubmissions'
 import { ContestUnsetContest } from './ContestUnsetContest'
 
@@ -16,6 +17,7 @@ export enum ContestActionType {
   SetClarifications = 'CONTEST_SET_CLARIFICATIONS',
   SetSubmissions = 'CONTEST_SET_SUBMISSIONS',
   ReadAnnouncements = 'CONTEST_READ_ANNOUNCEMENTS',
+  SetScoreboard = 'CONTEST_SET_SCOREBOARD',
 }
 
 export type ContestAction =
@@ -27,3 +29,4 @@ export type ContestAction =
   | ContestSetClarifications
   | ContestReadAnnouncements
   | ContestSetSubmissions
+  | ContestSetScoreboard
