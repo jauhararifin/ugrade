@@ -1,3 +1,4 @@
+import lodash from 'lodash'
 import { ContestActionType } from './ContestAction'
 import { Clarification, ContestState } from './ContestState'
 
@@ -19,7 +20,7 @@ export function setClarrificationsReducer(
   state: ContestState,
   action: ContestSetClarifications
 ): ContestState {
-  const nextState = { ...state }
+  const nextState = lodash.cloneDeep(state)
   const clarifications = nextState.clarifications || {}
   for (const newClarif of action.clarifications) {
     if (newClarif.id in clarifications) {

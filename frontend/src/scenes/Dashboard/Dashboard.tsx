@@ -21,8 +21,8 @@ export const Dashboard: FunctionComponent = () => {
   const contest = useContestInfo()
   const dispatch = useAppDispatch()
   useEffect(() => {
-    if (contest) dispatch(setTitle(`UGrade | ${contest.name}`))
-  }, [contest])
+    if (contest && contest.name) dispatch(setTitle(`UGrade | ${contest.name}`))
+  }, [contest && contest.name])
   return (
     <DashboardView>
       <TransitionGroup className='eat-them-all'>
