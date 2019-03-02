@@ -38,12 +38,14 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
   const loading = !clarifications || !problems
   const currentMoment = moment(serverClock || new Date())
 
+  const genSetClarif = (val?: string) => () => setCurrentClarif(val)
+
   return (
     <div className='contest-clarifications'>
       {serverClock && currentClarif && (
         <ClarificationDetail
           clarificationId={currentClarif}
-          handleClose={setCurrentClarif.bind(null, undefined)}
+          handleClose={genSetClarif()}
         />
       )}
       <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
@@ -108,7 +110,7 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
                 <div className='action'>
                   <Button
                     intent={Intent.PRIMARY}
-                    onClick={setCurrentClarif.bind(null, clarification.id)}
+                    onClick={genSetClarif(clarification.id)}
                   >
                     Show Detail
                   </Button>
