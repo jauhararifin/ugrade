@@ -18,6 +18,7 @@ import { GradingVerdict } from '../Grading'
 import { Scoreboard, ScoreboardProblemScore } from '../Scoreboard'
 import { Submission } from '../Submission'
 import {
+  annoucements,
   contestAnnouncementsMap,
   contestProblemsMap,
   contests,
@@ -306,11 +307,19 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Announcement[]>
   ): UnsubscriptionFunction {
+    let lastAnnouncements = undefined as Announcement[] | undefined
     const timeout = setInterval(async () => {
       const announcements = await this.getAnnouncements(token)
-      callback(announcements)
+      if (!lodash.isEqual(announcements, lastAnnouncements)) {
+        callback(lodash.difference(announcements, lastAnnouncements || []))
+        lastAnnouncements = announcements
+      }
     }, 5500)
     this.getAnnouncements(token)
+      .then(announces => {
+        lastAnnouncements = announces
+        return announces
+      })
       .then(callback)
       .catch(_ => null)
     return () => {
@@ -334,11 +343,19 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<string[]>
   ): UnsubscriptionFunction {
+    let lastProblemIds = undefined as string[] | undefined
     const timeout = setInterval(async () => {
       const ids = await this.getProblemIds(token)
-      callback(ids)
+      if (!lodash.isEqual(ids, lastProblemIds)) {
+        callback(ids)
+        lastProblemIds = ids
+      }
     }, 5500)
     this.getProblemIds(token)
+      .then(ids => {
+        lastProblemIds = ids
+        return ids
+      })
       .then(callback)
       .catch(_ => null)
     return () => {
@@ -355,11 +372,19 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Clarification[]>
   ): UnsubscriptionFunction {
+    let lastClarifications = undefined as Clarification[] | undefined
     const timeout = setInterval(async () => {
       const clarifs = await this.getClarifications(token)
-      callback(clarifs)
+      if (!lodash.isEqual(clarifs, lastClarifications)) {
+        callback(clarifs)
+        lastClarifications = clarifs
+      }
     }, 5500)
     this.getClarifications(token)
+      .then(clarifs => {
+        lastClarifications = clarifs
+        return clarifs
+      })
       .then(callback)
       .catch(_ => null)
     return () => {
@@ -463,11 +488,19 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Submission[]>
   ): UnsubscriptionFunction {
+    let lastSubmissions = undefined as Submission[] | undefined
     const timeout = setInterval(async () => {
       const submissions = await this.getSubmissions(token)
-      callback(submissions)
+      if (!lodash.isEqual(submissions, lastSubmissions)) {
+        callback(submissions)
+        lastSubmissions = submissions
+      }
     }, 5500)
     this.getSubmissions(token)
+      .then(submissions => {
+        lastSubmissions = submissions
+        return submissions
+      })
       .then(callback)
       .catch(_ => null)
     return () => {
