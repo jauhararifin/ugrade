@@ -48,14 +48,14 @@ export const subscribeProblemIdsAction = (
   }
 }
 
-let haveLoader = false
+let alreadyRun = false
 
 export function useProblems() {
   const dispatch = useAppThunkDispatch()
 
   useEffect(() => {
-    if (!haveLoader) {
-      haveLoader = true
+    if (!alreadyRun) {
+      alreadyRun = true
       const subs = dispatch(
         subscribeProblemIdsAction(async newIds => {
           const newProbs = await dispatch(getProblemByIdsAction(newIds))
@@ -63,7 +63,7 @@ export function useProblems() {
         })
       )
       return () => {
-        haveLoader = false
+        alreadyRun = false
         subs.then(unsub => unsub()).catch(_ => null)
       }
     }
