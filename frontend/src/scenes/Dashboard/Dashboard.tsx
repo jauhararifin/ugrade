@@ -12,7 +12,7 @@ import { DashboardView } from './DashboardView'
 import Overview from './Overview/Overview'
 import Problems from './Problems'
 import ProblemDetail from './Problems/ProblemDetail'
-import Scoreboard from './Scoreboard'
+import { Scoreboard } from './Scoreboard'
 import Submissions from './Submissions'
 
 export const Dashboard: FunctionComponent = () => {

@@ -42,5 +42,3 @@ export const Scoreboard: FunctionComponent = () => {
     />
   )
 }
-
-export default Scoreboard
