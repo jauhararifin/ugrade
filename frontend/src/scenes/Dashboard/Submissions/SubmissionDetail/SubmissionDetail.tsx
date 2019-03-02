@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { useContestOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
+import { useServerClock } from 'ugrade/server'
 import { ISubmission } from '../SubmissionsView'
 import { getSourceCodeFromUrl } from './actions'
 import { SubmissionDetailView } from './SubmissionDetailView'
@@ -8,14 +10,14 @@ import { SubmissionDetailView } from './SubmissionDetailView'
 export interface SubmissionDetailProps {
   submission?: ISubmission
   handleClose: () => any
-  serverClock: Date
 }
 
 export const SubmissionDetail: FunctionComponent<SubmissionDetailProps> = ({
   submission,
   handleClose,
-  serverClock,
 }) => {
+  useContestOnly()
+  const serverClock = useServerClock()
   const [sourceCodeContent, setSourceCodeContent] = useState(undefined as
     | string
     | undefined)
@@ -48,5 +50,3 @@ export const SubmissionDetail: FunctionComponent<SubmissionDetailProps> = ({
     />
   )
 }
-
-export default SubmissionDetail

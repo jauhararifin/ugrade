@@ -1,3 +1,2 @@
-import Submissions from './Submissions'
-
-export default Submissions
+export * from './Submissions'
+export * from './SubmissionsView'

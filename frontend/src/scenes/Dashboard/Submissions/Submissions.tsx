@@ -1,41 +1,24 @@
-import React, { ComponentType, FunctionComponent } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent } from 'react'
+import { useMappedState } from 'redux-react-hook'
 import { useContestOnly } from 'ugrade/auth'
+import { useProblems } from 'ugrade/contest/problem'
 import {
   getLanguagesMap,
-  getSubmissionList,
   Language,
   Problem,
   ProblemType,
   Submission,
 } from 'ugrade/contest/store'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { useInfo, useProblems } from '../helpers'
-import SubmissionsView, { ISubmission } from './SubmissionsView'
-import { useSubmissions } from './useSubmissions'
+import { useSubmissionList } from 'ugrade/contest/submission'
+import { useServerClock } from 'ugrade/server'
+import { ISubmission, SubmissionsView } from './SubmissionsView'
 
-export interface SubmissionsReduxProps {
-  submissions?: Submission[]
-  problems?: { [id: string]: Problem }
-  languages?: { [id: string]: Language }
-  dispatch: AppThunkDispatch
-}
-
-export type SubmissionProps = SubmissionsReduxProps & WithServerProps
-
-export const Submissions: FunctionComponent<SubmissionProps> = ({
-  submissions,
-  problems,
-  languages,
-  dispatch,
-  serverClock,
-}) => {
+export const Submissions: FunctionComponent = () => {
   useContestOnly()
-  useSubmissions(dispatch)
-  useInfo(dispatch)
-  useProblems(dispatch)
+  const serverClock = useServerClock()
+  const submissions = useSubmissionList()
+  const problems = useProblems()
+  const languages = useMappedState(getLanguagesMap)
 
   if (problems && languages) {
     const mySubmissions = submissions || []
@@ -72,14 +55,3 @@ export const Submissions: FunctionComponent<SubmissionProps> = ({
   }
   return <SubmissionsView />
 }
-
-const mapStateToProps = (state: AppState) => ({
-  submissions: getSubmissionList(state),
-  problems: state.contest.problems,
-  languages: getLanguagesMap(state),
-})
-
-export default compose<ComponentType>(
-  connect(mapStateToProps),
-  withServer
-)(Submissions)

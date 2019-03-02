@@ -19,7 +19,7 @@ import {
   Submission,
   SubmissionVerdict,
 } from 'ugrade/contest/store'
-import SubmissionDetail from './SubmissionDetail'
+import { SubmissionDetail } from './SubmissionDetail'
 
 import './styles.css'
 
@@ -78,7 +78,6 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
         <SubmissionDetail
           submission={currSubmission}
           handleClose={genhandleClose()}
-          serverClock={serverClock}
         />
       )}
       <div className='contest-submissions'>
@@ -146,5 +145,3 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
     </React.Fragment>
   )
 }
-
-export default SubmissionsView

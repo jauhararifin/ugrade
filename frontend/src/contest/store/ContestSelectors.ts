@@ -112,10 +112,14 @@ export const getUnReadClarification = createSelector(
   }
 )
 
-export const getSubmissionList = createSelector(
+export const getSubmissions = createSelector(
   getContest,
-  contest => {
-    const submissions = contest.submissions
+  contest => contest.submissions
+)
+
+export const getSubmissionList = createSelector(
+  getSubmissions,
+  submissions => {
     if (submissions) {
       return Object.keys(submissions)
         .map(k => submissions[k])

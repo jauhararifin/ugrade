@@ -21,7 +21,7 @@ import './styles.scss'
 export interface SubmissionDetailViewProps {
   submission?: ISubmission
   handleClose: () => any
-  serverClock: Date
+  serverClock?: Date
   sourceCodeContent?: string
 }
 

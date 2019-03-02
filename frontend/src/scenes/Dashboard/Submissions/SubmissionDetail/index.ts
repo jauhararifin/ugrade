@@ -1,3 +1,2 @@
-import SubmissionDetail from './SubmissionDetail'
-
-export default SubmissionDetail
+export * from './SubmissionDetail'
+export * from './SubmissionDetailView'
