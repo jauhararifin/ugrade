@@ -27,7 +27,7 @@ export class InMemoryUserService implements UserService {
     address?: string
   ): Promise<void> {
     const user = await this.authService.getMe(token)
-    if (name && name.length > 0) this.authService.setMyName(token, name)
+    if (name && name.length > 0) await this.authService.setMyName(token, name)
     this.userProfile[user.id] = { ...user, gender, shirtSize, address }
   }
 }

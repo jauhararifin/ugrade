@@ -1,5 +1,5 @@
 import { TitleAction, TitleActionType } from './TitleAction'
-import { setTitleReducer, TitleSetTitle } from './TitleSetTitle'
+import { setTitleReducer } from './TitleSetTitle'
 import { initialValue, TitleState } from './TitleState'
 
 export function titleReducer(
@@ -8,7 +8,7 @@ export function titleReducer(
 ) {
   switch (action.type) {
     case TitleActionType.SetTitle:
-      return setTitleReducer(state, action as TitleSetTitle)
+      return setTitleReducer(state, action)
   }
   return state
 }

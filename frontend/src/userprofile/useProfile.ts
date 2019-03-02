@@ -26,7 +26,20 @@ export const getProfileAction = (): AppThunkAction => {
 export function useProfile() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
-    dispatch(getProfileAction())
+    let cancel = false
+    ;(async () => {
+      while (!cancel) {
+        try {
+          await dispatch(getProfileAction())
+          break
+        } catch (error) {
+          await new Promise(r => setTimeout(r, 5000))
+        }
+      }
+    })().catch(_ => null)
+    return () => {
+      cancel = true
+    }
   }, [])
   return useMappedState(getUserProfile)
 }

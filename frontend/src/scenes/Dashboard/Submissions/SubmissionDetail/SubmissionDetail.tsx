@@ -38,7 +38,7 @@ export const SubmissionDetail: FunctionComponent<SubmissionDetailProps> = ({
   }
 
   useEffect(() => {
-    loadSourceCode()
+    loadSourceCode().catch(_ => null)
   }, [submission, sourceCodeContent])
 
   return (

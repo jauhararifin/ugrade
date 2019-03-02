@@ -42,7 +42,7 @@ export const MyAccountPasswordForm: FunctionComponent = () => {
     { setSubmitting, resetForm }: FormikActions<MyAccountPasswordFormValue>
   ) => {
     try {
-      setPassword(values.oldPassword, values.newPassword)
+      await setPassword(values.oldPassword, values.newPassword)
       TopToaster.showSuccessToast('Password Changed')
     } catch (error) {
       if (!handleCommonError(error)) throw error

@@ -34,7 +34,7 @@ export const getProblemsAction = (): AppThunkAction => {
     const problemIds = await contestService.getProblemIds(token)
     const stillRelevant = getState().auth.token === token
     if (stillRelevant) {
-      dispatch(getProblemByIdsAction(problemIds))
+      await dispatch(getProblemByIdsAction(problemIds))
     }
   }
 }

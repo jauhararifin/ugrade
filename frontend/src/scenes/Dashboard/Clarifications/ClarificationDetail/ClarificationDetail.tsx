@@ -32,7 +32,7 @@ export const ClarificationDetail: FunctionComponent<
     await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
     const unreadEntries = unreadClarificationList[clarificationId] || []
     if (unreadEntries.length > 0) {
-      readClarificationEntries(clarificationId, unreadEntries)
+      await readClarificationEntries(clarificationId, unreadEntries)
     }
   }
 

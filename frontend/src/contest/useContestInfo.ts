@@ -20,7 +20,20 @@ export function getContestInfoAction(): AppThunkAction {
 export function useContestInfo() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
-    dispatch(getContestInfoAction())
+    let cancel = false
+    ;(async () => {
+      while (!cancel) {
+        try {
+          await dispatch(getContestInfoAction())
+          break
+        } catch (error) {
+          await new Promise(r => setTimeout(r, 5000))
+        }
+      }
+    })().catch(_ => null)
+    return () => {
+      cancel = true
+    }
   }, [])
   return useMappedState(getContestInfo)
 }

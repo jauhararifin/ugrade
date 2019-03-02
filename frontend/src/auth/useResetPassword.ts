@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router'
-import { useDispatch } from 'redux-react-hook'
+import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 
 export function resetPasswordAction(
@@ -35,7 +35,7 @@ export function resetPasswordAction(
 }
 
 export function useResetPassword() {
-  const dispatch = useDispatch()
+  const dispatch = useAppThunkDispatch()
   return (oneTimeCode: string, password: string) =>
     dispatch(resetPasswordAction(oneTimeCode, password))
 }

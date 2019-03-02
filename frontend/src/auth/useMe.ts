@@ -18,7 +18,20 @@ export const getMeAction = (): AppThunkAction => {
 export function useMe() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
-    dispatch(getMeAction())
+    let cancel = false
+    ;(async () => {
+      while (!cancel) {
+        try {
+          await dispatch(getMeAction())
+          break
+        } catch (error) {
+          await new Promise(res => setTimeout(res, 5000))
+        }
+      }
+    })().catch(_ => null)
+    return () => {
+      cancel = true
+    }
   }, [])
   return useMappedState(getMe)
 }

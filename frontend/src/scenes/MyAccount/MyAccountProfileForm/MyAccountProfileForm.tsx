@@ -44,7 +44,7 @@ export const MyAccountProfileForm: FunctionComponent = () => {
   ) => {
     const { name, shirtSize, gender, address } = values
     try {
-      setProfile(
+      await setProfile(
         name,
         shirtSize as ShirtSizeType,
         gender as GenderType,
