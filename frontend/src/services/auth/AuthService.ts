@@ -11,6 +11,15 @@ export interface AuthService {
   getUserByEmail(contestId: string, email: string): Promise<User>
 
   /**
+   * Get some user information in a contest by their usernames
+   *
+   * @param contestId - The contest id
+   * @param username - List of user's usernames in the contest
+   * @returns List of User
+   */
+  getUserByUsernames(contestId: string, usernames: string[]): Promise<User[]>
+
+  /**
    * Sign in to specific contest. This will create session for user.
    * @param contestId - The contest id
    * @param email - User email

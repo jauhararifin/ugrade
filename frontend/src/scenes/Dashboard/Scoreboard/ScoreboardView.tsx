@@ -3,16 +3,19 @@ import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
 import { Problem, Scoreboard } from 'ugrade/contest/store'
 
+import { User } from 'ugrade/auth/store'
 import './styles.scss'
 
 export interface ScoreboardViewProps {
   problems?: Problem[]
   scoreboard?: Scoreboard
+  userMap: { [id: string]: User }
 }
 
 export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
   problems,
   scoreboard,
+  userMap,
 }) => {
   if (!problems || !scoreboard) {
     return (
@@ -63,7 +66,9 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
                       className={Classes.TOOLTIP_INDICATOR}
                       content={entry.contestant}
                     >
-                      {entry.contestant}
+                      {userMap[entry.contestant]
+                        ? userMap[entry.contestant].name
+                        : entry.contestant}
                     </Tooltip>
                   </td>
 

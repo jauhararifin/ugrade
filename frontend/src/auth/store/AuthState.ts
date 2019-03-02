@@ -13,6 +13,7 @@ export interface AuthState {
   isSignedIn: boolean
   token: string
   me?: User
+  users: { [userId: string]: User }
 }
 
 export const initialState: AuthState = {
@@ -23,4 +24,5 @@ export const initialState: AuthState = {
     sessionStorage.getItem(AUTH_TOKEN_KEY) ||
     localStorage.getItem(AUTH_TOKEN_KEY) ||
     '',
+  users: {},
 }

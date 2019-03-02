@@ -4,6 +4,7 @@ import { AuthActionType } from './AuthAction'
 import { AuthSetMe, setMeReducer } from './AuthSetMe'
 import { AuthSetSignedIn, setSignedInReducer } from './AuthSetSignedIn'
 import { AuthSetSignedOut, setSignedOutReducer } from './AuthSetSignedOut'
+import { AuthSetUser, setUserReducer } from './AuthSetUser'
 import { AuthState, initialState } from './AuthState'
 
 export const authReducer: Reducer<AuthState> = (
@@ -19,6 +20,9 @@ export const authReducer: Reducer<AuthState> = (
 
     case AuthActionType.SetSignedOut:
       return setSignedOutReducer(state, action as AuthSetSignedOut)
+
+    case AuthActionType.SetUser:
+      return setUserReducer(state, action as AuthSetUser)
   }
   return { ...state }
 }
