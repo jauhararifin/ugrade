@@ -48,36 +48,24 @@ export const subscribeProblemIdsAction = (
   }
 }
 
+let haveLoader = false
+
 export function useProblems() {
   const dispatch = useAppThunkDispatch()
 
   useEffect(() => {
-    const subs = dispatch(
-      subscribeProblemIdsAction(async newIds => {
-        const newProbs = await dispatch(getProblemByIdsAction(newIds))
-        dispatch(setProblems(newProbs))
-      })
-    )
-    return () => {
-      subs.then(unsub => unsub()).catch(_ => null)
-    }
-  }, [])
-
-  useEffect(() => {
-    let cancel = false
-    const func = async () => {
-      while (!cancel) {
-        try {
-          await dispatch(getProblemsAction())
-          break
-        } catch (error) {
-          await new Promise(r => setTimeout(r, 5000))
-        }
+    if (!haveLoader) {
+      haveLoader = true
+      const subs = dispatch(
+        subscribeProblemIdsAction(async newIds => {
+          const newProbs = await dispatch(getProblemByIdsAction(newIds))
+          dispatch(setProblems(newProbs))
+        })
+      )
+      return () => {
+        haveLoader = false
+        subs.then(unsub => unsub()).catch(_ => null)
       }
-    }
-    func().catch(_ => null)
-    return () => {
-      cancel = true
     }
   }, [])
 
