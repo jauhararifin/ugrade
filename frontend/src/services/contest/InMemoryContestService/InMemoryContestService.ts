@@ -86,22 +86,16 @@ export class InMemoryContestService implements ContestService {
       this.contestScoreboardMap[contest.id] = {
         contestId: contest.id,
         lastUpdated: new Date(),
-        entries: [
-          'test',
-          'newtest',
-          'lorem',
-          'ipsum',
-          'dos',
-          'color',
-          'sit',
-          'amet',
-        ].map(uname => ({
-          rank: 1,
-          contestant: uname,
-          totalPassed: 0,
-          totalPenalty: 0,
-          problemScores: genDefaultProbScore(),
-        })),
+        entries: lodash
+          .values(this.authService.contestUserMap[contest.id])
+          .map(user => user.username)
+          .map(uname => ({
+            rank: 1,
+            contestant: uname,
+            totalPassed: 0,
+            totalPenalty: 0,
+            problemScores: genDefaultProbScore(),
+          })),
       }
     }
 
@@ -155,16 +149,10 @@ export class InMemoryContestService implements ContestService {
           issuer: loremIpsum({
             count: 1,
             units: 'words',
-            words: [
-              'jauhar',
-              'arifin',
-              'lorem',
-              'ipsum',
-              'dos',
-              'color',
-              'sit',
-              'amet',
-            ],
+            words: lodash
+              .values(this.authService.contestUserMap[contest.id])
+              .map(user => user.username)
+              .concat(['jury']),
           }),
           contestId: contest.id,
           problemId: this.contestProblemsMap[contest.id][

@@ -4,6 +4,7 @@ import { useContestInfo } from 'ugrade/contest'
 import { useAnnouncements } from 'ugrade/contest/announcement'
 import { useClarifications } from 'ugrade/contest/clarification'
 import { useProblemList } from 'ugrade/contest/problem'
+import { useRank } from 'ugrade/contest/scoreboard'
 import { usePush } from 'ugrade/router'
 import { useServerClock } from 'ugrade/server'
 import { Menu, SidebarView } from './SidebarView'
@@ -62,7 +63,7 @@ export const Sidebar: FunctionComponent = () => {
   }
 
   const [currentMenu, setCurrentMenu] = useState(getCurrentMenu())
-  const rank = 21
+  const rank = useRank()
 
   return (
     <SidebarView

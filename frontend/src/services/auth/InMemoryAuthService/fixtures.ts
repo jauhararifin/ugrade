@@ -17,7 +17,7 @@ export const UserTest1: User = {
 export const UserNewTest1: User = {
   id: '2',
   contestId: ContestArkav4Qual.id,
-  username: '',
+  username: 'newtest',
   email: 'newtest@example.com',
   name: 'New Test',
 }
@@ -33,7 +33,7 @@ export const UserTest2: User = {
 export const UserNewTest2: User = {
   id: '4',
   contestId: ContestArkav4Final.id,
-  username: '',
+  username: 'newtest',
   email: 'newtest@example.com',
   name: 'New Test',
 }
@@ -49,7 +49,7 @@ export const UserTest3: User = {
 export const UserNewTest3: User = {
   id: '6',
   contestId: ContestArkav5Qual.id,
-  username: '',
+  username: 'newtest',
   email: 'newtest@example.com',
   name: 'New Test',
 }
@@ -65,7 +65,7 @@ export const UserTest4: User = {
 export const UserNewTest4: User = {
   id: '8',
   contestId: ContestArkav5Final.id,
-  username: '',
+  username: 'newtest',
   email: 'newtest@example.com',
   name: 'New Test',
 }

@@ -11,11 +11,11 @@ import { User } from '../User'
 import { contestUserMap, userPasswordMap } from './fixtures'
 
 export class InMemoryAuthService implements AuthService {
-  private serverStatusService: ServerStatusService
-  private userPasswordMap: { [id: string]: string }
-  private usersToken: { [id: string]: string }
+  public serverStatusService: ServerStatusService
+  public userPasswordMap: { [id: string]: string }
+  public usersToken: { [id: string]: string }
 
-  private contestUserMap: { [contestId: string]: { [userId: string]: User } }
+  public contestUserMap: { [contestId: string]: { [userId: string]: User } }
 
   constructor(serverStatusService: ServerStatusService) {
     this.contestUserMap = contestUserMap

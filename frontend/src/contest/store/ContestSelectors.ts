@@ -1,5 +1,6 @@
 import lodash from 'lodash'
 import { createSelector } from 'reselect'
+import { getAuth } from 'ugrade/auth/store'
 import { AppState } from 'ugrade/store'
 import {
   ClarificationEntry,
@@ -137,3 +138,21 @@ export const getSubmissionList = createSelector(
 export function getScoreboard(state: AppState) {
   return state.contest.scoreboard
 }
+
+export const getRank = createSelector(
+  getContest,
+  getAuth,
+  (contest, auth) => {
+    const scoreboard = contest.scoreboard
+    if (scoreboard) {
+      const me = auth.me
+      if (me && me.id) {
+        const entry = scoreboard.entries
+          .filter(en => en.contestant === me.username)
+          .pop()
+        if (entry) return entry.rank
+      }
+    }
+    return undefined
+  }
+)

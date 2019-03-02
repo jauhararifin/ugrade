@@ -3,7 +3,7 @@ import { createSelector } from 'reselect'
 import { AppState } from 'ugrade/store'
 import { AuthState } from './AuthState'
 
-function getAuth(state: AppState): AuthState {
+export function getAuth(state: AppState): AuthState {
   return state.auth
 }
 
