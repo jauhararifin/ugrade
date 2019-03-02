@@ -5,11 +5,11 @@ import { ContestInfo } from 'ugrade/contest/store'
 
 import './styles.css'
 
-export interface OverviewPageProps {
+export interface OverviewViewProps {
   contest?: ContestInfo
 }
 
-export const OverviewPage: FunctionComponent<OverviewPageProps> = ({
+export const OverviewView: FunctionComponent<OverviewViewProps> = ({
   contest,
 }) => (
   <div className='contest-overview'>
@@ -24,5 +24,3 @@ export const OverviewPage: FunctionComponent<OverviewPageProps> = ({
     )}
   </div>
 )
-
-export default OverviewPage
