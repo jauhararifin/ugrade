@@ -34,7 +34,7 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
         )}
 
         {announcements &&
-          announcements.map(announcement => (
+          announcements.reverse().map(announcement => (
             <Card
               key={announcement.id}
               className='item'

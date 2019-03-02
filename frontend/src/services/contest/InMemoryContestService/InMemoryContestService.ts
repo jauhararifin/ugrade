@@ -1,3 +1,4 @@
+import loremIpsum from 'lorem-ipsum'
 import { ForbiddenActionError, User } from 'ugrade/services/auth'
 import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { NoSuchProblem } from 'ugrade/services/problem'
@@ -50,7 +51,7 @@ export class InMemoryContestService implements ContestService {
         (this.contestClarificationsMap[contest.id] = [
           {
             id: Math.round(Math.random() * 100000).toString(),
-            title: 'Lorem Ipsum',
+            title: loremIpsum({ count: 4, units: 'words' }),
             subject: 'General Issue',
             issuedTime: new Date(),
             entries: [
@@ -59,7 +60,7 @@ export class InMemoryContestService implements ContestService {
                 sender: 'test',
                 read: true,
                 issuedTime: new Date(),
-                content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+                content: loremIpsum({ count: 1, units: 'paragraphs' }),
               },
             ],
           },
@@ -67,6 +68,107 @@ export class InMemoryContestService implements ContestService {
     )
 
     this.languages = languages
+
+    this.handleSubs().catch(_ => null)
+  }
+
+  async handleSubs() {
+    setInterval(() => {
+      for (const contest of this.contests) {
+        // add announcements
+        const newAnnouncement: Announcement = {
+          id: Math.round(Math.random() * 100000).toString(),
+          title: loremIpsum({ count: 4, units: 'words' }),
+          content: loremIpsum({ count: 1, units: 'paragraphs' }),
+          issuedTime: new Date(Date.now()),
+          read: false,
+        }
+        this.contestAnnouncementsMap[contest.id].push(newAnnouncement)
+
+        // shift problems
+        const problemArr = this.contestProblemsMap[contest.id]
+        if (problemArr && problemArr.length > 0) {
+          this.contestProblemsMap[contest.id] = problemArr
+            .slice(1)
+            .concat([problemArr[0]])
+        }
+
+        // add clarifcation entries
+        const clarifArr = this.contestClarificationsMap[contest.id]
+        for (const clarif of clarifArr) {
+          const newEntry: ClarificationEntry = {
+            id: Math.round(Math.random() * 100000).toString(),
+            sender: 'jury',
+            content: loremIpsum({ count: 1, units: 'paragraphs' }),
+            read: false,
+            issuedTime: new Date(),
+          }
+          clarif.entries.push(newEntry)
+        }
+
+        // add submissions
+        if (!this.contestSubmissionsMap[contest.id]) {
+          this.contestSubmissionsMap[contest.id] = []
+        }
+        const newSubmission: Submission = {
+          id: Math.round(Math.random() * 100000).toString(),
+          issuer: loremIpsum({
+            count: 1,
+            units: 'words',
+            words: [
+              'jauhar',
+              'arifin',
+              'lorem',
+              'ipsum',
+              'dos',
+              'color',
+              'sit',
+              'amet',
+            ],
+          }),
+          contestId: contest.id,
+          problemId: this.contestProblemsMap[contest.id][
+            Math.floor(
+              Math.random() * this.contestProblemsMap[contest.id].length
+            )
+          ],
+          languageId:
+            contest.permittedLanguages[
+              Math.floor(Math.random() * contest.permittedLanguages.length)
+            ].id,
+          issuedTime: new Date(),
+          verdict: GradingVerdict.Pending,
+          sourceCode: 'https://pastebin.com/raw/YDhf1cUV',
+          gradings: [
+            {
+              id: Math.round(Math.random() * 100000).toString(),
+              issuedTime: new Date(),
+              verdict: GradingVerdict.InternalError,
+              message: '',
+              compilationOutput:
+                'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
+            },
+            {
+              id: Math.round(Math.random() * 100000).toString(),
+              issuedTime: new Date(),
+              verdict: GradingVerdict.WrongAnswer,
+              message: 'fixing compiler in worker',
+              compilationOutput:
+                'https://raw.githubusercontent.com/jauhararifin/cp/master/.gitignore',
+            },
+            {
+              id: Math.round(Math.random() * 100000).toString(),
+              issuedTime: new Date(),
+              verdict: GradingVerdict.Accepted,
+              message: 'fixing testcases',
+              compilationOutput:
+                'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
+            },
+          ],
+        }
+        this.contestSubmissionsMap[contest.id].push(newSubmission)
+      }
+    }, 5000)
   }
 
   async getAvailableLanguages(): Promise<Language[]> {
@@ -102,25 +204,10 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Announcement[]>
   ): UnsubscriptionFunction {
-    const runThis = async () => {
-      const newAnnouncement: Announcement = {
-        id: Math.round(Math.random() * 300).toString(),
-        title: `Lorem Ipsum ${Math.random()}`,
-        content: `Lorem ipsum dos color sit amet`,
-        issuedTime: new Date(Date.now()),
-        read: false,
-      }
-
-      const contest = await this.getMyContest(token)
-      const arr = await this.getAnnouncements(token)
-      arr.push(newAnnouncement)
-      this.contestAnnouncementsMap[contest.id] = arr
-
+    const timeout = setInterval(async () => {
       const announcements = await this.getAnnouncements(token)
       callback(announcements)
-    }
-
-    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    }, 5500)
     return () => {
       clearInterval(timeout)
     }
@@ -142,20 +229,10 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<string[]>
   ): UnsubscriptionFunction {
-    const runThis = async () => {
-      const contest = await this.getMyContest(token)
-      const arr = await this.getProblemIds(token)
-      if (arr.length > 0) {
-        const first = arr.shift() as string
-        arr.push(first)
-      }
-      this.contestProblemsMap[contest.id] = arr
-
-      const problemIds = await this.getProblemIds(token)
-      callback(problemIds)
-    }
-
-    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    const timeout = setInterval(async () => {
+      const ids = await this.getProblemIds(token)
+      callback(ids)
+    }, 5500)
     return () => {
       clearInterval(timeout)
     }
@@ -170,24 +247,10 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Clarification[]>
   ): Promise<UnsubscriptionFunction> {
-    const runThis = async () => {
-      const arr = await this.getClarifications(token)
-      for (const clarif of arr) {
-        const newEntry: ClarificationEntry = {
-          id: Math.round(Math.random() * 100000).toString(),
-          sender: 'jury',
-          content: `Some random content ${Math.random()}`,
-          read: false,
-          issuedTime: new Date(),
-        }
-        clarif.entries.push(newEntry)
-      }
-
-      const clarifications = await this.getClarifications(token)
-      callback(clarifications)
-    }
-
-    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    const timeout = setInterval(async () => {
+      const clarifs = await this.getClarifications(token)
+      callback(clarifs)
+    }, 5500)
     return () => {
       clearInterval(timeout)
     }
@@ -291,70 +354,11 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Submission[]>
   ): Promise<UnsubscriptionFunction> {
-    const contest = await this.getMyContest(token)
-
-    const runThis = async () => {
-      if (!this.contestSubmissionsMap[contest.id]) {
-        this.contestSubmissionsMap[contest.id] = []
-      }
-      const newSubmission: Submission = {
-        id: Math.round(Math.random() * 100000).toString(),
-        issuer: [
-          'jauhar',
-          'arifin',
-          'lorem',
-          'ipsum',
-          'dos',
-          'color',
-          'sit',
-          'amet',
-        ][Math.floor(Math.random() * 8)],
-        contestId: contest.id,
-        problemId: this.contestProblemsMap[contest.id][
-          Math.floor(Math.random() * this.contestProblemsMap[contest.id].length)
-        ],
-        languageId:
-          contest.permittedLanguages[
-            Math.floor(Math.random() * contest.permittedLanguages.length)
-          ].id,
-        issuedTime: new Date(),
-        verdict: GradingVerdict.Pending,
-        sourceCode:
-          'https://raw.githubusercontent.com/jauhararifin/cp/master/atcoder_89_regular/c.cpp',
-        gradings: [
-          {
-            id: Math.round(Math.random() * 100000).toString(),
-            issuedTime: new Date(),
-            verdict: GradingVerdict.InternalError,
-            message: '',
-            compilationOutput:
-              'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
-          },
-          {
-            id: Math.round(Math.random() * 100000).toString(),
-            issuedTime: new Date(),
-            verdict: GradingVerdict.WrongAnswer,
-            message: 'fixing compiler in worker',
-            compilationOutput:
-              'https://raw.githubusercontent.com/jauhararifin/cp/master/.gitignore',
-          },
-          {
-            id: Math.round(Math.random() * 100000).toString(),
-            issuedTime: new Date(),
-            verdict: GradingVerdict.Accepted,
-            message: 'fixing testcases',
-            compilationOutput:
-              'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
-          },
-        ],
-      }
-      this.contestSubmissionsMap[contest.id].push(newSubmission)
-
+    await this.getMyContest(token)
+    const timeout = setInterval(async () => {
       const submissions = await this.getSubmissions(token)
       callback(submissions)
-    }
-
-    const timeout = setInterval(runThis, (10 + Math.random() * 5) * 1000)
+    }, 5500)
     return () => {
       clearInterval(timeout)
     }
