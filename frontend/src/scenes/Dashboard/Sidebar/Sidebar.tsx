@@ -1,83 +1,55 @@
-import { push } from 'connected-react-router'
-import React, { ComponentType, FunctionComponent, useState } from 'react'
-import { connect } from 'react-redux'
-import { RouteComponentProps, withRouter } from 'react-router'
-import { compose } from 'redux'
-import { getMe, User } from 'ugrade/auth/store'
-import { ContestState } from 'ugrade/contest/store'
+import React, { FunctionComponent, useState } from 'react'
+import { useContestOnly, useMe } from 'ugrade/auth'
+import { useContestInfo } from 'ugrade/contest'
+import { useAnnouncements } from 'ugrade/contest/announcement'
+import { useClarifications } from 'ugrade/contest/clarification'
+import { useProblemList } from 'ugrade/contest/problem'
+import { usePush } from 'ugrade/router'
 import { useServerClock } from 'ugrade/server'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { useAnnouncements } from '../helpers/useAnnouncements'
 import { Menu, SidebarView } from './SidebarView'
 
-export interface SidebarReduxProps {
-  contest: ContestState
-  me?: User
-  dispatch: AppThunkDispatch
-}
-
-export type SidebarProps = RouteComponentProps & SidebarReduxProps
-
-export interface SidebarState {
-  menu: Menu
-}
-
-export const Sidebar: FunctionComponent<SidebarProps> = ({
-  contest,
-  me,
-  dispatch,
-  location,
-}) => {
-  useAnnouncements(dispatch)
+export const Sidebar: FunctionComponent = () => {
+  useContestOnly()
+  const me = useMe()
+  const contestInfo = useContestInfo()
+  const problems = useProblemList()
+  const announcements = useAnnouncements()
+  const clarifications = useClarifications()
   const serverClock = useServerClock()
+  const push = usePush()
 
   const getCurrentMenu = (): Menu => {
     const match = location.pathname.match(/contest\/([a-z]+)/)
     if (match && match[1]) {
-      switch (match[1]) {
-        case 'announcements':
-          return Menu.Announcements
-        case 'problems':
-          return Menu.Problems
-        case 'clarifications':
-          return Menu.Clarifications
-        case 'submissions':
-          return Menu.Submissions
-        case 'scoreboard':
-          return Menu.Scoreboard
-      }
+      if (match[1] === 'announcements') return Menu.Announcements
+      if (match[1] === 'problems') return Menu.Problems
+      if (match[1] === 'clarifications') return Menu.Clarifications
+      if (match[1] === 'submissions') return Menu.Submissions
+      if (match[1] === 'scoreboard') return Menu.Scoreboard
     }
     return Menu.Overview
   }
 
   const onMenuChoosed = (menu: Menu) => {
     setCurrentMenu(menu)
-    switch (menu) {
-      case Menu.Overview:
-        return dispatch(push(`/contest`))
-      case Menu.Announcements:
-        return dispatch(push(`/contest/announcements`))
-      case Menu.Problems:
-        return dispatch(push(`/contest/problems`))
-      case Menu.Clarifications:
-        return dispatch(push(`/contest/clarifications`))
-      case Menu.Submissions:
-        return dispatch(push(`/contest/submissions`))
-      case Menu.Scoreboard:
-        return dispatch(push(`/contest/scoreboard`))
-    }
+    if (menu === Menu.Overview) return push(`/contest`)
+    if (menu === Menu.Announcements) return push(`/contest/announcements`)
+    if (menu === Menu.Problems) return push(`/contest/problems`)
+    if (menu === Menu.Clarifications) return push(`/contest/clarifications`)
+    if (menu === Menu.Submissions) return push(`/contest/submissions`)
+    if (menu === Menu.Scoreboard) return push(`/contest/scoreboard`)
   }
 
   const newAnnouncementCount = () => {
-    if (contest && contest.announcements) {
-      return Object.values(contest.announcements).filter(x => !x.read).length
+    if (announcements) {
+      return Object.values(announcements).filter(x => !x.read).length
     }
     return 0
   }
 
   const newClarificationCount = () => {
-    if (me && contest && contest.clarifications) {
-      const clarifs = Object.values(contest.clarifications)
+    if (clarifications && me) {
+      const clarifs = Object.values(clarifications)
       const clarifsCount = clarifs.map(
         clarif =>
           Object.values(clarif.entries).filter(
@@ -94,7 +66,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
 
   return (
     <SidebarView
-      contest={contest}
+      contest={contestInfo}
+      problems={problems}
       rank={rank}
       serverClock={serverClock}
       menu={currentMenu}
@@ -104,13 +77,3 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     />
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  contest: state.contest,
-  me: getMe(state),
-})
-
-export default compose<ComponentType>(
-  connect(mapStateToProps),
-  withRouter
-)(Sidebar)

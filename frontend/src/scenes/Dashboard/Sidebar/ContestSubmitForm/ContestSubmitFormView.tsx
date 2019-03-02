@@ -80,5 +80,3 @@ export const ContestSubmitFormView: FunctionComponent<
     </form>
   )
 }
-
-export default ContestSubmitFormView

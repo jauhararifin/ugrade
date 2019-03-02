@@ -15,5 +15,3 @@ export const SidebarMiniCard: FunctionComponent<
     className={classnames('sidebar-mini-card', props.className)}
   />
 )
-
-export default SidebarMiniCard

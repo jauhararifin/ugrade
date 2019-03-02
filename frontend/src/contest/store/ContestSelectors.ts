@@ -57,10 +57,14 @@ export const getAnnouncementList = createSelector(
   }
 )
 
-export const getClarificationList = createSelector(
+export const getClarifications = createSelector(
   getContest,
-  contest => {
-    const clarifications = contest.clarifications
+  contest => contest.clarifications
+)
+
+export const getClarificationList = createSelector(
+  getClarifications,
+  clarifications => {
     if (clarifications) {
       return Object.keys(clarifications)
         .map(k => clarifications[k])
@@ -71,9 +75,8 @@ export const getClarificationList = createSelector(
 )
 
 export const getClarificationEntryList = createSelector(
-  getContest,
-  contest => {
-    const clarifMap = contest.clarifications
+  getClarifications,
+  clarifMap => {
     const result: { [id: string]: ClarificationEntry[] } = {}
     if (clarifMap) {
       for (const clarifId in clarifMap) {

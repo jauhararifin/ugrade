@@ -1,21 +1,17 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { ComponentType, Fragment, FunctionComponent } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { Fragment, FunctionComponent } from 'react'
+import { useContestOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import {
-  ContestInfo,
-  getProblemList,
-  Language,
-  Problem,
-} from 'ugrade/contest/store'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
+import { useContestInfo } from 'ugrade/contest'
+import { useProblemList } from 'ugrade/contest/problem'
+import { ContestInfo, Language, Problem } from 'ugrade/contest/store'
+import { useSubmitSolution } from 'ugrade/contest/submission'
+import { WithServerProps } from 'ugrade/helpers/server'
+import { useServerClock } from 'ugrade/server'
+import { AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
-import { useInfo, useProblems } from '../../helpers'
-import { submitSolutionAction } from './actions'
-import ContestSubmitFormView from './ContestSubmitFormView'
+import { ContestSubmitFormView } from './ContestSubmitFormView'
 
 export interface ContestSubmitFormValue {
   language: string
@@ -33,15 +29,12 @@ export interface ContestSubmitFormReduxProps {
 export type ContestSubmitFormProps = ContestSubmitFormReduxProps &
   WithServerProps
 
-export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
-  dispatch,
-  problems,
-  languages,
-  info,
-  serverClock,
-}) => {
-  useInfo(dispatch)
-  useProblems(dispatch)
+export const ContestSubmitForm: FunctionComponent = () => {
+  useContestOnly()
+  const contestInfo = useContestInfo()
+  const problems = useProblemList()
+  const languages = contestInfo ? contestInfo.permittedLanguages : undefined
+  const serverClock = useServerClock()
 
   const validationSchema = yup.object().shape({
     language: yup.string().required(),
@@ -61,14 +54,14 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
     }
   }
 
+  const submitSolution = useSubmitSolution()
+
   const handleSubmit = async (
     values: ContestSubmitFormValue,
     { setSubmitting, resetForm }: FormikActions<ContestSubmitFormValue>
   ) => {
     try {
-      await dispatch(
-        submitSolutionAction(values.problem, values.language, values.sourceCode)
-      )
+      await submitSolution(values.problem, values.language, values.sourceCode)
       TopToaster.showSuccessToast('Solution Submitted')
     } catch (error) {
       if (!handleCommonError(error)) throw error
@@ -108,8 +101,10 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
     />
   )
 
-  const started = serverClock && info && serverClock >= info.startTime
-  const ended = serverClock && info && serverClock >= info.finishTime
+  const started =
+    serverClock && contestInfo && serverClock >= contestInfo.startTime
+  const ended =
+    serverClock && contestInfo && serverClock >= contestInfo.finishTime
 
   if (languages && problems && started && !ended) {
     return (
@@ -123,16 +118,3 @@ export const ContestSubmitForm: FunctionComponent<ContestSubmitFormProps> = ({
   }
   return <Fragment />
 }
-
-const mapStateToProps = (state: AppState) => ({
-  info: state.contest.info,
-  problems: getProblemList(state),
-  languages: state.contest.info
-    ? state.contest.info.permittedLanguages
-    : undefined,
-})
-
-export default compose<ComponentType>(
-  withServer,
-  connect(mapStateToProps)
-)(ContestSubmitForm)

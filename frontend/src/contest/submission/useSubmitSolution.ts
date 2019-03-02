@@ -1,3 +1,4 @@
+import { useAppThunkDispatch } from 'ugrade/common'
 import { setSubmissions, Submission } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
 
@@ -18,4 +19,10 @@ export const submitSolutionAction = (
     if (stillRelevant) dispatch(setSubmissions([submission]))
     return submission
   }
+}
+
+export function useSubmitSolution() {
+  const dispatch = useAppThunkDispatch()
+  return (problemId: string, languageId: string, sourceCode: string) =>
+    dispatch(submitSolutionAction(problemId, languageId, sourceCode))
 }

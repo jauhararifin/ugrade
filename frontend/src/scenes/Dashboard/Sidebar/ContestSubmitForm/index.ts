@@ -1,3 +1,2 @@
-import ContestSubmitForm from './ContestSubmitForm'
-
-export default ContestSubmitForm
+export * from './ContestSubmitForm'
+export * from './ContestSubmitFormView'

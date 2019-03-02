@@ -1,39 +1,44 @@
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
+import { Clarification, getClarifications } from 'ugrade/contest/store'
+import { setClarifications } from 'ugrade/contest/store/ContestSetClarrifications'
 import {
   SubscriptionCallback,
   UnsubscriptionFunction,
 } from 'ugrade/services/contest/ContestService'
-import { AppState, AppThunkAction } from 'ugrade/store'
-import { Announcement, setAnnouncements } from '../store'
+import { AppThunkAction } from 'ugrade/store'
+import { normalizeClarification } from './util'
 
-export const getAnnouncementsAction = (): AppThunkAction<Announcement[]> => {
+export const getClarificationsAction = (): AppThunkAction<Clarification[]> => {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    const announcements = await contestService.getAnnouncements(token)
+    const clarifications = await contestService.getClarifications(token)
+    const clarifs = clarifications.map(normalizeClarification)
     const stillRelevant = getState().auth.token === token
-    if (stillRelevant) dispatch(setAnnouncements(announcements))
-    return announcements
+    if (stillRelevant) dispatch(setClarifications(clarifs))
+    return clarifs
   }
 }
 
-export const subscribeAnnouncementsAction = (
-  callback: SubscriptionCallback<Announcement[]>
+export const subscribeClarificationsAction = (
+  callback: SubscriptionCallback<Clarification[]>
 ): AppThunkAction<UnsubscriptionFunction> => {
   return async (_dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    return contestService.subscribeAnnouncements(token, callback)
+    return contestService.subscribeClarifications(token, items =>
+      callback(items.map(normalizeClarification))
+    )
   }
 }
 
-export function useAnnouncements() {
+export function useClarifications() {
   const dispatch = useAppThunkDispatch()
 
   useEffect(() => {
     const subs = dispatch(
-      subscribeAnnouncementsAction(newAnnouncements => {
-        dispatch(setAnnouncements(newAnnouncements))
+      subscribeClarificationsAction(newClarifs => {
+        dispatch(setClarifications(newClarifs))
       })
     )
     return () => {
@@ -46,7 +51,7 @@ export function useAnnouncements() {
     const func = async () => {
       while (!cancel) {
         try {
-          await dispatch(getAnnouncementsAction())
+          await dispatch(getClarificationsAction())
           break
         } catch (error) {
           await new Promise(r => setTimeout(r, 5000))
@@ -59,5 +64,5 @@ export function useAnnouncements() {
     }
   }, [])
 
-  return useMappedState((state: AppState) => state.contest.announcements)
+  return useMappedState(getClarifications)
 }

@@ -2,9 +2,9 @@ import { Alignment, Button, H2, H5, H6, Intent, Tag } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { ContestState } from 'ugrade/contest/store'
-import ContestSubmitForm from './ContestSubmitForm'
-import SidebarMiniCard from './SidebarMiniCard'
+import { ContestInfo, Problem } from 'ugrade/contest/store'
+import { ContestSubmitForm } from './ContestSubmitForm'
+import { SidebarMiniCard } from './SidebarMiniCard'
 
 import './styles.css'
 
@@ -18,7 +18,8 @@ export enum Menu {
 }
 
 export interface SidebarViewProps {
-  contest: ContestState
+  contest?: ContestInfo
+  problems?: Problem[]
   rank?: number
   serverClock?: Date
   menu?: Menu
@@ -38,6 +39,7 @@ const durationToStr = (duration: moment.Duration | number): string => {
 
 export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   contest,
+  problems,
   serverClock,
   rank,
   menu,
@@ -45,35 +47,29 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   newAnnouncementCount,
   newClarificationCount,
 }) => {
-  const started =
-    serverClock && contest.info && serverClock >= contest.info.startTime
-  const ended =
-    serverClock && contest.info && serverClock >= contest.info.finishTime
+  const started = serverClock && contest && serverClock >= contest.startTime
+  const ended = serverClock && contest && serverClock >= contest.finishTime
   const running = started && !ended
-  const freezed = contest.info && contest.info.freezed
+  const freezed = contest && contest.freezed
   const remainingTime =
-    contest.info && serverClock
-      ? moment.duration(
-          moment(contest.info.finishTime).diff(moment(serverClock))
-        )
+    contest && serverClock
+      ? moment.duration(moment(contest.finishTime).diff(moment(serverClock)))
       : undefined
   const remainingTimeStr = remainingTime
     ? durationToStr(remainingTime)
     : '--:--:--'
   const startedIn =
-    contest.info && serverClock
+    contest && serverClock
       ? durationToStr(
-          moment.duration(
-            moment(contest.info.startTime).diff(moment(serverClock))
-          )
+          moment.duration(moment(contest.startTime).diff(moment(serverClock)))
         )
       : undefined
 
   const loading =
-    !contest.info ||
+    !contest ||
     !serverClock ||
-    (started && !contest.problems) ||
-    !contest.info.permittedLanguages
+    (started && !problems) ||
+    !contest.permittedLanguages
 
   const skeletonClass = classnames({ 'bp3-skeleton': loading })
 
@@ -98,13 +94,13 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
 
   return (
     <div className='contest-sidebar'>
-      {!loading && contest.info ? (
-        <H5>{contest.info.name}</H5>
+      {!loading && contest ? (
+        <H5>{contest.name}</H5>
       ) : (
         <H2 className='bp3-skeleton'>{'Fake'}</H2>
       )}
       <p className={skeletonClass} style={{ textAlign: 'left' }}>
-        {contest.info && contest.info.shortDescription}
+        {contest && contest.shortDescription}
       </p>
 
       <div className='contest-status-bottom'>
