@@ -1,15 +1,23 @@
 import { createSelector } from 'reselect'
+import { annoucements } from 'ugrade/services/contest/InMemoryContestService'
 import { AppState } from 'ugrade/store'
-import { ClarificationEntry, ContestState, Language } from './ContestState'
+import {
+  Announcement,
+  Clarification,
+  ClarificationEntry,
+  ContestInfo,
+  ContestState,
+  Language,
+  Problem,
+} from './ContestState'
 
 export function getContest(state: AppState): ContestState {
   return state.contest
 }
 
-export const getContestInfo = createSelector(
-  getContest,
-  contest => contest.info
-)
+export function getContestInfo(state: AppState): ContestInfo | undefined {
+  return state.contest.info
+}
 
 export const getLanguagesMap = createSelector(
   getContest,
@@ -44,10 +52,13 @@ export const getProblemList = createSelector(
   }
 )
 
+export function getAnnouncements(state: AppState) {
+  return state.contest.announcements
+}
+
 export const getAnnouncementList = createSelector(
-  getContest,
-  contest => {
-    const announcements = contest.announcements
+  getAnnouncements,
+  announcements => {
     if (announcements) {
       return Object.keys(announcements)
         .map(k => announcements[k])
@@ -112,10 +123,9 @@ export const getUnReadClarification = createSelector(
   }
 )
 
-export const getSubmissions = createSelector(
-  getContest,
-  contest => contest.submissions
-)
+export function getSubmissions(state: AppState) {
+  return state.contest.submissions
+}
 
 export const getSubmissionList = createSelector(
   getSubmissions,

@@ -86,11 +86,13 @@ export class InMemoryContestService implements ContestService {
         this.contestAnnouncementsMap[contest.id].push(newAnnouncement)
 
         // shift problems
+        if (!this.contestProblemsMap[contest.id]) {
+          this.contestProblemsMap[contest.id] = []
+        }
         const problemArr = this.contestProblemsMap[contest.id]
-        if (problemArr && problemArr.length > 0) {
-          this.contestProblemsMap[contest.id] = problemArr
-            .slice(1)
-            .concat([problemArr[0]])
+        if (problemArr.length > 0) {
+          const temp = problemArr.shift()
+          if (temp) problemArr.push(temp)
         }
 
         // add clarifcation entries
@@ -339,7 +341,7 @@ export class InMemoryContestService implements ContestService {
         entry.read = true
       }
     })
-    return clarification
+    return { ...clarification }
   }
 
   async getSubmissions(token: string): Promise<Submission[]> {
@@ -464,6 +466,6 @@ export class InMemoryContestService implements ContestService {
       newContest.id,
       email
     )
-    return [newContest, user]
+    return [{ ...newContest }, { ...user }]
   }
 }

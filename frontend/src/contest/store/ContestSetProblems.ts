@@ -17,9 +17,10 @@ export function setProblemsReducer(
   state: ContestState,
   action: ContestSetProblems
 ): ContestState {
-  const nextState = { ...state }
-  const nextProblems = nextState.problems || {}
+  const nextProblems: { [id: string]: Problem } = {}
   action.problems.slice().forEach(prob => (nextProblems[prob.id] = prob))
-  nextState.problems = nextProblems
-  return nextState
+  return {
+    ...state,
+    problems: { ...state.problems, ...nextProblems },
+  }
 }

@@ -19,11 +19,9 @@ export function setSubmissionReducer(
   state: ContestState,
   action: ContestSetSubmissions
 ): ContestState {
-  const nextState = { ...state }
-  const nextSubmission = nextState.submissions || {}
+  const nextSubmission: { [id: string]: Submission } = {}
   action.submissions
     .slice()
     .forEach(value => (nextSubmission[value.id] = value))
-  nextState.submissions = nextSubmission
-  return nextState
+  return { ...state, submissions: { ...state.submissions, ...nextSubmission } }
 }
