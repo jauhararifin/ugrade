@@ -1,8 +1,8 @@
 import { ServerStatusService } from 'ugrade/services/serverStatus'
-import { NoSuchProblem } from './errors'
+import { NoSuchProblem } from '../errors'
+import { Problem } from '../Problem'
+import { ProblemService } from '../ProblemService'
 import { problems as fixture } from './fixtures'
-import { Problem } from './Problem'
-import { ProblemService } from './ProblemService'
 
 export class InMemoryProblemService implements ProblemService {
   private serverStatusService: ServerStatusService

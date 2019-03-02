@@ -1,25 +1,26 @@
-import { ForbiddenActionError, InMemoryAuthService, User } from '../auth'
-import { NoSuchProblem } from '../problem'
-import { ServerStatusService } from '../serverStatus'
-import { Announcement } from './Announcement'
-import { Clarification, ClarificationEntry } from './Clarification'
-import { Contest, Language } from './Contest'
+import { ForbiddenActionError, User } from 'ugrade/services/auth'
+import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
+import { NoSuchProblem } from 'ugrade/services/problem'
+import { ServerStatusService } from 'ugrade/services/serverStatus'
+import { Announcement } from '../Announcement'
+import { Clarification, ClarificationEntry } from '../Clarification'
+import { Contest, Language } from '../Contest'
 import {
   ContestService,
   SubscriptionCallback,
   UnsubscriptionFunction,
-} from './ContestService'
-import { ContestIdTaken, NoSuchClarification, NoSuchContest } from './errors'
-import { NoSuchLanguage } from './errors/NoSuchLanguage'
+} from '../ContestService'
+import { ContestIdTaken, NoSuchClarification, NoSuchContest } from '../errors'
+import { NoSuchLanguage } from '../errors/NoSuchLanguage'
+import { GradingVerdict } from '../Grading'
+import { Scoreboard } from '../Scoreboard'
+import { Submission } from '../Submission'
 import {
   contestAnnouncementsMap,
   contestProblemsMap,
   contests,
   languages,
 } from './fixtures'
-import { GradingVerdict } from './Grading'
-import { Scoreboard } from './Scoreboard'
-import { Submission } from './Submission'
 
 export class InMemoryContestService implements ContestService {
   private authService: InMemoryAuthService

@@ -1,4 +1,4 @@
-import { Problem, ProblemType } from './Problem'
+import { Problem, ProblemType } from '../Problem'
 
 export const problem1: Problem = {
   id: '1',

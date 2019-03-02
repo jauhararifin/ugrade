@@ -1,6 +1,6 @@
 import { AuthService } from 'ugrade/services/auth'
-import { GenderType, ShirtSizeType, UserProfile } from './UserProfile'
-import { UserService } from './UserService'
+import { GenderType, ShirtSizeType, UserProfile } from '../UserProfile'
+import { UserService } from '../UserService'
 
 export class InMemoryUserService implements UserService {
   private authService: AuthService

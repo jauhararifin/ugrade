@@ -3,8 +3,8 @@ import {
   ContestArkav4Qual,
   ContestArkav5Final,
   ContestArkav5Qual,
-} from 'ugrade/services/contest/fixtures'
-import { User } from './User'
+} from 'ugrade/services/contest/InMemoryContestService/fixtures'
+import { User } from '../User'
 
 export const UserTest1: User = {
   id: '1',

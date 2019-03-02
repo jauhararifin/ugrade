@@ -1,5 +1,5 @@
-import { NetworkError } from './errors'
-import { ServerStatusService } from './ServerStatusService'
+import { NetworkError } from '../errors'
+import { ServerStatusService } from '../ServerStatusService'
 
 export class InMemoryServerStatusService implements ServerStatusService {
   private isOnline: boolean = true

@@ -13,9 +13,9 @@ import {
   problem7,
   problem8,
   problem9,
-} from 'ugrade/services/problem/fixtures'
-import { Announcement } from './Announcement'
-import { Contest, Language } from './Contest'
+} from 'ugrade/services/problem/InMemoryProblemService/fixtures'
+import { Announcement } from '../Announcement'
+import { Contest, Language } from '../Contest'
 
 export const Language1: Language = { id: '1', name: 'C++11' }
 export const Language2: Language = { id: '2', name: 'C' }

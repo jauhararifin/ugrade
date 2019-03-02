@@ -1,12 +1,12 @@
-import { ServerStatusService } from 'ugrade/services/serverStatus'
-import { AuthService } from './AuthService'
+import { ServerStatusService } from 'ugrade/services/serverStatus/ServerStatusService'
+import { AuthService } from '../AuthService'
 import {
   AuthError,
   ForbiddenActionError,
   UserRegistrationError,
-} from './errors'
+} from '../errors'
+import { User } from '../User'
 import { contestUserMap, userPasswordMap } from './fixtures'
-import { User } from './User'
 
 export class InMemoryAuthService implements AuthService {
   private serverStatusService: ServerStatusService
@@ -26,7 +26,8 @@ export class InMemoryAuthService implements AuthService {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
-    const user = Object.values(userMap)
+    const user = Object.keys(userMap)
+      .map(k => userMap[k])
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new AuthError('No Such User')
@@ -41,7 +42,8 @@ export class InMemoryAuthService implements AuthService {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
-    const user = Object.values(userMap)
+    const user = Object.keys(userMap)
+      .map(k => userMap[k])
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new AuthError('Wrong Email Or Password')
@@ -64,7 +66,8 @@ export class InMemoryAuthService implements AuthService {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
-    const user = Object.values(userMap)
+    const user = Object.keys(userMap)
+      .map(k => userMap[k])
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new ForbiddenActionError('Operation Not Allowed')
@@ -73,7 +76,8 @@ export class InMemoryAuthService implements AuthService {
       throw new UserRegistrationError('User Already Registered')
     }
     if (
-      Object.values(userMap)
+      Object.keys(userMap)
+        .map(k => userMap[k])
         .filter(x => x.username === username)
         .pop()
     ) {
@@ -109,7 +113,8 @@ export class InMemoryAuthService implements AuthService {
     if (!userMap) {
       throw new AuthError('No Such Contest')
     }
-    const user = Object.values(userMap)
+    const user = Object.keys(userMap)
+      .map(k => userMap[k])
       .filter(val => val.email === email)
       .pop()
     if (!user) throw new AuthError('No Such User')
