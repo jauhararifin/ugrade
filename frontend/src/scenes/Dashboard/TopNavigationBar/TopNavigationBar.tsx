@@ -14,45 +14,38 @@ import {
   Position,
 } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { push } from 'connected-react-router'
-import React, { ComponentType, FunctionComponent } from 'react'
-import { connect } from 'react-redux'
+import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { compose } from 'redux'
-import { getMe, User } from 'ugrade/auth/store'
+import { useMappedState } from 'redux-react-hook'
+import { useContestOnly, useMe, useSignOut } from 'ugrade/auth'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { useMe } from '../helpers'
-import { signOutAction } from './actions'
+import { usePush } from 'ugrade/router'
 import { selectBreadcrumb } from './selectors'
 
 export type TopNavigationBarBreadcrumb = IBreadcrumbProps
 
-export interface TopNavigationBarProps {
-  user: User
-  breadcrumbs: TopNavigationBarBreadcrumb[]
-  dispatch: AppThunkDispatch
-}
+export const TopNavigationBar: FunctionComponent = () => {
+  useContestOnly()
+  const user = useMe()
+  const breadcrumbs = useMappedState(selectBreadcrumb)
+  const push = usePush()
+  const signOut = useSignOut()
 
-export const TopNavigationBar: FunctionComponent<TopNavigationBarProps> = ({
-  user,
-  breadcrumbs,
-  dispatch,
-}) => {
-  useMe(dispatch)
   const breadcrumbWithRouter = breadcrumbs.map(breadcrumbItem => ({
     ...breadcrumbItem,
     onClick: () => {
-      if (breadcrumbItem.href) dispatch(push(breadcrumbItem.href))
+      if (breadcrumbItem.href) push(breadcrumbItem.href)
     },
     href: undefined,
   }))
+
   const handleSignOut = async () => {
-    await dispatch(signOutAction())
+    await signOut()
     TopToaster.showSuccessToast('Signed Out')
   }
-  const handleMyAccount = () => dispatch(push('/account'))
-  const handleSetting = () => dispatch(push('/setting'))
+  const handleMyAccount = () => push('/account')
+  const handleSetting = () => push('/setting')
+
   return (
     <Navbar>
       <NavbarGroup align={Alignment.LEFT}>
@@ -88,12 +81,3 @@ export const TopNavigationBar: FunctionComponent<TopNavigationBarProps> = ({
     </Navbar>
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  breadcrumbs: selectBreadcrumb(state),
-  user: getMe(state),
-})
-
-export default compose<ComponentType>(connect(mapStateToProps))(
-  TopNavigationBar
-)

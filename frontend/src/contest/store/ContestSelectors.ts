@@ -27,10 +27,14 @@ export const getLanguagesMap = createSelector(
   }
 )
 
-export const getProblemList = createSelector(
+export const getProblems = createSelector(
   getContest,
-  contest => {
-    const problems = contest.problems
+  contest => contest.problems
+)
+
+export const getProblemList = createSelector(
+  getProblems,
+  problems => {
     if (problems) {
       return Object.keys(problems)
         .map(k => problems[k])
