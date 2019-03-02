@@ -253,7 +253,7 @@ export class InMemoryContestService implements ContestService {
   }
 
   async getAvailableLanguages(): Promise<Language[]> {
-    return Object.values(this.languages).slice()
+    return lodash.values(this.languages).slice()
   }
 
   async getContestByShortId(shortId: string): Promise<Contest> {
@@ -281,14 +281,17 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestAnnouncementsMap[contest.id])
   }
 
-  subscribeAnnouncements(
+  async subscribeAnnouncements(
     token: string,
     callback: SubscriptionCallback<Announcement[]>
-  ): UnsubscriptionFunction {
+  ): Promise<UnsubscriptionFunction> {
     const timeout = setInterval(async () => {
       const announcements = await this.getAnnouncements(token)
-      callback(lodash.cloneDeep(announcements))
+      callback(announcements)
     }, 5500)
+    this.getAnnouncements(token)
+      .then(callback)
+      .catch(_ => null)
     return () => {
       clearInterval(timeout)
     }
@@ -306,14 +309,18 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestProblemsMap[contest.id])
   }
 
-  subscribeProblemIds(
+  async subscribeProblemIds(
     token: string,
     callback: SubscriptionCallback<string[]>
-  ): UnsubscriptionFunction {
+  ): Promise<UnsubscriptionFunction> {
+    await this.getMyContest(token)
     const timeout = setInterval(async () => {
       const ids = await this.getProblemIds(token)
       callback(ids)
     }, 5500)
+    this.getProblemIds(token)
+      .then(callback)
+      .catch(_ => null)
     return () => {
       clearInterval(timeout)
     }
@@ -328,10 +335,14 @@ export class InMemoryContestService implements ContestService {
     token: string,
     callback: SubscriptionCallback<Clarification[]>
   ): Promise<UnsubscriptionFunction> {
+    await this.getMyContest(token)
     const timeout = setInterval(async () => {
       const clarifs = await this.getClarifications(token)
-      callback(lodash.cloneDeep(clarifs))
+      callback(clarifs)
     }, 5500)
+    this.getClarifications(token)
+      .then(callback)
+      .catch(_ => null)
     return () => {
       clearInterval(timeout)
     }
@@ -377,9 +388,8 @@ export class InMemoryContestService implements ContestService {
       throw new ForbiddenActionError('Contest Already Finished')
     }
 
-    const clarification = Object.values(
-      this.contestClarificationsMap[contest.id]
-    )
+    const clarification = lodash
+      .values(this.contestClarificationsMap[contest.id])
       .filter(c => c.id === clarificationId)
       .pop()
 
@@ -405,11 +415,10 @@ export class InMemoryContestService implements ContestService {
     await this.authService.getMe(token)
     const contest = await this.getMyContest(token)
 
-    const clarification = Object.values(
-      this.contestClarificationsMap[contest.id]
+    const clarification = lodash.find(
+      this.contestClarificationsMap[contest.id],
+      c => c.id === clarificationId
     )
-      .filter(c => c.id === clarificationId)
-      .pop()
 
     if (!clarification) {
       throw new NoSuchClarification('No Such Clarification')
@@ -438,8 +447,11 @@ export class InMemoryContestService implements ContestService {
     await this.getMyContest(token)
     const timeout = setInterval(async () => {
       const submissions = await this.getSubmissions(token)
-      callback(lodash.cloneDeep(submissions))
+      callback(submissions)
     }, 5500)
+    this.getSubmissions(token)
+      .then(callback)
+      .catch(_ => null)
     return () => {
       clearInterval(timeout)
     }

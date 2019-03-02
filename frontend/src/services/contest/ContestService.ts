@@ -20,7 +20,7 @@ export interface ContestService {
   subscribeAnnouncements(
     token: string,
     callback: SubscriptionCallback<Announcement[]>
-  ): UnsubscriptionFunction
+  ): Promise<UnsubscriptionFunction>
 
   readAnnouncements(token: string, id: string[]): Promise<void>
 
@@ -29,7 +29,7 @@ export interface ContestService {
   subscribeProblemIds(
     token: string,
     callback: SubscriptionCallback<string[]>
-  ): UnsubscriptionFunction
+  ): Promise<UnsubscriptionFunction>
 
   getClarifications(token: string): Promise<Clarification[]>
 
