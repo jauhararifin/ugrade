@@ -1,3 +1,2 @@
-import Problems from './Problems'
-
-export default Problems
+export * from './Problems'
+export * from './ProblemsView'

@@ -33,5 +33,3 @@ export const ProblemDetailView: FunctionComponent<ProblemDetailViewProps> = ({
     </div>
   )
 }
-
-export default ProblemDetailView

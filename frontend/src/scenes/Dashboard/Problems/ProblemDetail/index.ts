@@ -1,3 +1,2 @@
-import ProblemDetail from './ProblemDetail'
-
-export default ProblemDetail
+export * from './ProblemDetail'
+export * from './ProblemDetailView'

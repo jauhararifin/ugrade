@@ -1,32 +1,17 @@
-import { push } from 'connected-react-router'
-import React, { ComponentType, FunctionComponent } from 'react'
-import { connect } from 'react-redux'
-import { compose, Dispatch } from 'redux'
+import React, { FunctionComponent } from 'react'
 import { useContestOnly } from 'ugrade/auth'
-import { getProblemList, Problem } from 'ugrade/contest/store'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { useProblems } from '../helpers'
-import ProblemsView from './ProblemsView'
+import { useProblemList } from 'ugrade/contest/problem'
+import { Problem } from 'ugrade/contest/store'
+import { usePush } from 'ugrade/router'
+import { ProblemsView } from './ProblemsView'
 
-export interface ProblemsProps {
-  problems?: Problem[]
-  dispatch: AppThunkDispatch & Dispatch
-}
-
-export const Problems: FunctionComponent<ProblemsProps> = ({
-  problems,
-  dispatch,
-}) => {
+export const Problems: FunctionComponent = () => {
   useContestOnly()
-  useProblems(dispatch)
+  const problems = useProblemList()
+  const push = usePush()
+
   const handleProblemChoose = (problem: Problem) => {
-    dispatch(push(`/contest/problems/${problem.id}`))
+    push(`/contest/problems/${problem.id}`)
   }
   return <ProblemsView problems={problems} onChoose={handleProblemChoose} />
 }
-
-const mapStateToProps = (state: AppState) => ({
-  problems: getProblemList(state),
-})
-
-export default compose<ComponentType>(connect(mapStateToProps))(Problems)

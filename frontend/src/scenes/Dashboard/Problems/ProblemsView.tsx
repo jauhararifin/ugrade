@@ -48,5 +48,3 @@ export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
     </div>
   )
 }
-
-export default ProblemsView
