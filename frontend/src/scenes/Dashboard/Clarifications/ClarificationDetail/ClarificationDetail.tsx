@@ -1,56 +1,43 @@
-import React, { ComponentType, FunctionComponent, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent, useEffect } from 'react'
+import { useMappedState } from 'redux-react-hook'
 import { useContestOnly } from 'ugrade/auth'
-import { Clarification, getUnReadClarification } from 'ugrade/contest/store'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { AppState, AppThunkDispatch } from 'ugrade/store'
-import { useClarifications } from '../../helpers/useClarifications'
-import { readClarificationEntriesAction } from './actions'
+import {
+  useClarifications,
+  useReadClarificationEntries,
+} from 'ugrade/contest/clarification'
+import { getUnReadClarification } from 'ugrade/contest/store'
+import { useServerClock } from 'ugrade/server'
 import { ClarificationDetailView } from './ClarificationDetailView'
 
-export interface ClarificationDetailSceneOwnProps {
+export interface ClarificationDetailProps {
   clarificationId: string
   handleClose: () => any
 }
 
-export interface ClarificationDetailSceneReduxProps {
-  clarifications?: { [id: string]: Clarification }
-  unreadClarificationList: { [id: string]: string[] }
-  dispatch: AppThunkDispatch
-}
-
-export type ClarificationDetailSceneProps = ClarificationDetailSceneOwnProps &
-  ClarificationDetailSceneReduxProps &
-  WithServerProps
-
-export const ClarificationDetailScene: FunctionComponent<
-  ClarificationDetailSceneProps
-> = ({
-  clarificationId,
-  handleClose,
-  clarifications,
-  unreadClarificationList,
-  dispatch,
-  serverClock,
-}) => {
+export const ClarificationDetail: FunctionComponent<
+  ClarificationDetailProps
+> = ({ clarificationId, handleClose }) => {
   useContestOnly()
-  useClarifications(dispatch)
+  const clarifications = useClarifications()
+  const unreadClarificationList = useMappedState(getUnReadClarification)
+  const serverClock = useServerClock()
 
   const clarification = clarifications
     ? clarifications[clarificationId]
     : undefined
 
+  const readClarificationEntries = useReadClarificationEntries()
+
   const readAllEntries = async () => {
     await new Promise(resolve => setTimeout(resolve, 2000)) // read after 2 seconds
     const unreadEntries = unreadClarificationList[clarificationId] || []
     if (unreadEntries.length > 0) {
-      dispatch(readClarificationEntriesAction(clarificationId, unreadEntries))
+      readClarificationEntries(clarificationId, unreadEntries)
     }
   }
 
   useEffect(() => {
-    readAllEntries()
+    readAllEntries().catch(_ => null)
   })
 
   return (
@@ -61,13 +48,3 @@ export const ClarificationDetailScene: FunctionComponent<
     />
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  clarifications: state.contest.clarifications,
-  unreadClarificationList: getUnReadClarification(state),
-})
-
-export default compose<ComponentType<ClarificationDetailSceneOwnProps>>(
-  connect(mapStateToProps),
-  withServer
-)(ClarificationDetailScene)

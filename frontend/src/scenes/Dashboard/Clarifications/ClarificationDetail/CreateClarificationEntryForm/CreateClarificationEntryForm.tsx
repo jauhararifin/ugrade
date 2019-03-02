@@ -1,40 +1,34 @@
 import { Formik, FormikActions } from 'formik'
-import React, { ComponentType, FunctionComponent } from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { FunctionComponent } from 'react'
 import { useContestOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { AppThunkDispatch } from 'ugrade/store'
+import { useCreateClarificationEntry } from 'ugrade/contest/clarification'
 import * as yup from 'yup'
-import { createClarificationEntryAction } from './actions'
 import { CreateClarificationEntryFormView } from './CreateClarificationEntryFormView'
 
 export interface CreateClarificationEntryFormValues {
   content: string
 }
 
-export interface CreateClarificationEntryFormOwnProps {
+export interface CreateClarificationEntryFormProps {
   clarificationId: string
 }
 
-export interface CreateClarificationEntryFormReduxProps {
-  dispatch: AppThunkDispatch
-}
-
-export type CreateClarificationEntryFormProps = CreateClarificationEntryFormOwnProps &
-  CreateClarificationEntryFormReduxProps
-
 export const CreateClarificationEntryForm: FunctionComponent<
   CreateClarificationEntryFormProps
-> = ({ clarificationId, dispatch }) => {
+> = ({ clarificationId }) => {
   useContestOnly()
 
   const validationSchema = yup.object().shape({
     content: yup.string().required(),
   })
 
-  const getInitialValue = () => ({ content: '' })
+  const initialValue = {
+    content: '',
+  }
+
+  const createClarificationEntry = useCreateClarificationEntry()
 
   const handleSubmit = async (
     values: CreateClarificationEntryFormValues,
@@ -44,9 +38,7 @@ export const CreateClarificationEntryForm: FunctionComponent<
     }: FormikActions<CreateClarificationEntryFormValues>
   ) => {
     try {
-      await dispatch(
-        createClarificationEntryAction(clarificationId, values.content)
-      )
+      await createClarificationEntry(clarificationId, values.content)
       TopToaster.showSuccessToast('Clarification Reply Submitted')
     } catch (error) {
       if (!handleCommonError(error)) throw error
@@ -58,14 +50,10 @@ export const CreateClarificationEntryForm: FunctionComponent<
 
   return (
     <Formik
-      initialValues={getInitialValue()}
+      initialValues={initialValue}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       component={CreateClarificationEntryFormView}
     />
   )
 }
-
-export default compose<ComponentType<CreateClarificationEntryFormOwnProps>>(
-  connect()
-)(CreateClarificationEntryForm)

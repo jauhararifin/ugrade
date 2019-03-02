@@ -1,11 +1,12 @@
-import { setClarifications } from 'ugrade/contest/store/ContestSetClarrifications'
+import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
-import { normalizeClarification } from '../util'
+import { setClarifications } from '../store/ContestSetClarrifications'
+import { normalizeClarification } from './util'
 
 export const readClarificationEntriesAction = (
   clarificationId: string,
   entryIds: string[]
-): AppThunkAction<void> => {
+): AppThunkAction => {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
     const clarification = await contestService.readClarificationEntries(
@@ -17,4 +18,10 @@ export const readClarificationEntriesAction = (
     const stillRelevant = getState().auth.token === token
     if (stillRelevant) dispatch(setClarifications([clarif]))
   }
+}
+
+export function useReadClarificationEntries() {
+  const dispatch = useAppThunkDispatch()
+  return (clarificationId: string, entryIds: string[]) =>
+    dispatch(readClarificationEntriesAction(clarificationId, entryIds))
 }

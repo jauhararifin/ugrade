@@ -1,6 +1,7 @@
+import { useAppThunkDispatch } from 'ugrade/common'
 import { setClarifications } from 'ugrade/contest/store/ContestSetClarrifications'
 import { AppThunkAction } from 'ugrade/store'
-import { normalizeClarification } from '../../util'
+import { normalizeClarification } from './util'
 
 export const createClarificationEntryAction = (
   clarificationId: string,
@@ -17,4 +18,10 @@ export const createClarificationEntryAction = (
     const stillRelevant = getState().auth.token === token
     if (stillRelevant) dispatch(setClarifications([clarif]))
   }
+}
+
+export function useCreateClarificationEntry() {
+  const dispatch = useAppThunkDispatch()
+  return (clarificationId: string, content: string) =>
+    dispatch(createClarificationEntryAction(clarificationId, content))
 }

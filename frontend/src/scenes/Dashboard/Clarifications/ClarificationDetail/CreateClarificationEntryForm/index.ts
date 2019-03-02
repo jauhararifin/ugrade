@@ -1,3 +1,2 @@
-import CreateClarificationEntryForm from './CreateClarificationEntryForm'
-
-export default CreateClarificationEntryForm
+export * from './CreateClarificationEntryForm'
+export * from './CreateClarificationEntryFormView'

@@ -1,2 +1,6 @@
 export * from './useClarifications'
 export * from './util'
+export * from './useCreateClarificationEntry'
+export * from './useReadClarificationEntries'
+export * from './useCreateClarification'
+export * from './useClarificationList'

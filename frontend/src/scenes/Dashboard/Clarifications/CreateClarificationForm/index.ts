@@ -1,3 +1,2 @@
-import CreateClarificationForm from './CreateClarificationForm'
-
-export default CreateClarificationForm
+export * from './CreateClarificationForm'
+export * from './CreateClarificationFormView'

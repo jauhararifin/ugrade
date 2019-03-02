@@ -1,31 +1,15 @@
-import React, { ComponentType, FunctionComponent } from 'react'
-import { connect } from 'react-redux'
-import { compose, Dispatch } from 'redux'
+import React, { FunctionComponent } from 'react'
 import { useContestOnly } from 'ugrade/auth'
-import {
-  Clarification,
-  getClarificationList,
-  getProblemList,
-  Problem,
-} from 'ugrade/contest/store'
-import { withServer, WithServerProps } from 'ugrade/helpers/server'
-import { AppAction, AppState, AppThunkDispatch } from 'ugrade/store'
-import { useProblems } from '../helpers'
-import { useClarifications } from '../helpers/useClarifications'
+import { useClarificationList } from 'ugrade/contest/clarification'
+import { useProblemList } from 'ugrade/contest/problem'
+import { useServerClock } from 'ugrade/server'
 import { ClarificationsView } from './ClarificationsView'
 
-export interface ClarificationsSceneProps extends WithServerProps {
-  clarifications?: Clarification[]
-  problems?: Problem[]
-  dispatch: AppThunkDispatch & Dispatch<AppAction>
-}
-
-export const ClarificationsScene: FunctionComponent<
-  ClarificationsSceneProps
-> = ({ clarifications, dispatch, problems, serverClock }) => {
+export const Clarifications: FunctionComponent = () => {
   useContestOnly()
-  useProblems(dispatch)
-  useClarifications(dispatch)
+  const problems = useProblemList()
+  const clarifications = useClarificationList()
+  const serverClock = useServerClock()
   return (
     <ClarificationsView
       problems={problems}
@@ -34,13 +18,3 @@ export const ClarificationsScene: FunctionComponent<
     />
   )
 }
-
-const mapStateToProps = (state: AppState) => ({
-  clarifications: getClarificationList(state),
-  problems: getProblemList(state),
-})
-
-export default compose<ComponentType>(
-  connect(mapStateToProps),
-  withServer
-)(ClarificationsScene)

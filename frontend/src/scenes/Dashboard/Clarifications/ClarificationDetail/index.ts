@@ -1,3 +1,2 @@
-import ClarificationDetail from './ClarificationDetail'
-
-export default ClarificationDetail
+export * from './ClarificationDetail'
+export * from './ClarificationDetailView'
