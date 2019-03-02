@@ -12,6 +12,7 @@ import {
 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import 'github-markdown-css'
+import lodash from 'lodash'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
 import { Clarification, Problem } from 'ugrade/contest/store'
@@ -63,8 +64,8 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
         {!loading &&
           clarifications &&
           clarifications.map(clarification => {
-            const entries = Object.keys(clarification.entries)
-              .map(k => clarification.entries[k])
+            const entries = lodash
+              .values(clarification.entries)
               .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
             const notReadCount = entries.filter(entry => !entry.read).length
             const content = entries[0]

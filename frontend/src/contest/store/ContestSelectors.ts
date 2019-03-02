@@ -1,3 +1,4 @@
+import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { AppState } from 'ugrade/store'
 import {
@@ -40,9 +41,7 @@ export const getProblemList = createSelector(
   getProblems,
   problems => {
     if (problems) {
-      return Object.keys(problems)
-        .map(k => problems[k])
-        .sort((a, b) => a.order - b.order)
+      return lodash.values(problems).sort((a, b) => a.order - b.order)
     }
     return undefined
   }
@@ -56,8 +55,8 @@ export const getAnnouncementList = createSelector(
   getAnnouncements,
   announcements => {
     if (announcements) {
-      return Object.keys(announcements)
-        .map(k => announcements[k])
+      return lodash
+        .values(announcements)
         .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
     }
     return undefined
@@ -73,8 +72,8 @@ export const getClarificationList = createSelector(
   getClarifications,
   clarifications => {
     if (clarifications) {
-      return Object.keys(clarifications)
-        .map(k => clarifications[k])
+      return lodash
+        .values(clarifications)
         .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
     }
     return undefined
@@ -90,8 +89,8 @@ export const getClarificationEntryList = createSelector(
         if (clarifMap.hasOwnProperty(clarifId)) {
           const clarif = clarifMap[clarifId]
           if (clarif && clarif.entries) {
-            result[clarifId] = Object.keys(clarif.entries)
-              .map(k => clarif.entries[k])
+            result[clarifId] = lodash
+              .values(clarif.entries)
               .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
           }
         }
@@ -127,8 +126,8 @@ export const getSubmissionList = createSelector(
   getSubmissions,
   submissions => {
     if (submissions) {
-      return Object.keys(submissions)
-        .map(k => submissions[k])
+      return lodash
+        .values(submissions)
         .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
     }
     return undefined

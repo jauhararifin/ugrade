@@ -1,3 +1,4 @@
+import lodash from 'lodash'
 import { ServerStatusService } from 'ugrade/services/serverStatus/ServerStatusService'
 import { AuthService } from '../AuthService'
 import {
@@ -27,8 +28,8 @@ export class InMemoryAuthService implements AuthService {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
-    const user = Object.keys(userMap)
-      .map(k => userMap[k])
+    const user = lodash
+      .values(userMap)
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new AuthError('No Such User')
@@ -43,8 +44,8 @@ export class InMemoryAuthService implements AuthService {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
-    const user = Object.keys(userMap)
-      .map(k => userMap[k])
+    const user = lodash
+      .values(userMap)
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new AuthError('Wrong Email Or Password')
@@ -67,8 +68,8 @@ export class InMemoryAuthService implements AuthService {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
-    const user = Object.keys(userMap)
-      .map(k => userMap[k])
+    const user = lodash
+      .values(userMap)
       .filter(x => x.email === email)
       .pop()
     if (!user) throw new ForbiddenActionError('Operation Not Allowed')
@@ -77,8 +78,8 @@ export class InMemoryAuthService implements AuthService {
       throw new UserRegistrationError('User Already Registered')
     }
     if (
-      Object.keys(userMap)
-        .map(k => userMap[k])
+      lodash
+        .values(userMap)
         .filter(x => x.username === username)
         .pop()
     ) {
@@ -114,8 +115,8 @@ export class InMemoryAuthService implements AuthService {
     if (!userMap) {
       throw new AuthError('No Such Contest')
     }
-    const user = Object.keys(userMap)
-      .map(k => userMap[k])
+    const user = lodash
+      .values(userMap)
       .filter(val => val.email === email)
       .pop()
     if (!user) throw new AuthError('No Such User')

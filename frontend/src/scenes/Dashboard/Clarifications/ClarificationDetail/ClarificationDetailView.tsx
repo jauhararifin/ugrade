@@ -1,4 +1,5 @@
 import { Card, Classes, Drawer, H5, Tooltip } from '@blueprintjs/core'
+import lodash from 'lodash'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
 import { Clarification } from 'ugrade/contest/store'
@@ -16,9 +17,7 @@ export const ClarificationDetailView: FunctionComponent<
   ClarificationDetailViewProps
 > = ({ clarification, handleClose, serverClock }) => {
   const currentMoment = moment(serverClock || new Date())
-  const entries = clarification
-    ? Object.keys(clarification.entries).map(k => clarification.entries[k])
-    : []
+  const entries = clarification ? lodash.values(clarification.entries) : []
   return (
     <Drawer
       icon='info-sign'
