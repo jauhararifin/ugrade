@@ -3,6 +3,7 @@ import { AuthService } from '../AuthService'
 import {
   AuthError,
   ForbiddenActionError,
+  InvalidTokenError,
   UserRegistrationError,
 } from '../errors'
 import { User } from '../User'
@@ -132,12 +133,12 @@ export class InMemoryAuthService implements AuthService {
       const contestId = matches[1]
       const userId = matches[2]
       const contest = this.contestUserMap[contestId]
-      if (!contest) throw new AuthError('Invalid Token')
+      if (!contest) throw new InvalidTokenError('Invalid Token')
       const user = contest[userId]
-      if (!user) throw new AuthError('Invalid Token')
+      if (!user) throw new InvalidTokenError('Invalid Token')
       return user
     }
-    throw new AuthError('Invalid Token')
+    throw new InvalidTokenError('Invalid Token')
   }
 
   async setMyPassword(
