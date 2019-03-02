@@ -15,6 +15,11 @@ export interface ContestService {
 
   getMyContest(token: string): Promise<Contest>
 
+  subscribeMyContest(
+    token: string,
+    callback: SubscriptionCallback<Contest>
+  ): Promise<UnsubscriptionFunction>
+
   getAnnouncements(token: string): Promise<Announcement[]>
 
   subscribeAnnouncements(

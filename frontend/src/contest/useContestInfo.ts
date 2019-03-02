@@ -1,39 +1,39 @@
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
+import { UnsubscriptionFunction } from 'ugrade/services/contest'
 import { AppThunkAction } from 'ugrade/store'
 import { getContestInfo, setInfo } from './store'
 
-export function getContestInfoAction(): AppThunkAction {
+export function subscribeContestInfoAction(): AppThunkAction<
+  UnsubscriptionFunction
+> {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    if (token.length > 0) {
-      const contestInfo = await contestService.getMyContest(token)
+    const unsub = await contestService.subscribeMyContest(token, contest => {
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) {
-        dispatch(setInfo(contestInfo))
+        dispatch(setInfo(contest))
       }
-    }
+    })
+    return unsub
   }
 }
+
+let alreadyRun = false
 
 export function useContestInfo() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
-    let cancel = false
-    ;(async () => {
-      while (!cancel) {
-        try {
-          await dispatch(getContestInfoAction())
-          break
-        } catch (error) {
-          await new Promise(r => setTimeout(r, 5000))
-        }
+    if (!alreadyRun) {
+      alreadyRun = true
+      const unsub = dispatch(subscribeContestInfoAction())
+      return () => {
+        alreadyRun = false
+        unsub.then(func => func()).catch(_ => null)
       }
-    })().catch(_ => null)
-    return () => {
-      cancel = true
     }
   }, [])
+
   return useMappedState(getContestInfo)
 }

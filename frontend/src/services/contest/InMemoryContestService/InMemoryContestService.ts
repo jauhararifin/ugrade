@@ -276,6 +276,30 @@ export class InMemoryContestService implements ContestService {
     throw new NoSuchContest('No Such Contest')
   }
 
+  async subscribeMyContest(
+    token: string,
+    callback: SubscriptionCallback<Contest>
+  ): Promise<UnsubscriptionFunction> {
+    let lastMyContest = undefined as Contest | undefined
+    const timeout = setInterval(async () => {
+      const myContest = await this.getMyContest(token)
+      if (!lodash.isEqual(myContest, lastMyContest)) {
+        callback(myContest)
+        lastMyContest = myContest
+      }
+    }, 5500)
+    this.getMyContest(token)
+      .then(contest => {
+        lastMyContest = contest
+        return contest
+      })
+      .then(callback)
+      .catch(_ => null)
+    return () => {
+      clearInterval(timeout)
+    }
+  }
+
   async getAnnouncements(token: string): Promise<Announcement[]> {
     const contest = await this.getMyContest(token)
     return lodash.cloneDeep(this.contestAnnouncementsMap[contest.id])
