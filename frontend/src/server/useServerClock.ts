@@ -3,27 +3,35 @@ import { useMappedState } from 'redux-react-hook'
 import { getClock } from './store'
 import { useLoadServerClock } from './useLoadServerClock'
 
-export function useServerClock() {
-  useLoadServerClock()
-  const [clock, setClock] = useState(undefined as Date | undefined)
-  const [current, setCurrent] = useState(new Date())
+export function useServerClock(refreshRate: number = 1000) {
   const clockStat = useMappedState(getClock)
+
+  function calculateNow() {
+    if (clockStat.clock) {
+      const now = Date.now()
+      const localClock = clockStat.localClock.getTime()
+      const serverClock = clockStat.clock.getTime()
+      return new Date(now + serverClock - localClock)
+    }
+    return undefined
+  }
+
+  useLoadServerClock()
+  const [clock, setClock] = useState(calculateNow())
+  const [current, setCurrent] = useState(new Date())
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent(new Date())
-    }, 1000)
+    }, refreshRate)
     return clearInterval.bind(null, timer)
   }, [])
 
   useEffect(() => {
     if (clockStat.clock) {
-      const now = Date.now()
-      const localClock = clockStat.localClock.getTime()
-      const serverClock = clockStat.clock.getTime()
-      setClock(new Date(now + serverClock - localClock))
+      setClock(calculateNow())
     } else if (clock) setClock(undefined)
   }, [current, clockStat])
 
-  return clock
+  return calculateNow() || clock
 }

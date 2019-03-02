@@ -9,7 +9,7 @@ export const Clarifications: FunctionComponent = () => {
   useContestOnly()
   const problems = useProblemList()
   const clarifications = useClarificationList()
-  const serverClock = useServerClock()
+  const serverClock = useServerClock(60 * 1000)
   return (
     <ClarificationsView
       problems={problems}

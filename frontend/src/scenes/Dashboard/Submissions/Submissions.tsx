@@ -15,7 +15,7 @@ import { ISubmission, SubmissionsView } from './SubmissionsView'
 
 export const Submissions: FunctionComponent = () => {
   useContestOnly()
-  const serverClock = useServerClock()
+  const serverClock = useServerClock(60 * 1000)
   const submissions = useSubmissionList()
   const problems = useProblems()
   const languages = useMappedState(getLanguagesMap)

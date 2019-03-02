@@ -17,7 +17,7 @@ export const SubmissionDetail: FunctionComponent<SubmissionDetailProps> = ({
   handleClose,
 }) => {
   useContestOnly()
-  const serverClock = useServerClock()
+  const serverClock = useServerClock(60 * 1000)
   const [sourceCodeContent, setSourceCodeContent] = useState(undefined as
     | string
     | undefined)

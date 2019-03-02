@@ -34,7 +34,7 @@ export const ContestSubmitForm: FunctionComponent = () => {
   const contestInfo = useContestInfo()
   const problems = useProblemList()
   const languages = contestInfo ? contestInfo.permittedLanguages : undefined
-  const serverClock = useServerClock()
+  const serverClock = useServerClock(60 * 1000)
 
   const validationSchema = yup.object().shape({
     language: yup.string().required(),

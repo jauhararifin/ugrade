@@ -11,7 +11,7 @@ export const Announcements: FunctionComponent = () => {
   useContestOnly()
 
   const announcementList = useAnnouncementList()
-  const serverClock = useServerClock()
+  const serverClock = useServerClock(60 * 1000)
   const readAnnouncements = useReadAnnouncements()
 
   const readAllAnnouncements = async () => {
