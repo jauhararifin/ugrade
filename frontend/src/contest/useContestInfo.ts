@@ -10,16 +10,13 @@ export function subscribeContestInfoAction(): AppThunkAction<
 > {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    if (token.length > 0) {
-      const unsub = contestService.subscribeMyContest(token, contest => {
-        const stillRelevant = getState().auth.token === token
-        if (stillRelevant) {
-          dispatch(setInfo(contest))
-        }
-      })
-      return unsub
-    }
-    return () => null
+    const unsub = contestService.subscribeMyContest(token, contest => {
+      const stillRelevant = getState().auth.token === token
+      if (stillRelevant) {
+        dispatch(setInfo(contest))
+      }
+    })
+    return unsub
   }
 }
 

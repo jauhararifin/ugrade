@@ -1,11 +1,10 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
-import { usePublicOnly, useSignUp } from 'ugrade/auth'
+import { usePublicOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { useContestInfo } from 'ugrade/contest'
 import * as yup from 'yup'
-import { useReset, useResetAccount } from '../actions'
-import { SignUpFormValue } from './SignUpForm'
+import { useReset, useResetAccount, useSignUp } from '../actions'
 import { SignUpFormView } from './SignUpFormView'
 
 import './styles.css'

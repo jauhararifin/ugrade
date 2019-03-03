@@ -1,10 +1,16 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
-import { useForgotPassword, useMe, usePublicOnly, useSignIn } from 'ugrade/auth'
+import { usePublicOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
-import { useContestInfo } from 'ugrade/contest'
 import * as yup from 'yup'
-import { useReset, useResetAccount } from '../actions'
+import {
+  useCurrentContestInfo,
+  useCurrentMe,
+  useForgotPassword,
+  useReset,
+  useResetAccount,
+  useSignIn,
+} from '../actions'
 import { EnterPasswordFormView } from './EnterPasswordFormView'
 
 export interface EnterPasswordFormValue {
@@ -45,10 +51,10 @@ export const EnterPasswordForm: FunctionComponent = () => {
     }
   }
 
-  const contestInfo = useContestInfo()
+  const contestInfo = useCurrentContestInfo()
   const resetContest = useReset()
   const resetAccount = useResetAccount()
-  const me = useMe()
+  const me = useCurrentMe()
 
   useEffect(() => {
     if (!contestInfo) resetContest()

@@ -18,17 +18,3 @@ export function useReset() {
     dispatch(resetAction()).catch(globalErrorCatcher)
   }
 }
-
-export function resetAccountAction(): AppThunkAction {
-  return async (dispatch, _getState, _extras) => {
-    dispatch(push('/enter-contest/enter-email'))
-    dispatch(setSignedOut())
-  }
-}
-
-export function useResetAccount() {
-  const dispatch = useAppThunkDispatch()
-  return () => {
-    dispatch(resetAccountAction()).catch(globalErrorCatcher)
-  }
-}

@@ -1,12 +1,12 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
-import { usePublicOnly, useSetMeByEmail } from 'ugrade/auth'
+import { usePublicOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
-import { useContestInfo } from 'ugrade/contest'
 import { ContestInfo } from 'ugrade/contest/store'
 import { useReset } from 'ugrade/scenes/EnterContest'
 import { AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
+import { useCurrentContestInfo, useSetMeByEmail } from '../actions'
 import { EnterEmailFormView } from './EnterEmailFormView'
 
 export interface EnterEmailFormValue {
@@ -50,7 +50,7 @@ export const EnterEmailForm: FunctionComponent = () => {
     }
   }
 
-  const contestInfo = useContestInfo()
+  const contestInfo = useCurrentContestInfo()
   const resetContest = useReset()
 
   useEffect(() => {

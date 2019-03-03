@@ -1,11 +1,10 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
-import { usePublicOnly, useResetPassword } from 'ugrade/auth'
+import { usePublicOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { useContestInfo } from 'ugrade/contest'
 import * as yup from 'yup'
-import { useReset, useResetAccount } from '../actions'
-import { ResetPasswordFormValue } from './ResetPasswordForm'
+import { useReset, useResetAccount, useResetPassword } from '../actions'
 import { ResetPasswordFormView } from './ResetPasswordFormView'
 
 import './styles.css'
