@@ -93,11 +93,14 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
+  const canReadAnnouncements = usePermissions([UserPermission.AnnouncementRead])
+
   return (
     <SidebarView
       contest={contestInfo}
       problems={problems}
       canUpdateInfo={canUpdateInfo}
+      canReadAnnouncements={canReadAnnouncements}
       rank={rank}
       serverClock={serverClock}
       menu={currentMenu}

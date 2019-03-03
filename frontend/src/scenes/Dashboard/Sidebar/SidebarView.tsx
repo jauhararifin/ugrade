@@ -35,6 +35,7 @@ export interface SidebarViewProps {
   newAnnouncementCount: number
   newClarificationCount: number
   onChoose?: (menu: Menu) => any
+  canReadAnnouncements: boolean
   canUpdateInfo: boolean
   onUpdateName: (newName: string) => any
   onUpdateShortDesc: (newShortDesc: string) => any
@@ -58,6 +59,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   onChoose,
   newAnnouncementCount,
   newClarificationCount,
+  canReadAnnouncements,
   canUpdateInfo,
   onUpdateName,
   onUpdateShortDesc,
@@ -253,7 +255,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
               text='Overview'
             />
 
-            {started && (
+            {started && canReadAnnouncements && (
               <Button
                 icon='notifications'
                 onClick={onMenuAnnouncementsChoosed}

@@ -5,7 +5,7 @@ import {
   ContestArkav5Qual,
 } from 'ugrade/services/contest/InMemoryContestService/fixtures'
 import { User } from '../User'
-import { adminPermissions, UserPermission } from '../UserPermission'
+import { adminPermissions, contestantPermissions } from '../UserPermission'
 
 export const UserTest1: User = {
   id: '1',
@@ -13,7 +13,7 @@ export const UserTest1: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserNewTest1: User = {
@@ -22,7 +22,7 @@ export const UserNewTest1: User = {
   username: '',
   email: 'newtest@example.com',
   name: 'New Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserTest2: User = {
@@ -31,7 +31,7 @@ export const UserTest2: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserNewTest2: User = {
@@ -40,7 +40,7 @@ export const UserNewTest2: User = {
   username: '',
   email: 'newtest@example.com',
   name: 'New Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserAdmin3: User = {
@@ -58,7 +58,7 @@ export const UserTest3: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserNewTest3: User = {
@@ -67,7 +67,7 @@ export const UserNewTest3: User = {
   username: '',
   email: 'newtest@example.com',
   name: 'New Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserTest4: User = {
@@ -76,7 +76,7 @@ export const UserTest4: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const UserNewTest4: User = {
@@ -85,7 +85,7 @@ export const UserNewTest4: User = {
   username: '',
   email: 'newtest@example.com',
   name: 'New Test',
-  permissions: [],
+  permissions: contestantPermissions,
 }
 
 export const contestUserMap: {
