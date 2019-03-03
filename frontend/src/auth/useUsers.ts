@@ -1,7 +1,7 @@
 import lodash from 'lodash'
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { getAuth, setUsers } from './store'
 
@@ -25,7 +25,7 @@ export function useUsers(usernames: string[]) {
   const dispatch = useAppThunkDispatch()
 
   useEffect(() => {
-    dispatch(getUsersAction(usernames))
+    dispatch(getUsersAction(usernames)).catch(globalErrorCatcher)
   }, [usernames])
 
   return lodash.values(auth.users).filter(u => usernames.includes(u.username))

@@ -8,7 +8,7 @@ import {
   UserRegistrationError,
 } from '../errors'
 import { User } from '../User'
-import { adminPermissions, UserPermission } from '../UserPermission'
+import { adminPermissions } from '../UserPermission'
 import { contestUserMap, userPasswordMap } from './fixtures'
 
 export class InMemoryAuthService implements AuthService {
