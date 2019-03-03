@@ -7,6 +7,10 @@
     width: 360px;
     padding: 10px 20px;
     background-color: #f5f5f5;
+    .short-description {
+      text-align: left;
+      margin-bottom: 10px;
+    }
     .contest-status-bottom {
       display: flex;
       .freezed > * {

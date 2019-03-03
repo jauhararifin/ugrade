@@ -116,7 +116,8 @@ export const createStore = (
         thunk.withExtraArgument(thunkExtraArguments),
         logger
       ),
-      (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+      (process.env.NODE_ENV === 'development' &&
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()) ||
         compose
     )

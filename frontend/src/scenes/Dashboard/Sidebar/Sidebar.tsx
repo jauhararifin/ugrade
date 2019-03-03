@@ -1,6 +1,9 @@
 import React, { FunctionComponent, useState } from 'react'
-import { useContestOnly, useMe } from 'ugrade/auth'
-import { useContestInfo } from 'ugrade/contest'
+import { useContestOnly, useMe, usePermissions } from 'ugrade/auth'
+import { UserPermission } from 'ugrade/auth/store'
+import { handleCommonError } from 'ugrade/common'
+import { TopToaster } from 'ugrade/common/ActionToaster'
+import { useContestInfo, useSetContestInfo } from 'ugrade/contest'
 import { useAnnouncements } from 'ugrade/contest/announcement'
 import { useClarifications } from 'ugrade/contest/clarification'
 import { useProblemList } from 'ugrade/contest/problem'
@@ -64,17 +67,41 @@ export const Sidebar: FunctionComponent = () => {
 
   const [currentMenu, setCurrentMenu] = useState(getCurrentMenu())
   const rank = useRank()
+  const canUpdateInfo = usePermissions([UserPermission.InfoUpdate])
+
+  const setContestInfo = useSetContestInfo()
+
+  const setContestName = async (_newName: string) => {
+    try {
+      await setContestInfo()
+      TopToaster.showSuccessToast('Contest Name Updated')
+    } catch (error) {
+      if (!handleCommonError(error)) throw error
+    }
+  }
+
+  const setContestShortDesc = async (_newShortDesc: string) => {
+    try {
+      await setContestInfo()
+      TopToaster.showSuccessToast('Contest Short Description Updated')
+    } catch (error) {
+      if (!handleCommonError(error)) throw error
+    }
+  }
 
   return (
     <SidebarView
       contest={contestInfo}
       problems={problems}
+      canUpdateInfo={canUpdateInfo}
       rank={rank}
       serverClock={serverClock}
       menu={currentMenu}
       onChoose={onMenuChoosed}
       newAnnouncementCount={newAnnouncementCount()}
       newClarificationCount={newClarificationCount()}
+      onUpdateName={setContestName}
+      onUpdateShortDesc={setContestShortDesc}
     />
   )
 }

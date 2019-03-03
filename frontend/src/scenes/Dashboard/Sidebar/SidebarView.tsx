@@ -1,7 +1,16 @@
-import { Alignment, Button, H2, H5, H6, Intent, Tag } from '@blueprintjs/core'
+import {
+  Alignment,
+  Button,
+  EditableText,
+  H2,
+  H5,
+  H6,
+  Intent,
+  Tag,
+} from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { ContestInfo, Problem } from 'ugrade/contest/store'
 import { ContestSubmitForm } from './ContestSubmitForm'
 import { SidebarMiniCard } from './SidebarMiniCard'
@@ -26,6 +35,9 @@ export interface SidebarViewProps {
   newAnnouncementCount: number
   newClarificationCount: number
   onChoose?: (menu: Menu) => any
+  canUpdateInfo: boolean
+  onUpdateName: (newName: string) => any
+  onUpdateShortDesc: (newShortDesc: string) => any
 }
 
 const durationToStr = (duration: moment.Duration | number): string => {
@@ -46,6 +58,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   onChoose,
   newAnnouncementCount,
   newClarificationCount,
+  canUpdateInfo,
+  onUpdateName,
+  onUpdateShortDesc,
 }) => {
   const started = serverClock && contest && serverClock >= contest.startTime
   const ended = serverClock && contest && serverClock >= contest.finishTime
@@ -92,16 +107,64 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
     ? () => onChoose(Menu.Scoreboard)
     : () => null
 
+  const [name, setName] = useState('')
+  const [shortDesc, setShortDesc] = useState('')
+  useEffect(() => {
+    if (contest) {
+      setName(contest.name)
+      setShortDesc(contest.shortDescription)
+    }
+  }, [contest && contest.name, contest && contest.shortDescription])
+
+  const renderName = () => {
+    if (!loading && contest) {
+      if (canUpdateInfo) {
+        return (
+          <H5>
+            <EditableText
+              maxLength={128}
+              placeholder='Contest Title'
+              onChange={setName}
+              value={name}
+              multiline={true}
+              onConfirm={onUpdateName}
+            />
+          </H5>
+        )
+      } else {
+        return <H5>{contest.name}</H5>
+      }
+    } else {
+      return <H2 className='bp3-skeleton'>{'Fake'}</H2>
+    }
+  }
+
+  const renderShortDesc = () => {
+    if (!loading && contest) {
+      if (canUpdateInfo) {
+        return (
+          <EditableText
+            maxLength={256}
+            className='short-description'
+            placeholder='Contest Short Description'
+            onChange={setShortDesc}
+            value={shortDesc}
+            multiline={true}
+            onConfirm={onUpdateShortDesc}
+          />
+        )
+      } else {
+        return <p>{contest.shortDescription}</p>
+      }
+    } else {
+      return <p className='bp3-skeleton'>{'fake '.repeat(50)}</p>
+    }
+  }
+
   return (
     <div className='contest-sidebar'>
-      {!loading && contest ? (
-        <H5>{contest.name}</H5>
-      ) : (
-        <H2 className='bp3-skeleton'>{'Fake'}</H2>
-      )}
-      <p className={skeletonClass} style={{ textAlign: 'left' }}>
-        {contest && contest.shortDescription}
-      </p>
+      {renderName()}
+      {renderShortDesc()}
 
       <div className='contest-status-bottom'>
         {(() => {

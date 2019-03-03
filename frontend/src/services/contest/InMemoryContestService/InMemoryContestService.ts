@@ -88,6 +88,7 @@ export class InMemoryContestService implements ContestService {
         lastUpdated: new Date(),
         entries: lodash
           .values(this.authService.contestUserMap[contest.id])
+          .filter(user => user.username !== '')
           .map(user => user.username)
           .map(uname => ({
             rank: 1,

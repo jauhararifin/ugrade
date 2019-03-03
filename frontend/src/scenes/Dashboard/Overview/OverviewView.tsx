@@ -7,6 +7,7 @@ import './styles.css'
 
 export interface OverviewViewProps {
   contest?: ContestInfo
+  canEdit: boolean
 }
 
 export const OverviewView: FunctionComponent<OverviewViewProps> = ({

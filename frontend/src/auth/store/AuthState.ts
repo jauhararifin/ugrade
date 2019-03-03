@@ -1,12 +1,17 @@
 export const AUTH_IS_SIGNED_IN_KEY = 'auth.isSignedIn'
 export const AUTH_TOKEN_KEY = 'auth.token'
 
+export enum UserPermission {
+  InfoUpdate = 'info:update',
+}
+
 export interface User {
   id: string
   contestId: string
   username: string
   name: string
   email: string
+  permissions: UserPermission[]
 }
 
 export interface AuthState {

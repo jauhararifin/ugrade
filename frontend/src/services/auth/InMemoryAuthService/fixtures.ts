@@ -5,6 +5,7 @@ import {
   ContestArkav5Qual,
 } from 'ugrade/services/contest/InMemoryContestService/fixtures'
 import { User } from '../User'
+import { UserPermission } from '../UserPermission'
 
 export const UserTest1: User = {
   id: '1',
@@ -12,14 +13,16 @@ export const UserTest1: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
+  permissions: [],
 }
 
 export const UserNewTest1: User = {
   id: '2',
   contestId: ContestArkav4Qual.id,
-  username: 'newtest',
+  username: '',
   email: 'newtest@example.com',
   name: 'New Test',
+  permissions: [],
 }
 
 export const UserTest2: User = {
@@ -28,14 +31,25 @@ export const UserTest2: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
+  permissions: [],
 }
 
 export const UserNewTest2: User = {
   id: '4',
   contestId: ContestArkav4Final.id,
-  username: 'newtest',
+  username: '',
   email: 'newtest@example.com',
   name: 'New Test',
+  permissions: [],
+}
+
+export const UserAdmin3: User = {
+  id: 'admin3',
+  contestId: ContestArkav5Qual.id,
+  username: 'admin',
+  email: 'admin@example.com',
+  name: 'Administrator',
+  permissions: [UserPermission.InfoUpdate],
 }
 
 export const UserTest3: User = {
@@ -44,14 +58,16 @@ export const UserTest3: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
+  permissions: [],
 }
 
 export const UserNewTest3: User = {
   id: '6',
   contestId: ContestArkav5Qual.id,
-  username: 'newtest',
+  username: '',
   email: 'newtest@example.com',
   name: 'New Test',
+  permissions: [],
 }
 
 export const UserTest4: User = {
@@ -60,14 +76,16 @@ export const UserTest4: User = {
   username: 'test',
   email: 'test@example.com',
   name: 'Test',
+  permissions: [],
 }
 
 export const UserNewTest4: User = {
   id: '8',
   contestId: ContestArkav5Final.id,
-  username: 'newtest',
+  username: '',
   email: 'newtest@example.com',
   name: 'New Test',
+  permissions: [],
 }
 
 export const contestUserMap: {
@@ -84,6 +102,7 @@ export const contestUserMap: {
   [ContestArkav5Qual.id]: {
     [UserTest3.id]: UserTest3,
     [UserNewTest3.id]: UserNewTest3,
+    [UserAdmin3.id]: UserAdmin3,
   },
   [ContestArkav5Final.id]: {
     [UserTest4.id]: UserTest4,
@@ -98,6 +117,7 @@ export const userPasswordMap: { [userId: string]: string } = {
   [UserNewTest2.id]: 'newtest',
   [UserTest3.id]: 'test',
   [UserNewTest3.id]: 'newtest',
+  [UserAdmin3.id]: 'admin',
   [UserTest4.id]: 'test',
   [UserNewTest4.id]: 'newtest',
 }
