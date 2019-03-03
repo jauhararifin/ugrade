@@ -15,6 +15,7 @@ import { createStore } from './store'
 
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
+import { ErrorBoundary } from './ErrorBoundary'
 
 const history = createBrowserHistory()
 const serverStatusService = new InMemoryServerStatusService()
@@ -35,13 +36,15 @@ export const store = createStore(history, {
 })
 
 ReactDOM.render(
-  <Provider store={store}>
-    <StoreContext.Provider value={store}>
-      <ConnectedRouter history={history}>
-        <App />
-      </ConnectedRouter>
-    </StoreContext.Provider>
-  </Provider>,
+  <ErrorBoundary>
+    <Provider store={store}>
+      <StoreContext.Provider value={store}>
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
+      </StoreContext.Provider>
+    </Provider>
+  </ErrorBoundary>,
   document.getElementById('root')
 )
 
