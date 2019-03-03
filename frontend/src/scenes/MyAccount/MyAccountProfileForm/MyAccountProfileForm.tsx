@@ -1,9 +1,8 @@
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
-import { useMe } from 'ugrade/auth'
+import { useContestOnly, useMe } from 'ugrade/auth'
 import { User } from 'ugrade/auth/store'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { contestOnly } from 'ugrade/helpers/auth'
 import { useProfile, useSetProfile } from 'ugrade/userprofile'
 import { GenderType, ShirtSizeType } from 'ugrade/userprofile/store'
 import * as yup from 'yup'
@@ -18,7 +17,7 @@ export interface MyAccountProfileFormValue {
 }
 
 export const MyAccountProfileForm: FunctionComponent = () => {
-  contestOnly()
+  useContestOnly()
 
   const validationSchema = yup.object().shape({
     name: yup

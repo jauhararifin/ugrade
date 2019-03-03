@@ -5,11 +5,8 @@ import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useContestInfo } from 'ugrade/contest'
 import { useProblemList } from 'ugrade/contest/problem'
-import { ContestInfo, Language, Problem } from 'ugrade/contest/store'
 import { useSubmitSolution } from 'ugrade/contest/submission'
-import { WithServerProps } from 'ugrade/helpers/server'
 import { useServerClock } from 'ugrade/server'
-import { AppThunkDispatch } from 'ugrade/store'
 import * as yup from 'yup'
 import { ContestSubmitFormView } from './ContestSubmitFormView'
 
@@ -18,16 +15,6 @@ export interface ContestSubmitFormValue {
   problem: string
   sourceCode: string
 }
-
-export interface ContestSubmitFormReduxProps {
-  dispatch: AppThunkDispatch
-  problems?: Problem[]
-  languages?: Language[]
-  info?: ContestInfo
-}
-
-export type ContestSubmitFormProps = ContestSubmitFormReduxProps &
-  WithServerProps
 
 export const ContestSubmitForm: FunctionComponent = () => {
   useContestOnly()
