@@ -13,7 +13,7 @@ export function simplePublisher<T>(
     const item = await func()
     if (lastItem === undefined || !compareFunc(item, lastItem)) {
       const difference =
-        lastItem === undefined ? item : diffFunc(lastItem, item)
+        lastItem === undefined ? item : diffFunc(item, lastItem)
       callback(difference)
       lastItem = item
     }
