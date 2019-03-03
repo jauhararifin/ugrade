@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { setServerClock } from './store'
 
@@ -28,6 +28,6 @@ export function useLoadServerClock() {
         }
       }
     }
-    loadFunction().catch(() => null)
+    loadFunction().catch(globalErrorCatcher)
   }, [])
 }

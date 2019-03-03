@@ -1,5 +1,5 @@
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { getProblems, Problem, setProblems } from 'ugrade/contest/store'
 import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
 import { AppThunkAction } from 'ugrade/store'
@@ -33,7 +33,7 @@ export const subscribeProblemsAction = (): AppThunkAction<
     return contestService.subscribeProblemIds(token, newIds => {
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) {
-        dispatch(getProblemByIdsAction(newIds))
+        dispatch(getProblemByIdsAction(newIds)).catch(globalErrorCatcher)
       }
     })
   }
@@ -46,7 +46,7 @@ export function useProblems() {
     () => {
       const subs = dispatch(subscribeProblemsAction())
       return () => {
-        subs.then(unsub => unsub()).catch(_ => null)
+        subs.then(unsub => unsub()).catch(globalErrorCatcher)
       }
     },
     []

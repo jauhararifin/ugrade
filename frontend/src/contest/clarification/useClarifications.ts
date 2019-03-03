@@ -1,5 +1,5 @@
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { getClarifications } from 'ugrade/contest/store'
 import { setClarifications } from 'ugrade/contest/store/ContestSetClarrifications'
 import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
@@ -30,7 +30,7 @@ export function useClarifications() {
     () => {
       const subs = dispatch(subscribeClarificationsAction())
       return () => {
-        subs.then(unsub => unsub()).catch(_ => null)
+        subs.then(unsub => unsub()).catch(globalErrorCatcher)
       }
     },
     []

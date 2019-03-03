@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useContestOnly } from 'ugrade/auth'
-import { handleCommonError } from 'ugrade/common'
+import { globalErrorCatcher, handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useServerClock } from 'ugrade/server'
 import { ISubmission } from '../SubmissionsView'
@@ -38,7 +38,7 @@ export const SubmissionDetail: FunctionComponent<SubmissionDetailProps> = ({
   }
 
   useEffect(() => {
-    loadSourceCode().catch(_ => null)
+    loadSourceCode().catch(globalErrorCatcher)
   }, [submission, sourceCodeContent])
 
   return (

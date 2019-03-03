@@ -1,5 +1,5 @@
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
 import { AppState, AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
@@ -27,7 +27,7 @@ export function useAnnouncements() {
     () => {
       const subs = dispatch(subscribeAnnouncementsAction())
       return () => {
-        subs.then(unsub => unsub()).catch(_ => null)
+        subs.then(unsub => unsub()).catch(globalErrorCatcher)
       }
     },
     []

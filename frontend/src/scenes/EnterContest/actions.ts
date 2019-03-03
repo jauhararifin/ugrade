@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router'
 import { setSignedOut } from 'ugrade/auth/store'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { unsetContest } from 'ugrade/contest/store'
 import { AppThunkAction } from 'ugrade/store'
 
@@ -15,7 +15,7 @@ export function resetAction(): AppThunkAction {
 export function useReset() {
   const dispatch = useAppThunkDispatch()
   return () => {
-    dispatch(resetAction()).catch(() => null)
+    dispatch(resetAction()).catch(globalErrorCatcher)
   }
 }
 
@@ -29,6 +29,6 @@ export function resetAccountAction(): AppThunkAction {
 export function useResetAccount() {
   const dispatch = useAppThunkDispatch()
   return () => {
-    dispatch(resetAccountAction()).catch(() => null)
+    dispatch(resetAccountAction()).catch(globalErrorCatcher)
   }
 }

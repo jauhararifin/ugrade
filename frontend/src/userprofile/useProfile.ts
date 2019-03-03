@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { getUserProfile, setUserProfile } from './store'
 
@@ -36,7 +36,7 @@ export function useProfile() {
           await new Promise(r => setTimeout(r, 5000))
         }
       }
-    })().catch(_ => null)
+    })().catch(globalErrorCatcher)
     return () => {
       cancel = true
     }

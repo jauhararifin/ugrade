@@ -1,3 +1,5 @@
+import { globalErrorCatcher } from 'ugrade/common'
+
 /**
  * doPeriodically runs a async function F periodically. This can be used to
  * listen to  state change, by asking the server periodically. When there is an
@@ -37,7 +39,7 @@ export function doPeriodically<T>(
       await new Promise(r => setTimeout(r, delay))
     }
   }
-  prom().catch(_ => null)
+  prom().catch(globalErrorCatcher)
   return () => {
     cancelled = true
   }

@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react'
 import { useContestOnly } from 'ugrade/auth'
+import { globalErrorCatcher } from 'ugrade/common'
 import {
   useAnnouncementList,
   useReadAnnouncements,
@@ -27,7 +28,7 @@ export const Announcements: FunctionComponent = () => {
   }
 
   useEffect(() => {
-    readAllAnnouncements().catch(_ => null)
+    readAllAnnouncements().catch(globalErrorCatcher)
   }, [announcementList])
 
   return (

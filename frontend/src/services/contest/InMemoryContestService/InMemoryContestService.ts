@@ -1,5 +1,6 @@
 import lodash from 'lodash'
 import loremIpsum from 'lorem-ipsum'
+import { globalErrorCatcher } from 'ugrade/common'
 import { ForbiddenActionError, User } from 'ugrade/services/auth'
 import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { NoSuchProblem } from 'ugrade/services/problem'
@@ -102,7 +103,7 @@ export class InMemoryContestService implements ContestService {
 
     this.languages = languages
 
-    this.handleSubs().catch(_ => null)
+    this.handleSubs().catch(globalErrorCatcher)
   }
 
   async handleSubs() {

@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useContestOnly } from 'ugrade/auth'
+import { globalErrorCatcher } from 'ugrade/common'
 import {
   useClarifications,
   useReadClarificationEntries,
@@ -37,7 +38,7 @@ export const ClarificationDetail: FunctionComponent<
   }
 
   useEffect(() => {
-    readAllEntries().catch(_ => null)
+    readAllEntries().catch(globalErrorCatcher)
   })
 
   return (

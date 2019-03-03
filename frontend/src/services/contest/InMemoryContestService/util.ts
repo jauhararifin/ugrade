@@ -1,4 +1,5 @@
 import lodash from 'lodash'
+import { globalErrorCatcher } from 'ugrade/common'
 
 export function simplePublisher<T>(
   func: () => Promise<T>,
@@ -23,7 +24,7 @@ export function simplePublisher<T>(
       return item
     })
     .then(callback)
-    .catch(_ => null)
+    .catch(globalErrorCatcher)
   return () => {
     clearInterval(timeout)
   }

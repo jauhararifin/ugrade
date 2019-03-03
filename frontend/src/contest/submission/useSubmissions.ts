@@ -1,5 +1,5 @@
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
 import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
@@ -24,7 +24,7 @@ export function useSubmissions() {
     () => {
       const subs = dispatch(subscribeSubmissionsAction())
       return () => {
-        subs.then(unsub => unsub()).catch(_ => null)
+        subs.then(unsub => unsub()).catch(globalErrorCatcher)
       }
     },
     []

@@ -1,5 +1,5 @@
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { UnsubscriptionFunction } from 'ugrade/services/contest'
 import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
@@ -27,7 +27,7 @@ export function useScoreboard() {
     () => {
       const unsub = dispatch(subscribeScoreboardAction())
       return () => {
-        unsub.then(func => func()).catch(_ => null)
+        unsub.then(func => func()).catch(globalErrorCatcher)
       }
     },
     []

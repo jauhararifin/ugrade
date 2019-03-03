@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { getIsOnline, setOnline } from './store'
 
@@ -35,7 +35,7 @@ export function useOnlineStatus() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
     const [action, cancel] = pingingAction()
-    dispatch(action).catch(() => null)
+    dispatch(action).catch(globalErrorCatcher)
     return cancel
   }, [])
   return useMappedState(getIsOnline)
