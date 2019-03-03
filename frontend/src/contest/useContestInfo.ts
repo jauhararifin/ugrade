@@ -3,6 +3,7 @@ import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { UnsubscriptionFunction } from 'ugrade/services/contest'
 import { AppThunkAction } from 'ugrade/store'
+import { useSingleEffect } from 'ugrade/utils'
 import { getContestInfo, setInfo } from './store'
 
 export function subscribeContestInfoAction(): AppThunkAction<
@@ -20,20 +21,18 @@ export function subscribeContestInfoAction(): AppThunkAction<
   }
 }
 
-let alreadyRun = false
-
 export function useContestInfo() {
   const dispatch = useAppThunkDispatch()
-  useEffect(() => {
-    if (!alreadyRun) {
-      alreadyRun = true
+  useSingleEffect(
+    'USE_CONTEST_INFO',
+    () => {
       const unsub = dispatch(subscribeContestInfoAction())
       return () => {
-        alreadyRun = false
         unsub.then(func => func()).catch(_ => null)
       }
-    }
-  }, [])
+    },
+    []
+  )
 
   return useMappedState(getContestInfo)
 }

@@ -1,12 +1,9 @@
-import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { getProblems, Problem, setProblems } from 'ugrade/contest/store'
-import {
-  SubscriptionCallback,
-  UnsubscriptionFunction,
-} from 'ugrade/services/contest/ContestService'
+import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
 import { AppThunkAction } from 'ugrade/store'
+import { useSingleEffect } from 'ugrade/utils'
 
 export const getProblemByIdsAction = (
   ids: string[]
@@ -28,46 +25,32 @@ export const getProblemByIdsAction = (
   }
 }
 
-export const getProblemsAction = (): AppThunkAction => {
+export const subscribeProblemsAction = (): AppThunkAction<
+  UnsubscriptionFunction
+> => {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    const problemIds = await contestService.getProblemIds(token)
-    const stillRelevant = getState().auth.token === token
-    if (stillRelevant) {
-      await dispatch(getProblemByIdsAction(problemIds))
-    }
+    return contestService.subscribeProblemIds(token, newIds => {
+      const stillRelevant = getState().auth.token === token
+      if (stillRelevant) {
+        dispatch(getProblemByIdsAction(newIds))
+      }
+    })
   }
 }
-
-export const subscribeProblemIdsAction = (
-  callback: SubscriptionCallback<string[]>
-): AppThunkAction<UnsubscriptionFunction> => {
-  return async (_dispatch, getState, { contestService }) => {
-    const token = getState().auth.token
-    return contestService.subscribeProblemIds(token, callback)
-  }
-}
-
-let alreadyRun = false
 
 export function useProblems() {
   const dispatch = useAppThunkDispatch()
-
-  useEffect(() => {
-    if (!alreadyRun) {
-      alreadyRun = true
-      const subs = dispatch(
-        subscribeProblemIdsAction(async newIds => {
-          const newProbs = await dispatch(getProblemByIdsAction(newIds))
-          dispatch(setProblems(newProbs))
-        })
-      )
+  useSingleEffect(
+    'USE_PROBLEMS',
+    () => {
+      const subs = dispatch(subscribeProblemsAction())
       return () => {
-        alreadyRun = false
         subs.then(unsub => unsub()).catch(_ => null)
       }
-    }
-  }, [])
+    },
+    []
+  )
 
   return useMappedState(getProblems)
 }

@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import lodash from 'lodash'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
+import { doPeriodically, useSingleEffect } from 'ugrade/utils'
 import { getMe, setMe } from './store'
 
 export const getMeAction = (): AppThunkAction => {
@@ -10,28 +11,21 @@ export const getMeAction = (): AppThunkAction => {
     if (token.length > 0) {
       const me = await authService.getMe(token)
       const stillRelevant = getState().auth.token === token
-      if (stillRelevant) dispatch(setMe(me))
+      const currentMe = getState().auth.me
+      if (stillRelevant && !lodash.isEqual(currentMe, me)) {
+        dispatch(setMe(me))
+      }
     }
   }
 }
 
 export function useMe() {
   const dispatch = useAppThunkDispatch()
-  useEffect(() => {
-    let cancel = false
-    ;(async () => {
-      while (!cancel) {
-        try {
-          await dispatch(getMeAction())
-          break
-        } catch (error) {
-          await new Promise(res => setTimeout(res, 5000))
-        }
-      }
-    })().catch(_ => null)
-    return () => {
-      cancel = true
-    }
-  }, [])
+  useSingleEffect(
+    'USE_ME_PERIODIC_CALL',
+    () => doPeriodically(async () => dispatch(getMeAction())),
+    []
+  )
+
   return useMappedState(getMe)
 }
