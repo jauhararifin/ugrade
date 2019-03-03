@@ -6,13 +6,11 @@ import { ProxySettingForm } from './ProxySettingForm'
 import './styles.css'
 
 export interface SettingViewProps {
-  showCreateContest: boolean
-  showEnterContest: boolean
+  signedIn: boolean
 }
 
 export const SettingView: FunctionComponent<SettingViewProps> = ({
-  showCreateContest,
-  showEnterContest,
+  signedIn,
 }) => (
   <div className='plain-page'>
     <div className='setting-page-panel'>
@@ -22,9 +20,10 @@ export const SettingView: FunctionComponent<SettingViewProps> = ({
       <ProxySettingForm />
     </div>
     <BottomLink>
-      <Link to='/'>Home</Link>
-      {showCreateContest && <Link to='/create-contest'>Create Contest</Link>}
-      {showEnterContest && <Link to='/enter-contest'>Enter Contest</Link>}
+      {signedIn && <Link to='/contest'>Dashboard</Link>}
+      {!signedIn && <Link to='/'>Home</Link>}
+      {!signedIn && <Link to='/create-contest'>Create Contest</Link>}
+      {!signedIn && <Link to='/enter-contest'>Enter Contest</Link>}
     </BottomLink>
   </div>
 )

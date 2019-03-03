@@ -49,7 +49,7 @@ export const TopNavigationBar: FunctionComponent = () => {
   return (
     <Navbar>
       <NavbarGroup align={Alignment.LEFT}>
-        <Link to='/'>
+        <Link to='/contest'>
           <NavbarHeading>UGrade</NavbarHeading>
         </Link>
         <NavbarDivider />

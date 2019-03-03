@@ -13,7 +13,5 @@ export interface SettingProps {
 export const Setting: FunctionComponent<SettingProps> = () => {
   useTitle('UGrade | Settings')
   const signedIn = useIsSignedIn()
-  return (
-    <SettingView showCreateContest={!signedIn} showEnterContest={!signedIn} />
-  )
+  return <SettingView signedIn={signedIn} />
 }
