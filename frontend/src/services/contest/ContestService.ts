@@ -15,6 +15,17 @@ export interface ContestService {
 
   getMyContest(token: string): Promise<Contest>
 
+  updateContestInfo(
+    token: string,
+    name?: string,
+    shortDescription?: string,
+    description?: string,
+    startTime?: Date,
+    freezed?: boolean,
+    finishTime?: Date,
+    permittedLanguages?: Language[]
+  ): Promise<Contest>
+
   subscribeMyContest(
     token: string,
     callback: SubscriptionCallback<Contest>

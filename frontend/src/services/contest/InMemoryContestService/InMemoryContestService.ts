@@ -236,7 +236,7 @@ export class InMemoryContestService implements ContestService {
           lastPenalty = en.totalPenalty
         }
       }
-    }, 5000)
+    }, 60 * 1000)
   }
 
   async getAvailableLanguages(): Promise<Language[]> {
@@ -255,12 +255,39 @@ export class InMemoryContestService implements ContestService {
 
   async getMyContest(token: string): Promise<Contest> {
     const user = await this.authService.getMe(token)
-    const contest = contests
+    const contest = this.contests
       .slice()
       .filter(x => x.id === user.contestId)
       .pop()
     if (contest) return lodash.cloneDeep(contest)
     throw new NoSuchContest('No Such Contest')
+  }
+
+  async updateContestInfo(
+    token: string,
+    name?: string,
+    shortDescription?: string,
+    description?: string,
+    startTime?: Date,
+    freezed?: boolean,
+    finishTime?: Date,
+    permittedLanguages?: Language[]
+  ): Promise<Contest> {
+    const contest = await this.getMyContest(token)
+    if (name) contest.name = name
+    if (shortDescription) contest.shortDescription = shortDescription
+    if (description) contest.description = description
+    if (startTime) contest.startTime = startTime
+    if (freezed !== undefined) contest.freezed = freezed
+    if (finishTime) contest.finishTime = finishTime
+    if (permittedLanguages) contest.permittedLanguages = permittedLanguages
+
+    for (const i in this.contests) {
+      if (this.contests[i].id === contest.id) {
+        this.contests[i] = lodash.cloneDeep(contest)
+      }
+    }
+    return lodash.cloneDeep(contest)
   }
 
   subscribeMyContest(

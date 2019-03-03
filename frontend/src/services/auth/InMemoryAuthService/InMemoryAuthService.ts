@@ -8,6 +8,7 @@ import {
   UserRegistrationError,
 } from '../errors'
 import { User } from '../User'
+import { adminPermissions, UserPermission } from '../UserPermission'
 import { contestUserMap, userPasswordMap } from './fixtures'
 
 export class InMemoryAuthService implements AuthService {
@@ -180,6 +181,7 @@ export class InMemoryAuthService implements AuthService {
       username: '',
       email,
       name: '',
+      permissions: adminPermissions.slice(),
     }
     this.contestUserMap[contestId] = {
       [newUser.id]: newUser,

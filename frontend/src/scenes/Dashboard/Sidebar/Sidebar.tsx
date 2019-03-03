@@ -71,21 +71,25 @@ export const Sidebar: FunctionComponent = () => {
 
   const setContestInfo = useSetContestInfo()
 
-  const setContestName = async (_newName: string) => {
-    try {
-      await setContestInfo()
-      TopToaster.showSuccessToast('Contest Name Updated')
-    } catch (error) {
-      if (!handleCommonError(error)) throw error
+  const setContestName = async (newName: string) => {
+    if (contestInfo && newName !== contestInfo.name) {
+      try {
+        await setContestInfo(newName)
+        TopToaster.showSuccessToast('Contest Name Updated')
+      } catch (error) {
+        if (!handleCommonError(error)) throw error
+      }
     }
   }
 
-  const setContestShortDesc = async (_newShortDesc: string) => {
-    try {
-      await setContestInfo()
-      TopToaster.showSuccessToast('Contest Short Description Updated')
-    } catch (error) {
-      if (!handleCommonError(error)) throw error
+  const setContestShortDesc = async (newShortDesc: string) => {
+    if (contestInfo && newShortDesc !== contestInfo.shortDescription) {
+      try {
+        await setContestInfo(undefined, newShortDesc)
+        TopToaster.showSuccessToast('Contest Short Description Updated')
+      } catch (error) {
+        if (!handleCommonError(error)) throw error
+      }
     }
   }
 

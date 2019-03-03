@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useMappedState } from 'redux-react-hook'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { UnsubscriptionFunction } from 'ugrade/services/contest'
@@ -11,13 +10,16 @@ export function subscribeContestInfoAction(): AppThunkAction<
 > {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
-    const unsub = await contestService.subscribeMyContest(token, contest => {
-      const stillRelevant = getState().auth.token === token
-      if (stillRelevant) {
-        dispatch(setInfo(contest))
-      }
-    })
-    return unsub
+    if (token.length > 0) {
+      const unsub = contestService.subscribeMyContest(token, contest => {
+        const stillRelevant = getState().auth.token === token
+        if (stillRelevant) {
+          dispatch(setInfo(contest))
+        }
+      })
+      return unsub
+    }
+    return () => null
   }
 }
 
