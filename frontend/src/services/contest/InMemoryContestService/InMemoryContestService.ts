@@ -303,6 +303,23 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestAnnouncementsMap[contest.id])
   }
 
+  async createAnnouncement(
+    token: string,
+    title: string,
+    content: string
+  ): Promise<Announcement> {
+    const contest = await this.getMyContest(token)
+    const newAnnouncement = {
+      id: Math.round(Math.random() * 100000).toString(),
+      title,
+      content,
+      read: true,
+      issuedTime: new Date(),
+    }
+    this.contestAnnouncementsMap[contest.id].push(newAnnouncement)
+    return lodash.cloneDeep(newAnnouncement)
+  }
+
   subscribeAnnouncements(
     token: string,
     callback: SubscriptionCallback<Announcement[]>

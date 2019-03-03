@@ -5,7 +5,7 @@ import {
   ContestArkav5Qual,
 } from 'ugrade/services/contest/InMemoryContestService/fixtures'
 import { User } from '../User'
-import { UserPermission } from '../UserPermission'
+import { adminPermissions, UserPermission } from '../UserPermission'
 
 export const UserTest1: User = {
   id: '1',
@@ -49,7 +49,7 @@ export const UserAdmin3: User = {
   username: 'admin',
   email: 'admin@example.com',
   name: 'Administrator',
-  permissions: [UserPermission.InfoUpdate],
+  permissions: adminPermissions.slice(),
 }
 
 export const UserTest3: User = {

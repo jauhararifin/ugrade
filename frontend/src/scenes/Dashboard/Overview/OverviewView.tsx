@@ -1,4 +1,4 @@
-import { H2 } from '@blueprintjs/core'
+import { Button, Divider, H2 } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Markdown } from 'ugrade/components/Markdown'
 import { ContestInfo } from 'ugrade/contest/store'
@@ -15,7 +15,9 @@ export const OverviewView: FunctionComponent<OverviewViewProps> = ({
 }) => (
   <div className='contest-overview'>
     {contest ? (
-      <Markdown source={contest.description} />
+      <React.Fragment>
+        <Markdown source={contest.description} />
+      </React.Fragment>
     ) : (
       <React.Fragment>
         <H2 className='bp3-skeleton'>Fake Contest Title</H2>

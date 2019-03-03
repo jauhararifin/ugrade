@@ -1,3 +1,4 @@
+import lodash from 'lodash'
 import { ContestActionType } from './ContestAction'
 import { Announcement, ContestState } from './ContestState'
 
@@ -19,7 +20,7 @@ export function setAnnouncementsReducer(
   state: ContestState,
   action: ContestSetAnnouncements
 ): ContestState {
-  const nextState = { ...state }
+  const nextState = lodash.cloneDeep(state)
   const oldAnnouncements = nextState.announcements || {}
   const newAnnouncements: { [annoucementId: string]: Announcement } = {}
   action.announcements

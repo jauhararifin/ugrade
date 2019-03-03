@@ -1,3 +1,4 @@
+import lodash from 'lodash'
 import { ContestActionType } from './ContestAction'
 import { Announcement, ContestState } from './ContestState'
 
@@ -19,7 +20,7 @@ export function readAnnouncementsReducer(
   state: ContestState,
   action: ContestReadAnnouncements
 ): ContestState {
-  const nextState = { ...state }
+  const nextState = lodash.cloneDeep(state)
   const announcements: { [id: string]: Announcement } =
     nextState.announcements || {}
   action.announcements.forEach(id => {

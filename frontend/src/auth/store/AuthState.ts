@@ -3,6 +3,7 @@ export const AUTH_TOKEN_KEY = 'auth.token'
 
 export enum UserPermission {
   InfoUpdate = 'info:update',
+  AnnouncementCreate = 'announcement:create',
 }
 
 export interface User {

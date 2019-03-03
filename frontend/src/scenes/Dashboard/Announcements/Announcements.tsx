@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import { useContestOnly } from 'ugrade/auth'
+import { useContestOnly, usePermissions } from 'ugrade/auth'
+import { UserPermission } from 'ugrade/auth/store'
 import { globalErrorCatcher } from 'ugrade/common'
 import {
   useAnnouncementList,
@@ -31,8 +32,11 @@ export const Announcements: FunctionComponent = () => {
     readAllAnnouncements().catch(globalErrorCatcher)
   }, [announcementList])
 
+  const canCreate = usePermissions([UserPermission.AnnouncementCreate])
+
   return (
     <AnnouncementsView
+      canCreate={canCreate}
       announcements={announcementList}
       serverClock={serverClock}
     />

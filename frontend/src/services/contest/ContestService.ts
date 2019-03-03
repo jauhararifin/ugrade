@@ -33,6 +33,12 @@ export interface ContestService {
 
   getAnnouncements(token: string): Promise<Announcement[]>
 
+  createAnnouncement(
+    token: string,
+    title: string,
+    content: string
+  ): Promise<Announcement>
+
   subscribeAnnouncements(
     token: string,
     callback: SubscriptionCallback<Announcement[]>

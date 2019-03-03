@@ -53,8 +53,9 @@ export function getAnnouncements(state: AppState) {
 }
 
 export const getAnnouncementList = createSelector(
-  getAnnouncements,
-  announcements => {
+  getContest,
+  contest => {
+    const announcements = contest.announcements
     if (announcements) {
       return lodash
         .values(announcements)
@@ -70,8 +71,9 @@ export const getClarifications = createSelector(
 )
 
 export const getClarificationList = createSelector(
-  getClarifications,
-  clarifications => {
+  getContest,
+  contest => {
+    const clarifications = contest.clarifications
     if (clarifications) {
       return lodash
         .values(clarifications)

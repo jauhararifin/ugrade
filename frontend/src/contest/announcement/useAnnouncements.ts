@@ -11,6 +11,7 @@ export const subscribeAnnouncementsAction = (): AppThunkAction<
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
     return contestService.subscribeAnnouncements(token, announcements => {
+      console.log('get', announcements)
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) {
         dispatch(setAnnouncements(announcements))
