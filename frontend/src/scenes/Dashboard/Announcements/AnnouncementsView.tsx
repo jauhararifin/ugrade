@@ -34,28 +34,31 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
         )}
 
         {announcements &&
-          announcements.reverse().map(announcement => (
-            <Card
-              key={announcement.id}
-              className='item'
-              elevation={announcement.read ? Elevation.ZERO : Elevation.TWO}
-            >
-              <div className='header'>
-                <H3 className='title'>{announcement.title}</H3>
-                <p className='info'>
-                  <Tooltip
-                    className={Classes.TOOLTIP_INDICATOR}
-                    content={moment(announcement.issuedTime).format(
-                      'dddd, MMMM Do YYYY, h:mm:ss a'
-                    )}
-                  >
-                    {moment(announcement.issuedTime).from(currentMoment)}
-                  </Tooltip>
-                </p>
-              </div>
-              <ReactMarkdown source={announcement.content} />
-            </Card>
-          ))}
+          announcements
+            .slice()
+            .reverse()
+            .map(announcement => (
+              <Card
+                key={announcement.id}
+                className='item'
+                elevation={announcement.read ? Elevation.ZERO : Elevation.TWO}
+              >
+                <div className='header'>
+                  <H3 className='title'>{announcement.title}</H3>
+                  <p className='info'>
+                    <Tooltip
+                      className={Classes.TOOLTIP_INDICATOR}
+                      content={moment(announcement.issuedTime).format(
+                        'dddd, MMMM Do YYYY, h:mm:ss a'
+                      )}
+                    >
+                      {moment(announcement.issuedTime).from(currentMoment)}
+                    </Tooltip>
+                  </p>
+                </div>
+                <ReactMarkdown source={announcement.content} />
+              </Card>
+            ))}
       </div>
     </div>
   )
