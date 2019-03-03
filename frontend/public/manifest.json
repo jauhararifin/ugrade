@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "UGrade",
+  "name": "UGrade A Simple OJ Using Your PC As Grader",
   "icons": [
     {
       "src": "favicon.ico",
