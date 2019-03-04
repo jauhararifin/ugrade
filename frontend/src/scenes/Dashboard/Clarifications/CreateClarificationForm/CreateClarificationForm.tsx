@@ -19,9 +19,18 @@ export const CreateClarificationForm: FunctionComponent = () => {
   const problems = useProblemList()
 
   const validationSchema = yup.object().shape({
-    title: yup.string().required(),
-    subject: yup.string().required(),
-    content: yup.string().required(),
+    title: yup
+      .string()
+      .label('Title')
+      .required(),
+    subject: yup
+      .string()
+      .label('Subject')
+      .required(),
+    content: yup
+      .string()
+      .label('Content')
+      .required(),
   })
 
   const initialValue: CreateClarificationFormValue = {

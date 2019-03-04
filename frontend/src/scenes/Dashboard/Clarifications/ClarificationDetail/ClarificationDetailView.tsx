@@ -1,4 +1,12 @@
-import { Card, Classes, Drawer, H5, Tooltip } from '@blueprintjs/core'
+import {
+  Card,
+  Classes,
+  Drawer,
+  H5,
+  Icon,
+  Intent,
+  Tooltip,
+} from '@blueprintjs/core'
 import lodash from 'lodash'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
@@ -51,23 +59,27 @@ export const ClarificationDetailView: FunctionComponent<
                   .map(entry => (
                     <Card
                       key={entry.id}
-                      className='entry'
-                      elevation={entry.read ? 0 : 2}
+                      className={entry.read ? 'entry' : 'entry unread'}
                     >
-                      <div className='info'>
-                        <H5>From: {entry.sender}</H5>
-                        <p>
-                          <Tooltip
-                            className={Classes.TOOLTIP_INDICATOR}
-                            content={moment(entry.issuedTime).format(
-                              'dddd, MMMM Do YYYY, h:mm:ss a'
-                            )}
-                          >
-                            {moment(entry.issuedTime).from(currentMoment)}
-                          </Tooltip>
-                        </p>
+                      <div className='unread-indicator'>
+                        <Icon icon='full-circle' intent={Intent.PRIMARY} />
                       </div>
-                      <p>{entry.content}</p>
+                      <div className='content'>
+                        <div className='info'>
+                          <H5>From: {entry.sender}</H5>
+                          <p>
+                            <Tooltip
+                              className={Classes.TOOLTIP_INDICATOR}
+                              content={moment(entry.issuedTime).format(
+                                'dddd, MMMM Do YYYY, h:mm:ss a'
+                              )}
+                            >
+                              {moment(entry.issuedTime).from(currentMoment)}
+                            </Tooltip>
+                          </p>
+                        </div>
+                        <p>{entry.content}</p>
+                      </div>
                     </Card>
                   ))}
               </div>

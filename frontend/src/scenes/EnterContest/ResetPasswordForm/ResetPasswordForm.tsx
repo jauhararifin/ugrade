@@ -30,6 +30,7 @@ export const ResetPasswordForm: FunctionComponent = () => {
       .required(),
     password: yup
       .string()
+      .label('New Password')
       .min(8)
       .max(255)
       .required(),

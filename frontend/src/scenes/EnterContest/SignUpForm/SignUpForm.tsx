@@ -31,6 +31,7 @@ export const SignUpForm: FunctionComponent = () => {
   const validationSchema = yup.object().shape({
     username: yup
       .string()
+      .label('Username')
       .matches(
         /[a-zA-Z0-9\-]+/,
         'Should contain alphanumeric and dash character only'
@@ -40,6 +41,7 @@ export const SignUpForm: FunctionComponent = () => {
       .required(),
     name: yup
       .string()
+      .label('Name')
       .min(4)
       .max(255)
       .required(),
@@ -50,6 +52,7 @@ export const SignUpForm: FunctionComponent = () => {
       .required(),
     password: yup
       .string()
+      .label('Password')
       .min(8)
       .max(255)
       .required(),

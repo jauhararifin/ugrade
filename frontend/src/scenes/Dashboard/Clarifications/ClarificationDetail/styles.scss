@@ -6,6 +6,19 @@
   .content {
     .entry {
       margin-top: 10px;
+      display: flex;
+      align-items: baseline;
+      .unread-indicator {
+        visibility: hidden;
+      }
+      .content {
+        margin-left: 10px;
+      }
+    }
+    .entry.unread {
+      .unread-indicator {
+        visibility: visible;
+      }
     }
   }
 }

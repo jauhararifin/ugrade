@@ -16,8 +16,14 @@ export const CreateAnnouncementForm: FunctionComponent = () => {
   useContestOnly()
 
   const validationSchema = yup.object().shape({
-    title: yup.string().required(),
-    content: yup.string().required(),
+    title: yup
+      .string()
+      .label('Title')
+      .required(),
+    content: yup
+      .string()
+      .label('Content')
+      .required(),
   })
 
   const initialValue: CreateAnnouncementFormValue = {

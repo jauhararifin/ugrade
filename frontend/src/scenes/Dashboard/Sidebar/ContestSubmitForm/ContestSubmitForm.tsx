@@ -24,10 +24,17 @@ export const ContestSubmitForm: FunctionComponent = () => {
   const serverClock = useServerClock(60 * 1000)
 
   const validationSchema = yup.object().shape({
-    language: yup.string().required(),
-    problem: yup.string().required(),
+    language: yup
+      .string()
+      .label('Language')
+      .required(),
+    problem: yup
+      .string()
+      .label('Problem')
+      .required(),
     sourceCode: yup
       .string()
+      .label('Source Code')
       .url()
       .required(),
   })

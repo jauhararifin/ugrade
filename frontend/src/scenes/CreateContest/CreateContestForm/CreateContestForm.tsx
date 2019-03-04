@@ -27,6 +27,7 @@ export const CreateContestForm: FunctionComponent = () => {
   const validationSchema = yup.object().shape({
     email: yup
       .string()
+      .label('Email')
       .min(4)
       .max(255)
       .email()

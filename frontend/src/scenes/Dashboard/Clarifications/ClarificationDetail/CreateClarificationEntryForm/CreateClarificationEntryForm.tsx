@@ -21,7 +21,10 @@ export const CreateClarificationEntryForm: FunctionComponent<
   useContestOnly()
 
   const validationSchema = yup.object().shape({
-    content: yup.string().required(),
+    content: yup
+      .string()
+      .label('Reply')
+      .required(),
   })
 
   const initialValue = {

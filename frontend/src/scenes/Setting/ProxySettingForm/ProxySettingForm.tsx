@@ -21,9 +21,10 @@ export const ProxySettingForm: FunctionComponent = () => {
   }
 
   const validationSchema = yup.object().shape({
-    host: yup.string(),
+    host: yup.string().label('Proxy Host'),
     port: yup
       .number()
+      .label('Proxy Port')
       .max(65536)
       .min(0)
       .when('host', {
@@ -31,8 +32,8 @@ export const ProxySettingForm: FunctionComponent = () => {
         then: yup.number().required(),
         otherwise: yup.number(),
       }),
-    username: yup.string(),
-    password: yup.string(),
+    username: yup.string().label('Proxy Username'),
+    password: yup.string().label('Proxy Password'),
   })
 
   const handleSubmit = (
