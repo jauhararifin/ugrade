@@ -8,6 +8,7 @@ import {
 } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
+import { MarkdownEdit } from 'ugrade/components/MarkdownEdit'
 import { CreateAnnouncementFormValue } from './CreateAnnouncementForm'
 
 import './styles.css'
@@ -26,6 +27,7 @@ export const CreateAnnouncementFormView: FunctionComponent<
   handleBlur,
   touched,
   isSubmitting,
+  setFieldValue,
 }) => (
   <form className='announcement-form' onSubmit={handleSubmit}>
     <Card className='card' elevation={2}>
@@ -60,7 +62,7 @@ export const CreateAnnouncementFormView: FunctionComponent<
           </Button>
         </FormGroup>
       </div>
-      <FormGroup
+      {/* <FormGroup
         helperText={touched.content && errors && errors.content}
         intent={
           touched.content && errors && errors.content
@@ -77,6 +79,20 @@ export const CreateAnnouncementFormView: FunctionComponent<
           onBlur={handleBlur}
           value={values.content}
           rows={3}
+        />
+      </FormGroup> */}
+      <FormGroup
+        helperText={touched.content && errors && errors.content}
+        intent={
+          touched.content && errors && errors.content
+            ? Intent.DANGER
+            : Intent.NONE
+        }
+      >
+        <MarkdownEdit
+          name='content'
+          onChange={setFieldValue.bind(null, 'content')}
+          value={values.content}
         />
       </FormGroup>
     </Card>

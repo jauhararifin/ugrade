@@ -1,20 +1,8 @@
-import {
-  Button,
-  Callout,
-  Card,
-  Classes,
-  Divider,
-  Elevation,
-  H1,
-  H3,
-  Icon,
-  Intent,
-  Tooltip,
-} from '@blueprintjs/core'
+import { Card, Classes, H1, H3, Icon, Intent, Tooltip } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import ReactMarkdown from 'react-markdown'
+import { Markdown } from 'ugrade/components'
 import { Announcement } from 'ugrade/contest/store'
 import { CreateAnnouncementForm } from './CreateAnnouncementForm'
 
@@ -57,7 +45,7 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
             </Tooltip>
           </p>
         </div>
-        <ReactMarkdown source={announcement.content} />
+        <Markdown source={announcement.content} />
       </div>
     </Card>
   )
