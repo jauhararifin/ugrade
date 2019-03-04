@@ -12,22 +12,31 @@
       }
       .item {
         margin-top: 10px;
-        .header {
-          display: flex;
-          margin-bottom: 0px;
-          justify-content: space-between;
-          .title {
-            text-align: left;
-          }
-          .info {
-            text-align: right;
+        align-items: baseline;
+        display: flex;
+        .unread-indicator {
+          flex-grow: 0;
+          visibility: hidden;
+        }
+        .content {
+          margin-left: 10px;
+          flex-grow: 1;
+          .header {
+            display: flex;
+            margin-bottom: 0px;
+            justify-content: space-between;
+            .title {
+              text-align: left;
+            }
+            .info {
+              text-align: right;
+            }
           }
         }
-        &.unread {
-          .title,
-          .info {
-            color: $pt-intent-primary;
-          }
+      }
+      .item.unread {
+        .unread-indicator {
+          visibility: visible;
         }
       }
     }

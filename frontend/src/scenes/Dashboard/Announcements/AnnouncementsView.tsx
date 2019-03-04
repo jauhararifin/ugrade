@@ -7,6 +7,7 @@ import {
   Elevation,
   H1,
   H3,
+  Icon,
   Intent,
   Tooltip,
 } from '@blueprintjs/core'
@@ -39,20 +40,25 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
       key={announcement.id}
       className={classnames('item', { unread: !announcement.read })}
     >
-      <div className='header'>
-        <H3 className='title'>{announcement.title}</H3>
-        <p className='info'>
-          <Tooltip
-            className={Classes.TOOLTIP_INDICATOR}
-            content={moment(announcement.issuedTime).format(
-              'dddd, MMMM Do YYYY, h:mm:ss a'
-            )}
-          >
-            {moment(announcement.issuedTime).from(currentMoment)}
-          </Tooltip>
-        </p>
+      <div className='unread-indicator'>
+        <Icon icon='full-circle' intent={Intent.PRIMARY} />
       </div>
-      <ReactMarkdown source={announcement.content} />
+      <div className='content'>
+        <div className='header'>
+          <H3 className='title'>{announcement.title}</H3>
+          <p className='info'>
+            <Tooltip
+              className={Classes.TOOLTIP_INDICATOR}
+              content={moment(announcement.issuedTime).format(
+                'dddd, MMMM Do YYYY, h:mm:ss a'
+              )}
+            >
+              {moment(announcement.issuedTime).from(currentMoment)}
+            </Tooltip>
+          </p>
+        </div>
+        <ReactMarkdown source={announcement.content} />
+      </div>
     </Card>
   )
 
