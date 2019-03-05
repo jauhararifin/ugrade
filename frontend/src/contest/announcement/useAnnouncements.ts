@@ -1,16 +1,16 @@
 import { useMappedState } from 'redux-react-hook'
 import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
-import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
+import { AnnouncementsUnsubscribe } from 'ugrade/services/announcementService/AnnouncementService'
 import { AppState, AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { setAnnouncements } from '../store'
 
 export const subscribeAnnouncementsAction = (): AppThunkAction<
-  UnsubscriptionFunction
+  AnnouncementsUnsubscribe
 > => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { announcementService }) => {
     const token = getState().auth.token
-    return contestService.subscribeAnnouncements(token, announcements => {
+    return announcementService.subscribeAnnouncements(token, announcements => {
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) {
         dispatch(setAnnouncements(announcements))

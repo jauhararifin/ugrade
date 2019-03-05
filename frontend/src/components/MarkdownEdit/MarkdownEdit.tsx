@@ -1,8 +1,8 @@
 import { Button } from '@blueprintjs/core'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
-
 import { Markdown } from '../Markdown/Markdown'
+
 import './styles.css'
 
 export interface MarkdownEditProps {

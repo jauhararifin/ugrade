@@ -1,15 +1,11 @@
 import lodash from 'lodash'
 import loremIpsum from 'lorem-ipsum'
 import { globalErrorCatcher } from 'ugrade/common'
-import {
-  ForbiddenActionError,
-  User,
-  UserPermission,
-} from 'ugrade/services/auth'
+import { ForbiddenActionError, User } from 'ugrade/services/auth'
 import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { NoSuchProblem } from 'ugrade/services/problem'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
-import { Announcement } from '../Announcement'
+import { simplePublisher } from 'ugrade/utils'
 import { Clarification, ClarificationEntry } from '../Clarification'
 import { Contest, Language } from '../Contest'
 import {
@@ -22,13 +18,7 @@ import { NoSuchLanguage } from '../errors/NoSuchLanguage'
 import { GradingVerdict } from '../Grading'
 import { Scoreboard, ScoreboardProblemScore } from '../Scoreboard'
 import { Submission } from '../Submission'
-import {
-  contestAnnouncementsMap,
-  contestProblemsMap,
-  contests,
-  languages,
-} from './fixtures'
-import { simplePublisher } from './util'
+import { contestProblemsMap, contests, languages } from './fixtures'
 
 export class InMemoryContestService implements ContestService {
   private authService: InMemoryAuthService
@@ -36,7 +26,6 @@ export class InMemoryContestService implements ContestService {
 
   private contests: Contest[] = []
   private contestProblemsMap: { [id: string]: string[] } = {}
-  private contestAnnouncementsMap: { [id: string]: Announcement[] } = {}
   private contestClarificationsMap: { [id: string]: Clarification[] } = {}
   private contestSubmissionsMap: { [id: string]: Submission[] } = {}
 
@@ -53,7 +42,6 @@ export class InMemoryContestService implements ContestService {
 
     this.contests = contests.slice()
     this.contestProblemsMap = { ...contestProblemsMap }
-    this.contestAnnouncementsMap = { ...contestAnnouncementsMap }
 
     for (const contest of this.contests) {
       this.contestClarificationsMap[contest.id] = [
@@ -113,16 +101,6 @@ export class InMemoryContestService implements ContestService {
   async handleSubs() {
     setInterval(() => {
       for (const contest of this.contests) {
-        // add announcements
-        const newAnnouncement: Announcement = {
-          id: Math.round(Math.random() * 100000).toString(),
-          title: loremIpsum({ count: 4, units: 'words' }),
-          content: loremIpsum({ count: 1, units: 'paragraphs' }),
-          issuedTime: new Date(Date.now()),
-          read: false,
-        }
-        this.contestAnnouncementsMap[contest.id].push(newAnnouncement)
-
         // shift problems
         if (!this.contestProblemsMap[contest.id]) {
           this.contestProblemsMap[contest.id] = []
@@ -300,47 +278,6 @@ export class InMemoryContestService implements ContestService {
     callback: SubscriptionCallback<Contest>
   ): UnsubscriptionFunction {
     return simplePublisher(this.getMyContest.bind(this, token), callback)
-  }
-
-  async getAnnouncements(token: string): Promise<Announcement[]> {
-    const contest = await this.getMyContest(token)
-    return lodash.cloneDeep(this.contestAnnouncementsMap[contest.id])
-  }
-
-  async createAnnouncement(
-    token: string,
-    title: string,
-    content: string
-  ): Promise<Announcement> {
-    const contest = await this.getMyContest(token)
-    const newAnnouncement = {
-      id: Math.round(Math.random() * 100000).toString(),
-      title,
-      content,
-      read: true,
-      issuedTime: new Date(),
-    }
-    this.contestAnnouncementsMap[contest.id].push(newAnnouncement)
-    return lodash.cloneDeep(newAnnouncement)
-  }
-
-  subscribeAnnouncements(
-    token: string,
-    callback: SubscriptionCallback<Announcement[]>
-  ): UnsubscriptionFunction {
-    return simplePublisher(
-      this.getAnnouncements.bind(this, token),
-      callback,
-      lodash.isEqual,
-      lodash.difference
-    )
-  }
-
-  async readAnnouncements(token: string, id: string[]): Promise<void> {
-    const contest = await this.getMyContest(token)
-    this.contestAnnouncementsMap[contest.id]
-      .filter(i => id.includes(i.id))
-      .forEach(val => (val.read = true))
   }
 
   async getProblemIds(token: string): Promise<string[]> {

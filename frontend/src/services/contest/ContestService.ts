@@ -1,5 +1,4 @@
 import { User } from 'ugrade/services/auth'
-import { Announcement } from './Announcement'
 import { Clarification } from './Clarification'
 import { Contest, Language } from './Contest'
 import { Scoreboard } from './Scoreboard'
@@ -68,21 +67,6 @@ export interface ContestService {
     token: string,
     callback: SubscriptionCallback<Contest>
   ): UnsubscriptionFunction
-
-  getAnnouncements(token: string): Promise<Announcement[]>
-
-  createAnnouncement(
-    token: string,
-    title: string,
-    content: string
-  ): Promise<Announcement>
-
-  subscribeAnnouncements(
-    token: string,
-    callback: SubscriptionCallback<Announcement[]>
-  ): UnsubscriptionFunction
-
-  readAnnouncements(token: string, id: string[]): Promise<void>
 
   getProblemIds(token: string): Promise<string[]>
 

@@ -1,4 +1,3 @@
-export * from './Announcement'
 export * from './Clarification'
 export * from './Contest'
 export * from './ContestService'

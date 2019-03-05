@@ -6,9 +6,9 @@ export function createAnnouncementAction(
   title: string,
   content: string
 ): AppThunkAction {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { announcementService }) => {
     const token = getState().auth.token
-    const announcement = await contestService.createAnnouncement(
+    const announcement = await announcementService.createAnnouncement(
       token,
       title,
       content

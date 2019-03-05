@@ -45,6 +45,7 @@ import {
   userProfileReducer,
   UserProfileState,
 } from 'ugrade/userprofile/store'
+import { AnnouncementService } from './services/announcementService/AnnouncementService'
 
 declare global {
   interface Window {
@@ -58,6 +59,7 @@ export interface ThunkExtraArguments {
   contestService: ContestService
   problemService: ProblemService
   userService: UserService
+  announcementService: AnnouncementService
 }
 
 export interface AppState {

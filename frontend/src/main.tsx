@@ -17,12 +17,14 @@ import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import { ErrorBoundary } from './ErrorBoundary'
+import { InMemoryAnnouncementService } from './services/announcementService/InMemoryAnnouncementService'
 
 const history = createBrowserHistory()
 const serverStatusService = new InMemoryServerStatusService()
 const authService = new InMemoryAuthService(serverStatusService)
 const userService = new InMemoryUserService(authService)
 const problemService = new InMemoryProblemService(authService)
+const announcementService = new InMemoryAnnouncementService(authService)
 const contestService = new InMemoryContestService(
   serverStatusService,
   authService
@@ -34,6 +36,7 @@ export const store = createStore(history, {
   serverStatusService,
   contestService,
   problemService,
+  announcementService,
 })
 
 ReactDOM.render(
