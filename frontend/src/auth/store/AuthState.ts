@@ -7,9 +7,10 @@ export enum UserPermission {
   AnnouncementRead = 'announcement:read',
 
   ProblemsCreate = 'problems:create',
-  ProblemsRead = 'problems:create',
-  ProblemsUpdate = 'problems:create',
-  ProblemsDelete = 'problems:create',
+  ProblemsRead = 'problems:read',
+  ProblemsReadDisabled = 'problems:read-disabled',
+  ProblemsUpdate = 'problems:update',
+  ProblemsDelete = 'problems:delete',
 }
 
 export interface User {

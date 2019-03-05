@@ -22,7 +22,7 @@ const history = createBrowserHistory()
 const serverStatusService = new InMemoryServerStatusService()
 const authService = new InMemoryAuthService(serverStatusService)
 const userService = new InMemoryUserService(authService)
-const problemService = new InMemoryProblemService(serverStatusService)
+const problemService = new InMemoryProblemService(authService)
 const contestService = new InMemoryContestService(
   serverStatusService,
   authService
