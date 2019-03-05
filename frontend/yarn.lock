@@ -877,6 +877,32 @@
     resize-observer-polyfill "^1.5.0"
     tslib "^1.9.0"
 
+"@blueprintjs/core@^3.13.0":
+  version "3.14.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.14.1.tgz#9a0c816bbe6c232d6515361f502506a1fb53acfb"
+  integrity sha512-DlBkztfvk5RgD+MBo22LFxLa7Rz8DVgszNdXF0MY63QGjb1uYwdSJIKXtsN1bn42SRTz24Bzp498VhSJ2+5FuQ==
+  dependencies:
+    "@blueprintjs/icons" "^3.6.0"
+    "@types/dom4" "^2.0.1"
+    classnames "^2.2"
+    dom4 "^2.0.1"
+    normalize.css "^8.0.0"
+    popper.js "^1.14.1"
+    react-popper "^1.0.0"
+    react-transition-group "^2.2.1"
+    resize-observer-polyfill "^1.5.0"
+    tslib "^1.9.0"
+
+"@blueprintjs/datetime@^3.7.1":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/datetime/-/datetime-3.7.1.tgz#6741f68df94bbe6221a41feaaafc4d4539c42241"
+  integrity sha512-XV0fvq7uWrSlT8PDZ7oM+Rb6bF74I0k6/uw9XLJZ9hGrEPgsyd1K6QjVLFxc1Pnn5++1lDMtGlZC6x9nqCw1JA==
+  dependencies:
+    "@blueprintjs/core" "^3.13.0"
+    classnames "^2.2"
+    react-day-picker "^7.1.10"
+    tslib "^1.9.0"
+
 "@blueprintjs/icons@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.6.0.tgz#af1d2de091d67927ed61671e6967c43620cb416d"
@@ -1022,7 +1048,7 @@
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.7.tgz#fb68cc9be8487e6ea5b13700e759bfbab7e0fefd"
   integrity sha512-rzOhiQ55WzAiFgXRtitP/ZUT8iVNyllEpylJ5zHzR4vArUvMB39GTk+Zon/uAM0JxEFAWnwsxC2gH8s+tZ3Myg==
 
-"@types/dom4@^2.0.0":
+"@types/dom4@^2.0.0", "@types/dom4@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/dom4/-/dom4-2.0.1.tgz#506d5781b9bcab81bd9a878b198aec7dee2a6033"
   integrity sha512-kSkVAvWmMZiCYtvqjqQEwOmvKwcH+V4uiv3qPQ8pAh1Xl39xggGEo8gHUqV4waYGHezdFw0rKBR8Jt0CrQSDZA==
@@ -8696,6 +8722,13 @@ react-app-rewired@^2.1.0:
     cross-spawn "^6.0.5"
     dotenv "^6.2.0"
     semver "^5.6.0"
+
+react-day-picker@^7.1.10:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.3.0.tgz#59b6d4e19d274650c79dcf49fbcce2637313467d"
+  integrity sha512-t2kz0Zy4P5U4qwU5YhsBq2QGmypP8L/u+89TSnuD0h4dYKSEDQArFPWfin9gv8erV1ciR1Wzr485TMaYnI7FTw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-dev-utils@^7.0.2:
   version "7.0.3"

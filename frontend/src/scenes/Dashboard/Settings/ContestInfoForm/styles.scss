@@ -1,0 +1,12 @@
+.contest-info-form {
+  .contest-time {
+    display: flex;
+    .contest-freeze-time,
+    .contest-finish-time {
+      margin-left: 20px;
+    }
+  }
+  .submit {
+    text-align: right;
+  }
+}
