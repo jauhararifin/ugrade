@@ -17,7 +17,7 @@ export function setInfoReducer(
   state: ContestState,
   action: ContestSetInfo
 ): ContestState {
-  if (state.info && state.info.id === action.contestInfo.id) {
+  if (!state.info || state.info.id === action.contestInfo.id) {
     return {
       ...state,
       info: action.contestInfo,
