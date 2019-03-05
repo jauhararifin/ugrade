@@ -12,13 +12,13 @@ export const AnnouncementExample1: Announcement = {
   title: `Term and Condition`,
   content: `By competing in TLX contests, you agree that:
   
-  - You will not collaborate with any other contestants.
-  - You will not use fake or multiple TLX accounts, other than your own account.
-  - You will not try to hack or attack the contest system in any way.
-  
-  Failure to comply with the above rules can result to a disqualification or ban.
-      
-  Enjoy the contest!`,
+- You will not collaborate with any other contestants.
+- You will not use fake or multiple TLX accounts, other than your own account.
+- You will not try to hack or attack the contest system in any way.
+
+Failure to comply with the above rules can result to a disqualification or ban.
+    
+Enjoy the contest!`,
   issuedTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   read: true,
 }

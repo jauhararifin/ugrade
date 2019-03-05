@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { StoreContext } from 'redux-react-hook'
 import App from 'ugrade/scenes/App'
+import { ErrorBoundary } from './ErrorBoundary'
+import { InMemoryAnnouncementService } from './services/announcement/InMemoryAnnouncementService'
 import { InMemoryAuthService } from './services/auth/InMemoryAuthService'
 import { InMemoryContestService } from './services/contest/InMemoryContestService'
 import { InMemoryProblemService } from './services/problem/InMemoryProblemService'
@@ -16,8 +18,6 @@ import { createStore } from './store'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
-import { ErrorBoundary } from './ErrorBoundary'
-import { InMemoryAnnouncementService } from './services/announcementService/InMemoryAnnouncementService'
 
 const history = createBrowserHistory()
 const serverStatusService = new InMemoryServerStatusService()
