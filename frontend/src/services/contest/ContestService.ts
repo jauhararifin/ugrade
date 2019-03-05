@@ -86,6 +86,8 @@ export interface ContestService {
 
   getProblemIds(token: string): Promise<string[]>
 
+  deleteProblemIds(token: string, ids: string[]): Promise<string[]>
+
   subscribeProblemIds(
     token: string,
     callback: SubscriptionCallback<string[]>

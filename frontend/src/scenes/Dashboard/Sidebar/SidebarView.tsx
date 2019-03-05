@@ -1,18 +1,10 @@
-import {
-  Alignment,
-  Button,
-  EditableText,
-  H2,
-  H5,
-  H6,
-  Intent,
-  Tag,
-} from '@blueprintjs/core'
+import { EditableText, H2, H5, H6 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { ContestInfo, Problem } from 'ugrade/contest/store'
 import { ContestSubmitForm } from './ContestSubmitForm'
+import { SidebarMenus } from './SidebarMenus'
 import { SidebarMiniCard } from './SidebarMiniCard'
 
 import './styles.css'
@@ -30,13 +22,8 @@ export interface SidebarViewProps {
   contest?: ContestInfo
   problems?: Problem[]
   rank?: number
-  serverClock?: Date
-  menu?: Menu
-  newAnnouncementCount: number
-  newClarificationCount: number
-  onChoose?: (menu: Menu) => any
-  canReadAnnouncements: boolean
   canUpdateInfo: boolean
+  serverClock?: Date
   onUpdateName: (newName: string) => any
   onUpdateShortDesc: (newShortDesc: string) => any
 }
@@ -55,11 +42,6 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   problems,
   serverClock,
   rank,
-  menu,
-  onChoose,
-  newAnnouncementCount,
-  newClarificationCount,
-  canReadAnnouncements,
   canUpdateInfo,
   onUpdateName,
   onUpdateShortDesc,
@@ -89,25 +71,6 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
     !contest.permittedLanguages
 
   const skeletonClass = classnames({ 'bp3-skeleton': loading })
-
-  const onMenuOverviewChoosed = onChoose
-    ? () => onChoose(Menu.Overview)
-    : () => null
-  const onMenuAnnouncementsChoosed = onChoose
-    ? () => onChoose(Menu.Announcements)
-    : () => null
-  const onMenuProblemsChoosed = onChoose
-    ? () => onChoose(Menu.Problems)
-    : () => null
-  const onMenuClarificationsChoosed = onChoose
-    ? () => onChoose(Menu.Clarifications)
-    : () => null
-  const onMenuSubmissionsChoosed = onChoose
-    ? () => onChoose(Menu.Submissions)
-    : () => null
-  const onMenuScoreboardChoosed = onChoose
-    ? () => onChoose(Menu.Scoreboard)
-    : () => null
 
   const [name, setName] = useState('')
   const [shortDesc, setShortDesc] = useState('')
@@ -239,114 +202,8 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
         })()}
       </div>
 
-      <div className={classnames(['contest-menu', skeletonClass])}>
-        {loading ? (
-          [0, 1, 2].map(i => <Button key={i} fill={true} text='Fake' />)
-        ) : (
-          <React.Fragment>
-            <Button
-              icon='home'
-              onClick={onMenuOverviewChoosed}
-              intent={menu === Menu.Overview ? Intent.PRIMARY : Intent.NONE}
-              fill={true}
-              minimal={true}
-              alignText={Alignment.LEFT}
-              disabled={!contest}
-              text='Overview'
-            />
-
-            {started && canReadAnnouncements && (
-              <Button
-                icon='notifications'
-                onClick={onMenuAnnouncementsChoosed}
-                intent={
-                  menu === Menu.Announcements ? Intent.PRIMARY : Intent.NONE
-                }
-                fill={true}
-                minimal={true}
-                alignText={Alignment.LEFT}
-                disabled={!contest}
-              >
-                <div className='menu-item'>
-                  <div className='menu-title'>Announcements</div>
-                  {newAnnouncementCount > 0 && (
-                    <div className='menu-tag'>
-                      <Tag round={true} intent={Intent.SUCCESS}>
-                        {newAnnouncementCount}
-                      </Tag>
-                    </div>
-                  )}
-                </div>
-              </Button>
-            )}
-
-            {started && (
-              <Button
-                icon='book'
-                onClick={onMenuProblemsChoosed}
-                intent={menu === Menu.Problems ? Intent.PRIMARY : Intent.NONE}
-                fill={true}
-                minimal={true}
-                alignText={Alignment.LEFT}
-                disabled={!contest}
-                text='Problems'
-              />
-            )}
-
-            {started && (
-              <Button
-                icon='chat'
-                onClick={onMenuClarificationsChoosed}
-                intent={
-                  menu === Menu.Clarifications ? Intent.PRIMARY : Intent.NONE
-                }
-                fill={true}
-                minimal={true}
-                alignText={Alignment.LEFT}
-                disabled={!contest}
-              >
-                <div className='menu-item'>
-                  <div className='menu-title'>Clarifications</div>
-                  {newClarificationCount > 0 && (
-                    <div className='menu-tag'>
-                      <Tag round={true} intent={Intent.SUCCESS}>
-                        {newClarificationCount}
-                      </Tag>
-                    </div>
-                  )}
-                </div>
-              </Button>
-            )}
-
-            {started && (
-              <Button
-                icon='layers'
-                onClick={onMenuSubmissionsChoosed}
-                intent={
-                  menu === Menu.Submissions ? Intent.PRIMARY : Intent.NONE
-                }
-                fill={true}
-                minimal={true}
-                alignText={Alignment.LEFT}
-                disabled={!contest}
-                text='Submissions'
-              />
-            )}
-
-            {started && (
-              <Button
-                icon='th-list'
-                onClick={onMenuScoreboardChoosed}
-                intent={menu === Menu.Scoreboard ? Intent.PRIMARY : Intent.NONE}
-                fill={true}
-                minimal={true}
-                alignText={Alignment.LEFT}
-                disabled={!contest}
-                text='Scoreboard'
-              />
-            )}
-          </React.Fragment>
-        )}
+      <div className='contest-menu'>
+        <SidebarMenus loading={loading} />
       </div>
 
       <div className='contest-submit-solution'>

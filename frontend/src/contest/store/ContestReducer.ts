@@ -1,6 +1,10 @@
 import { Reducer } from 'redux'
 import { ContestActionType } from './ContestAction'
 import {
+  ContestDeleteProblems,
+  deleteProblemsReducer,
+} from './ContestDeleteProblems'
+import {
   ContestReadAnnouncements,
   readAnnouncementsReducer,
 } from './ContestReadAnnouncements'
@@ -48,6 +52,9 @@ export const contestReducer: Reducer<ContestState> = (
 
     case ContestActionType.SetProblems:
       return setProblemsReducer(state, action as ContestSetProblems)
+
+    case ContestActionType.DeleteProblems:
+      return deleteProblemsReducer(state, action as ContestDeleteProblems)
 
     case ContestActionType.ReadAnnouncements:
       return readAnnouncementsReducer(state, action as ContestReadAnnouncements)

@@ -1,7 +1,11 @@
 import lodash from 'lodash'
 import loremIpsum from 'lorem-ipsum'
 import { globalErrorCatcher } from 'ugrade/common'
-import { ForbiddenActionError, User } from 'ugrade/services/auth'
+import {
+  ForbiddenActionError,
+  User,
+  UserPermission,
+} from 'ugrade/services/auth'
 import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { NoSuchProblem } from 'ugrade/services/problem'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
@@ -341,7 +345,20 @@ export class InMemoryContestService implements ContestService {
 
   async getProblemIds(token: string): Promise<string[]> {
     const contest = await this.getMyContest(token)
+    // Should not return disabled problem, should store disabled info in contest
     return lodash.cloneDeep(this.contestProblemsMap[contest.id])
+  }
+
+  async deleteProblemIds(token: string, ids: string[]): Promise<string[]> {
+    const contest = await this.getMyContest(token)
+    const deleting = this.contestProblemsMap[contest.id].filter(id =>
+      ids.includes(id)
+    )
+    const result = this.contestProblemsMap[contest.id].filter(
+      id => !deleting.includes(id)
+    )
+    this.contestProblemsMap[contest.id] = result
+    return deleting
   }
 
   subscribeProblemIds(

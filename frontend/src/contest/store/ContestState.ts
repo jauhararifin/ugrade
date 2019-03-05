@@ -37,6 +37,7 @@ export interface Problem {
   tolerance: number
   memoryLimit: number
   outputLimit: number
+  disabled: boolean
 }
 
 export interface Language {

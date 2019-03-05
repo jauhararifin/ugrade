@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
+import { useSingleEffect } from 'ugrade/utils'
 import { setServerClock } from './store'
 
 export function getServerClockAction(): AppThunkAction {
@@ -16,18 +17,22 @@ export function getServerClockAction(): AppThunkAction {
 
 export function useLoadServerClock() {
   const dispatch = useAppThunkDispatch()
-  useEffect(() => {
-    const loadFunction = async () => {
-      let success = false
-      while (!success) {
-        try {
-          await dispatch(getServerClockAction())
-          success = true
-        } catch (error) {
-          await new Promise(resolve => setTimeout(resolve, 5 * 60 * 1000))
+  useSingleEffect(
+    'LOAD_SERVER_CLOCK',
+    () => {
+      const loadFunction = async () => {
+        let success = false
+        while (!success) {
+          try {
+            await dispatch(getServerClockAction())
+            success = true
+          } catch (error) {
+            await new Promise(resolve => setTimeout(resolve, 5 * 60 * 1000))
+          }
         }
       }
-    }
-    loadFunction().catch(globalErrorCatcher)
-  }, [])
+      loadFunction().catch(globalErrorCatcher)
+    },
+    []
+  )
 }

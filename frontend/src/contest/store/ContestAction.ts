@@ -1,3 +1,4 @@
+import { ContestDeleteProblems } from './ContestDeleteProblems'
 import { ContestReadAnnouncements } from './ContestReadAnnouncements'
 import { ContestSetAnnouncements } from './ContestSetAnnouncements'
 import { ContestSetClarifications } from './ContestSetClarrifications'
@@ -14,6 +15,7 @@ export enum ContestActionType {
   UnsetContest = 'CONTEST_UNSET_CONTEST',
   SetAnnouncements = 'CONTEST_SET_ANNOUNCEMENTS',
   SetProblems = 'CONTEST_SET_PROBLEMS',
+  DeleteProblems = 'CONTEST_DELETE_PROBLEMS',
   SetClarifications = 'CONTEST_SET_CLARIFICATIONS',
   SetSubmissions = 'CONTEST_SET_SUBMISSIONS',
   ReadAnnouncements = 'CONTEST_READ_ANNOUNCEMENTS',
@@ -26,6 +28,7 @@ export type ContestAction =
   | ContestUnsetContest
   | ContestSetAnnouncements
   | ContestSetProblems
+  | ContestDeleteProblems
   | ContestSetClarifications
   | ContestReadAnnouncements
   | ContestSetSubmissions

@@ -13,6 +13,7 @@ import { Overview } from './Overview/Overview'
 import { Problems } from './Problems'
 import { ProblemDetail } from './Problems/ProblemDetail'
 import { Scoreboard } from './Scoreboard'
+import { Settings } from './Settings'
 import { Submissions } from './Submissions'
 
 export const Dashboard: FunctionComponent = () => {
@@ -55,6 +56,7 @@ export const Dashboard: FunctionComponent = () => {
               exact={true}
               component={Scoreboard}
             />
+            <Route path='/contest/settings' exact={true} component={Settings} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>

@@ -11,16 +11,26 @@ export enum UserPermission {
   AnnouncementCreate = 'announcement:create',
   AnnouncementRead = 'announcement:read',
 
-  // ProblemsCreate = 'problems:create',
-  // ProblemsRead = 'problems:create',
-  // ProblemsUpdate = 'problems:create',
-  // ProblemsDelete = 'problems:create',
+  ProblemsCreate = 'problems:create',
+  ProblemsRead = 'problems:read',
+  ProblemsReadDisabled = 'problems:read-disabled',
+  ProblemsUpdate = 'problems:update',
+  ProblemsDelete = 'problems:delete',
 }
 
 export const adminPermissions = [
   UserPermission.InfoUpdate,
   UserPermission.AnnouncementCreate,
   UserPermission.AnnouncementRead,
+
+  UserPermission.ProblemsCreate,
+  UserPermission.ProblemsRead,
+  UserPermission.ProblemsReadDisabled,
+  UserPermission.ProblemsUpdate,
+  UserPermission.ProblemsDelete,
 ]
 
-export const contestantPermissions = [UserPermission.AnnouncementRead]
+export const contestantPermissions = [
+  UserPermission.AnnouncementRead,
+  UserPermission.ProblemsRead,
+]

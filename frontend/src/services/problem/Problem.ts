@@ -9,6 +9,7 @@ export interface Problem {
   name: string
   statement: string
   type: ProblemType
+  disabled: boolean
 
   timeLimit: number
   tolerance: number

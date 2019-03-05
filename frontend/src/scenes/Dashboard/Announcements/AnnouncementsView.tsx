@@ -55,7 +55,7 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
       <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
         Announcements
       </H1>
-      {canCreate && <CreateAnnouncementForm />}
+      {canCreate && !loading && <CreateAnnouncementForm />}
       <div>
         {loading && (
           <Card className='bp3-skeleton item'>{'lorem ipsum'.repeat(100)}</Card>
