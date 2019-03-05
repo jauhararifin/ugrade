@@ -133,7 +133,7 @@ export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
     <div className='actions'>
       {canCreate && (
         <Navigator to={`/contest/problems/create`}>
-          <Button intent={Intent.SUCCESS} icon='new-object'>
+          <Button intent={Intent.SUCCESS} icon='plus'>
             New
           </Button>
         </Navigator>
