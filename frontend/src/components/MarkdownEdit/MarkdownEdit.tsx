@@ -3,6 +3,9 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import AceEditor from 'react-ace'
 import { Markdown } from '../Markdown/Markdown'
 
+import 'brace/mode/markdown'
+import 'brace/theme/github'
+
 import './styles.css'
 
 export interface MarkdownEditProps {
