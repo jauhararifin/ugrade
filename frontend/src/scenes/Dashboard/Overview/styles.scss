@@ -1,9 +1,11 @@
 .contest-panel {
   .contest-content {
     .contest-overview {
-      margin: 20px 50px;
-      padding: 10px 50px;
-      text-align: left;
+      .contest-description {
+        margin: 20px 50px;
+        padding: 10px 50px;
+        text-align: left;
+      }
     }
   }
 }
