@@ -344,6 +344,18 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(this.contestProblemsMap[contest.id])
   }
 
+  async deleteProblemIds(token: string, ids: string[]): Promise<string[]> {
+    const contest = await this.getMyContest(token)
+    const deleting = this.contestProblemsMap[contest.id].filter(
+      id => !ids.includes(id)
+    )
+    const result = this.contestProblemsMap[contest.id].filter(id =>
+      deleting.includes(id)
+    )
+    this.contestProblemsMap[contest.id] = result
+    return deleting
+  }
+
   subscribeProblemIds(
     token: string,
     callback: SubscriptionCallback<string[]>
