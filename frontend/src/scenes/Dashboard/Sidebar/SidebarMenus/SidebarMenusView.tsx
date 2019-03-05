@@ -19,8 +19,13 @@ export const SidebarMenuView: FunctionComponent<SidebarMenuViewProps> = ({
   loading,
   menus,
 }) => {
-  const renderLoading = () =>
-    [0, 1, 2].map(i => <Button key={i} fill={true} text='Fake' />)
+  const renderLoading = () => (
+    <div className='bp3-skeleton'>
+      {[0, 1, 2].map(i => (
+        <Button key={i} fill={true} text='Fake' />
+      ))}
+    </div>
+  )
 
   const renderMenu = (menu: IMenu, key?: any) =>
     menu.visible && (
