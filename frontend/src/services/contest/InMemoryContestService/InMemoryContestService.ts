@@ -346,11 +346,11 @@ export class InMemoryContestService implements ContestService {
 
   async deleteProblemIds(token: string, ids: string[]): Promise<string[]> {
     const contest = await this.getMyContest(token)
-    const deleting = this.contestProblemsMap[contest.id].filter(
-      id => !ids.includes(id)
+    const deleting = this.contestProblemsMap[contest.id].filter(id =>
+      ids.includes(id)
     )
-    const result = this.contestProblemsMap[contest.id].filter(id =>
-      deleting.includes(id)
+    const result = this.contestProblemsMap[contest.id].filter(
+      id => !deleting.includes(id)
     )
     this.contestProblemsMap[contest.id] = result
     return deleting
