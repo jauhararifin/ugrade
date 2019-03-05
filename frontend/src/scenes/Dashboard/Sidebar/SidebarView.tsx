@@ -202,7 +202,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
         })()}
       </div>
 
-      <SidebarMenus loading={loading} />
+      <div className='contest-menu'>
+        <SidebarMenus loading={loading} />
+      </div>
 
       <div className='contest-submit-solution'>
         <ContestSubmitForm />

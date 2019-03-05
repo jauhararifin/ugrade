@@ -1,6 +1,5 @@
 import { Alignment, Button, IconName, Intent, Tag } from '@blueprintjs/core'
-import classnames from 'classnames'
-import React, { FunctionComponent } from 'react'
+import React, { Fragment, FunctionComponent } from 'react'
 
 export interface IMenu {
   onClick: () => any
@@ -49,8 +48,6 @@ export const SidebarMenuView: FunctionComponent<SidebarMenuViewProps> = ({
     )
 
   return (
-    <div className={classnames(['contest-menu', { 'bp3-skeleton': loading }])}>
-      {loading ? renderLoading() : menus.map(renderMenu)}
-    </div>
+    <Fragment>{loading ? renderLoading() : menus.map(renderMenu)}</Fragment>
   )
 }
