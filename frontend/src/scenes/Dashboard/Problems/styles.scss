@@ -1,9 +1,15 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
 .contest-panel {
   .contest-content {
     .contest-problems {
       padding: 30px 100px;
       text-align: left;
       width: 100%;
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+      }
       .header {
         text-align: center;
         margin-bottom: 30px;
@@ -20,6 +26,9 @@
           .info {
             text-align: right;
           }
+        }
+        &.disabled {
+          background-color: $pt-dark-text-color-disabled;
         }
       }
       .item:hover {
