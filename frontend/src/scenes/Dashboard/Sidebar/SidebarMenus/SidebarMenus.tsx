@@ -1,5 +1,5 @@
 import lodash from 'lodash'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useMemo, useState } from 'react'
 import { useMe, usePermissions } from 'ugrade/auth'
 import { UserPermission } from 'ugrade/auth/store'
 import { useAnnouncements } from 'ugrade/contest/announcement'
@@ -46,14 +46,14 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
   const announcements = useAnnouncements()
   const clarifications = useClarifications()
 
-  const newAnnouncementCount = () => {
+  const newAnnouncementCount = useMemo(() => {
     if (announcements) {
       return lodash.values(announcements).filter(x => !x.read).length
     }
     return 0
-  }
+  }, [announcements])
 
-  const newClarificationCount = () => {
+  const newClarificationCount = useMemo(() => {
     if (clarifications && me) {
       const clarifs = lodash.values(clarifications)
       const clarifsCount = clarifs.map(
@@ -65,7 +65,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
       return clarifsCount.reduce((a, b) => a + b)
     }
     return 0
-  }
+  }, [clarifications, me])
 
   const canReadAnnouncement = usePermissions([UserPermission.AnnouncementRead])
   const canUpdateInfo = usePermissions([UserPermission.InfoUpdate])
@@ -84,7 +84,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
       active: currentMenu === Menu.Announcements,
       visible: canReadAnnouncement,
       title: Menu.Announcements,
-      indicator: newAnnouncementCount(),
+      indicator: newAnnouncementCount,
     },
     {
       icon: 'book',
@@ -99,7 +99,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
       active: currentMenu === Menu.Clarifications,
       visible: true,
       title: Menu.Clarifications,
-      indicator: newClarificationCount(),
+      indicator: newClarificationCount,
     },
     {
       icon: 'layers',
