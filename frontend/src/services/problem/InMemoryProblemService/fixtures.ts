@@ -11,6 +11,7 @@ export const problem1: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem2: Problem = {
@@ -24,6 +25,7 @@ export const problem2: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem3: Problem = {
@@ -37,6 +39,7 @@ export const problem3: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: false,
 }
 
 export const problem4: Problem = {
@@ -50,6 +53,7 @@ export const problem4: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem5: Problem = {
@@ -63,6 +67,7 @@ export const problem5: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: false,
 }
 
 export const problem6: Problem = {
@@ -76,6 +81,7 @@ export const problem6: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: false,
 }
 
 export const problem7: Problem = {
@@ -89,6 +95,7 @@ export const problem7: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem8: Problem = {
@@ -102,6 +109,7 @@ export const problem8: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: false,
 }
 
 export const problem9: Problem = {
@@ -115,6 +123,7 @@ export const problem9: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem10: Problem = {
@@ -128,6 +137,7 @@ export const problem10: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem11: Problem = {
@@ -141,6 +151,7 @@ export const problem11: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem12: Problem = {
@@ -154,6 +165,7 @@ export const problem12: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: false,
 }
 
 export const problem13: Problem = {
@@ -167,6 +179,7 @@ export const problem13: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: true,
 }
 
 export const problem14: Problem = {
@@ -180,6 +193,7 @@ export const problem14: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  disabled: false,
 }
 
 export const problems = [
