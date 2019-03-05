@@ -5,6 +5,11 @@ export enum UserPermission {
   InfoUpdate = 'info:update',
   AnnouncementCreate = 'announcement:create',
   AnnouncementRead = 'announcement:read',
+
+  ProblemsCreate = 'problems:create',
+  ProblemsRead = 'problems:create',
+  ProblemsUpdate = 'problems:create',
+  ProblemsDelete = 'problems:create',
 }
 
 export interface User {
