@@ -8,9 +8,9 @@ export const createClarificationAction = (
   subject: string,
   content: string
 ): AppThunkAction => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { clarificationService }) => {
     const token = getState().auth.token
-    const clarification = await contestService.createClarification(
+    const clarification = await clarificationService.createClarification(
       token,
       title,
       subject,

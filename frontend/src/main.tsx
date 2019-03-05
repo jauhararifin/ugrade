@@ -18,6 +18,7 @@ import { createStore } from './store'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
+import { InMemoryClarificationService } from './services/clarification/InMemoryClarificationService'
 
 const history = createBrowserHistory()
 const serverStatusService = new InMemoryServerStatusService()
@@ -25,6 +26,7 @@ const authService = new InMemoryAuthService(serverStatusService)
 const userService = new InMemoryUserService(authService)
 const problemService = new InMemoryProblemService(authService)
 const announcementService = new InMemoryAnnouncementService(authService)
+const clarificationService = new InMemoryClarificationService(authService)
 const contestService = new InMemoryContestService(
   serverStatusService,
   authService
@@ -37,6 +39,7 @@ export const store = createStore(history, {
   contestService,
   problemService,
   announcementService,
+  clarificationService,
 })
 
 ReactDOM.render(

@@ -1,5 +1,4 @@
 import { User } from 'ugrade/services/auth'
-import { Clarification } from './Clarification'
 import { Contest, Language } from './Contest'
 import { Scoreboard } from './Scoreboard'
 import { Submission } from './Submission'
@@ -76,32 +75,6 @@ export interface ContestService {
     token: string,
     callback: SubscriptionCallback<string[]>
   ): UnsubscriptionFunction
-
-  getClarifications(token: string): Promise<Clarification[]>
-
-  subscribeClarifications(
-    token: string,
-    callback: SubscriptionCallback<Clarification[]>
-  ): UnsubscriptionFunction
-
-  createClarification(
-    token: string,
-    title: string,
-    subject: string,
-    content: string
-  ): Promise<Clarification>
-
-  createClarificationEntry(
-    token: string,
-    clarificationId: string,
-    content: string
-  ): Promise<Clarification>
-
-  readClarificationEntries(
-    token: string,
-    clarificationId: string,
-    entryIds: string[]
-  ): Promise<Clarification>
 
   getSubmissions(token: string): Promise<Submission[]>
 

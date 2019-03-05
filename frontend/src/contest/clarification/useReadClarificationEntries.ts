@@ -7,9 +7,9 @@ export const readClarificationEntriesAction = (
   clarificationId: string,
   entryIds: string[]
 ): AppThunkAction => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { clarificationService }) => {
     const token = getState().auth.token
-    const clarification = await contestService.readClarificationEntries(
+    const clarification = await clarificationService.readClarificationEntries(
       token,
       clarificationId,
       entryIds

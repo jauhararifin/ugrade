@@ -1,10 +1,4 @@
-export interface ClarificationEntry {
-  id: string
-  sender: string
-  content: string
-  read: boolean
-  issuedTime: Date
-}
+import { ClarificationEntry } from './ClarificationEntry'
 
 export interface Clarification {
   id: string

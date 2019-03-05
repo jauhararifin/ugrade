@@ -64,7 +64,7 @@ export const ClarificationDetailView: FunctionComponent<
                       <div className='unread-indicator'>
                         <Icon icon='full-circle' intent={Intent.PRIMARY} />
                       </div>
-                      <div className='content'>
+                      <div className='entry-content'>
                         <div className='info'>
                           <H5>From: {entry.sender}</H5>
                           <p>

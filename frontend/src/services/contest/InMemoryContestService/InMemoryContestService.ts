@@ -6,14 +6,13 @@ import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { NoSuchProblem } from 'ugrade/services/problem'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { simplePublisher } from 'ugrade/utils'
-import { Clarification, ClarificationEntry } from '../Clarification'
 import { Contest, Language } from '../Contest'
 import {
   ContestService,
   SubscriptionCallback,
   UnsubscriptionFunction,
 } from '../ContestService'
-import { ContestIdTaken, NoSuchClarification, NoSuchContest } from '../errors'
+import { ContestIdTaken, NoSuchContest } from '../errors'
 import { NoSuchLanguage } from '../errors/NoSuchLanguage'
 import { GradingVerdict } from '../Grading'
 import { Scoreboard, ScoreboardProblemScore } from '../Scoreboard'
@@ -26,7 +25,6 @@ export class InMemoryContestService implements ContestService {
 
   private contests: Contest[] = []
   private contestProblemsMap: { [id: string]: string[] } = {}
-  private contestClarificationsMap: { [id: string]: Clarification[] } = {}
   private contestSubmissionsMap: { [id: string]: Submission[] } = {}
 
   private contestScoreboardMap: { [id: string]: Scoreboard } = {}
@@ -44,24 +42,6 @@ export class InMemoryContestService implements ContestService {
     this.contestProblemsMap = { ...contestProblemsMap }
 
     for (const contest of this.contests) {
-      this.contestClarificationsMap[contest.id] = [
-        {
-          id: Math.round(Math.random() * 100000).toString(),
-          title: loremIpsum({ count: 4, units: 'words' }),
-          subject: 'General Issue',
-          issuedTime: new Date(),
-          entries: [
-            {
-              id: Math.round(Math.random() * 100000).toString(),
-              sender: 'test',
-              read: true,
-              issuedTime: new Date(),
-              content: loremIpsum({ count: 1, units: 'paragraphs' }),
-            },
-          ],
-        },
-      ]
-
       const genDefaultProbScore = () => {
         const result: { [id: string]: ScoreboardProblemScore } = {}
         for (const problemId of this.contestProblemsMap[contest.id]) {
@@ -109,19 +89,6 @@ export class InMemoryContestService implements ContestService {
         if (problemArr.length > 0) {
           const temp = problemArr.shift()
           if (temp) problemArr.push(temp)
-        }
-
-        // add clarifcation entries
-        const clarifArr = this.contestClarificationsMap[contest.id]
-        for (const clarif of clarifArr) {
-          const newEntry: ClarificationEntry = {
-            id: Math.round(Math.random() * 100000).toString(),
-            sender: 'jury',
-            content: loremIpsum({ count: 1, units: 'paragraphs' }),
-            read: false,
-            issuedTime: new Date(),
-          }
-          clarif.entries.push(newEntry)
         }
 
         // add submissions
@@ -303,102 +270,6 @@ export class InMemoryContestService implements ContestService {
     callback: SubscriptionCallback<string[]>
   ): UnsubscriptionFunction {
     return simplePublisher(this.getProblemIds.bind(this, token), callback)
-  }
-
-  async getClarifications(token: string): Promise<Clarification[]> {
-    const contest = await this.getMyContest(token)
-    return lodash.cloneDeep(this.contestClarificationsMap[contest.id])
-  }
-
-  subscribeClarifications(
-    token: string,
-    callback: SubscriptionCallback<Clarification[]>
-  ): UnsubscriptionFunction {
-    return simplePublisher(this.getClarifications.bind(this, token), callback)
-  }
-
-  async createClarification(
-    token: string,
-    title: string,
-    subject: string,
-    content: string
-  ): Promise<Clarification> {
-    const user = await this.authService.getMe(token)
-    const contest = await this.getMyContest(token)
-    const clarification: Clarification = {
-      id: Math.round(Math.random() * 100000).toString(),
-      title,
-      subject,
-      issuedTime: new Date(),
-      entries: [
-        {
-          id: Math.round(Math.random() * 100000).toString(),
-          sender: user.username,
-          content,
-          read: true,
-          issuedTime: new Date(),
-        },
-      ],
-    }
-
-    this.contestClarificationsMap[contest.id].push(clarification)
-    return lodash.cloneDeep(clarification)
-  }
-
-  async createClarificationEntry(
-    token: string,
-    clarificationId: string,
-    content: string
-  ): Promise<Clarification> {
-    const user = await this.authService.getMe(token)
-    const contest = await this.getMyContest(token)
-
-    if (new Date() >= contest.finishTime) {
-      throw new ForbiddenActionError('Contest Already Finished')
-    }
-
-    const clarification = lodash
-      .values(this.contestClarificationsMap[contest.id])
-      .filter(c => c.id === clarificationId)
-      .pop()
-
-    if (!clarification) {
-      throw new NoSuchClarification('No Such Clarification')
-    }
-
-    clarification.entries.push({
-      id: Math.round(Math.random() * 100000).toString(),
-      sender: user.username,
-      issuedTime: new Date(),
-      read: true,
-      content,
-    })
-    return lodash.cloneDeep(clarification)
-  }
-
-  async readClarificationEntries(
-    token: string,
-    clarificationId: string,
-    entryIds: string[]
-  ): Promise<Clarification> {
-    await this.authService.getMe(token)
-    const contest = await this.getMyContest(token)
-
-    const clarification = lodash.find(
-      this.contestClarificationsMap[contest.id],
-      c => c.id === clarificationId
-    )
-
-    if (!clarification) {
-      throw new NoSuchClarification('No Such Clarification')
-    }
-
-    clarification.entries.forEach(entry => {
-      if (entryIds.includes(entry.id)) {
-        entry.read = true
-      }
-    })
-    return lodash.cloneDeep(clarification)
   }
 
   async getSubmissions(token: string): Promise<Submission[]> {
