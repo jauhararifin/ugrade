@@ -1,11 +1,4 @@
-import {
-  Button,
-  Card,
-  FormGroup,
-  InputGroup,
-  Intent,
-  TextArea,
-} from '@blueprintjs/core'
+import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
 import { MarkdownEdit } from 'ugrade/components/MarkdownEdit'
@@ -62,25 +55,6 @@ export const CreateAnnouncementFormView: FunctionComponent<
           </Button>
         </FormGroup>
       </div>
-      {/* <FormGroup
-        helperText={touched.content && errors && errors.content}
-        intent={
-          touched.content && errors && errors.content
-            ? Intent.DANGER
-            : Intent.NONE
-        }
-      >
-        <TextArea
-          name='content'
-          placeholder='Your Announcement Here'
-          fill={true}
-          large={true}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.content}
-          rows={3}
-        />
-      </FormGroup> */}
       <FormGroup
         helperText={touched.content && errors && errors.content}
         intent={
