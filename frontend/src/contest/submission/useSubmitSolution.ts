@@ -7,9 +7,9 @@ export const submitSolutionAction = (
   languageId: string,
   sourceCode: string
 ): AppThunkAction<Submission> => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { submissionService }) => {
     const token = getState().auth.token
-    const submission = await contestService.submitSolution(
+    const submission = await submissionService.submitSolution(
       token,
       problemId,
       languageId,

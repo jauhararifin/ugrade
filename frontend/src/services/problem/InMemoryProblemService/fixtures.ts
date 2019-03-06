@@ -1,3 +1,10 @@
+import lodash from 'lodash'
+import {
+  ContestArkav4Final,
+  ContestArkav4Qual,
+  ContestArkav5Final,
+  ContestArkav5Qual,
+} from 'ugrade/services/contest/InMemoryContestService'
 import { Problem, ProblemType } from '../Problem'
 
 export const problem1: Problem = {
@@ -11,6 +18,7 @@ export const problem1: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 1,
   disabled: true,
 }
 
@@ -25,6 +33,7 @@ export const problem2: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 2,
   disabled: true,
 }
 
@@ -39,6 +48,7 @@ export const problem3: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 3,
   disabled: false,
 }
 
@@ -53,6 +63,7 @@ export const problem4: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 4,
   disabled: true,
 }
 
@@ -67,6 +78,7 @@ export const problem5: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 5,
   disabled: false,
 }
 
@@ -81,6 +93,7 @@ export const problem6: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 6,
   disabled: false,
 }
 
@@ -95,6 +108,7 @@ export const problem7: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 7,
   disabled: true,
 }
 
@@ -109,6 +123,7 @@ export const problem8: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 8,
   disabled: false,
 }
 
@@ -123,6 +138,7 @@ export const problem9: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 9,
   disabled: true,
 }
 
@@ -137,6 +153,7 @@ export const problem10: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 10,
   disabled: true,
 }
 
@@ -151,6 +168,7 @@ export const problem11: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 11,
   disabled: true,
 }
 
@@ -165,6 +183,7 @@ export const problem12: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 12,
   disabled: false,
 }
 
@@ -179,6 +198,7 @@ export const problem13: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 13,
   disabled: true,
 }
 
@@ -193,6 +213,7 @@ export const problem14: Problem = {
   tolerance: 0.75,
   memoryLimit: 536870912.0,
   outputLimit: 536870912.0,
+  order: 14,
   disabled: false,
 }
 
@@ -211,3 +232,10 @@ export const problems = [
   problem13,
   problem14,
 ]
+
+export const problemsMap: { [contestId: string]: Problem[] } = {
+  [ContestArkav4Qual.id]: lodash.cloneDeep(problems.slice(0, 6)),
+  [ContestArkav4Final.id]: lodash.cloneDeep(problems.slice(6)),
+  [ContestArkav5Qual.id]: lodash.cloneDeep(problems.slice(0, 6)),
+  [ContestArkav5Final.id]: lodash.cloneDeep(problems.slice(6)),
+}

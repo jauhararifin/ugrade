@@ -8,9 +8,11 @@ import App from 'ugrade/scenes/App'
 import { ErrorBoundary } from './ErrorBoundary'
 import { InMemoryAnnouncementService } from './services/announcement/InMemoryAnnouncementService'
 import { InMemoryAuthService } from './services/auth/InMemoryAuthService'
+import { InMemoryClarificationService } from './services/clarification/InMemoryClarificationService'
 import { InMemoryContestService } from './services/contest/InMemoryContestService'
 import { InMemoryProblemService } from './services/problem/InMemoryProblemService'
 import { InMemoryServerStatusService } from './services/serverStatus/InMemoryServerStatusService'
+import { InMemorySubmissionService } from './services/submission/InMemorySubmissionService'
 import { InMemoryUserService } from './services/user/InMemoryUserService'
 import * as serviceWorker from './serviceWorker'
 import { createStore } from './store'
@@ -18,7 +20,6 @@ import { createStore } from './store'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
-import { InMemoryClarificationService } from './services/clarification/InMemoryClarificationService'
 
 const history = createBrowserHistory()
 const serverStatusService = new InMemoryServerStatusService()
@@ -29,7 +30,12 @@ const announcementService = new InMemoryAnnouncementService(authService)
 const clarificationService = new InMemoryClarificationService(authService)
 const contestService = new InMemoryContestService(
   serverStatusService,
-  authService
+  authService,
+  problemService
+)
+const submissionService = new InMemorySubmissionService(
+  authService,
+  contestService
 )
 
 export const store = createStore(history, {
@@ -40,6 +46,7 @@ export const store = createStore(history, {
   problemService,
   announcementService,
   clarificationService,
+  submissionService,
 })
 
 ReactDOM.render(

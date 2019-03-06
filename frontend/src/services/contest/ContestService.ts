@@ -1,7 +1,6 @@
 import { User } from 'ugrade/services/auth'
 import { Contest, Language } from './Contest'
 import { Scoreboard } from './Scoreboard'
-import { Submission } from './Submission'
 
 export type SubscriptionCallback<T> = (newItem: T) => any
 export type UnsubscriptionFunction = () => any
@@ -66,31 +65,6 @@ export interface ContestService {
     token: string,
     callback: SubscriptionCallback<Contest>
   ): UnsubscriptionFunction
-
-  getProblemIds(token: string): Promise<string[]>
-
-  deleteProblemIds(token: string, ids: string[]): Promise<string[]>
-
-  subscribeProblemIds(
-    token: string,
-    callback: SubscriptionCallback<string[]>
-  ): UnsubscriptionFunction
-
-  getSubmissions(token: string): Promise<Submission[]>
-
-  subscribeSubmissions(
-    token: string,
-    callback: SubscriptionCallback<Submission[]>
-  ): UnsubscriptionFunction
-
-  submitSolution(
-    token: string,
-    problemId: string,
-    languageId: string,
-    sourceCode: string
-  ): Promise<Submission>
-
-  getScoreboard(token: string): Promise<Scoreboard>
 
   subscribeScoreboard(
     token: string,

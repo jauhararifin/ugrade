@@ -8,9 +8,9 @@ import { getSubmissions, setSubmissions } from '../store'
 export const subscribeSubmissionsAction = (): AppThunkAction<
   UnsubscriptionFunction
 > => {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { submissionService }) => {
     const token = getState().auth.token
-    return contestService.subscribeSubmissions(token, newSubmissions => {
+    return submissionService.subscribeSubmissions(token, newSubmissions => {
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) dispatch(setSubmissions(newSubmissions))
     })

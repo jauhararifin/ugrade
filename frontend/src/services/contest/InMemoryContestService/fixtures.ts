@@ -1,19 +1,3 @@
-import {
-  problem1,
-  problem10,
-  problem11,
-  problem12,
-  problem13,
-  problem14,
-  problem2,
-  problem3,
-  problem4,
-  problem5,
-  problem6,
-  problem7,
-  problem8,
-  problem9,
-} from 'ugrade/services/problem/InMemoryProblemService/fixtures'
 import { Contest, Language } from '../Contest'
 
 export const Language1: Language = { id: '1', name: 'C++11' }
@@ -83,15 +67,6 @@ Competitive Programming merupakan kompetisi pemrograman yang dibuka untuk tingka
   permittedLanguages: availableLanguages.slice(),
 }
 
-export const ContestArkav4QualProblems = [
-  problem1.id,
-  problem2.id,
-  problem3.id,
-  problem4.id,
-  problem5.id,
-  problem6.id,
-]
-
 export const ContestArkav4Final: Contest = {
   id: '2',
   shortId: 'arkavidia-40-qualification',
@@ -107,17 +82,6 @@ export const ContestArkav4Final: Contest = {
   permittedLanguages: availableLanguages.slice(),
 }
 
-export const ContestArkav4FinalProblems = [
-  problem7.id,
-  problem8.id,
-  problem9.id,
-  problem10.id,
-  problem11.id,
-  problem12.id,
-  problem13.id,
-  problem14.id,
-]
-
 export const ContestArkav5Qual: Contest = {
   id: '3',
   shortId: 'arkavidia-50-qualification',
@@ -130,15 +94,6 @@ export const ContestArkav5Qual: Contest = {
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
   permittedLanguages: availableLanguages.slice(),
 }
-
-export const ContestArkav5QualProblems = [
-  problem1.id,
-  problem2.id,
-  problem3.id,
-  problem4.id,
-  problem5.id,
-  problem6.id,
-]
 
 export const ContestArkav5Final: Contest = {
   id: '4',
@@ -155,30 +110,12 @@ export const ContestArkav5Final: Contest = {
   permittedLanguages: availableLanguages.slice(),
 }
 
-export const ContestArkav5FinalProblems = [
-  problem7.id,
-  problem8.id,
-  problem9.id,
-  problem10.id,
-  problem11.id,
-  problem12.id,
-  problem13.id,
-  problem14.id,
-]
-
 export const contests: Contest[] = [
   ContestArkav4Qual,
   ContestArkav4Final,
   ContestArkav5Qual,
   ContestArkav5Final,
 ]
-
-export const contestProblemsMap = {
-  [ContestArkav4Qual.id]: ContestArkav4QualProblems,
-  [ContestArkav4Final.id]: ContestArkav4FinalProblems,
-  [ContestArkav5Qual.id]: ContestArkav5QualProblems,
-  [ContestArkav5Final.id]: ContestArkav5FinalProblems,
-}
 
 export const languages = {
   [Language1.id]: Language1,

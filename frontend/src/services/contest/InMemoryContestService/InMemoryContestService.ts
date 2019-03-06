@@ -1,9 +1,9 @@
 import lodash from 'lodash'
 import loremIpsum from 'lorem-ipsum'
 import { globalErrorCatcher } from 'ugrade/common'
-import { ForbiddenActionError, User } from 'ugrade/services/auth'
+import { User } from 'ugrade/services/auth'
 import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
-import { NoSuchProblem } from 'ugrade/services/problem'
+import { InMemoryProblemService } from 'ugrade/services/problem/InMemoryProblemService'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { simplePublisher } from 'ugrade/utils'
 import { Contest, Language } from '../Contest'
@@ -16,16 +16,14 @@ import { ContestIdTaken, NoSuchContest } from '../errors'
 import { NoSuchLanguage } from '../errors/NoSuchLanguage'
 import { GradingVerdict } from '../Grading'
 import { Scoreboard, ScoreboardProblemScore } from '../Scoreboard'
-import { Submission } from '../Submission'
-import { contestProblemsMap, contests, languages } from './fixtures'
+import { contests, languages } from './fixtures'
 
 export class InMemoryContestService implements ContestService {
   private authService: InMemoryAuthService
+  private problemService: InMemoryProblemService
   private serverStatusService: ServerStatusService
 
   private contests: Contest[] = []
-  private contestProblemsMap: { [id: string]: string[] } = {}
-  private contestSubmissionsMap: { [id: string]: Submission[] } = {}
 
   private contestScoreboardMap: { [id: string]: Scoreboard } = {}
 
@@ -33,18 +31,22 @@ export class InMemoryContestService implements ContestService {
 
   constructor(
     serverStatusService: ServerStatusService,
-    authService: InMemoryAuthService
+    authService: InMemoryAuthService,
+    problemService: InMemoryProblemService
   ) {
     this.serverStatusService = serverStatusService
     this.authService = authService
+    this.problemService = problemService
 
     this.contests = contests.slice()
-    this.contestProblemsMap = { ...contestProblemsMap }
 
     for (const contest of this.contests) {
       const genDefaultProbScore = () => {
         const result: { [id: string]: ScoreboardProblemScore } = {}
-        for (const problemId of this.contestProblemsMap[contest.id]) {
+        const problemIds = Object.keys(
+          this.problemService.problemsMap[contest.id]
+        )
+        for (const problemId of problemIds) {
           result[problemId] = {
             problemId,
             attempt: 0,
@@ -81,77 +83,14 @@ export class InMemoryContestService implements ContestService {
   async handleSubs() {
     setInterval(() => {
       for (const contest of this.contests) {
-        // shift problems
-        if (!this.contestProblemsMap[contest.id]) {
-          this.contestProblemsMap[contest.id] = []
-        }
-        const problemArr = this.contestProblemsMap[contest.id]
-        if (problemArr.length > 0) {
-          const temp = problemArr.shift()
-          if (temp) problemArr.push(temp)
-        }
-
-        // add submissions
-        if (!this.contestSubmissionsMap[contest.id]) {
-          this.contestSubmissionsMap[contest.id] = []
-        }
-        const newSubmission: Submission = {
-          id: Math.round(Math.random() * 100000).toString(),
-          issuer: loremIpsum({
-            count: 1,
-            units: 'words',
-            words: lodash
-              .values(this.authService.contestUserMap[contest.id])
-              .map(user => user.username)
-              .concat(['jury']),
-          }),
-          contestId: contest.id,
-          problemId: this.contestProblemsMap[contest.id][
-            Math.floor(
-              Math.random() * this.contestProblemsMap[contest.id].length
-            )
-          ],
-          languageId:
-            contest.permittedLanguages[
-              Math.floor(Math.random() * contest.permittedLanguages.length)
-            ].id,
-          issuedTime: new Date(),
-          verdict: GradingVerdict.Pending,
-          sourceCode: 'https://pastebin.com/raw/YDhf1cUV',
-          gradings: [
-            {
-              id: Math.round(Math.random() * 100000).toString(),
-              issuedTime: new Date(),
-              verdict: GradingVerdict.InternalError,
-              message: '',
-              compilationOutput:
-                'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
-            },
-            {
-              id: Math.round(Math.random() * 100000).toString(),
-              issuedTime: new Date(),
-              verdict: GradingVerdict.WrongAnswer,
-              message: 'fixing compiler in worker',
-              compilationOutput:
-                'https://raw.githubusercontent.com/jauhararifin/cp/master/.gitignore',
-            },
-            {
-              id: Math.round(Math.random() * 100000).toString(),
-              issuedTime: new Date(),
-              verdict: GradingVerdict.Accepted,
-              message: 'fixing testcases',
-              compilationOutput:
-                'https://raw.githubusercontent.com/jauhararifin/cp/master/TODO',
-            },
-          ],
-        }
-        this.contestSubmissionsMap[contest.id].push(newSubmission)
-
         // update scoreboard
+        const problemIds = Object.keys(
+          this.problemService.problemsMap[contest.id]
+        )
         const scoreboard = this.contestScoreboardMap[contest.id]
         scoreboard.lastUpdated = new Date()
         const entr = Math.floor(Math.random() * scoreboard.entries.length)
-        const prob = problemArr[Math.floor(Math.random() * problemArr.length)]
+        const prob = problemIds[Math.floor(Math.random() * problemIds.length)]
         const probScore = scoreboard.entries[entr].problemScores[prob]
         probScore.attempt++
         probScore.first = Math.random() > 0.5
@@ -245,102 +184,6 @@ export class InMemoryContestService implements ContestService {
     callback: SubscriptionCallback<Contest>
   ): UnsubscriptionFunction {
     return simplePublisher(this.getMyContest.bind(this, token), callback)
-  }
-
-  async getProblemIds(token: string): Promise<string[]> {
-    const contest = await this.getMyContest(token)
-    // Should not return disabled problem, should store disabled info in contest
-    return lodash.cloneDeep(this.contestProblemsMap[contest.id])
-  }
-
-  async deleteProblemIds(token: string, ids: string[]): Promise<string[]> {
-    const contest = await this.getMyContest(token)
-    const deleting = this.contestProblemsMap[contest.id].filter(id =>
-      ids.includes(id)
-    )
-    const result = this.contestProblemsMap[contest.id].filter(
-      id => !deleting.includes(id)
-    )
-    this.contestProblemsMap[contest.id] = result
-    return deleting
-  }
-
-  subscribeProblemIds(
-    token: string,
-    callback: SubscriptionCallback<string[]>
-  ): UnsubscriptionFunction {
-    return simplePublisher(this.getProblemIds.bind(this, token), callback)
-  }
-
-  async getSubmissions(token: string): Promise<Submission[]> {
-    const contest = await this.getMyContest(token)
-    if (!this.contestSubmissionsMap[contest.id]) {
-      this.contestSubmissionsMap[contest.id] = []
-    }
-    return lodash.cloneDeep(this.contestSubmissionsMap[contest.id])
-  }
-
-  subscribeSubmissions(
-    token: string,
-    callback: SubscriptionCallback<Submission[]>
-  ): UnsubscriptionFunction {
-    return simplePublisher(this.getSubmissions.bind(this, token), callback)
-  }
-
-  async submitSolution(
-    token: string,
-    problemId: string,
-    languageId: string,
-    sourceCode: string
-  ): Promise<Submission> {
-    const me = await this.authService.getMe(token)
-    const contest = await this.getMyContest(token)
-    if (new Date() >= contest.finishTime) {
-      throw new ForbiddenActionError('Contest Already Finished')
-    }
-    const language = contest.permittedLanguages
-      .filter(lang => lang.id === languageId)
-      .pop()
-    if (!language) {
-      throw new NoSuchLanguage('No Such Language')
-    }
-    const problems = this.contestProblemsMap[contest.id].slice()
-    if (!problems.includes(problemId)) {
-      throw new NoSuchProblem('No Such Problem')
-    }
-
-    const submissionDetail: Submission = {
-      id: Math.round(Math.random() * 100000).toString(),
-      issuer: me.username,
-      contestId: contest.id,
-      problemId,
-      languageId,
-      issuedTime: new Date(),
-      verdict: GradingVerdict.Pending,
-      sourceCode,
-      gradings: [
-        {
-          id: Math.round(Math.random() * 100000).toString(),
-          issuedTime: new Date(),
-          verdict: GradingVerdict.Accepted,
-          message: '',
-          compilationOutput: 'some compilation output here',
-        },
-        {
-          id: Math.round(Math.random() * 100000).toString(),
-          issuedTime: new Date(Date.now()),
-          verdict: GradingVerdict.Pending,
-          message: '',
-          compilationOutput: '',
-        },
-      ],
-    }
-
-    if (!this.contestSubmissionsMap[contest.id]) {
-      this.contestSubmissionsMap[contest.id] = []
-    }
-    this.contestSubmissionsMap[contest.id].push(submissionDetail)
-    return lodash.cloneDeep(submissionDetail)
   }
 
   async getScoreboard(token: string): Promise<Scoreboard> {

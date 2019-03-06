@@ -10,6 +10,7 @@ export interface Problem {
   statement: string
   type: ProblemType
   disabled: boolean
+  order: number
 
   timeLimit: number
   tolerance: number
