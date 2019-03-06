@@ -47,6 +47,7 @@ import {
 } from 'ugrade/userprofile/store'
 import { AnnouncementService } from './services/announcement'
 import { ClarificationService } from './services/clarification'
+import { ScoreboardService } from './services/scoreboard'
 import { SubmissionService } from './services/submission'
 
 declare global {
@@ -64,6 +65,7 @@ export interface ThunkExtraArguments {
   announcementService: AnnouncementService
   clarificationService: ClarificationService
   submissionService: SubmissionService
+  scoreboardService: ScoreboardService
 }
 
 export interface AppState {

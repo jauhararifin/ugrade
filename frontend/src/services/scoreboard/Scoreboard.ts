@@ -1,9 +1,9 @@
-export interface ScoreboardProblemScore {
+export interface ProblemScore {
   problemId: string
   attempt: number
   penalty: number
   passed: boolean
-  frozen: boolean
+  freezed: boolean
   first: boolean
 }
 
@@ -12,11 +12,12 @@ export interface ScoreboardEntry {
   contestant: string
   totalPassed: number
   totalPenalty: number
-  problemScores: { [problemId: string]: ScoreboardProblemScore }
+  problemScores: { [problemId: string]: ProblemScore }
 }
 
 export interface Scoreboard {
   contestId: string
   lastUpdated: Date
+  freezed: boolean
   entries: ScoreboardEntry[]
 }

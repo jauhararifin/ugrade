@@ -12,8 +12,7 @@ import {
 } from '@blueprintjs/core'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { SubmissionVerdict } from 'ugrade/contest/store'
-import { GradingVerdict } from 'ugrade/services/contest/Grading'
+import { GradingVerdict, SubmissionVerdict } from 'ugrade/contest/store'
 import { ISubmission } from '../SubmissionsView'
 
 import './styles.scss'

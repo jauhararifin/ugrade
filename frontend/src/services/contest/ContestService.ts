@@ -1,6 +1,6 @@
 import { User } from 'ugrade/services/auth'
+import { Scoreboard } from '../scoreboard/Scoreboard'
 import { Contest, Language } from './Contest'
-import { Scoreboard } from './Scoreboard'
 
 export type SubscriptionCallback<T> = (newItem: T) => any
 export type UnsubscriptionFunction = () => any
@@ -64,11 +64,6 @@ export interface ContestService {
   subscribeMyContest(
     token: string,
     callback: SubscriptionCallback<Contest>
-  ): UnsubscriptionFunction
-
-  subscribeScoreboard(
-    token: string,
-    callback: SubscriptionCallback<Scoreboard>
   ): UnsubscriptionFunction
 
   createContest(

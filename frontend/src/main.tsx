@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { StoreContext } from 'redux-react-hook'
 import App from 'ugrade/scenes/App'
+import { InMemoryScoreboardService } from 'ugrade/services/scoreboard/InMemoryScoreboardService'
 import { ErrorBoundary } from './ErrorBoundary'
 import { InMemoryAnnouncementService } from './services/announcement/InMemoryAnnouncementService'
 import { InMemoryAuthService } from './services/auth/InMemoryAuthService'
@@ -30,12 +31,15 @@ const announcementService = new InMemoryAnnouncementService(authService)
 const clarificationService = new InMemoryClarificationService(authService)
 const contestService = new InMemoryContestService(
   serverStatusService,
-  authService,
-  problemService
+  authService
 )
 const submissionService = new InMemorySubmissionService(
   authService,
   contestService
+)
+const scoreboardService = new InMemoryScoreboardService(
+  authService,
+  problemService
 )
 
 export const store = createStore(history, {
@@ -47,6 +51,7 @@ export const store = createStore(history, {
   announcementService,
   clarificationService,
   submissionService,
+  scoreboardService,
 })
 
 ReactDOM.render(

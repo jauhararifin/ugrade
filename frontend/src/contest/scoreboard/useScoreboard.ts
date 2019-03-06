@@ -8,12 +8,12 @@ import { getScoreboard, setScoreboard } from '../store'
 export function subscribeScoreboardAction(): AppThunkAction<
   UnsubscriptionFunction
 > {
-  return async (dispatch, getState, { contestService }) => {
+  return async (dispatch, getState, { scoreboardService }) => {
     const token = getState().auth.token
-    const unsub = contestService.subscribeScoreboard(token, contest => {
+    const unsub = scoreboardService.subscribeScoreboard(token, scoreboard => {
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) {
-        dispatch(setScoreboard(contest))
+        dispatch(setScoreboard(scoreboard))
       }
     })
     return unsub

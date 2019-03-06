@@ -3,7 +3,7 @@ export interface ScoreboardProblemScore {
   attempt: number
   penalty: number
   passed: boolean
-  frozen: boolean
+  freezed: boolean
   first: boolean
 }
 
@@ -18,6 +18,7 @@ export interface ScoreboardEntry {
 export interface Scoreboard {
   contestId: string
   lastUpdated: Date
+  freezed: boolean
   entries: ScoreboardEntry[]
 }
 
