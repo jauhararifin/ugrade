@@ -62,16 +62,25 @@ export class InMemoryContestService implements ContestService {
     startTime?: Date,
     freezed?: boolean,
     finishTime?: Date,
-    permittedLanguages?: Language[]
+    permittedLanguages?: string[]
   ): Promise<Contest> {
     const contest = await this.getMyContest(token)
+    if (permittedLanguages) {
+      const newVal: Language[] = []
+      for (const langId of permittedLanguages) {
+        if (!this.languages[langId]) {
+          throw new NoSuchLanguage('No Such Language')
+        }
+        newVal.push(this.languages[langId])
+      }
+      contest.permittedLanguages = newVal
+    }
     if (name) contest.name = name
     if (shortDescription) contest.shortDescription = shortDescription
     if (description) contest.description = description
     if (startTime) contest.startTime = startTime
     if (freezed !== undefined) contest.freezed = freezed
     if (finishTime) contest.finishTime = finishTime
-    if (permittedLanguages) contest.permittedLanguages = permittedLanguages
 
     for (const i in this.contests) {
       if (this.contests[i].id === contest.id) {

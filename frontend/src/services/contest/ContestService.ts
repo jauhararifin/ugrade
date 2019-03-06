@@ -58,7 +58,7 @@ export interface ContestService {
     startTime?: Date,
     freezed?: boolean,
     finishTime?: Date,
-    permittedLanguages?: Language[]
+    permittedLanguages?: string[]
   ): Promise<Contest>
 
   subscribeMyContest(
