@@ -6,6 +6,7 @@ import { useAnnouncements } from 'ugrade/contest/announcement'
 import { useClarifications } from 'ugrade/contest/clarification'
 import { usePush } from 'ugrade/router'
 import { Menu } from './Menu'
+import { SidebarMenuLoadingView } from './SidebarMenusLoadingView'
 import { IMenu, SidebarMenuView } from './SidebarMenusView'
 
 export interface SidebarMenusProps {
@@ -124,5 +125,6 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
     },
   ]
 
-  return <SidebarMenuView loading={loading} menus={menus} />
+  if (loading) return <SidebarMenuLoadingView />
+  return <SidebarMenuView menus={menus} />
 }

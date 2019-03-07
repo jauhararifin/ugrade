@@ -7,6 +7,7 @@ import { useContestInfo, useSetContestInfo } from 'ugrade/contest'
 import { useProblemList } from 'ugrade/contest/problem'
 import { useRank } from 'ugrade/contest/scoreboard'
 import { useServerClock } from 'ugrade/server'
+import { SidebarLoadingView } from './SidebarLoadingView'
 import { SidebarView } from './SidebarView'
 
 export const Sidebar: FunctionComponent = () => {
@@ -40,10 +41,19 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
+  if (
+    !contestInfo ||
+    !problems ||
+    canUpdateInfo === undefined ||
+    rank === undefined ||
+    !serverClock
+  ) {
+    return <SidebarLoadingView />
+  }
+
   return (
     <SidebarView
       contest={contestInfo}
-      problems={problems}
       canUpdateInfo={canUpdateInfo}
       rank={rank}
       serverClock={serverClock}
