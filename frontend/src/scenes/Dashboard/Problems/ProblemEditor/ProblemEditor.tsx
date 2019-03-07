@@ -42,7 +42,6 @@ export const ProblemEditor: FunctionComponent<ProblemEditorProps> = ({
     shortId: yup
       .string()
       .label('Problem ID')
-      .min(4)
       .max(255)
       .matches(
         /[a-zA-Z0-9\-]+/,
@@ -77,22 +76,22 @@ export const ProblemEditor: FunctionComponent<ProblemEditorProps> = ({
     tolerance: yup
       .number()
       .label('Tolerance Factor')
-      .min(1)
+      .min(0.1)
       .max(10)
       .required(),
     memoryLimit: yup
       .number()
       .label('Memory Limit')
       .integer()
-      .min(16 * 1024)
-      .max(512 * 1024)
+      .min(16 * 1024 * 1024)
+      .max(512 * 1024 * 1024)
       .required(),
     outputLimit: yup
       .number()
       .label('Output Limit')
       .integer()
       .min(1)
-      .max(128 * 1024)
+      .max(512 * 1024 * 1024)
       .required(),
   })
 

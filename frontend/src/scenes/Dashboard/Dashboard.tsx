@@ -13,6 +13,7 @@ import { Overview } from './Overview/Overview'
 import { Problems } from './Problems'
 import { CreateProblem } from './Problems/CreateProblem'
 import { ProblemDetail } from './Problems/ProblemDetail'
+import { UpdateProblem } from './Problems/UpdateProblem'
 import { Scoreboard } from './Scoreboard'
 import { Settings } from './Settings'
 import { Submissions } from './Submissions'
@@ -42,6 +43,10 @@ export const Dashboard: FunctionComponent = () => {
               path='/contest/problems/create'
               exact={true}
               component={CreateProblem}
+            />
+            <Route
+              path='/contest/problems/:problemId/edit'
+              component={UpdateProblem}
             />
             <Route
               path='/contest/problems/:problemId'
