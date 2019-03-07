@@ -27,13 +27,7 @@ export const Problems: FunctionComponent = () => {
     }
   }
 
-  if (
-    !problems ||
-    canCreate === undefined ||
-    canRead === undefined ||
-    canUpdate === undefined ||
-    canDelete === undefined
-  ) {
+  if (!problems) {
     return <ProblemsLoadingView />
   }
 

@@ -41,13 +41,7 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
-  if (
-    !contestInfo ||
-    !problems ||
-    canUpdateInfo === undefined ||
-    rank === undefined ||
-    !serverClock
-  ) {
+  if (!contestInfo || !problems || rank === undefined || !serverClock) {
     return <SidebarLoadingView />
   }
 
