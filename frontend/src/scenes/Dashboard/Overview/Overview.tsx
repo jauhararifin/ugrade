@@ -9,8 +9,7 @@ export const Overview: FunctionComponent = () => {
   useContestOnly()
   const contest = useContestInfo()
 
-  const loading = !contest
-  if (loading) return <OverviewLoadingView />
+  if (!contest) return <OverviewLoadingView />
 
   return <OverviewView contest={contest as Contest} />
 }

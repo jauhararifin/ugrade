@@ -19,8 +19,7 @@ export const ProblemDetail: FunctionComponent = () => {
     if (match && problems) setProblem(problems[match[1]])
   }, [problems, location])
 
-  const loading = !problem
-  if (loading) return <ProblemDetailLoadingView />
+  if (!problem) return <ProblemDetailLoadingView />
 
-  return <ProblemDetailView problem={problem as Problem} />
+  return <ProblemDetailView problem={problem} />
 }

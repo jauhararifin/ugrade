@@ -27,17 +27,19 @@ export const Problems: FunctionComponent = () => {
     }
   }
 
-  const loading =
+  if (
     !problems ||
     canCreate === undefined ||
     canRead === undefined ||
     canUpdate === undefined ||
     canDelete === undefined
-  if (loading) return <ProblemsLoadingView />
+  ) {
+    return <ProblemsLoadingView />
+  }
 
   return (
     <ProblemsView
-      problems={problems as Problem[]}
+      problems={problems}
       onDelete={handleDelete}
       canCreate={canCreate}
       canRead={canRead}
