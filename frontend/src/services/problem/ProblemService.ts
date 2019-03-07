@@ -27,5 +27,19 @@ export interface ProblemService {
     callback: ProblemsCallback
   ): ProblemsUnsubscribe
 
+  updateProblem(
+    token: string,
+    problemId: string,
+    shortId?: string,
+    name?: string,
+    statement?: string,
+    type?: ProblemType,
+    disabled?: boolean,
+    timeLimit?: number,
+    tolerance?: number,
+    memoryLimit?: number,
+    outputLimit?: number
+  ): Promise<Problem>
+
   deleteProblems(token: string, problemIds: string[]): Promise<string[]>
 }
