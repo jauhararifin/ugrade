@@ -1,13 +1,13 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { Fragment, FunctionComponent } from 'react'
+import React, { FunctionComponent } from 'react'
 import { useContestOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useContestInfo } from 'ugrade/contest'
 import { useProblemList } from 'ugrade/contest/problem'
 import { useSubmitSolution } from 'ugrade/contest/submission'
-import { useServerClock } from 'ugrade/server'
 import * as yup from 'yup'
+import { ContestSubmitFormLoadingView } from './ContestSubmitFormLoadingView'
 import { ContestSubmitFormView } from './ContestSubmitFormView'
 
 export interface ContestSubmitFormValue {
@@ -21,7 +21,6 @@ export const ContestSubmitForm: FunctionComponent = () => {
   const contestInfo = useContestInfo()
   const problems = useProblemList()
   const languages = contestInfo ? contestInfo.permittedLanguages : undefined
-  const serverClock = useServerClock(60 * 1000)
 
   const validationSchema = yup.object().shape({
     language: yup
@@ -87,20 +86,17 @@ export const ContestSubmitForm: FunctionComponent = () => {
     return undefined
   }
 
-  const renderView = (props: FormikProps<ContestSubmitFormValue>) => (
-    <ContestSubmitFormView
-      avaiableLanguages={getLanguages()}
-      avaiableProblems={getProblems()}
-      {...props}
-    />
-  )
+  const availableLanguages = getLanguages()
+  const availableProblems = getProblems()
 
-  const started =
-    serverClock && contestInfo && serverClock >= contestInfo.startTime
-  const ended =
-    serverClock && contestInfo && serverClock >= contestInfo.finishTime
-
-  if (languages && problems && started && !ended) {
+  if (availableLanguages && availableProblems) {
+    const renderView = (props: FormikProps<ContestSubmitFormValue>) => (
+      <ContestSubmitFormView
+        avaiableLanguages={availableLanguages}
+        avaiableProblems={availableProblems}
+        {...props}
+      />
+    )
     return (
       <Formik
         initialValues={getInitialValue()}
@@ -110,5 +106,5 @@ export const ContestSubmitForm: FunctionComponent = () => {
       />
     )
   }
-  return <Fragment />
+  return <ContestSubmitFormLoadingView />
 }
