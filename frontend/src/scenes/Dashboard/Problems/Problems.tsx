@@ -3,7 +3,11 @@ import { useContestOnly, usePermissions } from 'ugrade/auth'
 import { UserPermission } from 'ugrade/auth/store'
 import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { useDeleteProblem, useProblemList } from 'ugrade/contest/problem'
+import {
+  useDeleteProblem,
+  useProblemList,
+  useUpdateProblem,
+} from 'ugrade/contest/problem'
 import { Problem } from 'ugrade/contest/store'
 import { ProblemsLoadingView } from './ProblemsLoadingView'
 import { ProblemsView } from './ProblemsView'
@@ -27,6 +31,25 @@ export const Problems: FunctionComponent = () => {
     }
   }
 
+  const updateProblem = useUpdateProblem()
+  const handleToggleDisable = async (problem: Problem) => {
+    try {
+      await updateProblem(
+        problem.id,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        !problem.disabled
+      )
+      TopToaster.showSuccessToast(
+        problem.disabled ? 'Problem Enabled' : 'Problem Disabled'
+      )
+    } catch (error) {
+      if (!handleCommonError(error)) throw error
+    }
+  }
+
   if (!problems) {
     return <ProblemsLoadingView />
   }
@@ -34,6 +57,7 @@ export const Problems: FunctionComponent = () => {
   return (
     <ProblemsView
       problems={problems}
+      onDisable={handleToggleDisable}
       onDelete={handleDelete}
       canCreate={canCreate}
       canRead={canRead}
