@@ -1,8 +1,12 @@
 import lodash from 'lodash'
-import { AuthService, UserPermission } from 'ugrade/services/auth'
+import {
+  AuthService,
+  ForbiddenActionError,
+  UserPermission,
+} from 'ugrade/services/auth'
 import { simplePublisher } from 'ugrade/utils'
-import { NoSuchProblemError } from '../errors'
-import { Problem } from '../Problem'
+import { NoSuchProblemError, ProblemIdAlreadyTaken } from '../errors'
+import { Problem, ProblemType } from '../Problem'
 import {
   ProblemsCallback,
   ProblemService,
@@ -18,6 +22,51 @@ export class InMemoryProblemService implements ProblemService {
     this.problemsMap = problemsMap
     this.authService = authService
     this.handleSubscription()
+  }
+
+  async createProblem(
+    token: string,
+    shortId: string,
+    name: string,
+    statement: string,
+    type: ProblemType,
+    disabled: boolean,
+    timeLimit: number,
+    tolerance: number,
+    memoryLimit: number,
+    outputLimit: number
+  ): Promise<Problem> {
+    const user = await this.authService.getMe(token)
+    if (!user.permissions.includes(UserPermission.ProblemsCreate)) {
+      throw new ForbiddenActionError(
+        `User Doesn't Have Create Problem Permission`
+      )
+    }
+
+    const contestId = user.contestId
+
+    if (!this.problemsMap[contestId]) this.problemsMap[contestId] = []
+    const problems = this.problemsMap[contestId]
+    if (problems.filter(p => p.shortId === shortId).pop()) {
+      throw new ProblemIdAlreadyTaken('Problem Id Already Taken')
+    }
+
+    const newProblem: Problem = {
+      id: Math.round(Math.random() * 100000).toString(),
+      shortId,
+      name,
+      statement,
+      type,
+      disabled,
+      timeLimit,
+      tolerance,
+      memoryLimit,
+      outputLimit,
+      order: problems.length,
+    }
+    this.problemsMap[contestId].push(newProblem)
+
+    return lodash.cloneDeep(newProblem)
   }
 
   async getProblemById(token: string, problemId: string): Promise<Problem> {

@@ -4,10 +4,13 @@ import {
   ContestArkav4Qual,
   ContestArkav5Final,
   ContestArkav5Qual,
+  Language1,
+  Language2,
 } from 'ugrade/services/contest/InMemoryContestService'
 import { Problem, ProblemType } from '../Problem'
+import { ProblemSpec } from '../ProblemSpec'
 
-export const problem1: Problem = {
+export const problem1: ProblemSpec = {
   id: '1',
   shortId: 'A',
   name: 'Potongan Kue',
@@ -20,9 +23,19 @@ export const problem1: Problem = {
   outputLimit: 536870912.0,
   order: 1,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem2: Problem = {
+export const problem2: ProblemSpec = {
   id: '2',
   shortId: 'B',
   name: 'XOR',
@@ -35,9 +48,19 @@ export const problem2: Problem = {
   outputLimit: 536870912.0,
   order: 2,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem3: Problem = {
+export const problem3: ProblemSpec = {
   id: '3',
   shortId: 'C',
   name: 'AND',
@@ -50,9 +73,19 @@ export const problem3: Problem = {
   outputLimit: 536870912.0,
   order: 3,
   disabled: false,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem4: Problem = {
+export const problem4: ProblemSpec = {
   id: '4',
   shortId: 'D',
   name: 'Fahar Jundi Dan Kotak',
@@ -65,9 +98,19 @@ export const problem4: Problem = {
   outputLimit: 536870912.0,
   order: 4,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem5: Problem = {
+export const problem5: ProblemSpec = {
   id: '5',
   shortId: 'E',
   name: 'Sisa Yang Dikuadratkan',
@@ -80,9 +123,19 @@ export const problem5: Problem = {
   outputLimit: 536870912.0,
   order: 5,
   disabled: false,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem6: Problem = {
+export const problem6: ProblemSpec = {
   id: '6',
   shortId: 'F',
   name: 'Hashing',
@@ -95,9 +148,19 @@ export const problem6: Problem = {
   outputLimit: 536870912.0,
   order: 6,
   disabled: false,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem7: Problem = {
+export const problem7: ProblemSpec = {
   id: '7',
   shortId: 'G',
   name: 'Mengurutkan Bilangan',
@@ -110,9 +173,19 @@ export const problem7: Problem = {
   outputLimit: 536870912.0,
   order: 7,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem8: Problem = {
+export const problem8: ProblemSpec = {
   id: '8',
   shortId: 'H',
   name: 'Snake Cube',
@@ -125,9 +198,19 @@ export const problem8: Problem = {
   outputLimit: 536870912.0,
   order: 8,
   disabled: false,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem9: Problem = {
+export const problem9: ProblemSpec = {
   id: '9',
   shortId: 'I',
   name: 'Menutup Meriam',
@@ -140,9 +223,19 @@ export const problem9: Problem = {
   outputLimit: 536870912.0,
   order: 9,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem10: Problem = {
+export const problem10: ProblemSpec = {
   id: '10',
   shortId: 'J',
   name: 'Hari Gajian',
@@ -155,9 +248,19 @@ export const problem10: Problem = {
   outputLimit: 536870912.0,
   order: 10,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem11: Problem = {
+export const problem11: ProblemSpec = {
   id: '11',
   shortId: 'K',
   name: 'Meretas Password Wifi',
@@ -170,9 +273,19 @@ export const problem11: Problem = {
   outputLimit: 536870912.0,
   order: 11,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem12: Problem = {
+export const problem12: ProblemSpec = {
   id: '12',
   shortId: 'L',
   name: 'Jomblo Dan Taken',
@@ -185,9 +298,19 @@ export const problem12: Problem = {
   outputLimit: 536870912.0,
   order: 12,
   disabled: false,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem13: Problem = {
+export const problem13: ProblemSpec = {
   id: '13',
   shortId: 'M',
   name: 'Random Generator',
@@ -200,9 +323,19 @@ export const problem13: Problem = {
   outputLimit: 536870912.0,
   order: 13,
   disabled: true,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problem14: Problem = {
+export const problem14: ProblemSpec = {
   id: '14',
   shortId: 'N',
   name: 'Kotak Cokelat',
@@ -215,9 +348,19 @@ export const problem14: Problem = {
   outputLimit: 536870912.0,
   order: 14,
   disabled: false,
+  solution: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language1.id,
+  },
+  testcaseGenerator: {
+    sourceCode:
+      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    languageId: Language2.id,
+  },
 }
 
-export const problems = [
+export const problems: ProblemSpec[] = [
   problem1,
   problem2,
   problem3,
@@ -233,7 +376,7 @@ export const problems = [
   problem14,
 ]
 
-export const problemsMap: { [contestId: string]: Problem[] } = {
+export const problemsMap: { [contestId: string]: ProblemSpec[] } = {
   [ContestArkav4Qual.id]: lodash.cloneDeep(problems.slice(0, 6)),
   [ContestArkav4Final.id]: lodash.cloneDeep(problems.slice(6)),
   [ContestArkav5Qual.id]: lodash.cloneDeep(problems.slice(0, 6)),
