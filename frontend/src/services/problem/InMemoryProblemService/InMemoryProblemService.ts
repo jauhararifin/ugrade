@@ -148,7 +148,7 @@ export class InMemoryProblemService implements ProblemService {
         if (name) problem.name = name
         if (statement) problem.statement = statement
         if (type) problem.type = type
-        if (disabled) problem.disabled = disabled
+        if (disabled !== undefined) problem.disabled = disabled
         if (timeLimit) problem.timeLimit = timeLimit
         if (tolerance) problem.tolerance = tolerance
         if (memoryLimit) problem.memoryLimit = memoryLimit
