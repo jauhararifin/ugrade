@@ -6,6 +6,7 @@ import { ContestInfo } from 'ugrade/contest/store'
 import { ContestSubmitForm } from './ContestSubmitForm'
 import { SidebarMiniCard } from './SidebarMiniCard'
 
+import { SidebarMenus } from './SidebarMenus'
 import './styles.css'
 
 export enum Menu {
@@ -158,6 +159,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
         })()}
       </div>
 
+      <div className='contest-menu'>
+        <SidebarMenus loading={false} />
+      </div>
       <div className='contest-submit-solution'>
         <ContestSubmitForm />
       </div>
