@@ -11,6 +11,7 @@ import { Clarifications } from './Clarifications'
 import { DashboardView } from './DashboardView'
 import { Overview } from './Overview/Overview'
 import { Problems } from './Problems'
+import { CreateProblem } from './Problems/CreateProblem'
 import { ProblemDetail } from './Problems/ProblemDetail'
 import { Scoreboard } from './Scoreboard'
 import { Settings } from './Settings'
@@ -37,6 +38,11 @@ export const Dashboard: FunctionComponent = () => {
               component={Announcements}
             />
             <Route path='/contest/problems' exact={true} component={Problems} />
+            <Route
+              path='/contest/problems/create'
+              exact={true}
+              component={CreateProblem}
+            />
             <Route
               path='/contest/problems/:problemId'
               component={ProblemDetail}
