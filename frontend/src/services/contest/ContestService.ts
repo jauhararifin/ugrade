@@ -1,5 +1,4 @@
 import { User } from 'ugrade/services/auth'
-import { Scoreboard } from '../scoreboard/Scoreboard'
 import { Contest, Language } from './Contest'
 
 export type SubscriptionCallback<T> = (newItem: T) => any
