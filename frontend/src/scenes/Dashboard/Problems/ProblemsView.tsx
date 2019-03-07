@@ -10,10 +10,10 @@ import {
 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { Fragment, FunctionComponent, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Problem } from 'ugrade/contest/store'
 import { Navigator } from 'ugrade/router/Navigator'
 
-import { Link } from 'react-router-dom'
 import './styles.css'
 
 export interface ProblemsViewProps {
@@ -35,8 +35,6 @@ export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
   canRead,
   canUpdate,
 }) => {
-  const loading = !problems
-
   const [currentDelete, setCurrentDelete] = useState(undefined as
     | Problem
     | undefined)
@@ -159,9 +157,7 @@ export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
 
   return (
     <div className='contest-problems'>
-      <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
-        Problems
-      </H1>
+      <H1 className='header'>Problems</H1>
       {renderAlertDelete()}
       <div>{renderProblems()}</div>
     </div>

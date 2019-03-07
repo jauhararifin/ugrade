@@ -3,6 +3,7 @@ import { useContestOnly } from 'ugrade/auth'
 import { useProblems } from 'ugrade/contest/problem'
 import { Problem } from 'ugrade/contest/store'
 import { useLocation } from 'ugrade/router'
+import { ProblemDetailLoadingView } from './ProblemDetailLoadingView'
 import { ProblemDetailView } from './ProblemDetailView'
 
 export const ProblemDetail: FunctionComponent = () => {
@@ -18,5 +19,8 @@ export const ProblemDetail: FunctionComponent = () => {
     if (match && problems) setProblem(problems[match[1]])
   }, [problems, location])
 
-  return <ProblemDetailView problem={problem} />
+  const loading = !problem
+  if (loading) return <ProblemDetailLoadingView />
+
+  return <ProblemDetailView problem={problem as Problem} />
 }

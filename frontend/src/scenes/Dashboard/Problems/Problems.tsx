@@ -5,6 +5,7 @@ import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useDeleteProblem, useProblemList } from 'ugrade/contest/problem'
 import { Problem } from 'ugrade/contest/store'
+import { ProblemsLoadingView } from './ProblemsLoadingView'
 import { ProblemsView } from './ProblemsView'
 
 export const Problems: FunctionComponent = () => {
@@ -26,9 +27,17 @@ export const Problems: FunctionComponent = () => {
     }
   }
 
+  const loading =
+    !problems ||
+    canCreate === undefined ||
+    canRead === undefined ||
+    canUpdate === undefined ||
+    canDelete === undefined
+  if (loading) return <ProblemsLoadingView />
+
   return (
     <ProblemsView
-      problems={problems}
+      problems={problems as Problem[]}
       onDelete={handleDelete}
       canCreate={canCreate}
       canRead={canRead}
