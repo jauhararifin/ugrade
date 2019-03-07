@@ -3,6 +3,7 @@ import React, { FunctionComponent, useMemo } from 'react'
 import { useUsers } from 'ugrade/auth'
 import { useProblemList } from 'ugrade/contest/problem'
 import { useScoreboard } from 'ugrade/contest/scoreboard'
+import { ScoreboardLoadingView } from './ScoreboardLoadingView'
 import { ScoreboardView } from './ScoreboardView'
 
 export const Scoreboard: FunctionComponent = () => {
@@ -14,6 +15,8 @@ export const Scoreboard: FunctionComponent = () => {
   )
   const users = useUsers(usernames)
   const userMap = lodash.zipObject(users.map(u => u.username), users)
+
+  if (!problems || !scoreboard) return <ScoreboardLoadingView />
 
   return (
     <ScoreboardView
