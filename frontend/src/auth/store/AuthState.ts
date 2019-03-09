@@ -15,6 +15,8 @@ export enum UserPermission {
   UsersInvite = 'users:invite',
   UsersUpdate = 'users:update',
   UsersDelete = 'users:delete',
+
+  ProfilesRead = 'profiles:read',
 }
 
 export interface User {
