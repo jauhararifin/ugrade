@@ -25,6 +25,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
       if (match[1] === 'submissions') return Menu.Submissions
       if (match[1] === 'scoreboard') return Menu.Scoreboard
       if (match[1] === 'settings') return Menu.Settings
+      if (match[1] === 'members') return Menu.Members
     }
     return Menu.Overview
   }
@@ -40,6 +41,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
     if (menu === Menu.Submissions) push(`/contest/submissions`)
     if (menu === Menu.Scoreboard) push(`/contest/scoreboard`)
     if (menu === Menu.Settings) push(`/contest/settings`)
+    if (menu === Menu.Members) push(`/contest/members`)
   }
 
   const me = useMe()
@@ -122,6 +124,13 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
       active: currentMenu === Menu.Settings,
       visible: canUpdateInfo,
       title: Menu.Settings,
+    },
+    {
+      icon: 'person',
+      onClick: () => onMenuChoosed(Menu.Members),
+      active: currentMenu === Menu.Members,
+      visible: true,
+      title: Menu.Members,
     },
   ]
 

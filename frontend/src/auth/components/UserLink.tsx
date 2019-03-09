@@ -1,4 +1,4 @@
-import { Classes, Tooltip } from '@blueprintjs/core'
+import { Classes, Intent, Tag, Tooltip } from '@blueprintjs/core'
 import React, { FunctionComponent, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useUsers } from '../useUsers'
@@ -8,6 +8,9 @@ export interface UserLinkProps {
 }
 
 export const UserLink: FunctionComponent<UserLinkProps> = ({ username }) => {
+  if (username === '') {
+    return <Tag intent={Intent.DANGER}>Haven't Signed Up Yet</Tag>
+  }
   const arr = useMemo(() => [username], [username])
   const users = useUsers(arr)
   const name = users.length > 0 ? users[0].name : undefined

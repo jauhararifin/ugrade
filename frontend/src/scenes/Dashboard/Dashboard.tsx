@@ -9,6 +9,7 @@ import { useLocation } from 'ugrade/router'
 import { Announcements } from './Announcements'
 import { Clarifications } from './Clarifications'
 import { DashboardView } from './DashboardView'
+import { Members } from './Members'
 import { Overview } from './Overview/Overview'
 import { Problems } from './Problems'
 import { CreateProblem } from './Problems/CreateProblem'
@@ -68,6 +69,7 @@ export const Dashboard: FunctionComponent = () => {
               component={Scoreboard}
             />
             <Route path='/contest/settings' exact={true} component={Settings} />
+            <Route path='/contest/members' exact={true} component={Members} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>
