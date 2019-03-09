@@ -1,6 +1,6 @@
 import lodash from 'lodash'
 import { User } from 'ugrade/services/auth'
-import { AuthService } from 'ugrade/services/auth/AuthService'
+import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { simplePublisher } from 'ugrade/utils'
 import { Contest, Language } from '../Contest'
@@ -15,14 +15,14 @@ import { contests, languages } from './fixtures'
 
 export class InMemoryContestService implements ContestService {
   public contests: Contest[] = []
-  private authService: AuthService
+  private authService: InMemoryAuthService
   private serverStatusService: ServerStatusService
 
   private languages: { [id: string]: Language } = {}
 
   constructor(
     serverStatusService: ServerStatusService,
-    authService: AuthService
+    authService: InMemoryAuthService
   ) {
     this.serverStatusService = serverStatusService
     this.authService = authService
