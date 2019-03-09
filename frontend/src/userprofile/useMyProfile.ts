@@ -4,7 +4,7 @@ import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { getUserProfile, setUserProfile } from './store'
 
-export const getProfileAction = (): AppThunkAction => {
+export const getMyProfileAction = (): AppThunkAction => {
   return async (dispatch, getState, { userService }) => {
     const token = getState().auth.token
     if (token.length > 0) {
@@ -23,14 +23,14 @@ export const getProfileAction = (): AppThunkAction => {
   }
 }
 
-export function useProfile() {
+export function useMyProfile() {
   const dispatch = useAppThunkDispatch()
   useEffect(() => {
     let cancel = false
     ;(async () => {
       while (!cancel) {
         try {
-          await dispatch(getProfileAction())
+          await dispatch(getMyProfileAction())
           break
         } catch (error) {
           await new Promise(r => setTimeout(r, 5000))

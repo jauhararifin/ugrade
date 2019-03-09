@@ -12,10 +12,12 @@ export enum ShirtSizeType {
   SHIRT_SIZE_TYPE_XXL = 'XXL',
 }
 
-export interface UserProfileState {
+export interface UserProfile {
   gender?: GenderType
   shirtSize?: ShirtSizeType
   address?: string
 }
+
+export type UserProfileState = UserProfile
 
 export const initialState: UserProfileState = {}
