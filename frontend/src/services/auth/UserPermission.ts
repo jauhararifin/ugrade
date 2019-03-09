@@ -16,6 +16,10 @@ export enum UserPermission {
   ProblemsReadDisabled = 'problems:read-disabled',
   ProblemsUpdate = 'problems:update',
   ProblemsDelete = 'problems:delete',
+
+  UserInvite = 'users:invite',
+  UserUpdate = 'users:update',
+  UserDelete = 'users:delete',
 }
 
 export const adminPermissions = [
@@ -28,6 +32,10 @@ export const adminPermissions = [
   UserPermission.ProblemsReadDisabled,
   UserPermission.ProblemsUpdate,
   UserPermission.ProblemsDelete,
+
+  UserPermission.UserInvite,
+  UserPermission.UserUpdate,
+  UserPermission.UserDelete,
 ]
 
 export const contestantPermissions = [

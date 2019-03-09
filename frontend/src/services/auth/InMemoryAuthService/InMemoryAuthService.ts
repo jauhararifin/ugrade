@@ -25,6 +25,13 @@ export class InMemoryAuthService implements AuthService {
     this.serverStatusService = serverStatusService
   }
 
+  async getUsers(contestId: string): Promise<User[]> {
+    await this.serverStatusService.ping()
+    const userMap = this.contestUserMap[contestId]
+    if (!userMap) throw new AuthError('No Such Contest')
+    return lodash.cloneDeep(lodash.values(userMap))
+  }
+
   async getUserByEmail(contestId: string, email: string): Promise<User> {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]

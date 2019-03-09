@@ -2,6 +2,13 @@ import { User } from './User'
 
 export interface AuthService {
   /**
+   * Get all user information in a contest
+   * @param contestId The contest id
+   * @return list of user in the specific contest
+   */
+  getUsers(contestId: string): Promise<User[]>
+
+  /**
    * Get user information in a contest by their email.
    *
    * @param contestId - The contest id
