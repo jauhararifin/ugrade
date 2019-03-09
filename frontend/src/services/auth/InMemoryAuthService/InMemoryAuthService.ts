@@ -5,6 +5,7 @@ import {
   AuthError,
   ForbiddenActionError,
   InvalidTokenError,
+  NoSuchUserError,
   UserRegistrationError,
 } from '../errors'
 import { User } from '../User'
@@ -23,6 +24,14 @@ export class InMemoryAuthService implements AuthService {
     this.userPasswordMap = userPasswordMap
     this.usersToken = {}
     this.serverStatusService = serverStatusService
+  }
+
+  async getUserById(userId: string): Promise<User> {
+    await this.serverStatusService.ping()
+    for (const map of lodash.values(this.contestUserMap)) {
+      if (map[userId]) return lodash.cloneDeep(map[userId])
+    }
+    throw new NoSuchUserError('No Such User')
   }
 
   async getUsers(contestId: string): Promise<User[]> {

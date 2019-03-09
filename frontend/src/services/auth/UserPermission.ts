@@ -20,6 +20,8 @@ export enum UserPermission {
   UsersInvite = 'users:invite',
   UsersUpdate = 'users:update',
   UsersDelete = 'users:delete',
+
+  ProfilesRead = 'profiles:read',
 }
 
 export const adminPermissions = [
@@ -36,6 +38,8 @@ export const adminPermissions = [
   UserPermission.UsersInvite,
   UserPermission.UsersUpdate,
   UserPermission.UsersDelete,
+
+  UserPermission.ProfilesRead,
 ]
 
 export const contestantPermissions = [
