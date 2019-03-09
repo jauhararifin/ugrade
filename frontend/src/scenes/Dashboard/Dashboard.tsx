@@ -10,6 +10,7 @@ import { Announcements } from './Announcements'
 import { Clarifications } from './Clarifications'
 import { DashboardView } from './DashboardView'
 import { Members } from './Members'
+import { MemberDetail } from './Members/MemberDetail'
 import { Overview } from './Overview/Overview'
 import { Problems } from './Problems'
 import { CreateProblem } from './Problems/CreateProblem'
@@ -70,6 +71,7 @@ export const Dashboard: FunctionComponent = () => {
             />
             <Route path='/contest/settings' exact={true} component={Settings} />
             <Route path='/contest/members' exact={true} component={Members} />
+            <Route path='/contest/members/:userId' component={MemberDetail} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>

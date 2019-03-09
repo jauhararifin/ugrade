@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import { useContestOnly, useMe } from 'ugrade/auth'
 import { User } from 'ugrade/auth/store'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { useProfile, useSetProfile } from 'ugrade/userprofile'
+import { useMyProfile, useSetProfile } from 'ugrade/userprofile'
 import { GenderType, ShirtSizeType } from 'ugrade/userprofile/store'
 import * as yup from 'yup'
 import { genderValues, shirtSizeValues } from './helpers'
@@ -56,7 +56,7 @@ export const MyAccountProfileForm: FunctionComponent = () => {
   }
 
   const me = useMe() as User
-  const profile = useProfile()
+  const profile = useMyProfile()
 
   const initialValues = {
     name: me.name,

@@ -28,7 +28,7 @@ export const MembersView: FunctionComponent<MembersViewProps> = ({
       <HTMLTable striped={true} className='users-table'>
         <tbody>
           {users.map(user => (
-            <tr>
+            <tr key={user.id}>
               <td className='col-user'>
                 <UserLink username={user.username} />
               </td>
