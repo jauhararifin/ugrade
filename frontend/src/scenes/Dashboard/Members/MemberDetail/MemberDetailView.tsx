@@ -46,7 +46,7 @@ export const MemberDetailView: FunctionComponent<MemberDetailViewProps> = ({
             <td className='col-key'>Status</td>
             <td>
               {!user.username || user.username.length === 0 ? (
-                <Tag intent={Intent.DANGER}>Not Yet Registered</Tag>
+                <Tag intent={Intent.DANGER}>Haven't Signed Up Yet</Tag>
               ) : (
                 <Tag intent={Intent.SUCCESS}>Registered</Tag>
               )}
