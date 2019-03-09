@@ -11,6 +11,10 @@ export enum UserPermission {
   ProblemsReadDisabled = 'problems:read-disabled',
   ProblemsUpdate = 'problems:update',
   ProblemsDelete = 'problems:delete',
+
+  UserInvite = 'users:invite',
+  UserUpdate = 'users:update',
+  UserDelete = 'users:delete',
 }
 
 export interface User {
