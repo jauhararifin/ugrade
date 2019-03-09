@@ -1,7 +1,7 @@
 import { Classes, H1, HTMLTable, Tooltip } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
-import { User } from 'ugrade/auth/store'
+import { UserLink } from 'ugrade/auth/components'
 import { Problem, Scoreboard } from 'ugrade/contest/store'
 
 import './styles.scss'
@@ -9,13 +9,11 @@ import './styles.scss'
 export interface ScoreboardViewProps {
   problems: Problem[]
   scoreboard: Scoreboard
-  userMap: { [id: string]: User }
 }
 
 export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
   problems,
   scoreboard,
-  userMap,
 }) => {
   scoreboard.entries = scoreboard.entries.sort((a, b) => a.rank - b.rank)
 
@@ -53,14 +51,7 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
                 <tr key={entry.contestant}>
                   <td className='rank'>{entry.rank}</td>
                   <td>
-                    <Tooltip
-                      className={Classes.TOOLTIP_INDICATOR}
-                      content={entry.contestant}
-                    >
-                      {userMap[entry.contestant]
-                        ? userMap[entry.contestant].name
-                        : entry.contestant}
-                    </Tooltip>
+                    <UserLink username={entry.contestant} />
                   </td>
 
                   <td className='score'>
