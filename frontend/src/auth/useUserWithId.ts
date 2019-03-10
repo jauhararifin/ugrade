@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { User } from './store'
@@ -17,7 +17,9 @@ export function useUserWithId(userId: string) {
   useSingleEffect(
     'USE_USER_WITH_ID',
     () => {
-      dispatch(getUserByIdAction(userId)).then(setUser)
+      dispatch(getUserByIdAction(userId))
+        .then(setUser)
+        .catch(globalErrorCatcher)
     },
     []
   )

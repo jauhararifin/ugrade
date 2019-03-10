@@ -1,6 +1,6 @@
 import { useMappedState } from 'redux-react-hook'
 import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
-import { AnnouncementsUnsubscribe } from 'ugrade/services/announcementService/AnnouncementService'
+import { AnnouncementsUnsubscribe } from 'ugrade/services/announcement'
 import { AppState, AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { setAnnouncements } from '../store'

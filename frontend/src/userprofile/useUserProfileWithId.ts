@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAppThunkDispatch } from 'ugrade/common'
+import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { UserProfile } from './store'
 
@@ -17,8 +17,11 @@ export function useUserProfileWithId(userId?: string) {
   const [profile, setProfile] = useState(undefined as UserProfile | undefined)
 
   useEffect(() => {
-    if (userId) dispatch(getUserProfileByIdAction(userId)).then(setProfile)
-    else setProfile(undefined)
+    if (userId) {
+      dispatch(getUserProfileByIdAction(userId))
+        .then(setProfile)
+        .catch(globalErrorCatcher)
+    } else setProfile(undefined)
   }, [userId])
 
   return profile
