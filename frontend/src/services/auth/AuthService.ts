@@ -93,6 +93,18 @@ export interface AuthService {
   ): Promise<void>
 
   /**
+   * Add users to the contests
+   *
+   * @param token User's token
+   * @param users list of user's email and permissions
+   * @returns List of string contains added user emails
+   */
+  addUser(
+    token: string,
+    users: Array<{ email: string; permissions: UserPermission[] }>
+  ): Promise<string[]>
+
+  /**
    * Get user's information (id, contest id and username) from server.
    * @param token User's session token
    * @return User's information

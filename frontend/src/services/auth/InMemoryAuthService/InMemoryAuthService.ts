@@ -7,6 +7,7 @@ import {
   ForbiddenActionError,
   InvalidTokenError,
   NoSuchUserError,
+  UserAlreadyAddedError,
   UserRegistrationError,
 } from '../errors'
 import { User } from '../User'
@@ -157,6 +158,54 @@ export class InMemoryAuthService implements AuthService {
     }
     if (oneTimeCode !== '00000000') throw new AuthError('Wrong One Time Code')
     this.userPasswordMap[user.id] = password
+  }
+
+  async addUser(
+    token: string,
+    users: Array<{ email: string; permissions: UserPermission[] }>
+  ): Promise<string[]> {
+    const me = await this.getMe(token)
+    if (!me.permissions.includes(UserPermission.UsersInvite)) {
+      throw new ForbiddenActionError(
+        `User Doesn't Have Permission To Invite Other Users`
+      )
+    }
+
+    const userMap = this.contestUserMap[me.contestId]
+    const currentEmails = lodash.values(userMap).map(u => u.email)
+    const newEmails = users.map(u => u.email)
+    if (lodash.intersection(currentEmails, newEmails).length > 0) {
+      throw new UserAlreadyAddedError(`User's Email Already Added`)
+    }
+
+    if (!me.permissions.includes(UserPermission.UsersPermissionsUpdate)) {
+      throw new ForbiddenActionError(
+        `User's doesn't Have Permission To Update User's Permissions`
+      )
+    }
+
+    const req = lodash.union(...users.map(u => u.permissions))
+    for (const reqPerm of req) {
+      if (!me.permissions.includes(reqPerm)) {
+        throw new ForbiddenActionError(
+          `User's doesn't Have Permission To Give User's ${reqPerm}`
+        )
+      }
+    }
+
+    for (const user of users) {
+      const newId = Math.round(Math.random() * 100000).toString()
+      userMap[newId] = {
+        id: newId,
+        contestId: me.contestId,
+        username: '',
+        email: user.email,
+        permissions: user.permissions,
+        name: '',
+      }
+    }
+
+    return lodash.cloneDeep(users.map(u => u.email))
   }
 
   async getMe(token: string): Promise<User> {
