@@ -11,6 +11,7 @@ import {
 } from 'ugrade/contest/store'
 import { useSubmissionList } from 'ugrade/contest/submission'
 import { useServerClock } from 'ugrade/server'
+import { SubmissionsLoadingView } from './SubmissionsLoadingView'
 import { ISubmission, SubmissionsView } from './SubmissionsView'
 
 export const Submissions: FunctionComponent = () => {
@@ -20,7 +21,7 @@ export const Submissions: FunctionComponent = () => {
   const problems = useProblems()
   const languages = useMappedState(getLanguagesMap)
 
-  if (problems && languages) {
+  if (problems && serverClock && languages) {
     const mySubmissions = submissions || []
 
     const noneProblem: Problem = {
@@ -34,6 +35,7 @@ export const Submissions: FunctionComponent = () => {
       memoryLimit: 0,
       outputLimit: 0,
       order: 0,
+      disabled: true,
     }
 
     const noneLanguage: Language = {
@@ -53,5 +55,5 @@ export const Submissions: FunctionComponent = () => {
       <SubmissionsView submissions={isubmissions} serverClock={serverClock} />
     )
   }
-  return <SubmissionsView />
+  return <SubmissionsLoadingView />
 }

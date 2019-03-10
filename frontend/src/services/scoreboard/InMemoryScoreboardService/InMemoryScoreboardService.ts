@@ -1,5 +1,5 @@
 import lodash from 'lodash'
-import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
+import { AuthService } from 'ugrade/services/auth/AuthService'
 import { InMemoryProblemService } from 'ugrade/services/problem/InMemoryProblemService'
 import { simplePublisher } from 'ugrade/utils'
 import { ProblemScore, Scoreboard } from '../Scoreboard'
@@ -10,12 +10,12 @@ import {
 } from '../ScoreboardService'
 
 export class InMemoryScoreboardService implements ScoreboardService {
-  private authService: InMemoryAuthService
+  private authService: AuthService
   private problemService: InMemoryProblemService
   private scoreboardMap: { [contestId: string]: Scoreboard }
 
   constructor(
-    authService: InMemoryAuthService,
+    authService: AuthService,
     problemService: InMemoryProblemService
   ) {
     this.authService = authService
@@ -28,7 +28,9 @@ export class InMemoryScoreboardService implements ScoreboardService {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
     if (!this.scoreboardMap[contestId]) {
-      this.scoreboardMap[contestId] = this.createEmptyScoreboard(contestId)
+      this.scoreboardMap[contestId] = await this.createEmptyScoreboard(
+        contestId
+      )
     }
     return lodash.cloneDeep(this.scoreboardMap[contestId])
   }
@@ -40,7 +42,7 @@ export class InMemoryScoreboardService implements ScoreboardService {
     return simplePublisher(this.getScoreboard.bind(this, token), callback)
   }
 
-  private createEmptyScoreboard(contestId: string): Scoreboard {
+  private async createEmptyScoreboard(contestId: string): Promise<Scoreboard> {
     const genDefaultProbScore = () => {
       const result: { [id: string]: ProblemScore } = {}
       const problemIds = Object.keys(this.problemService.problemsMap[contestId])
@@ -57,12 +59,13 @@ export class InMemoryScoreboardService implements ScoreboardService {
       return result
     }
 
+    const users = await this.authService.getUsers(contestId)
+
     return {
       contestId,
       lastUpdated: new Date(),
       freezed: false,
-      entries: lodash
-        .values(this.authService.contestUserMap[contestId])
+      entries: users
         .filter(user => user.username !== '')
         .map(user => user.username)
         .map(uname => ({

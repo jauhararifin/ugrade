@@ -13,8 +13,8 @@ import React, { FunctionComponent } from 'react'
 import { ContestSubmitFormValue } from './ContestSubmitForm'
 
 export interface ContestSubmitFormViewOwnProps {
-  avaiableLanguages?: Array<{ label: string; value: string }>
-  avaiableProblems?: Array<{ label: string; value: string }>
+  avaiableLanguages: Array<{ label: string; value: string }>
+  avaiableProblems: Array<{ label: string; value: string }>
 }
 
 export type ContestSubmitFormViewProps = FormikProps<ContestSubmitFormValue> &
@@ -31,9 +31,8 @@ export const ContestSubmitFormView: FunctionComponent<
   avaiableLanguages,
   isSubmitting,
 }) => {
-  const loading = !avaiableProblems || !avaiableLanguages
   return (
-    <form className={loading ? 'bp3-skeleton' : ''} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <H5>Submit Solution</H5>
       <FormGroup>
         <ControlGroup fill={true}>

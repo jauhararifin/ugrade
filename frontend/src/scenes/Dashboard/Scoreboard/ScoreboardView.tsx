@@ -1,31 +1,20 @@
 import { Classes, H1, HTMLTable, Tooltip } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { FunctionComponent } from 'react'
+import { UserLink } from 'ugrade/auth/components'
 import { Problem, Scoreboard } from 'ugrade/contest/store'
 
-import { User } from 'ugrade/auth/store'
 import './styles.scss'
 
 export interface ScoreboardViewProps {
-  problems?: Problem[]
-  scoreboard?: Scoreboard
-  userMap: { [id: string]: User }
+  problems: Problem[]
+  scoreboard: Scoreboard
 }
 
 export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
   problems,
   scoreboard,
-  userMap,
 }) => {
-  if (!problems || !scoreboard) {
-    return (
-      <div className='contest-scoreboard'>
-        <H1 className='bp3-skeleton'>Scoreboard</H1>
-        <div className='bp3-skeleton'>{'lorem ipsum'.repeat(100)}</div>
-      </div>
-    )
-  }
-
   scoreboard.entries = scoreboard.entries.sort((a, b) => a.rank - b.rank)
 
   return (
@@ -62,14 +51,7 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
                 <tr key={entry.contestant}>
                   <td className='rank'>{entry.rank}</td>
                   <td>
-                    <Tooltip
-                      className={Classes.TOOLTIP_INDICATOR}
-                      content={entry.contestant}
-                    >
-                      {userMap[entry.contestant]
-                        ? userMap[entry.contestant].name
-                        : entry.contestant}
-                    </Tooltip>
+                    <UserLink username={entry.contestant} />
                   </td>
 
                   <td className='score'>
@@ -83,22 +65,22 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
                     const {
                       attempt,
                       penalty,
-                      frozen,
+                      freezed,
                       first,
                       passed,
                     } = problemScore || {
                       attempt: 0,
                       penalty: 0,
-                      frozen: false,
+                      freezed: false,
                       first: false,
                       passed: false,
                     }
 
                     const classes = classnames('problem-column', {
                       passed,
-                      failed: attempt > 0 && !passed && !frozen,
+                      failed: attempt > 0 && !passed && !freezed,
                       'first-passed': first,
-                      frozed: attempt > 0 && frozen,
+                      frozed: attempt > 0 && freezed,
                     })
 
                     return (

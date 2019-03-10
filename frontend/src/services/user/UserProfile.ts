@@ -1,5 +1,3 @@
-import { User } from 'ugrade/services/auth'
-
 export enum GenderType {
   GENDER_TYPE_MALE = 'Male',
   GENDER_TYPE_FEMALE = 'Female',
@@ -14,7 +12,7 @@ export enum ShirtSizeType {
   SHIRT_SIZE_TYPE_XXL = 'XXL',
 }
 
-export interface UserProfile extends User {
+export interface UserProfile {
   gender?: GenderType
   shirtSize?: ShirtSizeType
   address?: string

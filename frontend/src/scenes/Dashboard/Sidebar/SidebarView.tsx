@@ -2,11 +2,11 @@ import { EditableText, H2, H5, H6 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { ContestInfo, Problem } from 'ugrade/contest/store'
+import { ContestInfo } from 'ugrade/contest/store'
 import { ContestSubmitForm } from './ContestSubmitForm'
-import { SidebarMenus } from './SidebarMenus'
 import { SidebarMiniCard } from './SidebarMiniCard'
 
+import { SidebarMenus } from './SidebarMenus'
 import './styles.css'
 
 export enum Menu {
@@ -19,11 +19,10 @@ export enum Menu {
 }
 
 export interface SidebarViewProps {
-  contest?: ContestInfo
-  problems?: Problem[]
-  rank?: number
+  contest: ContestInfo
+  rank: number
   canUpdateInfo: boolean
-  serverClock?: Date
+  serverClock: Date
   onUpdateName: (newName: string) => any
   onUpdateShortDesc: (newShortDesc: string) => any
 }
@@ -39,7 +38,6 @@ const durationToStr = (duration: moment.Duration | number): string => {
 
 export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   contest,
-  problems,
   serverClock,
   rank,
   canUpdateInfo,
@@ -64,14 +62,6 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
         )
       : undefined
 
-  const loading =
-    !contest ||
-    !serverClock ||
-    (started && !problems) ||
-    !contest.permittedLanguages
-
-  const skeletonClass = classnames({ 'bp3-skeleton': loading })
-
   const [name, setName] = useState('')
   const [shortDesc, setShortDesc] = useState('')
   useEffect(() => {
@@ -82,47 +72,39 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   }, [contest && contest.name, contest && contest.shortDescription])
 
   const renderName = () => {
-    if (!loading && contest) {
-      if (canUpdateInfo) {
-        return (
-          <H5>
-            <EditableText
-              maxLength={128}
-              placeholder='Contest Title'
-              onChange={setName}
-              value={name}
-              multiline={true}
-              onConfirm={onUpdateName}
-            />
-          </H5>
-        )
-      } else {
-        return <H5>{contest.name}</H5>
-      }
+    if (canUpdateInfo) {
+      return (
+        <H5>
+          <EditableText
+            maxLength={128}
+            placeholder='Contest Title'
+            onChange={setName}
+            value={name}
+            multiline={true}
+            onConfirm={onUpdateName}
+          />
+        </H5>
+      )
     } else {
-      return <H2 className='bp3-skeleton'>{'Fake'}</H2>
+      return <H5>{contest.name}</H5>
     }
   }
 
   const renderShortDesc = () => {
-    if (!loading && contest) {
-      if (canUpdateInfo) {
-        return (
-          <EditableText
-            maxLength={256}
-            className='short-description'
-            placeholder='Contest Short Description'
-            onChange={setShortDesc}
-            value={shortDesc}
-            multiline={true}
-            onConfirm={onUpdateShortDesc}
-          />
-        )
-      } else {
-        return <p>{contest.shortDescription}</p>
-      }
+    if (canUpdateInfo) {
+      return (
+        <EditableText
+          maxLength={256}
+          className='short-description'
+          placeholder='Contest Short Description'
+          onChange={setShortDesc}
+          value={shortDesc}
+          multiline={true}
+          onConfirm={onUpdateShortDesc}
+        />
+      )
     } else {
-      return <p className='bp3-skeleton'>{'fake '.repeat(50)}</p>
+      return <p>{contest.shortDescription}</p>
     }
   }
 
@@ -133,30 +115,9 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
 
       <div className='contest-status-bottom'>
         {(() => {
-          if (loading) {
+          if (!started) {
             return (
-              <React.Fragment>
-                <SidebarMiniCard
-                  className={classnames(skeletonClass, 'contest-status-rank', {
-                    freezed,
-                  })}
-                >
-                  <H6>Rank</H6>
-                  <H2>Fake</H2>
-                </SidebarMiniCard>
-                <SidebarMiniCard
-                  className={classnames(skeletonClass, 'contest-status-time')}
-                >
-                  <H6>Remaining Time</H6>
-                  <H2>Fake Fake</H2>
-                </SidebarMiniCard>
-              </React.Fragment>
-            )
-          } else if (!started) {
-            return (
-              <SidebarMiniCard
-                className={classnames(skeletonClass, 'contest-status-time')}
-              >
+              <SidebarMiniCard className='contest-status-time'>
                 <H6>Started In</H6>
                 <H2>{startedIn}</H2>
               </SidebarMiniCard>
@@ -165,16 +126,14 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
             return (
               <React.Fragment>
                 <SidebarMiniCard
-                  className={classnames(skeletonClass, 'contest-status-rank', {
+                  className={classnames('contest-status-rank', {
                     freezed,
                   })}
                 >
                   <H6>Rank</H6>
                   <H2>{contest && rank ? rank : '-'}</H2>
                 </SidebarMiniCard>
-                <SidebarMiniCard
-                  className={classnames(skeletonClass, 'contest-status-time')}
-                >
+                <SidebarMiniCard className={classnames('contest-status-time')}>
                   <H6>Remaining Time</H6>
                   <H2>{remainingTimeStr}</H2>
                 </SidebarMiniCard>
@@ -184,16 +143,14 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
             return (
               <React.Fragment>
                 <SidebarMiniCard
-                  className={classnames(skeletonClass, 'contest-status-rank', {
+                  className={classnames('contest-status-rank', {
                     freezed,
                   })}
                 >
                   <H6>Rank</H6>
                   <H2>{contest && rank ? rank : '-'}</H2>
                 </SidebarMiniCard>
-                <SidebarMiniCard
-                  className={classnames(skeletonClass, 'contest-status-time')}
-                >
+                <SidebarMiniCard className='contest-status-time'>
                   <H2>Contest Ended</H2>
                 </SidebarMiniCard>
               </React.Fragment>
@@ -203,9 +160,8 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
       </div>
 
       <div className='contest-menu'>
-        <SidebarMenus loading={loading} />
+        <SidebarMenus loading={false} />
       </div>
-
       <div className='contest-submit-solution'>
         <ContestSubmitForm />
       </div>

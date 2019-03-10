@@ -1,6 +1,6 @@
 import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
-import { Language, setInfo } from './store'
+import { setInfo } from './store'
 
 export function setContestInfoAction(
   name?: string,
@@ -9,7 +9,7 @@ export function setContestInfoAction(
   startTime?: Date,
   freezed?: boolean,
   finishTime?: Date,
-  permittedLanguages?: Language[]
+  permittedLanguages?: string[]
 ): AppThunkAction {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
@@ -36,7 +36,7 @@ export function useSetContestInfo() {
     startTime?: Date,
     freezed?: boolean,
     finishTime?: Date,
-    permittedLanguages?: Language[]
+    permittedLanguages?: string[]
   ) =>
     dispatch(
       setContestInfoAction(

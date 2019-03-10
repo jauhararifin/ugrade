@@ -10,4 +10,6 @@ export interface UserService {
     shirtSize?: ShirtSizeType,
     address?: string
   ): Promise<void>
+
+  getUserProfile(token: string, userId: string): Promise<UserProfile>
 }

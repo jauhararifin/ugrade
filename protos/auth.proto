@@ -1,26 +1,44 @@
 syntax = "proto3";
 
+enum UserPermission {
+  InfoUpdate = 0;
+
+  AnnouncementCreate = 1;
+  AnnouncementRead = 2;
+
+  ProblemsCreate = 3;
+  ProblemsRead = 4;
+  ProblemsReadDisabled = 5;
+  ProblemsUpdate = 6;
+}
+
 message User {
-  string uuid = 1;
+  string id = 1;
   string contestId = 2;
-  string email = 3;
+  string username = 3;
+  string email = 4;
+  string name = 5;
+  repeated UserPermission permissions = 6;
 }
 
-message UserDetail {
-  User user = 1;
-  string username = 2;
-}
+message Void {}
 
-message Session {
-  string token = 1;
-}
-
-message SignUpRequest {
+message GetUserByEmailRequest {
   string contestId = 1;
   string email = 2;
-  string registrationCode = 3;
-  string username = 4;
-  string password = 5;
+}
+
+message GetUserByEmailResponse {
+  User user = 1;
+}
+
+message GetUserByUsernamesRequest {
+  string contestId = 1;
+  repeated string usernames = 2;
+}
+
+message GetUserByUsernamesResponse {
+  repeated User user = 1;
 }
 
 message SignInRequest {
@@ -29,8 +47,21 @@ message SignInRequest {
   string password = 3;
 }
 
-message GetMeRequest {
-  string sessionToken = 1;
+message SignInResponse {
+  string token = 1;
+}
+
+message SignUpRequest {
+  string contestId = 1;
+  string username = 2;
+  string email = 3;
+  string oneTimeCode = 4;
+  string password = 5;
+  string name = 6;
+}
+
+message SignUpResponse {
+  string token = 1;
 }
 
 message ForgotPasswordRequest {
@@ -38,16 +69,50 @@ message ForgotPasswordRequest {
   string email = 2;
 }
 
-message Void {}
+message ResetPasswordRequest {
+  string contestId = 1;
+  string email = 2;
+  string oneTimeCode = 3;
+  string password = 4;
+}
+
+message GetMeRequest {
+  string token = 1;
+}
+
+message GetMeResponse {
+  User me = 1;
+}
+
+message SetMyPasswordRequest {
+  string token = 1;
+  string oldPassword = 2;
+  string newPassword = 3;
+}
+
+message SetMyNameRequest {
+  string token = 1;
+  string name = 2;
+}
 
 service AuthService {
 
-  rpc SignUp(SignUpRequest) returns (UserDetail);
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
 
-  rpc SignIn(SignInRequest) returns (Session);
+  rpc GetUserByUsernames(GetUserByUsernamesRequest) returns (GetUserByUsernamesResponse);
+
+  rpc SignIn(SignInRequest) returns (SignInResponse);
   
-  rpc GetMe(GetMeRequest) returns (UserDetail);
+  rpc SignUp(SignUpRequest) returns (SignUpResponse);
 
   rpc ForgotPassword(ForgotPasswordRequest) returns (Void);
+
+  rpc ResetPassword(ResetPasswordRequest) returns (Void);
+
+  rpc GetMe(GetMeRequest) returns (GetMeResponse);
+
+  rpc SetMyPassword(SetMyPasswordRequest) returns (Void);
+
+  rpc SetMyName(SetMyNameRequest) returns (Void);
 
 }

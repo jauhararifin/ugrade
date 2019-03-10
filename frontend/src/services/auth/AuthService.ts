@@ -1,6 +1,21 @@
 import { User } from './User'
+import { UserPermission } from './UserPermission'
 
 export interface AuthService {
+  /**
+   * Get user by its id.
+   * @param userId User's id
+   * @return User
+   */
+  getUserById(userId: string): Promise<User>
+
+  /**
+   * Get all user information in a contest
+   * @param contestId The contest id
+   * @return list of user in the specific contest
+   */
+  getUsers(contestId: string): Promise<User[]>
+
   /**
    * Get user information in a contest by their email.
    *
@@ -104,4 +119,17 @@ export interface AuthService {
    * @param name New user's name
    */
   setMyName(token: string, name: string): Promise<void>
+
+  /**
+   * Set users's permission
+   *
+   * @param token User's session token
+   * @param name User's id
+   * @param permissions User's new permission after updated
+   */
+  setUserPermissions(
+    token: string,
+    userId: string,
+    permissions: UserPermission[]
+  ): Promise<UserPermission[]>
 }

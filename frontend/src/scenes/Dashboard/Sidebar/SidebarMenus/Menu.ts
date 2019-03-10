@@ -7,4 +7,5 @@ export enum Menu {
   Scoreboard = 'Scoreboard',
 
   Settings = 'Settings',
+  Members = 'Members',
 }

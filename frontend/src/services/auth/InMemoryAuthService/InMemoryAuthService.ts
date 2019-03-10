@@ -1,10 +1,12 @@
 import lodash from 'lodash'
+import { UserPermission } from 'ugrade/auth/store'
 import { ServerStatusService } from 'ugrade/services/serverStatus/ServerStatusService'
 import { AuthService } from '../AuthService'
 import {
   AuthError,
   ForbiddenActionError,
   InvalidTokenError,
+  NoSuchUserError,
   UserRegistrationError,
 } from '../errors'
 import { User } from '../User'
@@ -23,6 +25,21 @@ export class InMemoryAuthService implements AuthService {
     this.userPasswordMap = userPasswordMap
     this.usersToken = {}
     this.serverStatusService = serverStatusService
+  }
+
+  async getUserById(userId: string): Promise<User> {
+    await this.serverStatusService.ping()
+    for (const map of lodash.values(this.contestUserMap)) {
+      if (map[userId]) return lodash.cloneDeep(map[userId])
+    }
+    throw new NoSuchUserError('No Such User')
+  }
+
+  async getUsers(contestId: string): Promise<User[]> {
+    await this.serverStatusService.ping()
+    const userMap = this.contestUserMap[contestId]
+    if (!userMap) throw new AuthError('No Such Contest')
+    return lodash.cloneDeep(lodash.values(userMap))
   }
 
   async getUserByEmail(contestId: string, email: string): Promise<User> {
@@ -172,6 +189,31 @@ export class InMemoryAuthService implements AuthService {
   async setMyName(token: string, name: string): Promise<void> {
     const user = await this.getMe(token)
     this.contestUserMap[user.contestId][user.id].name = name
+  }
+
+  async setUserPermissions(
+    token: string,
+    userId: string,
+    permissions: UserPermission[]
+  ): Promise<UserPermission[]> {
+    const me = await this.getMe(token)
+    if (!me.permissions.includes(UserPermission.UsersPermissionsUpdate)) {
+      throw new ForbiddenActionError(
+        `User's doesn't Have Permission To Update User's Permissions`
+      )
+    }
+
+    for (const p of permissions) {
+      if (!me.permissions.includes(p)) {
+        throw new ForbiddenActionError(`User's doesn't Have ${p} Permission`)
+      }
+    }
+
+    const user = await this.getUserById(userId)
+    user.permissions = lodash.cloneDeep(permissions)
+    this.contestUserMap[user.contestId][user.id] = user
+
+    return lodash.cloneDeep(user.permissions)
   }
 
   async registerContestAdmin(contestId: string, email: string): Promise<User> {

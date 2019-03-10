@@ -22,6 +22,11 @@ export interface Scoreboard {
   entries: ScoreboardEntry[]
 }
 
+export interface Program {
+  sourceCode: string
+  languageId: string
+}
+
 export enum ProblemType {
   PROBLEM_TYPE_BATCH = 0,
   PROBLEM_TYPE_INTERACTIVE = 1,
@@ -39,6 +44,11 @@ export interface Problem {
   memoryLimit: number
   outputLimit: number
   disabled: boolean
+}
+
+export interface ProblemSpec extends Problem {
+  solution: Program
+  testcaseGenerator: Program
 }
 
 export interface Language {
@@ -118,6 +128,7 @@ export interface ContestState {
   info?: ContestInfo
   registered?: boolean
   problems?: { [problemId: string]: Problem }
+  problemSpec?: ProblemSpec
   announcements?: { [announcementId: string]: Announcement }
   clarifications?: { [clarificationId: string]: Clarification }
   submissions?: { [submissionId: string]: Submission }

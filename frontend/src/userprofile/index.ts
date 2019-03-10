@@ -1,2 +1,3 @@
 export * from './useSetProfile'
-export * from './useProfile'
+export * from './useMyProfile'
+export * from './useUserProfileWithId'

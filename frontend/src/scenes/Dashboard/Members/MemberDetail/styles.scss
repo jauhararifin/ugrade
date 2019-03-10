@@ -1,0 +1,24 @@
+.member-detail {
+  padding: 30px 100px;
+  text-align: left;
+  width: 100%;
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .content {
+    width: 100%;
+    .account-table,
+    .profile-table {
+      width: 100%;
+      .col-key {
+        width: 200px;
+      }
+    }
+    .content-account,
+    .content-profiles,
+    .content-permission {
+      margin-top: 10px;
+    }
+  }
+}

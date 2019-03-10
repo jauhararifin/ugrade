@@ -1,5 +1,5 @@
 import lodash from 'lodash'
-import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
+import { AuthService } from 'ugrade/services/auth/AuthService'
 import { ContestService } from 'ugrade/services/contest'
 import { simplePublisher } from 'ugrade/utils'
 import { SubmissionValidationError } from '../errors'
@@ -13,14 +13,11 @@ import {
 } from '../SubmissionService'
 
 export class InMemorySubmissionService implements SubmissionService {
-  private authService: InMemoryAuthService
+  private authService: AuthService
   private contestService: ContestService
   private submissionsMap: { [contestId: string]: Submission[] }
 
-  constructor(
-    authService: InMemoryAuthService,
-    contestService: ContestService
-  ) {
+  constructor(authService: AuthService, contestService: ContestService) {
     this.authService = authService
     this.contestService = contestService
 

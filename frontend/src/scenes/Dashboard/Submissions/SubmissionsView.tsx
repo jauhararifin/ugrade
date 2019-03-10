@@ -1,13 +1,4 @@
-import {
-  Card,
-  Classes,
-  H1,
-  HTMLTable,
-  Intent,
-  Tag,
-  Tooltip,
-} from '@blueprintjs/core'
-import classnames from 'classnames'
+import { Classes, H1, HTMLTable, Intent, Tag, Tooltip } from '@blueprintjs/core'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
@@ -29,8 +20,8 @@ export interface ISubmission extends Submission {
 }
 
 export interface SubmissionsViewProps {
-  submissions?: ISubmission[]
-  serverClock?: Date
+  submissions: ISubmission[]
+  serverClock: Date
 }
 
 export interface SubmissionViewState {
@@ -69,9 +60,7 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
     }
   }
 
-  const loading = !submissions || !serverClock
-  const currentMoment = moment(serverClock || new Date())
-
+  const currentMoment = moment(serverClock)
   return (
     <React.Fragment>
       {serverClock && currSubmission && (
@@ -81,65 +70,53 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
         />
       )}
       <div className='contest-submissions'>
-        <H1 className={classnames('header', { 'bp3-skeleton': loading })}>
-          Submissions
-        </H1>
+        <H1 className='header'>Submissions</H1>
         <div>
-          {loading ? (
-            <Card className='bp3-skeleton item'>
-              {'lorem ipsum'.repeat(100)}
-            </Card>
-          ) : (
-            <HTMLTable
-              bordered={true}
-              striped={true}
-              interactive={true}
-              className='submissions-table'
-            >
-              <thead>
+          <HTMLTable
+            bordered={true}
+            striped={true}
+            interactive={true}
+            className='submissions-table'
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Time</th>
+                <th>Problem</th>
+                <th>Language</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              {submissions.length === 0 && (
                 <tr>
-                  <th>ID</th>
-                  <th>Time</th>
-                  <th>Problem</th>
-                  <th>Language</th>
-                  <th>Verdict</th>
+                  <td colSpan={5}>No Submissions Yet</td>
                 </tr>
-              </thead>
-              <tbody>
-                {submissions && submissions.length === 0 && (
-                  <tr>
-                    <td colSpan={5}>No Submissions Yet</td>
-                  </tr>
-                )}
-                {submissions &&
-                  submissions.map(submission => (
-                    <tr
-                      key={submission.id}
-                      onClick={genhandleClick(submission)}
+              )}
+              {submissions.map(submission => (
+                <tr key={submission.id} onClick={genhandleClick(submission)}>
+                  <td>{submission.id}</td>
+                  <td>
+                    <Tooltip
+                      className={Classes.TOOLTIP_INDICATOR}
+                      content={moment(submission.issuedTime).format(
+                        'dddd, MMMM Do YYYY, h:mm:ss a'
+                      )}
                     >
-                      <td>{submission.id}</td>
-                      <td>
-                        <Tooltip
-                          className={Classes.TOOLTIP_INDICATOR}
-                          content={moment(submission.issuedTime).format(
-                            'dddd, MMMM Do YYYY, h:mm:ss a'
-                          )}
-                        >
-                          {moment(submission.issuedTime).from(currentMoment)}
-                        </Tooltip>
-                      </td>
-                      <td>
-                        <Link to={`/contest/problems/${submission.problemId}`}>
-                          {submission.problem.name}
-                        </Link>
-                      </td>
-                      <td>{submission.language.name}</td>
-                      <td>{renderVerdict(submission.verdict)}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </HTMLTable>
-          )}
+                      {moment(submission.issuedTime).from(currentMoment)}
+                    </Tooltip>
+                  </td>
+                  <td>
+                    <Link to={`/contest/problems/${submission.problemId}`}>
+                      {submission.problem.name}
+                    </Link>
+                  </td>
+                  <td>{submission.language.name}</td>
+                  <td>{renderVerdict(submission.verdict)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </HTMLTable>
         </div>
       </div>
     </React.Fragment>

@@ -11,22 +11,12 @@ export interface IMenu {
 }
 
 export interface SidebarMenuViewProps {
-  loading: boolean
   menus: IMenu[]
 }
 
 export const SidebarMenuView: FunctionComponent<SidebarMenuViewProps> = ({
-  loading,
   menus,
 }) => {
-  const renderLoading = () => (
-    <div className='bp3-skeleton'>
-      {[0, 1, 2].map(i => (
-        <Button key={i} fill={true} text='Fake' />
-      ))}
-    </div>
-  )
-
   const renderMenu = (menu: IMenu, key?: any) =>
     menu.visible && (
       <Button
@@ -37,7 +27,6 @@ export const SidebarMenuView: FunctionComponent<SidebarMenuViewProps> = ({
         fill={true}
         minimal={true}
         alignText={Alignment.LEFT}
-        disabled={loading}
       >
         <div className='menu-item'>
           <div className='menu-title'>{menu.title}</div>
@@ -52,7 +41,5 @@ export const SidebarMenuView: FunctionComponent<SidebarMenuViewProps> = ({
       </Button>
     )
 
-  return (
-    <Fragment>{loading ? renderLoading() : menus.map(renderMenu)}</Fragment>
-  )
+  return <Fragment>{menus.map(renderMenu)}</Fragment>
 }

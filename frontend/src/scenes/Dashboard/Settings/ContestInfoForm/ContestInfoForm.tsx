@@ -3,13 +3,13 @@ import React, { FunctionComponent } from 'react'
 import { useContestOnly } from 'ugrade/auth'
 import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
-import { TwoRowLoading } from 'ugrade/components/TwoRowLoading'
 import {
   useAvailableLanguages,
   useContestInfo,
   useSetContestInfo,
 } from 'ugrade/contest'
 import * as yup from 'yup'
+import { ContestInfoFormLoadingView } from './ContestInfoFormLoadingView'
 import { ContestInfoFormView } from './ContestInfoFormView'
 
 export interface ContestInfoFormValue {
@@ -102,7 +102,7 @@ export const ContestInfoForm: FunctionComponent = () => {
 
   const availableLanguages = useAvailableLanguages()
 
-  if (!contest || !availableLanguages) return <TwoRowLoading />
+  if (!contest || !availableLanguages) return <ContestInfoFormLoadingView />
 
   const renderForm = (props: FormikProps<ContestInfoFormValue>) => (
     <ContestInfoFormView availableLanguages={availableLanguages} {...props} />
