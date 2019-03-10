@@ -1,9 +1,10 @@
 import { Button, H1, HTMLTable, Intent } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
+import { Link } from 'react-router-dom'
 import { UserLink } from 'ugrade/auth/components'
 import { User } from 'ugrade/auth/store'
+import { Navigator } from 'ugrade/router/Navigator'
 
-import { Link } from 'react-router-dom'
 import './styles.css'
 
 export interface MembersViewProps {
@@ -20,9 +21,11 @@ export const MembersView: FunctionComponent<MembersViewProps> = ({
     <div className='content'>
       <div className='actions'>
         {canInvite && (
-          <Button intent={Intent.SUCCESS} icon='plus'>
-            Invite
-          </Button>
+          <Navigator to='/contest/members/invite'>
+            <Button intent={Intent.SUCCESS} icon='new-person'>
+              Invite
+            </Button>
+          </Navigator>
         )}
       </div>
       <HTMLTable striped={true} className='users-table'>

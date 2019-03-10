@@ -17,6 +17,7 @@ export const Sidebar: FunctionComponent = () => {
   const serverClock = useServerClock()
   const rank = useRank()
   const canUpdateInfo = usePermissions([UserPermission.InfoUpdate])
+  const canReadProblems = usePermissions([UserPermission.ProblemsRead])
   const setContestInfo = useSetContestInfo()
 
   const setContestName = async (newName: string) => {
@@ -41,7 +42,12 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
-  if (!contestInfo || !problems || rank === undefined || !serverClock) {
+  if (
+    !contestInfo ||
+    (canReadProblems && !problems) ||
+    rank === undefined ||
+    !serverClock
+  ) {
     return <SidebarLoadingView />
   }
 
