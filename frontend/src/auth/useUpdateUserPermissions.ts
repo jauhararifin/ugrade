@@ -1,14 +1,26 @@
 import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
-import { UserPermission } from './store'
+import { setMe, UserPermission } from './store'
 
 export function updateUserPermissionsAction(
   userId: string,
   permissions: UserPermission[]
 ): AppThunkAction<UserPermission[]> {
-  return async (_dispatch, getState, { authService }) => {
+  return async (dispatch, getState, { authService }) => {
     const token = getState().auth.token
-    return authService.setUserPermissions(token, userId, permissions)
+    const newPermissions = await authService.setUserPermissions(
+      token,
+      userId,
+      permissions
+    )
+    const stillRelevant = getState().auth.token === token
+    if (stillRelevant) {
+      const me = getState().auth.me
+      if (me && me.id === userId) {
+        dispatch(setMe({ ...me, permissions: newPermissions }))
+      }
+    }
+    return newPermissions
   }
 }
 
