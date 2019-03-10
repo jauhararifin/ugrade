@@ -13,11 +13,26 @@ export enum UserPermission {
   ProblemsDelete = 'problems:delete',
 
   UsersInvite = 'users:invite',
-  UsersUpdate = 'users:update',
+  UsersPermissionsUpdate = 'users:permissions:update',
   UsersDelete = 'users:delete',
 
   ProfilesRead = 'profiles:read',
 }
+
+export const allPermissions = [
+  UserPermission.InfoUpdate,
+  UserPermission.AnnouncementCreate,
+  UserPermission.AnnouncementRead,
+  UserPermission.ProblemsCreate,
+  UserPermission.ProblemsRead,
+  UserPermission.ProblemsReadDisabled,
+  UserPermission.ProblemsUpdate,
+  UserPermission.ProblemsDelete,
+  UserPermission.UsersInvite,
+  UserPermission.UsersPermissionsUpdate,
+  UserPermission.UsersDelete,
+  UserPermission.ProfilesRead,
+]
 
 export interface User {
   id: string
