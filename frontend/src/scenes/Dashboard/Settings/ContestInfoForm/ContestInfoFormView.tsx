@@ -143,20 +143,33 @@ export const ContestInfoFormView: FunctionComponent<
           : Intent.NONE
       }
     >
-      {availableLanguages.map(language => (
-        <Checkbox
-          key={language.id}
-          name='permittedLanguages'
-          onChange={setFieldValue.bind(
-            null,
-            'permittedLanguages',
-            values.permittedLanguages.filter(id => id !== language.id)
-          )}
-          onBlur={handleBlur}
-          checked={values.permittedLanguages.includes(language.id)}
-          label={language.name}
-        />
-      ))}
+      {availableLanguages.map(language => {
+        const checked = values.permittedLanguages.includes(language.id)
+        const handleCheckboxChange = () => {
+          if (checked) {
+            setFieldValue(
+              'permittedLanguages',
+              values.permittedLanguages.filter(id => id !== language.id)
+            )
+          } else {
+            setFieldValue(
+              'permittedLanguages',
+              values.permittedLanguages.concat([language.id])
+            )
+          }
+        }
+        return (
+          <Checkbox
+            key={language.id}
+            name='permittedLanguages'
+            onChange={handleCheckboxChange}
+            onBlur={handleBlur}
+            checked={checked}
+            value={language.id}
+            label={language.name}
+          />
+        )
+      })}
     </FormGroup>
 
     <FormGroup
