@@ -12,13 +12,14 @@ export const getUserProfileByIdAction = (
   }
 }
 
-export function useUserProfileWithId(userId: string) {
+export function useUserProfileWithId(userId?: string) {
   const dispatch = useAppThunkDispatch()
   const [profile, setProfile] = useState(undefined as UserProfile | undefined)
 
   useEffect(() => {
-    dispatch(getUserProfileByIdAction(userId)).then(setProfile)
-  }, [])
+    if (userId) dispatch(getUserProfileByIdAction(userId)).then(setProfile)
+    else setProfile(undefined)
+  }, [userId])
 
   return profile
 }

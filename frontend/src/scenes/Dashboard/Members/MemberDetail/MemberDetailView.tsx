@@ -12,7 +12,7 @@ import './styles.css'
 
 export interface MemberDetailViewProps {
   user: User
-  profile: UserProfile
+  profile?: UserProfile
   canUpdatePermission: boolean
 }
 
@@ -60,31 +60,35 @@ export const MemberDetailView: FunctionComponent<MemberDetailViewProps> = ({
         </HTMLTable>
       </div>
 
-      <div className='content-profiles'>
-        <H4>Profiles</H4>
-        <HTMLTable className='profile-table'>
-          <tbody>
-            <tr>
-              <td className='col-key'>Address</td>
-              <td>
-                {!profile.address || profile.address.length === 0
-                  ? '-'
-                  : profile.address}
-              </td>
-            </tr>
-            <tr>
-              <td className='col-key'>Gender</td>
-              <td>{profile.gender ? genderToString(profile.gender) : '-'}</td>
-            </tr>
-            <tr>
-              <td className='col-key'>Shirt Size</td>
-              <td>
-                {profile.shirtSize ? shirtSizeToString(profile.shirtSize) : '-'}
-              </td>
-            </tr>
-          </tbody>
-        </HTMLTable>
-      </div>
+      {profile && (
+        <div className='content-profiles'>
+          <H4>Profiles</H4>
+          <HTMLTable className='profile-table'>
+            <tbody>
+              <tr>
+                <td className='col-key'>Address</td>
+                <td>
+                  {!profile.address || profile.address.length === 0
+                    ? '-'
+                    : profile.address}
+                </td>
+              </tr>
+              <tr>
+                <td className='col-key'>Gender</td>
+                <td>{profile.gender ? genderToString(profile.gender) : '-'}</td>
+              </tr>
+              <tr>
+                <td className='col-key'>Shirt Size</td>
+                <td>
+                  {profile.shirtSize
+                    ? shirtSizeToString(profile.shirtSize)
+                    : '-'}
+                </td>
+              </tr>
+            </tbody>
+          </HTMLTable>
+        </div>
+      )}
 
       {canUpdatePermission && (
         <div className='content-permission'>

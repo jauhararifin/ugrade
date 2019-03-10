@@ -11,12 +11,16 @@ export type MemberDetailProps = RouteComponentProps<{ userId: string }>
 export const MemberDetail: FunctionComponent<MemberDetailProps> = ({
   match,
 }) => {
-  const profile = useUserProfileWithId(match.params.userId)
-  const user = useUserWithId(match.params.userId)
   const canUpdatePermission = usePermissions([
     UserPermission.UsersPermissionsUpdate,
   ])
-  if (!profile || !user) return <MemberDetailLoadingView />
+  const canReadProfile = usePermissions([UserPermission.ProfilesRead])
+  const profile = useUserProfileWithId(
+    canReadProfile ? match.params.userId : undefined
+  )
+  const user = useUserWithId(match.params.userId)
+
+  if (!user || (canReadProfile && !profile)) return <MemberDetailLoadingView />
   return (
     <MemberDetailView
       user={user}
