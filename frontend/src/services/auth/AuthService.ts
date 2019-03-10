@@ -1,4 +1,5 @@
 import { User } from './User'
+import { UserPermission } from './UserPermission'
 
 export interface AuthService {
   /**
@@ -118,4 +119,17 @@ export interface AuthService {
    * @param name New user's name
    */
   setMyName(token: string, name: string): Promise<void>
+
+  /**
+   * Set users's permission
+   *
+   * @param token User's session token
+   * @param name User's id
+   * @param permissions User's new permission after updated
+   */
+  setUserPermissions(
+    token: string,
+    userId: string,
+    permissions: UserPermission[]
+  ): Promise<UserPermission[]>
 }

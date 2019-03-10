@@ -18,7 +18,7 @@ export enum UserPermission {
   ProblemsDelete = 'problems:delete',
 
   UsersInvite = 'users:invite',
-  UsersUpdate = 'users:update',
+  UsersPermissionsUpdate = 'users:permissions:update',
   UsersDelete = 'users:delete',
 
   ProfilesRead = 'profiles:read',
@@ -36,7 +36,7 @@ export const adminPermissions = [
   UserPermission.ProblemsDelete,
 
   UserPermission.UsersInvite,
-  UserPermission.UsersUpdate,
+  UserPermission.UsersPermissionsUpdate,
   UserPermission.UsersDelete,
 
   UserPermission.ProfilesRead,

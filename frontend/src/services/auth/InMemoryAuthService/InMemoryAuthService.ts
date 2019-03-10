@@ -1,4 +1,5 @@
 import lodash from 'lodash'
+import { UserPermission } from 'ugrade/auth/store'
 import { ServerStatusService } from 'ugrade/services/serverStatus/ServerStatusService'
 import { AuthService } from '../AuthService'
 import {
@@ -188,6 +189,31 @@ export class InMemoryAuthService implements AuthService {
   async setMyName(token: string, name: string): Promise<void> {
     const user = await this.getMe(token)
     this.contestUserMap[user.contestId][user.id].name = name
+  }
+
+  async setUserPermissions(
+    token: string,
+    userId: string,
+    permissions: UserPermission[]
+  ): Promise<UserPermission[]> {
+    const me = await this.getMe(token)
+    if (!me.permissions.includes(UserPermission.UsersPermissionsUpdate)) {
+      throw new ForbiddenActionError(
+        `User's doesn't Have Permission To Update User's Permissions`
+      )
+    }
+
+    for (const p of permissions) {
+      if (!me.permissions.includes(p)) {
+        throw new ForbiddenActionError(`User's doesn't Have ${p} Permission`)
+      }
+    }
+
+    const user = await this.getUserById(userId)
+    user.permissions = lodash.cloneDeep(permissions)
+    this.contestUserMap[user.contestId][user.id] = user
+
+    return lodash.cloneDeep(user.permissions)
   }
 
   async registerContestAdmin(contestId: string, email: string): Promise<User> {
