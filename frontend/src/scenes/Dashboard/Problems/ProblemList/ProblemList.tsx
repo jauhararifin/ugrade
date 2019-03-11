@@ -13,6 +13,8 @@ import { SimpleLoading } from '../../components/SimpleLoading'
 import { ProblemListView } from './ProblemListView'
 
 // TODO: add problem reordering
+// TODO: add deleting indicator when delete problem
+// TODO: Use more ui friendly disabled problem
 export const ProblemList: FunctionComponent = () => {
   useContestOnly()
   const problems = useProblemList()
