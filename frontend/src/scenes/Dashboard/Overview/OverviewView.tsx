@@ -12,9 +12,7 @@ export const OverviewView: FunctionComponent<OverviewViewProps> = ({
 }) => {
   return (
     <Content className='contest-overview'>
-      <div className='contest-description'>
-        <Markdown source={contest.description} />
-      </div>
+      <Markdown source={contest.description} />
     </Content>
   )
 }

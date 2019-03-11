@@ -12,6 +12,7 @@ import { Problem } from 'ugrade/contest/store'
 import { SimpleLoading } from '../../components/SimpleLoading'
 import { ProblemListView } from './ProblemListView'
 
+// TODO: add problem reordering
 export const ProblemList: FunctionComponent = () => {
   useContestOnly()
   const problems = useProblemList()
