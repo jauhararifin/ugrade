@@ -9,7 +9,7 @@ import {
   useSetContestInfo,
 } from 'ugrade/contest'
 import * as yup from 'yup'
-import { ContestInfoFormLoadingView } from './ContestInfoFormLoadingView'
+import { SimpleLoading } from '../../components/SimpleLoading'
 import { ContestInfoFormView } from './ContestInfoFormView'
 
 export interface ContestInfoFormValue {
@@ -102,7 +102,7 @@ export const ContestInfoForm: FunctionComponent = () => {
 
   const availableLanguages = useAvailableLanguages()
 
-  if (!contest || !availableLanguages) return <ContestInfoFormLoadingView />
+  if (!contest || !availableLanguages) return <SimpleLoading />
 
   const renderForm = (props: FormikProps<ContestInfoFormValue>) => (
     <ContestInfoFormView availableLanguages={availableLanguages} {...props} />

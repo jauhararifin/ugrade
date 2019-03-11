@@ -1,6 +1,6 @@
-import { H1 } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Problem } from 'ugrade/contest/store'
+import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { ProblemEditor, ProblemFormValue } from '../ProblemEditor'
 
 import './styles.css'
@@ -14,8 +14,7 @@ export const UpdateProblemView: FunctionComponent<UpdateProblemViewProps> = ({
   problem,
   onSubmit,
 }) => (
-  <div className='contest-problem-update'>
-    <H1 className='header'>Update Problem</H1>
+  <ContentWithHeader className='contest-problem-update' header='Update Problem'>
     <ProblemEditor problem={problem} onSubmit={onSubmit} />
-  </div>
+  </ContentWithHeader>
 )

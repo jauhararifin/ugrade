@@ -1,18 +1,10 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Divider,
-  H1,
-  H3,
-  H4,
-  Intent,
-} from '@blueprintjs/core'
+import { Alert, Button, Card, Divider, H3, H4, Intent } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { Fragment, FunctionComponent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Problem } from 'ugrade/contest/store'
 import { Navigator } from 'ugrade/router/Navigator'
+import { ContentWithHeader } from '../components/ContentWithHeader'
 
 import './styles.css'
 
@@ -156,10 +148,9 @@ export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
   }
 
   return (
-    <div className='contest-problems'>
-      <H1 className='header'>Problems</H1>
+    <ContentWithHeader className='contest-problems' header='Problems'>
       {renderAlertDelete()}
       <div>{renderProblems()}</div>
-    </div>
+    </ContentWithHeader>
   )
 }

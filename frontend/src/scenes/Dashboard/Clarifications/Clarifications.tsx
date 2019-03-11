@@ -3,7 +3,7 @@ import { useContestOnly } from 'ugrade/auth'
 import { useClarificationList } from 'ugrade/contest/clarification'
 import { useProblemList } from 'ugrade/contest/problem'
 import { useServerClock } from 'ugrade/server'
-import { ClarificationsLoadingView } from './ClarificationsLoadingView'
+import { SimpleLoading } from '../components/SimpleLoading'
 import { ClarificationsView } from './ClarificationsView'
 
 export const Clarifications: FunctionComponent = () => {
@@ -13,7 +13,7 @@ export const Clarifications: FunctionComponent = () => {
   const serverClock = useServerClock(60 * 1000)
 
   if (!problems || !clarifications || !serverClock) {
-    return <ClarificationsLoadingView />
+    return <SimpleLoading />
   }
 
   return (

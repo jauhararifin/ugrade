@@ -1,9 +1,10 @@
-import { Card, Classes, H1, H3, Icon, Intent, Tooltip } from '@blueprintjs/core'
+import { Card, Classes, H3, Icon, Intent, Tooltip } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
 import { Markdown } from 'ugrade/components'
 import { Announcement } from 'ugrade/contest/store'
+import { ContentWithHeader } from '../components/ContentWithHeader'
 import { CreateAnnouncementForm } from './CreateAnnouncementForm'
 
 import 'github-markdown-css'
@@ -50,8 +51,7 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
   )
 
   return (
-    <div className='contest-announcements'>
-      <H1 className='header'>Announcements</H1>
+    <ContentWithHeader className='contest-announcements' header='Announcements'>
       {canCreate && <CreateAnnouncementForm />}
       <div>
         {announcements.length === 0 && <H3>No Announcements Yet</H3>}
@@ -60,6 +60,6 @@ export const AnnouncementsView: FunctionComponent<AnnouncementsViewProps> = ({
           .reverse()
           .map(renderAnnouncement)}
       </div>
-    </div>
+    </ContentWithHeader>
   )
 }

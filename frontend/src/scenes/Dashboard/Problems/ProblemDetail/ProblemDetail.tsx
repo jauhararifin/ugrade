@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router'
 import { useContestOnly } from 'ugrade/auth'
 import { useProblems } from 'ugrade/contest/problem'
 import { Problem } from 'ugrade/contest/store'
-import { ProblemDetailLoadingView } from './ProblemDetailLoadingView'
+import { SimpleLoading } from '../../components/SimpleLoading'
 import { ProblemDetailView } from './ProblemDetailView'
 
 export type ProblemDetailProps = RouteComponentProps<{ problemId: string }>
@@ -19,6 +19,6 @@ export const ProblemDetail: FunctionComponent<ProblemDetailProps> = ({
     if (problems) setProblem(problems[match.params.problemId])
   }, [problems])
 
-  if (!problem) return <ProblemDetailLoadingView />
+  if (!problem) return <SimpleLoading />
   return <ProblemDetailView problem={problem} />
 }

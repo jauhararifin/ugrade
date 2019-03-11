@@ -3,7 +3,6 @@ import {
   Card,
   Classes,
   Elevation,
-  H1,
   H3,
   H5,
   Intent,
@@ -15,6 +14,7 @@ import lodash from 'lodash'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
 import { Clarification } from 'ugrade/contest/store'
+import { ContentWithHeader } from '../components/ContentWithHeader'
 import { ClarificationDetail } from './ClarificationDetail'
 import { CreateClarificationForm } from './CreateClarificationForm'
 
@@ -36,14 +36,16 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
   const genSetClarif = (val?: string) => () => setCurrentClarif(val)
 
   return (
-    <div className='contest-clarifications'>
+    <ContentWithHeader
+      header='Clarifications'
+      className='contest-clarifications'
+    >
       {currentClarif && (
         <ClarificationDetail
           clarificationId={currentClarif}
           handleClose={genSetClarif()}
         />
       )}
-      <H1 className='header'>Clarifications</H1>
       <div>
         {clarifications.length === 0 && <H3>No Clarifications Yet</H3>}
 
@@ -107,6 +109,6 @@ export const ClarificationsView: FunctionComponent<ClarificationsViewProps> = ({
       <Card className='clarification-form-panel'>
         <CreateClarificationForm />
       </Card>
-    </div>
+    </ContentWithHeader>
   )
 }

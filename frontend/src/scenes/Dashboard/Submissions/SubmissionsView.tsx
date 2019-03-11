@@ -1,4 +1,4 @@
-import { Classes, H1, HTMLTable, Intent, Tag, Tooltip } from '@blueprintjs/core'
+import { Classes, HTMLTable, Intent, Tag, Tooltip } from '@blueprintjs/core'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
@@ -12,6 +12,7 @@ import {
 } from 'ugrade/contest/store'
 import { SubmissionDetail } from './SubmissionDetail'
 
+import { ContentWithHeader } from '../components/ContentWithHeader'
 import './styles.css'
 
 export interface ISubmission extends Submission {
@@ -62,63 +63,60 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({
 
   const currentMoment = moment(serverClock)
   return (
-    <React.Fragment>
+    <ContentWithHeader className='contest-submissions' header='Submissions'>
       {serverClock && currSubmission && (
         <SubmissionDetail
           submission={currSubmission}
           handleClose={genhandleClose()}
         />
       )}
-      <div className='contest-submissions'>
-        <H1 className='header'>Submissions</H1>
-        <div>
-          <HTMLTable
-            bordered={true}
-            striped={true}
-            interactive={true}
-            className='submissions-table'
-          >
-            <thead>
+      <div>
+        <HTMLTable
+          bordered={true}
+          striped={true}
+          interactive={true}
+          className='submissions-table'
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Time</th>
+              <th>Problem</th>
+              <th>Language</th>
+              <th>Verdict</th>
+            </tr>
+          </thead>
+          <tbody>
+            {submissions.length === 0 && (
               <tr>
-                <th>ID</th>
-                <th>Time</th>
-                <th>Problem</th>
-                <th>Language</th>
-                <th>Verdict</th>
+                <td colSpan={5}>No Submissions Yet</td>
               </tr>
-            </thead>
-            <tbody>
-              {submissions.length === 0 && (
-                <tr>
-                  <td colSpan={5}>No Submissions Yet</td>
-                </tr>
-              )}
-              {submissions.map(submission => (
-                <tr key={submission.id} onClick={genhandleClick(submission)}>
-                  <td>{submission.id}</td>
-                  <td>
-                    <Tooltip
-                      className={Classes.TOOLTIP_INDICATOR}
-                      content={moment(submission.issuedTime).format(
-                        'dddd, MMMM Do YYYY, h:mm:ss a'
-                      )}
-                    >
-                      {moment(submission.issuedTime).from(currentMoment)}
-                    </Tooltip>
-                  </td>
-                  <td>
-                    <Link to={`/contest/problems/${submission.problemId}`}>
-                      {submission.problem.name}
-                    </Link>
-                  </td>
-                  <td>{submission.language.name}</td>
-                  <td>{renderVerdict(submission.verdict)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </HTMLTable>
-        </div>
+            )}
+            {submissions.map(submission => (
+              <tr key={submission.id} onClick={genhandleClick(submission)}>
+                <td>{submission.id}</td>
+                <td>
+                  <Tooltip
+                    className={Classes.TOOLTIP_INDICATOR}
+                    content={moment(submission.issuedTime).format(
+                      'dddd, MMMM Do YYYY, h:mm:ss a'
+                    )}
+                  >
+                    {moment(submission.issuedTime).from(currentMoment)}
+                  </Tooltip>
+                </td>
+                <td>
+                  <Link to={`/contest/problems/${submission.problemId}`}>
+                    {submission.problem.name}
+                  </Link>
+                </td>
+                <td>{submission.language.name}</td>
+                <td>{renderVerdict(submission.verdict)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </HTMLTable>
       </div>
-    </React.Fragment>
+    </ContentWithHeader>
   )
 }

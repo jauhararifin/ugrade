@@ -9,7 +9,7 @@ import {
   useUpdateProblem,
 } from 'ugrade/contest/problem'
 import { Problem } from 'ugrade/contest/store'
-import { ProblemsLoadingView } from './ProblemsLoadingView'
+import { SimpleLoading } from '../components/SimpleLoading'
 import { ProblemsView } from './ProblemsView'
 
 export const Problems: FunctionComponent = () => {
@@ -51,7 +51,7 @@ export const Problems: FunctionComponent = () => {
   }
 
   if (!problems) {
-    return <ProblemsLoadingView />
+    return <SimpleLoading />
   }
 
   return (

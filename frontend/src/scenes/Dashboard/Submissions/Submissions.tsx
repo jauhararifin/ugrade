@@ -11,7 +11,7 @@ import {
 } from 'ugrade/contest/store'
 import { useSubmissionList } from 'ugrade/contest/submission'
 import { useServerClock } from 'ugrade/server'
-import { SubmissionsLoadingView } from './SubmissionsLoadingView'
+import { SimpleLoading } from '../components/SimpleLoading'
 import { ISubmission, SubmissionsView } from './SubmissionsView'
 
 export const Submissions: FunctionComponent = () => {
@@ -55,5 +55,5 @@ export const Submissions: FunctionComponent = () => {
       <SubmissionsView submissions={isubmissions} serverClock={serverClock} />
     )
   }
-  return <SubmissionsLoadingView />
+  return <SimpleLoading />
 }

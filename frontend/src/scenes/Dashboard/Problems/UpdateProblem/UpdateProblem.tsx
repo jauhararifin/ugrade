@@ -5,8 +5,8 @@ import { handleCommonError } from 'ugrade/common'
 import { TopToaster } from 'ugrade/common/ActionToaster'
 import { useProblems, useUpdateProblem } from 'ugrade/contest/problem'
 import { Problem } from 'ugrade/contest/store'
+import { SimpleLoading } from '../../components/SimpleLoading'
 import { ProblemFormValue } from '../ProblemEditor'
-import { UpdateProblemLoadingView } from './UpdateProblemLoadingView'
 import { UpdateProblemView } from './UpdateProblemView'
 
 export type UpdateProblemProps = RouteComponentProps<{ problemId: string }>
@@ -45,6 +45,6 @@ export const UpdateProblem: FunctionComponent<UpdateProblemProps> = ({
     }
   }
 
-  if (!problem) return <UpdateProblemLoadingView />
+  if (!problem) return <SimpleLoading />
   return <UpdateProblemView problem={problem} onSubmit={handleSubmit} />
 }

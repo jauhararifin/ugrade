@@ -7,7 +7,7 @@ import {
   useReadAnnouncements,
 } from 'ugrade/contest/announcement'
 import { useServerClock } from 'ugrade/server'
-import { AnnouncementsLoadingView } from './AnnouncementsLoadingView'
+import { SimpleLoading } from '../components/SimpleLoading'
 import { AnnouncementsView } from './AnnouncementsView'
 
 export const Announcements: FunctionComponent = () => {
@@ -35,7 +35,7 @@ export const Announcements: FunctionComponent = () => {
 
   const canCreate = usePermissions([UserPermission.AnnouncementCreate])
 
-  if (!announcementList || !serverClock) return <AnnouncementsLoadingView />
+  if (!announcementList || !serverClock) return <SimpleLoading />
 
   return (
     <AnnouncementsView
