@@ -2,7 +2,6 @@ import {
   Button,
   Checkbox,
   FormGroup,
-  H1,
   H4,
   HTMLTable,
   Intent,
@@ -12,6 +11,7 @@ import { FormikProps } from 'formik'
 import lodash from 'lodash'
 import React, { FunctionComponent } from 'react'
 import { UserPermission } from 'ugrade/auth/store'
+import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { InviteMembersFormValue } from './InviteMembersForm'
 
 import './styles.css'
@@ -65,79 +65,78 @@ export const InviteMembersFormView: FunctionComponent<
 
   return (
     <form onSubmit={handleSubmit} className='invite-member-form'>
-      <div className='header'>
-        <H1>Invite Members</H1>
-      </div>
-      <div className='content'>
-        <FormGroup
-          label="User's Emails"
-          labelFor='input-member-invite-emails'
-          helperText={
-            errors && errors.emails
-              ? errors.emails
-              : "Insert user's emails you want to invite separated by commas..."
-          }
-          intent={errors && errors.emails ? Intent.DANGER : Intent.NONE}
-        >
-          <TagInput
-            placeholder='Separate email with commas...'
-            rightElement={clearButton}
-            onChange={setFieldValue.bind(null, 'emails')}
-            values={values.emails}
-            addOnBlur={true}
-            addOnPaste={true}
-            inputProps={{
-              id: 'input-member-invite-emails',
-              name: 'emails',
-              autoFocus: true,
-            }}
-          />
-        </FormGroup>
+      <ContentWithHeader header='Invite Members'>
+        <div className='content'>
+          <FormGroup
+            label="User's Emails"
+            labelFor='input-member-invite-emails'
+            helperText={
+              errors && errors.emails
+                ? errors.emails
+                : "Insert user's emails you want to invite separated by commas..."
+            }
+            intent={errors && errors.emails ? Intent.DANGER : Intent.NONE}
+          >
+            <TagInput
+              placeholder='Separate email with commas...'
+              rightElement={clearButton}
+              onChange={setFieldValue.bind(null, 'emails')}
+              values={values.emails}
+              addOnBlur={true}
+              addOnPaste={true}
+              inputProps={{
+                id: 'input-member-invite-emails',
+                name: 'emails',
+                autoFocus: true,
+              }}
+            />
+          </FormGroup>
 
-        <H4>Permissions</H4>
-        <HTMLTable className='permission-table'>
-          <tbody>
-            {availablePredifined && (
-              <tr>
-                <td colSpan={4}>
-                  {lodash.keys(availablePredifined).map(pred => (
-                    <Button
-                      key={pred}
-                      className='predifined-permission'
-                      onClick={availablePredifined[pred]}
-                    >
-                      {pred}
-                    </Button>
-                  ))}
-                </td>
-              </tr>
-            )}
-            {chucks.map((ch, i) => (
-              <tr key={i}>
-                {ch.map(perm => {
-                  const checked = values.permissions.includes(perm)
-                  const disabled = !givablePermissions.includes(perm)
-                  return (
-                    <td key={perm}>
-                      <Checkbox
-                        name={perm}
-                        checked={checked}
-                        label={perm}
-                        disabled={disabled}
-                        onChange={handleChangePermission}
-                      />
-                    </td>
-                  )
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </HTMLTable>
+          <H4>Permissions</H4>
+          <HTMLTable className='permission-table'>
+            <tbody>
+              {availablePredifined && (
+                <tr>
+                  <td colSpan={4}>
+                    {lodash.keys(availablePredifined).map(pred => (
+                      <Button
+                        key={pred}
+                        className='predifined-permission'
+                        onClick={availablePredifined[pred]}
+                      >
+                        {pred}
+                      </Button>
+                    ))}
+                  </td>
+                </tr>
+              )}
+              {chucks.map((ch, i) => (
+                <tr key={i}>
+                  {ch.map(perm => {
+                    const checked = values.permissions.includes(perm)
+                    const disabled = !givablePermissions.includes(perm)
+                    return (
+                      <td key={perm}>
+                        <Checkbox
+                          name={perm}
+                          checked={checked}
+                          label={perm}
+                          disabled={disabled}
+                          onChange={handleChangePermission}
+                        />
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </HTMLTable>
 
-        <Button type='submit' intent={Intent.SUCCESS} icon='new-person'>
-          Invite
-        </Button>
-      </div>
+          <Button type='submit' intent={Intent.SUCCESS} icon='new-person'>
+            Invite
+          </Button>
+        </div>
+      </ContentWithHeader>
     </form>
   )
 }

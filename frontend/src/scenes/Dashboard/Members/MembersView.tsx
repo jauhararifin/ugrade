@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom'
 import { UserLink } from 'ugrade/auth/components'
 import { User } from 'ugrade/auth/store'
 import { Navigator } from 'ugrade/router/Navigator'
-import { Content } from '../components/Content'
-import { Header } from '../components/Header'
+import { ContentWithHeader } from '../components/ContentWithHeader'
 
 import './styles.css'
 
@@ -18,8 +17,7 @@ export const MembersView: FunctionComponent<MembersViewProps> = ({
   users,
   canInvite,
 }) => (
-  <Content className='contest-members'>
-    <Header>Members</Header>
+  <ContentWithHeader header='Members' className='contest-members'>
     <div className='content'>
       <div className='actions'>
         {canInvite && (
@@ -45,5 +43,5 @@ export const MembersView: FunctionComponent<MembersViewProps> = ({
         </tbody>
       </HTMLTable>
     </div>
-  </Content>
+  </ContentWithHeader>
 )

@@ -1,4 +1,4 @@
-import { H1, H4, HTMLTable, Intent, Tag } from '@blueprintjs/core'
+import { H4, HTMLTable, Intent, Tag } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { User } from 'ugrade/auth/store'
 import {
@@ -6,6 +6,7 @@ import {
   shirtSizeToString,
 } from 'ugrade/scenes/MyAccount/MyAccountProfileForm'
 import { UserProfile } from 'ugrade/userprofile/store'
+import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { PermissionForm } from '../PermissionForm'
 
 import './styles.css'
@@ -21,10 +22,7 @@ export const MemberDetailView: FunctionComponent<MemberDetailViewProps> = ({
   user,
   canUpdatePermission,
 }) => (
-  <div className='member-detail'>
-    <div className='header'>
-      <H1>Member Detail</H1>
-    </div>
+  <ContentWithHeader className='member-detail' header='Member Detail'>
     <div className='content'>
       <div className='content-account'>
         <H4>Account</H4>
@@ -97,5 +95,5 @@ export const MemberDetailView: FunctionComponent<MemberDetailViewProps> = ({
         </div>
       )}
     </div>
-  </div>
+  </ContentWithHeader>
 )
