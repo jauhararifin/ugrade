@@ -39,11 +39,23 @@ export const selectBreadcrumb = createSelector(
           text: 'Problems',
         })
         const prob = location.pop()
-        if (prob && problems && problems[prob]) {
+        if (prob === 'create') {
+          result.push({
+            href: `contest/problems/create`,
+            text: 'Create',
+          })
+        } else if (prob && problems && problems[prob]) {
           result.push({
             href: `contest/problems/${problems[prob].id}`,
             text: problems[prob].name,
           })
+          const edit = location.pop()
+          if (edit === 'edit') {
+            result.push({
+              href: `contest/problems/${problems[prob].id}/edit`,
+              text: 'Edit',
+            })
+          }
         }
       } else if (menu === 'clarifications') {
         result.push({
@@ -65,6 +77,28 @@ export const selectBreadcrumb = createSelector(
           href: `/contest/scoreboard`,
           text: 'Scoreboard',
         })
+      } else if (menu === 'settings') {
+        result.push({
+          href: `/contest/settings`,
+          text: 'Settings',
+        })
+      } else if (menu === 'members') {
+        result.push({
+          href: `/contest/members`,
+          text: 'Members',
+        })
+        const uid = location.pop()
+        if (uid === 'invite') {
+          result.push({
+            href: `contest/members/invite`,
+            text: 'Invite',
+          })
+        } else if (uid) {
+          result.push({
+            href: `contest/problems/${uid}`,
+            text: 'Edit',
+          })
+        }
       }
     }
 
