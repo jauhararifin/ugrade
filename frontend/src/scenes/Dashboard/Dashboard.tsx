@@ -29,6 +29,8 @@ export const Dashboard: FunctionComponent = () => {
   useEffect(() => {
     if (contest && contest.name) dispatch(setTitle(`UGrade | ${contest.name}`))
   }, [contest && contest.name])
+
+  // TODO: use one level routing
   return (
     <DashboardView>
       <TransitionGroup className='eat-them-all'>

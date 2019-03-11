@@ -1,9 +1,11 @@
-import { Button, H1, HTMLTable, Intent } from '@blueprintjs/core'
+import { Button, HTMLTable, Intent } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 import { UserLink } from 'ugrade/auth/components'
 import { User } from 'ugrade/auth/store'
 import { Navigator } from 'ugrade/router/Navigator'
+import { Content } from '../components/Content'
+import { Header } from '../components/Header'
 
 import './styles.css'
 
@@ -16,8 +18,8 @@ export const MembersView: FunctionComponent<MembersViewProps> = ({
   users,
   canInvite,
 }) => (
-  <div className='contest-members'>
-    <H1 className='header'>Members</H1>
+  <Content className='contest-members'>
+    <Header>Members</Header>
     <div className='content'>
       <div className='actions'>
         {canInvite && (
@@ -43,5 +45,5 @@ export const MembersView: FunctionComponent<MembersViewProps> = ({
         </tbody>
       </HTMLTable>
     </div>
-  </div>
+  </Content>
 )
