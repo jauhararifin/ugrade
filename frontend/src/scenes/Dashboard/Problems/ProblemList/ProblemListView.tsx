@@ -4,11 +4,11 @@ import React, { Fragment, FunctionComponent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Problem } from 'ugrade/contest/store'
 import { Navigator } from 'ugrade/router/Navigator'
-import { ContentWithHeader } from '../components/ContentWithHeader'
+import { ContentWithHeader } from '../../components/ContentWithHeader'
 
 import './styles.css'
 
-export interface ProblemsViewProps {
+export interface ProblemListViewProps {
   problems?: Problem[]
   onDisable?: (problem: Problem) => any
   onDelete?: (problem: Problem) => any
@@ -18,7 +18,7 @@ export interface ProblemsViewProps {
   canDelete: boolean
 }
 
-export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
+export const ProblemListView: FunctionComponent<ProblemListViewProps> = ({
   problems,
   onDisable,
   onDelete,
@@ -148,7 +148,7 @@ export const ProblemsView: FunctionComponent<ProblemsViewProps> = ({
   }
 
   return (
-    <ContentWithHeader className='contest-problems' header='Problems'>
+    <ContentWithHeader className='contest-problem-list' header='Problems'>
       {renderAlertDelete()}
       <div>{renderProblems()}</div>
     </ContentWithHeader>

@@ -1,68 +1,38 @@
 import React, { FunctionComponent } from 'react'
-import { useContestOnly, usePermissions } from 'ugrade/auth'
-import { UserPermission } from 'ugrade/auth/store'
-import { handleCommonError } from 'ugrade/common'
-import { TopToaster } from 'ugrade/common/ActionToaster'
-import {
-  useDeleteProblem,
-  useProblemList,
-  useUpdateProblem,
-} from 'ugrade/contest/problem'
-import { Problem } from 'ugrade/contest/store'
-import { SimpleLoading } from '../components/SimpleLoading'
-import { ProblemsView } from './ProblemsView'
+import { Route, Switch } from 'react-router'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { useLocation } from 'ugrade/router'
+import { CreateProblem } from './CreateProblem'
+import { ProblemDetail } from './ProblemDetail'
+import { ProblemList } from './ProblemList'
+import { UpdateProblem } from './UpdateProblem'
 
 export const Problems: FunctionComponent = () => {
-  useContestOnly()
-  const problems = useProblemList()
-
-  const canCreate = usePermissions([UserPermission.ProblemsCreate])
-  const canRead = usePermissions([UserPermission.ProblemsRead])
-  const canUpdate = usePermissions([UserPermission.ProblemsUpdate])
-  const canDelete = usePermissions([UserPermission.ProblemsDelete])
-
-  const deleteProblem = useDeleteProblem()
-  const handleDelete = async (problem: Problem) => {
-    try {
-      await deleteProblem(problem.id)
-      TopToaster.showSuccessToast(`Problem ${problem.name} Deleted`)
-    } catch (error) {
-      if (!handleCommonError(error)) throw error
-    }
-  }
-
-  const updateProblem = useUpdateProblem()
-  const handleToggleDisable = async (problem: Problem) => {
-    try {
-      await updateProblem(
-        problem.id,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        !problem.disabled
-      )
-      TopToaster.showSuccessToast(
-        problem.disabled ? 'Problem Enabled' : 'Problem Disabled'
-      )
-    } catch (error) {
-      if (!handleCommonError(error)) throw error
-    }
-  }
-
-  if (!problems) {
-    return <SimpleLoading />
-  }
-
+  const location = useLocation()
   return (
-    <ProblemsView
-      problems={problems}
-      onDisable={handleToggleDisable}
-      onDelete={handleDelete}
-      canCreate={canCreate}
-      canRead={canRead}
-      canUpdate={canUpdate}
-      canDelete={canDelete}
-    />
+    <TransitionGroup className='eat-them-all'>
+      <CSSTransition timeout={300} classNames='fade' key={location.pathname}>
+        <Switch>
+          <Route
+            path='/contest/problems'
+            exact={true}
+            component={ProblemList}
+          />
+          <Route
+            path='/contest/problems/create'
+            exact={true}
+            component={CreateProblem}
+          />
+          <Route
+            path='/contest/problems/:problemId/edit'
+            component={UpdateProblem}
+          />
+          <Route
+            path='/contest/problems/:problemId'
+            component={ProblemDetail}
+          />
+        </Switch>
+      </CSSTransition>
+    </TransitionGroup>
   )
 }

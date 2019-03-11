@@ -13,10 +13,7 @@ import { Members } from './Members'
 import { InviteMembersForm } from './Members/InviteMembersForm'
 import { MemberDetail } from './Members/MemberDetail'
 import { Overview } from './Overview/Overview'
-import { Problems } from './Problems'
-import { CreateProblem } from './Problems/CreateProblem'
-import { ProblemDetail } from './Problems/ProblemDetail'
-import { UpdateProblem } from './Problems/UpdateProblem'
+import { Problems } from './Problems/Problems'
 import { Scoreboard } from './Scoreboard'
 import { Settings } from './Settings'
 import { Submissions } from './Submissions'
@@ -43,20 +40,7 @@ export const Dashboard: FunctionComponent = () => {
               exact={true}
               component={Announcements}
             />
-            <Route path='/contest/problems' exact={true} component={Problems} />
-            <Route
-              path='/contest/problems/create'
-              exact={true}
-              component={CreateProblem}
-            />
-            <Route
-              path='/contest/problems/:problemId/edit'
-              component={UpdateProblem}
-            />
-            <Route
-              path='/contest/problems/:problemId'
-              component={ProblemDetail}
-            />
+            <Route path='/contest/problems' component={Problems} />
             <Route
               path='/contest/clarifications'
               exact={true}
