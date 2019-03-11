@@ -4,20 +4,20 @@ import { Link } from 'react-router-dom'
 import { UserLink } from 'ugrade/auth/components'
 import { User } from 'ugrade/auth/store'
 import { Navigator } from 'ugrade/router/Navigator'
-import { ContentWithHeader } from '../components/ContentWithHeader'
+import { ContentWithHeader } from '../../components/ContentWithHeader'
 
 import './styles.css'
 
-export interface MembersViewProps {
+export interface MemberListViewProps {
   users: User[]
   canInvite: boolean
 }
 
-export const MembersView: FunctionComponent<MembersViewProps> = ({
+export const MemberListView: FunctionComponent<MemberListViewProps> = ({
   users,
   canInvite,
 }) => (
-  <ContentWithHeader header='Members' className='contest-members'>
+  <ContentWithHeader header='Members' className='contest-member-list'>
     <div className='content'>
       <div className='actions'>
         {canInvite && (
