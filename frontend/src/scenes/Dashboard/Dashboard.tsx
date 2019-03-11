@@ -54,7 +54,7 @@ export const Dashboard: FunctionComponent = () => {
               component={Scoreboard}
             />
             <Route path='/contest/settings' exact={true} component={Settings} />
-            <Route path='/contest/members' exact={true} component={Members} />
+            <Route path='/contest/members' component={Members} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>

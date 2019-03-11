@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { Route } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useLocation } from 'ugrade/router'
 import { InviteMembersForm } from './InviteMembersForm'
@@ -11,13 +11,15 @@ export const Members: FunctionComponent = () => {
   return (
     <TransitionGroup className='eat-them-all'>
       <CSSTransition timeout={300} classNames='fade' key={location.pathname}>
-        <Route path='/contest/members' exact={true} component={MemberList} />
-        <Route
-          path='/contest/members/invite'
-          exact={true}
-          component={InviteMembersForm}
-        />
-        <Route path='/contest/members/:userId' component={MemberDetail} />
+        <Switch>
+          <Route path='/contest/members' exact={true} component={MemberList} />
+          <Route
+            path='/contest/members/invite'
+            exact={true}
+            component={InviteMembersForm}
+          />
+          <Route path='/contest/members/:userId' component={MemberDetail} />
+        </Switch>
       </CSSTransition>
     </TransitionGroup>
   )
