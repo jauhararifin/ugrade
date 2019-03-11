@@ -3,8 +3,6 @@ import { Problem } from 'ugrade/contest/store'
 import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { ProblemEditor, ProblemFormValue } from '../ProblemEditor'
 
-import './styles.css'
-
 export interface UpdateProblemViewProps {
   problem: Problem
   onSubmit: (value: ProblemFormValue) => any
