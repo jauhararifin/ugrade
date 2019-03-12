@@ -7,5 +7,5 @@ type User struct {
 	Username    string
 	Email       string
 	Name        string
-	Permissions []int32
+	Permissions []int
 }

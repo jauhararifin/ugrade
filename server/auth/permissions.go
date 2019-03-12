@@ -21,4 +21,13 @@ const (
 
 	// UserPermissionProblemsUpdate indicates user's permission to update contest problem.
 	UserPermissionProblemsUpdate = iota
+
+	// UserPermissionUsersInvite indicates user's permission to invite other user into a contest.
+	UserPermissionUsersInvite = iota
+
+	// UserPermissionUsersPermissionsUpdate indicates user's permission to update other user's permissions.
+	UserPermissionUsersPermissionsUpdate = iota
+
+	// UserPermissionUsersDelete indicates user's permission to delete other user from contest.
+	UserPermissionUsersDelete = iota
 )
