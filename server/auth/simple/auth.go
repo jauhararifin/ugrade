@@ -120,20 +120,15 @@ func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name 
 	}
 
 	token := uuid.Random()
-	if err := s.store.Update(user.ID, &User{
-		User: &auth.User{
-			ID:          user.ID,
-			ContestID:   user.ContestID,
-			Username:    user.Username,
-			Email:       user.Email,
-			Name:        name,
-			Permissions: user.Permissions,
-		},
-		Password:         string(hashPass),
-		Token:            token,
-		SignUpOTC:        "",
-		ResetPasswordOTC: "",
-	}); err != nil {
+
+	updatedUser := copyUser(user)
+	updatedUser.Name = name
+	updatedUser.Password = string(hashPass)
+	updatedUser.Token = token
+	updatedUser.SignUpOTC = ""
+	updatedUser.ResetPasswordOTC = ""
+
+	if err := s.store.Update(user.ID, updatedUser); err != nil {
 		return "", err
 	}
 	return token, nil
@@ -146,20 +141,10 @@ func (s *Simple) ForgotPassword(contestID, email string) auth.Error {
 		return err
 	}
 
-	if err := s.store.Update(user.ID, &User{
-		User: &auth.User{
-			ID:          user.ID,
-			ContestID:   user.ContestID,
-			Username:    user.Username,
-			Email:       user.Email,
-			Name:        user.Name,
-			Permissions: user.Permissions,
-		},
-		Password:         user.Password,
-		Token:            user.Token,
-		SignUpOTC:        user.SignUpOTC,
-		ResetPasswordOTC: otc.Random(),
-	}); err != nil {
+	updatedUser := copyUser(user)
+	updatedUser.ResetPasswordOTC = otc.Random()
+
+	if err := s.store.Update(user.ID, updatedUser); err != nil {
 		return err
 	}
 	return nil
@@ -280,20 +265,10 @@ func (s *Simple) SetMyPassword(token, oldPassword, newPassword string) auth.Erro
 		return auth.ErrInternalServer
 	}
 
-	return s.store.Update(user.ID, &User{
-		User: &auth.User{
-			ID:          user.ID,
-			ContestID:   user.ContestID,
-			Username:    user.Username,
-			Email:       user.Email,
-			Name:        user.Name,
-			Permissions: user.Permissions,
-		},
-		Password:         string(hashPass),
-		Token:            user.Token,
-		SignUpOTC:        user.SignUpOTC,
-		ResetPasswordOTC: user.ResetPasswordOTC,
-	})
+	updatedUser := copyUser(user)
+	updatedUser.Password = string(hashPass)
+
+	return s.store.Update(user.ID, updatedUser)
 }
 
 // SetMyName updates user's name information.
@@ -303,20 +278,10 @@ func (s *Simple) SetMyName(token, name string) auth.Error {
 		return err
 	}
 
-	return s.store.Update(user.ID, &User{
-		User: &auth.User{
-			ID:          user.ID,
-			ContestID:   user.ContestID,
-			Username:    user.Username,
-			Email:       user.Email,
-			Name:        name,
-			Permissions: user.Permissions,
-		},
-		Password:         user.Password,
-		Token:            user.Token,
-		SignUpOTC:        user.SignUpOTC,
-		ResetPasswordOTC: user.ResetPasswordOTC,
-	})
+	updatedUser := copyUser(user)
+	updatedUser.Name = name
+
+	return s.store.Update(user.ID, updatedUser)
 }
 
 // SetUserPermissions updates other user's permission list.
@@ -341,18 +306,8 @@ func (s *Simple) SetUserPermissions(token, userID string, permissions []int) aut
 		}
 	}
 
-	return s.store.Update(user.ID, &User{
-		User: &auth.User{
-			ID:          user.ID,
-			ContestID:   user.ContestID,
-			Username:    user.Username,
-			Email:       user.Email,
-			Name:        user.Name,
-			Permissions: permissions,
-		},
-		Password:         user.Password,
-		Token:            user.Token,
-		SignUpOTC:        user.SignUpOTC,
-		ResetPasswordOTC: user.ResetPasswordOTC,
-	})
+	updatedUser := copyUser(user)
+	updatedUser.Permissions = permissions
+
+	return s.store.Update(user.ID, updatedUser)
 }
