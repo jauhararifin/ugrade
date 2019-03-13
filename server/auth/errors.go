@@ -1,151 +1,63 @@
 package auth
 
-// ValidationError contains information about validation error.
-type ValidationError struct {
+type errorString struct {
+	msg string
+}
+
+func (e *errorString) Error() string {
+	return e.msg
+}
+
+// NoSuchUserError indicates indicates that no user is found when calling Service methods.
+type NoSuchUserError struct {
+	errorString
+}
+
+// NoSuchContestError indicates indicates that no contest is found when calling service methods.
+type NoSuchContestError struct {
+	errorString
+}
+
+// WrongCredentialError indicates indicates that provided credential is wrong when authenticating user.
+type WrongCredentialError struct {
+	errorString
+}
+
+// WrongTokenError indicates indicates that user provided wrong token. oneTimeCode is considered as token too.
+type WrongTokenError struct {
+	errorString
+}
+
+// InvalidSessionError indicates indicates that user provided invalid session token.
+type InvalidSessionError struct {
+	errorString
+}
+
+// ForbiddenActionError indicates indicates that user doesn't have permission to do some actions.
+type ForbiddenActionError struct {
+	errorString
+}
+
+// InvalidInputError indiates that user's input is invalid.
+type InvalidInputError struct {
+	errorString
 	Username string
 	Name     string
 	Email    string
 	Password string
 }
 
-// Error interface is the error that returned by auth.Service.
-type Error interface {
-	error
-	IsNoSuchUser() bool
-	IsNoSuchContest() bool
-	IsWrongCredential() bool
-	IsWrongToken() bool
-	IsInvalidSession() bool
-	IsForbiddenAction() bool
-	IsInvalidInput() bool
-	IsUsernameAlreadyUsed() bool
-	ValidationError() ValidationError
-	IsInternal() bool
-	IsAlreadyInvited() bool
+// UsernameAlreadyUsedError indicates indicates that user's username input is already used by other user.
+type UsernameAlreadyUsedError struct {
+	errorString
 }
 
-type defaultError struct {
-	msg                 string
-	noSuchUser          bool
-	noSuchContest       bool
-	wrongCredential     bool
-	wrongToken          bool
-	invalidSession      bool
-	forbiddenAction     bool
-	invalidInput        bool
-	usernameAlreadyUsed bool
-	internal            bool
-	alreadyInvited      bool
-	validationError     ValidationError
+// InternalServerError indicates indicates that there is internal server error.
+type InternalServerError struct {
+	errorString
 }
 
-func (d *defaultError) Error() string {
-	return d.msg
-}
-
-func (d *defaultError) IsNoSuchUser() bool {
-	return d.noSuchUser
-}
-
-func (d *defaultError) IsNoSuchContest() bool {
-	return d.noSuchContest
-}
-
-func (d *defaultError) IsWrongCredential() bool {
-	return d.wrongCredential
-}
-
-func (d *defaultError) IsWrongToken() bool {
-	return d.wrongToken
-}
-
-func (d *defaultError) IsInvalidSession() bool {
-	return d.invalidSession
-}
-
-func (d *defaultError) IsForbiddenAction() bool {
-	return d.forbiddenAction
-}
-
-func (d *defaultError) IsInvalidInput() bool {
-	return d.invalidInput
-}
-
-func (d *defaultError) ValidationError() ValidationError {
-	return d.validationError
-}
-
-func (d *defaultError) IsUsernameAlreadyUsed() bool {
-	return d.usernameAlreadyUsed
-}
-
-func (d *defaultError) IsInternal() bool {
-	return d.internal
-}
-
-func (d *defaultError) IsAlreadyInvited() bool {
-	return d.alreadyInvited
-}
-
-// ErrNoSuchUser indicates that no user is found when calling Service methods.
-var ErrNoSuchUser = &defaultError{
-	msg:        "No Such User",
-	noSuchUser: true,
-}
-
-// ErrNoSuchContest indicates that no contest is found when calling service methods.
-var ErrNoSuchContest = &defaultError{
-	msg:           "No Such Contest",
-	noSuchContest: true,
-}
-
-// ErrWrongCredential indicates that provided credential is wrong when authenticating user.
-var ErrWrongCredential = &defaultError{
-	msg:             "Wrong Credential",
-	wrongCredential: true,
-}
-
-// ErrWrongToken indicates that user provided wrong token. oneTimeCode is considered as token too.
-var ErrWrongToken = &defaultError{
-	msg:        "Wrong Token",
-	wrongToken: true,
-}
-
-// ErrInvalidSession indicates that user provided invalid session token.
-var ErrInvalidSession = &defaultError{
-	msg:            "Invalid Session",
-	invalidSession: true,
-}
-
-// ErrForbiddenAction indicates that user doesn't have permission to do some actions.
-var ErrForbiddenAction = &defaultError{
-	msg:             "Forbidden Action",
-	forbiddenAction: true,
-}
-
-// NewInvalidInput returns new Error that indicates validation error.
-func NewInvalidInput(validationErr ValidationError) Error {
-	return &defaultError{
-		msg:             "Invalid Input",
-		invalidInput:    true,
-		validationError: validationErr,
-	}
-}
-
-// ErrUsernameAlreadyUsed indicates that user's username input is already used by other user.
-var ErrUsernameAlreadyUsed = &defaultError{
-	msg:                 "Username Already Used",
-	usernameAlreadyUsed: true,
-}
-
-// ErrInternalServer indicates that there is internal server error.
-var ErrInternalServer = &defaultError{
-	msg:      "Internal Server Error",
-	internal: true,
-}
-
-// ErrAlreadyInvited indicates that users is already invited.
-var ErrAlreadyInvited = &defaultError{
-	msg:            "User Already Invited",
-	alreadyInvited: true,
+// AlreadyInvitedError indicates indicates that users is already invited.
+type AlreadyInvitedError struct {
+	errorString
 }
