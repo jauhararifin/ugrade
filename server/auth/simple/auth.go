@@ -4,6 +4,7 @@ import (
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/jauhararifin/ugrade/server/otc"
 	"github.com/jauhararifin/ugrade/server/uuid"
+	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -12,20 +13,26 @@ type Simple struct {
 	store Store
 }
 
-// UserByID returns specific User by its ID. If no such user is found, then returned ErrNoSuchUser.
-func (s *Simple) UserByID(userID string) (*auth.User, auth.Error) {
+// UserByID returns specific User by its ID. If no such user is found, then returned NoSuchUser.
+func (s *Simple) UserByID(userID string) (*auth.User, error) {
 	user, err := s.store.UserByID(userID)
-	if err != nil {
+	if auth.IsNoSuchUser(err) {
 		return nil, err
+	}
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot fetch user")
 	}
 	return user.User, nil
 }
 
-// UsersInContest returns all users in a contest. If no such contest is found, then returned ErrNoSuchContest.
-func (s *Simple) UsersInContest(contestID string) ([]*auth.User, auth.Error) {
+// UsersInContest returns all users in a contest. If no such contest is found, then returned NoSuchContest.
+func (s *Simple) UsersInContest(contestID string) ([]*auth.User, error) {
 	users, err := s.store.UsersInContest(contestID)
-	if err != nil {
+	if auth.IsNoSuchContest(err) {
 		return nil, err
+	}
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot fetch users")
 	}
 	result := make([]*auth.User, len(users))
 	for _, u := range users {
@@ -35,19 +42,33 @@ func (s *Simple) UsersInContest(contestID string) ([]*auth.User, auth.Error) {
 }
 
 // UserByEmail returns specific user by combination if its contestID and email. When no such user if found, returned ErrNoSuchUser.
-func (s *Simple) UserByEmail(contestID, email string) (*auth.User, auth.Error) {
+func (s *Simple) UserByEmail(contestID, email string) (*auth.User, error) {
+	if err := validateEmail(email); err != nil {
+		return nil, &authErr{
+			msg: "invalid input",
+			invalidInput: &invalidInputErr{
+				email: err.Error(),
+			},
+		}
+	}
 	user, err := s.store.UserByEmail(contestID, email)
-	if err != nil {
+	if auth.IsNoSuchUser(err) {
 		return nil, err
+	}
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot fetch user")
 	}
 	return user.User, nil
 }
 
 // UserByUsernames returns slices of users by its username in specific contest. When no such contest if found, returned ErrNoSuchContest.
-func (s *Simple) UserByUsernames(contestID string, usernames []string) ([]*auth.User, auth.Error) {
+func (s *Simple) UserByUsernames(contestID string, usernames []string) ([]*auth.User, error) {
 	users, err := s.store.UserByUsernames(contestID, usernames)
-	if err != nil {
+	if auth.IsNoSuchContest(err) {
 		return nil, err
+	}
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot fetch users")
 	}
 	result := make([]*auth.User, len(users))
 	for _, u := range users {
@@ -56,17 +77,26 @@ func (s *Simple) UserByUsernames(contestID string, usernames []string) ([]*auth.
 	return result, nil
 }
 
-// SignIn authenticate combination of contestId, email and password and returns session token when success, otherwise return ErrWrongCredential auth.Error.
-func (s *Simple) SignIn(contestID, email, password string) (string, auth.Error) {
+// SignIn authenticate combination of contestId, email and password and returns session token when success, otherwise return ErrWrongCredential error.
+func (s *Simple) SignIn(contestID, email, password string) (string, error) {
 	user, err := s.store.UserByEmail(contestID, email)
+	if auth.IsNoSuchUser(err) {
+		return "", &authErr{
+			msg:             "wrong credential",
+			wrongCredential: true,
+		}
+	}
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "cannot fetch user")
 	}
 
 	byteDbPass := []byte(user.Password)
 	bytePass := []byte(password)
 	if err := bcrypt.CompareHashAndPassword(byteDbPass, bytePass); err != nil {
-		return "", auth.ErrWrongCredential
+		return "", &authErr{
+			msg:             "wrong credential",
+			wrongCredential: true,
+		}
 	}
 
 	if len(user.Token) > 0 {
@@ -75,48 +105,72 @@ func (s *Simple) SignIn(contestID, email, password string) (string, auth.Error) 
 
 	token, err := s.store.IssueToken(user.ID, uuid.Random())
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "cannot issue token")
 	}
 	return token, nil
 }
 
 // SignUp used by used when they first time join the contest. It takes user information such as name, username and passwod and returned session token when success.
-func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name string) (string, auth.Error) {
-	if err := validateUsername(username); err != nil {
-		return "", auth.NewInvalidInput(auth.ValidationError{
-			Username: err.Error(),
-		})
-	}
-	if err := validateName(name); err != nil {
-		return "", auth.NewInvalidInput(auth.ValidationError{
-			Name: err.Error(),
-		})
-	}
-	if err := validatePassword(password); err != nil {
-		return "", auth.NewInvalidInput(auth.ValidationError{
-			Password: err.Error(),
-		})
+func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name string) (string, error) {
+	errUsername := validateUsername(username)
+	errName := validateName(name)
+	errPasswd := validatePassword(password)
+	if errUsername != nil || errName != nil || errPasswd != nil {
+		err := &invalidInputErr{}
+		if errUsername != nil {
+			err.username = errUsername.Error()
+		}
+		if errName != nil {
+			err.name = errName.Error()
+		}
+		if errPasswd != nil {
+			err.password = errPasswd.Error()
+		}
+		return "", &authErr{
+			msg:          "invalid input",
+			invalidInput: err,
+		}
 	}
 
 	uu, err := s.store.UserByUsernames(contestID, []string{username})
-	if err != nil {
+	if auth.IsNoSuchContest(err) {
 		return "", err
 	}
+	if err != nil {
+		return "", errors.Wrap(err, "cannot fetch users")
+	}
 	if len(uu) > 0 {
-		return "", auth.ErrUsernameAlreadyUsed
+		return "", &authErr{
+			msg:                 "username already used",
+			usernameAlreadyUsed: true,
+		}
 	}
 
 	user, err := s.store.UserByEmail(contestID, email)
-	if err != nil {
+	if auth.IsNoSuchUser(err) {
 		return "", err
 	}
+	if err != nil {
+		return "", errors.Wrap(err, "cannot fetch user")
+	}
+
+	if user.SignedUp {
+		return "", &authErr{
+			msg:             "already signed up",
+			alreadySignedUp: true,
+		}
+	}
+
 	if len(user.SignUpOTC) == 0 || user.SignUpOTC != oneTimeCode {
-		return "", auth.ErrWrongToken
+		return "", &authErr{
+			msg:        "wrong one time code",
+			wrongToken: true,
+		}
 	}
 
 	hashPass, errPass := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if errPass != nil {
-		return "", auth.ErrInternalServer
+		return "", errors.Wrap(errPass, "cannot hash password")
 	}
 
 	token := uuid.Random()
@@ -129,58 +183,80 @@ func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name 
 	updatedUser.ResetPasswordOTC = ""
 
 	if err := s.store.Update(user.ID, updatedUser); err != nil {
-		return "", err
+		return "", errors.Wrap(err, "cannot update user")
 	}
 	return token, nil
 }
 
 // ForgotPassword used by user to send reset password request.
-func (s *Simple) ForgotPassword(contestID, email string) auth.Error {
+func (s *Simple) ForgotPassword(contestID, email string) error {
 	user, err := s.store.UserByEmail(contestID, email)
-	if err != nil {
+	if auth.IsNoSuchUser(err) {
 		return err
+	}
+	if err != nil {
+		return errors.Wrap(err, "cannot fetch user")
 	}
 
 	updatedUser := copyUser(user)
 	updatedUser.ResetPasswordOTC = otc.Random()
 
 	if err := s.store.Update(user.ID, updatedUser); err != nil {
-		return err
+		return errors.Wrap(err, "cannot update user")
 	}
 	return nil
 }
 
 // ResetPassword used by user to reset their password.
-func (s *Simple) ResetPassword(contestID, email, oneTimeCode, password string) auth.Error {
+func (s *Simple) ResetPassword(contestID, email, oneTimeCode, password string) error {
 	if err := validatePassword(password); err != nil {
-		return auth.NewInvalidInput(auth.ValidationError{
-			Password: err.Error(),
-		})
+		return &authErr{
+			msg: "invalid input",
+			invalidInput: &invalidInputErr{
+				password: err.Error(),
+			},
+		}
 	}
+
 	user, err := s.store.UserByEmail(contestID, email)
-	if err != nil {
+	if auth.IsNoSuchUser(err) {
 		return err
+	}
+	if err != nil {
+		return errors.Wrap(err, "cannot fetch user")
 	}
 
 	if len(user.ResetPasswordOTC) == 0 || user.ResetPasswordOTC != oneTimeCode {
-		return auth.ErrWrongToken
+		return &authErr{
+			msg:        "wrong one time code",
+			wrongToken: true,
+		}
 	}
 
 	hashPass, errPass := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if errPass != nil {
-		return auth.ErrInternalServer
+		return errors.Wrap(errPass, "cannot hash password")
 	}
 
 	user.Password = string(hashPass)
 	user.ResetPasswordOTC = ""
-	return s.store.Update(user.ID, user)
+	if err := s.store.Update(user.ID, user); err != nil {
+		return errors.Wrap(err, "cannot update user")
+	}
+	return nil
 }
 
 // AddUser invite other users to a contest.
-func (s *Simple) AddUser(token string, users map[string][]int) auth.Error {
+func (s *Simple) AddUser(token string, users map[string][]int) error {
 	user, err := s.store.UserByToken(token)
+	if auth.IsNoSuchUser(err) {
+		return &authErr{
+			msg:            "invalid session token",
+			invalidSession: true,
+		}
+	}
 	if err != nil {
-		return err
+		return errors.Wrap(err, "cannot fetch user")
 	}
 
 	myPermissions := make(map[int]bool)
@@ -188,9 +264,12 @@ func (s *Simple) AddUser(token string, users map[string][]int) auth.Error {
 		myPermissions[perm] = true
 	}
 
-	hasPermission := myPermissions[auth.UserPermissionUsersInvite]
+	hasPermission := myPermissions[auth.PermissionUsersInvite]
 	if !hasPermission {
-		return auth.ErrForbiddenAction
+		return &authErr{
+			msg:             "forbidden action",
+			forbiddenAction: true,
+		}
 	}
 
 	canGivePermission := true
@@ -206,16 +285,22 @@ func (s *Simple) AddUser(token string, users map[string][]int) auth.Error {
 		}
 	}
 	if !canGivePermission {
-		return auth.ErrForbiddenAction
+		return &authErr{
+			msg:             "forbidden action",
+			forbiddenAction: true,
+		}
 	}
 
 	for email := range users {
 		exists, err := s.store.EmailExists(user.ContestID, email)
 		if err != nil {
-			return err
+			return errors.Wrap(err, "cannot fetch email")
 		}
 		if exists {
-			return auth.ErrAlreadyInvited
+			return &authErr{
+				msg:            "already invited",
+				alreadyInvited: true,
+			}
 		}
 	}
 
@@ -237,58 +322,129 @@ func (s *Simple) AddUser(token string, users map[string][]int) auth.Error {
 		})
 	}
 
-	return s.store.Insert(newUsers)
+	if err := s.store.Insert(newUsers); err != nil {
+		return errors.Wrap(err, "cannot insert new user")
+	}
+	return nil
 }
 
 // Me returns User information based on their's session token.
-func (s *Simple) Me(token string) (*auth.User, auth.Error) {
+func (s *Simple) Me(token string) (*auth.User, error) {
 	user, err := s.store.UserByToken(token)
+	if auth.IsNoSuchUser(err) {
+		return nil, &authErr{
+			msg:            "invalid session token",
+			invalidSession: true,
+		}
+	}
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "cannot fetch user")
 	}
 	return user.User, nil
 }
 
 // SetMyPassword updates user password.
-func (s *Simple) SetMyPassword(token, oldPassword, newPassword string) auth.Error {
+func (s *Simple) SetMyPassword(token, oldPassword, newPassword string) error {
+	errOld := validatePassword(oldPassword)
+	errNew := validatePassword(newPassword)
+	if errOld != nil || errNew != nil {
+		errStr := ""
+		if errOld != nil {
+			errStr = errOld.Error()
+		} else {
+			errStr = errNew.Error()
+		}
+		return &authErr{
+			msg: "invalid input",
+			invalidInput: &invalidInputErr{
+				password: errStr,
+			},
+		}
+	}
+
 	user, err := s.store.UserByToken(token)
+	if auth.IsNoSuchUser(err) {
+		return &authErr{
+			msg:            "invalid session token",
+			invalidSession: true,
+		}
+	}
 	if err != nil {
-		return err
+		return errors.Wrap(err, "cannot fetch user")
 	}
 
 	if oldPassword != user.Password {
-		return auth.ErrWrongCredential
+		return &authErr{
+			msg:             "wrong credential",
+			wrongCredential: true,
+		}
 	}
 
 	hashPass, errPass := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.MinCost)
 	if errPass != nil {
-		return auth.ErrInternalServer
+		return errors.Wrap(err, "cannot hash password")
 	}
 
 	updatedUser := copyUser(user)
 	updatedUser.Password = string(hashPass)
 
-	return s.store.Update(user.ID, updatedUser)
+	if err := s.store.Update(user.ID, updatedUser); err != nil {
+		return errors.Wrap(err, "cannot update user")
+	}
+	return nil
 }
 
 // SetMyName updates user's name information.
-func (s *Simple) SetMyName(token, name string) auth.Error {
+func (s *Simple) SetMyName(token, name string) error {
+	if err := validateName(name); err != nil {
+		return &authErr{
+			msg: "invalid input",
+			invalidInput: &invalidInputErr{
+				name: err.Error(),
+			},
+		}
+	}
+
 	user, err := s.store.UserByToken(token)
+	if auth.IsNoSuchUser(err) {
+		return &authErr{
+			msg:            "invalid session token",
+			invalidSession: true,
+		}
+	}
 	if err != nil {
-		return err
+		return errors.Wrap(err, "cannot fetch user")
 	}
 
 	updatedUser := copyUser(user)
 	updatedUser.Name = name
 
-	return s.store.Update(user.ID, updatedUser)
+	if err := s.store.Update(user.ID, updatedUser); err != nil {
+		return errors.Wrap(err, "cannot update user")
+	}
+	return nil
 }
 
 // SetUserPermissions updates other user's permission list.
-func (s *Simple) SetUserPermissions(token, userID string, permissions []int) auth.Error {
+func (s *Simple) SetUserPermissions(token, userID string, permissions []int) error {
+	if err := validatePermissions(permissions); err != nil {
+		return &authErr{
+			msg: "invalid input",
+			invalidInput: &invalidInputErr{
+				permissions: err.Error(),
+			},
+		}
+	}
+
 	user, err := s.store.UserByToken(token)
+	if auth.IsNoSuchUser(err) {
+		return &authErr{
+			msg:            "invalid session token",
+			invalidSession: true,
+		}
+	}
 	if err != nil {
-		return err
+		return errors.Wrap(err, "cannot fetch user")
 	}
 
 	myPerms := make(map[int]bool)
@@ -296,18 +452,27 @@ func (s *Simple) SetUserPermissions(token, userID string, permissions []int) aut
 		myPerms[perm] = true
 	}
 
-	if _, ok := myPerms[auth.UserPermissionUsersPermissionsUpdate]; !ok {
-		return auth.ErrForbiddenAction
+	if _, ok := myPerms[auth.PermissionUsersPermissionsUpdate]; !ok {
+		return &authErr{
+			msg:             "forbidden action",
+			forbiddenAction: true,
+		}
 	}
 
 	for perm := range permissions {
 		if _, ok := myPerms[perm]; !ok {
-			return auth.ErrForbiddenAction
+			return &authErr{
+				msg:             "forbidden action",
+				forbiddenAction: true,
+			}
 		}
 	}
 
 	updatedUser := copyUser(user)
 	updatedUser.Permissions = permissions
 
-	return s.store.Update(user.ID, updatedUser)
+	if err := s.store.Update(user.ID, updatedUser); err != nil {
+		return errors.Wrap(err, "cannot update user")
+	}
+	return nil
 }

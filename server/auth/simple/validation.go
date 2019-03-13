@@ -2,7 +2,10 @@ package simple
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
+
+	"github.com/jauhararifin/ugrade/server/auth"
 )
 
 func validateUsername(username string) error {
@@ -42,6 +45,19 @@ func validatePassword(password string) error {
 	}
 	if len(password) > 100 {
 		return errors.New("Password should not contain more than 100 characters")
+	}
+	return nil
+}
+
+func validatePermissions(permissions []int) error {
+	authPerms := make(map[int]bool)
+	for p := range auth.Permissions {
+		authPerms[p] = true
+	}
+	for p := range permissions {
+		if _, ok := authPerms[p]; !ok {
+			return fmt.Errorf("No such permission with id %d", p)
+		}
 	}
 	return nil
 }
