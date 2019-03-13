@@ -1,33 +1,47 @@
 package auth
 
 const (
-	// UserPermissionInfoUpdate indicates user's permission to update contest info.
-	UserPermissionInfoUpdate = iota
+	// PermissionInfoUpdate indicates user's permission to update contest info.
+	PermissionInfoUpdate = iota
 
-	// UserPermissionAnnouncementsCreate indicates user's permission to create contest announcements.
-	UserPermissionAnnouncementsCreate = iota
+	// PermissionAnnouncementsCreate indicates user's permission to create contest announcements.
+	PermissionAnnouncementsCreate = iota
 
-	// UserPermissionAnnouncementsRead indicates user's permission to read contest announcements.
-	UserPermissionAnnouncementsRead = iota
+	// PermissionAnnouncementsRead indicates user's permission to read contest announcements.
+	PermissionAnnouncementsRead = iota
 
-	// UserPermissionProblemsCreate indicates user's permission to create contest problems.
-	UserPermissionProblemsCreate = iota
+	// PermissionProblemsCreate indicates user's permission to create contest problems.
+	PermissionProblemsCreate = iota
 
-	// UserPermissionProblemsRead indicates user's permission to read contest problems.
-	UserPermissionProblemsRead = iota
+	// PermissionProblemsRead indicates user's permission to read contest problems.
+	PermissionProblemsRead = iota
 
-	// UserPermissionProblemsReadDisabled indicates user's permission to read disabled contest problems.
-	UserPermissionProblemsReadDisabled = iota
+	// PermissionProblemsReadDisabled indicates user's permission to read disabled contest problems.
+	PermissionProblemsReadDisabled = iota
 
-	// UserPermissionProblemsUpdate indicates user's permission to update contest problem.
-	UserPermissionProblemsUpdate = iota
+	// PermissionProblemsUpdate indicates user's permission to update contest problem.
+	PermissionProblemsUpdate = iota
 
-	// UserPermissionUsersInvite indicates user's permission to invite other user into a contest.
-	UserPermissionUsersInvite = iota
+	// PermissionUsersInvite indicates user's permission to invite other user into a contest.
+	PermissionUsersInvite = iota
 
-	// UserPermissionUsersPermissionsUpdate indicates user's permission to update other user's permissions.
-	UserPermissionUsersPermissionsUpdate = iota
+	// PermissionUsersPermissionsUpdate indicates user's permission to update other user's permissions.
+	PermissionUsersPermissionsUpdate = iota
 
-	// UserPermissionUsersDelete indicates user's permission to delete other user from contest.
-	UserPermissionUsersDelete = iota
+	// PermissionUsersDelete indicates user's permission to delete other user from contest.
+	PermissionUsersDelete = iota
 )
+
+// Permissions is the list contain all possible user's permissions
+var Permissions = []int{
+	PermissionInfoUpdate,
+	PermissionAnnouncementsCreate,
+	PermissionAnnouncementsRead,
+	PermissionProblemsCreate,
+	PermissionProblemsRead,
+	PermissionProblemsReadDisabled,
+	PermissionProblemsUpdate,
+	PermissionUsersInvite,
+	PermissionUsersPermissionsUpdate,
+	PermissionUsersDelete,
+}

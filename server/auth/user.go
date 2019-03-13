@@ -7,5 +7,6 @@ type User struct {
 	Username    string
 	Email       string
 	Name        string
+	SignedUp    bool
 	Permissions []int
 }

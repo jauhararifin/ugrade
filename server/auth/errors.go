@@ -85,14 +85,15 @@ type InvalidInput interface {
 	Name() string
 	Email() string
 	Password() string
+	Permissions() string
 }
 
 // IsInvalidInput checks whether error is InvalidInput
-func IsInvalidInput(err error) bool {
+func IsInvalidInput(err error) (bool, InvalidInput) {
 	if m, ok := err.(InvalidInput); ok {
-		return m.InvalidInput()
+		return m.InvalidInput(), m
 	}
-	return false
+	return false, nil
 }
 
 // UsernameAlreadyUsed indicates indicates that user's username input is already used by other user.
@@ -117,6 +118,19 @@ type AlreadyInvited interface {
 func IsAlreadyInvited(err error) bool {
 	if m, ok := err.(AlreadyInvited); ok {
 		return m.AlreadyInvited()
+	}
+	return false
+}
+
+// AlreadySignedUp indicates that the user is already signed up.
+type AlreadySignedUp interface {
+	AlreadySignedUp() bool
+}
+
+// IsAlreadySignedUp checks whether the error is AlreadySignedUp.
+func IsAlreadySignedUp(err error) bool {
+	if m, ok := err.(AlreadySignedUp); ok {
+		return m.AlreadySignedUp()
 	}
 	return false
 }
