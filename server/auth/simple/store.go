@@ -2,8 +2,21 @@ package simple
 
 import "github.com/jauhararifin/ugrade/server/auth"
 
+// NoSuchUser indicates that no user is found.
 type NoSuchUser = auth.NoSuchUser
-type NoSuchContes = auth.NoSuchContest
+
+// NoSuchContest indicates that no contest is found.
+type NoSuchContest = auth.NoSuchContest
+
+// IsNoSuchUser checks whether the error is NoSuchUser.
+func IsNoSuchUser(err error) bool {
+	return auth.IsNoSuchUser(err)
+}
+
+// IsNoSuchContest checks whether the error is NoSuchContest.
+func IsNoSuchContest(err error) bool {
+	return auth.IsNoSuchContest(err)
+}
 
 // User wrap auth.User struct and add password & token field.
 type User struct {
