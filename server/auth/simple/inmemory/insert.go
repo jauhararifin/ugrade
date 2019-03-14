@@ -14,7 +14,7 @@ func (m *inMemory) Insert(users []*simple.User) error {
 		}
 
 		if _, ok := m.mapContestUsers[user.ContestID]; !ok {
-			return &noSuchContest{}
+			m.mapContestUsers[user.ContestID] = make([]string, 0, 0)
 		}
 
 		emailKey := fmt.Sprintf("%s/%s", user.ContestID, user.Email)
