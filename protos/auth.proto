@@ -1,101 +1,161 @@
 syntax = "proto3";
 
-enum UserPermission {
+option go_package = "server";
+
+enum Permission {
   InfoUpdate = 0;
-
-  AnnouncementCreate = 1;
-  AnnouncementRead = 2;
-
+  AnnouncementsCreate = 1;
+  AnnouncementsRead = 2;
   ProblemsCreate = 3;
   ProblemsRead = 4;
   ProblemsReadDisabled = 5;
   ProblemsUpdate = 6;
+  UsersInvite = 7;
+  UsersPermissionsUpdate = 8;
+  UsersDelete = 9;
 }
 
 message User {
-  string id = 1;
-  string contestId = 2;
-  string username = 3;
-  string email = 4;
-  string name = 5;
-  repeated UserPermission permissions = 6;
+  string ID = 1;
+  string ContestID = 2;
+  string Username = 3;
+  string Email = 4;
+  string Name = 5;
+  repeated Permission Permissions = 6;
 }
 
 message Void {}
 
+message AuthError {
+
+  message InvalidInput {
+    bool invalidInput = 1;
+    string username = 2;
+    string name = 3;
+    string email = 4;
+    string password = 5;
+    string permissions = 6;
+  }
+
+  string msg = 1;
+  bool noSuchUser = 2;
+  bool noSuchContest = 3;
+  bool wrongCredential = 4;
+  bool wrongToken = 5;
+  bool invalidSession = 6;
+  bool forbiddenAction = 7;
+  InvalidInput invalidInput = 8;
+  bool usernameAlreadyUsed = 9;
+  bool alreadyInvited = 10;
+  bool alreadySignedUp = 11;
+  bool contestAlreadyExists = 12;
+}
+
+message GetUserByIDRequest {
+  string userID = 1;
+}
+
+message GetUserByIDResponse {
+  User user = 1;
+  AuthError error = 2;
+}
+
 message GetUserByEmailRequest {
-  string contestId = 1;
-  string email = 2;
+  string ContestID = 1;
+  string Email = 2;
 }
 
 message GetUserByEmailResponse {
-  User user = 1;
+  User User = 1;
+  AuthError error = 2;
 }
 
 message GetUserByUsernamesRequest {
-  string contestId = 1;
-  repeated string usernames = 2;
+  string ContestID = 1;
+  repeated string Usernames = 2;
 }
 
 message GetUserByUsernamesResponse {
-  repeated User user = 1;
+  repeated User User = 1;
+  AuthError error = 2;
 }
 
 message SignInRequest {
-  string contestId = 1;
-  string email = 2;
-  string password = 3;
+  string ContestID = 1;
+  string Email = 2;
+  string Password = 3;
 }
 
 message SignInResponse {
-  string token = 1;
+  string Token = 1;
+  AuthError error = 2;
 }
 
 message SignUpRequest {
-  string contestId = 1;
-  string username = 2;
-  string email = 3;
-  string oneTimeCode = 4;
-  string password = 5;
-  string name = 6;
+  string ContestID = 1;
+  string Username = 2;
+  string Email = 3;
+  string OneTimeCode = 4;
+  string Password = 5;
+  string Name = 6;
 }
 
 message SignUpResponse {
-  string token = 1;
+  string Token = 1;
+  AuthError error = 2;
 }
 
 message ForgotPasswordRequest {
-  string contestId = 1;
-  string email = 2;
+  string ContestID = 1;
+  string Email = 2;
+}
+
+message ForgotPasswordResponse {
+  AuthError error = 1;
 }
 
 message ResetPasswordRequest {
-  string contestId = 1;
-  string email = 2;
-  string oneTimeCode = 3;
-  string password = 4;
+  string ContestID = 1;
+  string Email = 2;
+  string OneTimeCode = 3;
+  string Password = 4;
+}
+
+message ResetPasswordResponse {
+  AuthError error = 1;
 }
 
 message GetMeRequest {
-  string token = 1;
+  string Token = 1;
 }
 
 message GetMeResponse {
-  User me = 1;
+  User Me = 1;
+  AuthError error = 2;
 }
 
 message SetMyPasswordRequest {
-  string token = 1;
-  string oldPassword = 2;
-  string newPassword = 3;
+  string Token = 1;
+  string OldPassword = 2;
+  string NewPassword = 3;
+}
+
+message SetMyPasswordResponse {
+  AuthError error = 1;
 }
 
 message SetMyNameRequest {
-  string token = 1;
-  string name = 2;
+  string Token = 1;
+  string Name = 2;
+}
+
+message SetMyNameResponse {
+  AuthError error = 1;
 }
 
 service AuthService {
+
+  rpc GetUserByID(GetUserByIDRequest) returns (GetUserByIDResponse);
 
   rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
 
@@ -105,14 +165,14 @@ service AuthService {
   
   rpc SignUp(SignUpRequest) returns (SignUpResponse);
 
-  rpc ForgotPassword(ForgotPasswordRequest) returns (Void);
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse);
 
-  rpc ResetPassword(ResetPasswordRequest) returns (Void);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
 
   rpc GetMe(GetMeRequest) returns (GetMeResponse);
 
-  rpc SetMyPassword(SetMyPasswordRequest) returns (Void);
+  rpc SetMyPassword(SetMyPasswordRequest) returns (SetMyPasswordResponse);
 
-  rpc SetMyName(SetMyNameRequest) returns (Void);
+  rpc SetMyName(SetMyNameRequest) returns (SetMyNameResponse);
 
 }
