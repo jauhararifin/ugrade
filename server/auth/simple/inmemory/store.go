@@ -26,22 +26,6 @@ func New() simple.Store {
 	}
 }
 
-func (m *inMemory) UsersInContest(contestID string) ([]*simple.User, error) {
-	users, ok := m.mapContestUsers[contestID]
-	if !ok {
-		return nil, &noSuchContest{}
-	}
-	result := make([]*simple.User, len(users))
-	for _, uid := range users {
-		user, err := m.assertUserByID(uid, "contestUsers")
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, user)
-	}
-	return result, nil
-}
-
 func (m *inMemory) UserByEmail(contestID, email string) (*simple.User, error) {
 	key := fmt.Sprintf("%s/%s", contestID, email)
 	if uid, ok := m.mapContestEmail[key]; ok {
@@ -54,7 +38,7 @@ func (m *inMemory) UserByUsernames(contestID string, usernames []string) ([]*sim
 	if _, ok := m.mapContestUsers[contestID]; !ok {
 		return nil, &noSuchContest{}
 	}
-	result := make([]*simple.User, len(usernames))
+	result := make([]*simple.User, 0, len(usernames))
 	for _, uname := range usernames {
 		key := fmt.Sprintf("%s/%s", contestID, uname)
 		if uid, ok := m.mapContestUsername[key]; ok {
