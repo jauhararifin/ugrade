@@ -34,12 +34,12 @@ func (m *inMemory) Update(userID string, newUser *simple.User) error {
 	}
 
 	oldEmailKey := fmt.Sprintf("%s/%s", user.ContestID, user.Email)
-	newEmailKey := fmt.Sprintf("%s/%s", user.ContestID, newUser.Email)
+	newEmailKey := fmt.Sprintf("%s/%s", newUser.ContestID, newUser.Email)
 	delete(m.mapContestEmail, oldEmailKey)
 	m.mapContestEmail[newEmailKey] = newUser.ID
 
 	oldUsernameKey := fmt.Sprintf("%s/%s", user.ContestID, user.Username)
-	newUsernameKey := fmt.Sprintf("%s/%s", user.ContestID, newUser.Username)
+	newUsernameKey := fmt.Sprintf("%s/%s", newUser.ContestID, newUser.Username)
 	delete(m.mapContestUsername, oldUsernameKey)
 	m.mapContestUsername[newUsernameKey] = newUser.ID
 
