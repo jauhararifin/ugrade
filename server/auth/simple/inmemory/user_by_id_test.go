@@ -21,7 +21,7 @@ func TestUserByID(t *testing.T) {
 	}
 }
 
-func TestNoSuchUserInUserByID(t *testing.T) {
+func TestNoSuchUserWithID(t *testing.T) {
 	m := &inMemory{
 		mapIDUser: map[string]*simple.User{
 			"nouser": &simple.User{},

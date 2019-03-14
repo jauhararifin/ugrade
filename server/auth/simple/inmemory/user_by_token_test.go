@@ -23,7 +23,7 @@ func TestUserByToken(t *testing.T) {
 	}
 }
 
-func TestUserByTokenNoSuchUser(t *testing.T) {
+func TestMissingUserByToken(t *testing.T) {
 	m := &inMemory{
 		mapContestEmail: make(map[string]string),
 	}
@@ -36,7 +36,7 @@ func TestUserByTokenNoSuchUser(t *testing.T) {
 	}
 }
 
-func TestUserByTokenInvalidState(t *testing.T) {
+func TestInvalidStateUserByToken(t *testing.T) {
 	m := &inMemory{
 		mapIDUser: make(map[string]*simple.User),
 		mapToken:  map[string]string{"faketoken": "fakeuid"},

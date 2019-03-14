@@ -28,7 +28,7 @@ func TestUserByEmail(t *testing.T) {
 	}
 }
 
-func TestUserByEmailNoSuchUser(t *testing.T) {
+func TestMissingUserByEmail(t *testing.T) {
 	m := &inMemory{
 		mapContestEmail: make(map[string]string),
 	}
@@ -41,7 +41,7 @@ func TestUserByEmailNoSuchUser(t *testing.T) {
 	}
 }
 
-func TestUserByEmailInvalidState(t *testing.T) {
+func TestInvalidStateUserByEmail(t *testing.T) {
 	m := &inMemory{
 		mapIDUser:       make(map[string]*simple.User),
 		mapContestEmail: map[string]string{"fakecontestid/fakeemail": "fakeuid"},

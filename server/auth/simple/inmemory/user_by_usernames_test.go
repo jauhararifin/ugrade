@@ -41,7 +41,7 @@ func TestUserByUsernames(t *testing.T) {
 	}
 }
 
-func TestUserByUsernamesMissingUsernames(t *testing.T) {
+func TestMissingUserWithUsernames(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Error("New should return inMemory store")
@@ -78,7 +78,7 @@ func TestUserByUsernamesMissingUsernames(t *testing.T) {
 	}
 }
 
-func TestUserByUsernamesEmptyUsernames(t *testing.T) {
+func TestUserByUsernamesWithEmptyUsernames(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Error("New should return inMemory store")
@@ -106,7 +106,7 @@ func TestUserByUsernamesEmptyUsernames(t *testing.T) {
 	}
 }
 
-func TestUserByUsernamesMissingContest(t *testing.T) {
+func TestUserByUsernamesWithMissingContest(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Error("New should return inMemory store")
@@ -131,7 +131,7 @@ func TestUserByUsernamesMissingContest(t *testing.T) {
 	}
 }
 
-func TestUserByUsernamesInvalidState(t *testing.T) {
+func TestInvalidStateUserByUsernames(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Error("New should return inMemory store")

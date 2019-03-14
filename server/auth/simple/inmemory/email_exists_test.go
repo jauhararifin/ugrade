@@ -18,7 +18,7 @@ func TestEmailExists(t *testing.T) {
 	}
 }
 
-func TestEmailExistsMissingEmail(t *testing.T) {
+func TestMissingEmail(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Errorf("Expecting inMemory, found %T", m)

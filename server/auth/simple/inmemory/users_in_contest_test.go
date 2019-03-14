@@ -39,7 +39,7 @@ func TestUsersInContest(t *testing.T) {
 	}
 }
 
-func TestUsersInContestNoSuchContest(t *testing.T) {
+func TestUsersInContestWithMissingContest(t *testing.T) {
 	user1 := &simple.User{
 		User: &auth.User{
 			ID:        "userone",
@@ -68,7 +68,7 @@ func TestUsersInContestNoSuchContest(t *testing.T) {
 	}
 }
 
-func TestUsersInContestInvalidState(t *testing.T) {
+func TestInvalidStateUsersInContest(t *testing.T) {
 	m := &inMemory{
 		mapIDUser:       make(map[string]*simple.User),
 		mapContestUsers: map[string][]string{"contestid": []string{"userone", "usertwo"}},

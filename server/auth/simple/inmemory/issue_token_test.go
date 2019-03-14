@@ -28,7 +28,7 @@ func TestIssueToken(t *testing.T) {
 	}
 }
 
-func TestIssueTokenAlreadyIssued(t *testing.T) {
+func TestTokenAlreadyIssued(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Error("New should return inMemory store")
@@ -50,7 +50,7 @@ func TestIssueTokenAlreadyIssued(t *testing.T) {
 	}
 }
 
-func TestIssueTokenNoSuchUser(t *testing.T) {
+func TestNoUserWithToken(t *testing.T) {
 	m, ok := New().(*inMemory)
 	if !ok {
 		t.Error("New should return inMemory store")
