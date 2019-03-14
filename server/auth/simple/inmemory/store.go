@@ -15,22 +15,15 @@ type inMemory struct {
 	mapToken           map[string]string
 }
 
-func (m *inMemory) UserByID(userID string) (*simple.User, error) {
-	if user, ok := m.mapIDUser[userID]; ok {
-		return user, nil
+// New create a new in memory store.
+func New() simple.Store {
+	return &inMemory{
+		mapIDUser:          make(map[string]*simple.User),
+		mapContestUsers:    make(map[string][]string),
+		mapContestEmail:    make(map[string]string),
+		mapContestUsername: make(map[string]string),
+		mapToken:           make(map[string]string),
 	}
-	return nil, &noSuchUser{}
-}
-
-func (m *inMemory) assertUserByID(userID string, fromMap string) (*simple.User, error) {
-	user, err := m.UserByID(userID)
-	if err != nil {
-		if _, ok := err.(*noSuchUser); ok {
-			return nil, errors.Errorf("invalid state, %s map contains userid that doesn't exists in mapIDUser", fromMap)
-		}
-		return nil, errors.Wrap(err, "cannot get users from storage")
-	}
-	return user, nil
 }
 
 func (m *inMemory) UsersInContest(contestID string) ([]*simple.User, error) {

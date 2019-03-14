@@ -21,3 +21,15 @@ func (*noSuchContest) Error() string {
 func (*noSuchContest) IsNoSuchContest() bool {
 	return true
 }
+
+type invalidState struct {
+	msg string
+}
+
+func (e *invalidState) Error() string {
+	return e.msg
+}
+
+func (*invalidState) IsInvalidState() bool {
+	return true
+}
