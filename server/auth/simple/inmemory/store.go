@@ -26,14 +26,6 @@ func New() simple.Store {
 	}
 }
 
-func (m *inMemory) UserByEmail(contestID, email string) (*simple.User, error) {
-	key := fmt.Sprintf("%s/%s", contestID, email)
-	if uid, ok := m.mapContestEmail[key]; ok {
-		return m.assertUserByID(uid, "mapContestEmail")
-	}
-	return nil, &noSuchUser{}
-}
-
 func (m *inMemory) UserByUsernames(contestID string, usernames []string) ([]*simple.User, error) {
 	if _, ok := m.mapContestUsers[contestID]; !ok {
 		return nil, &noSuchContest{}
