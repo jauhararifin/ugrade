@@ -22,7 +22,7 @@ func (m *inMemory) Update(userID string, newUser *simple.User) error {
 	if user.ContestID != newUser.ContestID {
 		oldContestMap := m.mapContestUsers[user.ContestID]
 		for i, uid := range oldContestMap {
-			if uid == user.ContestID {
+			if uid == user.ID {
 				m.mapContestUsers[user.ContestID] = append(oldContestMap[:i], oldContestMap[i+1:]...)
 				break
 			}
@@ -30,6 +30,7 @@ func (m *inMemory) Update(userID string, newUser *simple.User) error {
 
 		newContestMap := m.mapContestUsers[newUser.ContestID]
 		newContestMap = append(newContestMap, newUser.ID)
+		m.mapContestUsers[newUser.ContestID] = newContestMap
 	}
 
 	oldEmailKey := fmt.Sprintf("%s/%s", user.ContestID, user.Email)
