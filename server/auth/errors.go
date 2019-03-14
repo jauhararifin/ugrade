@@ -26,6 +26,19 @@ func IsNoSuchContest(err error) bool {
 	return false
 }
 
+// ContestAlreadyExists indicates that the contest is already exists.
+type ContestAlreadyExists interface {
+	ContestAlreadyExists() bool
+}
+
+// IsContestAlreadyExists checks whether error is ContestAlreadyExists
+func IsContestAlreadyExists(err error) bool {
+	if m, ok := err.(ContestAlreadyExists); ok {
+		return m.ContestAlreadyExists()
+	}
+	return false
+}
+
 // WrongCredential indicates indicates that provided credential is wrong when authenticating user.
 type WrongCredential interface {
 	WrongCredential() bool

@@ -37,17 +37,18 @@ func (e *invalidInputErr) Permissions() string {
 }
 
 type authErr struct {
-	msg                 string
-	noSuchUser          bool
-	noSuchContest       bool
-	wrongCredential     bool
-	wrongToken          bool
-	invalidSession      bool
-	forbiddenAction     bool
-	invalidInput        *invalidInputErr
-	usernameAlreadyUsed bool
-	alreadyInvited      bool
-	alreadySignedUp     bool
+	msg                  string
+	noSuchUser           bool
+	noSuchContest        bool
+	wrongCredential      bool
+	wrongToken           bool
+	invalidSession       bool
+	forbiddenAction      bool
+	invalidInput         *invalidInputErr
+	usernameAlreadyUsed  bool
+	alreadyInvited       bool
+	alreadySignedUp      bool
+	contestAlreadyExists bool
 }
 
 func (ae *authErr) Error() string {
@@ -95,4 +96,8 @@ func (ae *authErr) AlreadyInvited() bool {
 
 func (ae *authErr) AlreadySignedUp() bool {
 	return ae.alreadySignedUp
+}
+
+func (ae *authErr) ContestAlreadyExists() bool {
+	return ae.contestAlreadyExists
 }

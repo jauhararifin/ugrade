@@ -314,6 +314,7 @@ func (s *Simple) AddUser(token string, users map[string][]int) error {
 				Email:       email,
 				Name:        "",
 				Permissions: perms,
+				SignedUp:    false,
 			},
 			Password:         "",
 			Token:            "",
@@ -326,6 +327,42 @@ func (s *Simple) AddUser(token string, users map[string][]int) error {
 		return errors.Wrap(err, "cannot insert new user")
 	}
 	return nil
+}
+
+// AddContest add new contest with specific email as admin.
+func (s *Simple) AddContest(contestID, adminEmail string) (*User, error) {
+	conExists, err := s.store.ContestExists(contestID)
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot add new contest")
+	}
+	if conExists {
+		return nil, &authErr{
+			contestAlreadyExists: true,
+		}
+	}
+
+	admin := &User{
+		User: &auth.User{
+			ID:          uuid.Random(),
+			Username:    "",
+			Email:       adminEmail,
+			Name:        "",
+			ContestID:   contestID,
+			SignedUp:    false,
+			Permissions: auth.Permissions,
+		},
+		Password:         "",
+		Token:            "",
+		SignUpOTC:        otc.Random(),
+		ResetPasswordOTC: "",
+	}
+
+	err = s.store.Insert([]*User{admin})
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot add new contest")
+	}
+
+	return admin, nil
 }
 
 // Me returns User information based on their's session token.

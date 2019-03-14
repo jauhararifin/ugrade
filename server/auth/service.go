@@ -29,6 +29,9 @@ type Service interface {
 	// AddUser invite other users to a contest.
 	AddUser(token string, users map[string][]int) error
 
+	// AddContest add new contest with specific email as admin.
+	AddContest(contestID, adminEmail string) (*User, error)
+
 	// Me returns User information based on their's session token.
 	Me(token string) (*User, error)
 

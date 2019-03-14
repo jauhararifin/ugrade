@@ -38,4 +38,5 @@ type Store interface {
 	Update(userID string, user *User) error
 	Insert(users []*User) error
 	EmailExists(contestID, email string) (bool, error)
+	ContestExists(contestID string) (bool, error)
 }
