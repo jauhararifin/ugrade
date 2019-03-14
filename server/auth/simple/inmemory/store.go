@@ -110,9 +110,3 @@ func (m *inMemory) Insert(users []*simple.User) error {
 
 	return nil
 }
-
-func (m *inMemory) EmailExists(contestID, email string) (bool, error) {
-	emailKey := fmt.Sprintf("%s/%s", contestID, email)
-	_, ok := m.mapContestEmail[emailKey]
-	return ok, nil
-}
