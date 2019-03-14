@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
-	"github.com/pkg/errors"
 )
 
 type inMemory struct {
@@ -26,34 +25,21 @@ func New() simple.Store {
 	}
 }
 
-func (m *inMemory) Insert(users []*simple.User) error {
-	for _, user := range users {
-		if _, ok := m.mapIDUser[user.ID]; ok {
-			return errors.Errorf("user with id %s already defined", user.ID)
-		}
-
-		if _, ok := m.mapContestUsers[user.ContestID]; !ok {
-			return &noSuchContest{}
-		}
-
-		emailKey := fmt.Sprintf("%s/%s", user.ContestID, user.Email)
-		if _, ok := m.mapContestEmail[emailKey]; ok {
-			return errors.Errorf("user with email %s already defined", user.Email)
-		}
-
-		usernameKey := fmt.Sprintf("%s/%s", user.ContestID, user.Username)
-		if _, ok := m.mapContestUsername[usernameKey]; ok {
-			return errors.Errorf("user with username %s already defined", user.Username)
-		}
-
-		if _, ok := m.mapToken[user.Token]; ok {
-			return errors.Errorf("user with token %s already defined", user.Token)
-		}
+// NewWithFixture create a new in memory store with some predifined user.
+func NewWithFixture(fixture []*simple.User) simple.Store {
+	m := &inMemory{
+		mapIDUser:          make(map[string]*simple.User),
+		mapContestUsers:    make(map[string][]string),
+		mapContestEmail:    make(map[string]string),
+		mapContestUsername: make(map[string]string),
+		mapToken:           make(map[string]string),
 	}
-
-	for _, user := range users {
+	for _, user := range fixture {
 		m.mapIDUser[user.ID] = user
 
+		if _, ok := m.mapContestUsers[user.ContestID]; !ok {
+			m.mapContestUsers[user.ContestID] = make([]string, 0, 0)
+		}
 		m.mapContestUsers[user.ContestID] = append(m.mapContestUsers[user.ContestID], user.ID)
 
 		emailKey := fmt.Sprintf("%s/%s", user.ContestID, user.Email)
@@ -62,10 +48,7 @@ func (m *inMemory) Insert(users []*simple.User) error {
 		usernameKey := fmt.Sprintf("%s/%s", user.ContestID, user.Username)
 		m.mapContestUsername[usernameKey] = user.ID
 
-		if len(user.Token) > 0 {
-			m.mapToken[user.Token] = user.ID
-		}
+		m.mapToken[user.Token] = user.ID
 	}
-
-	return nil
+	return m
 }
