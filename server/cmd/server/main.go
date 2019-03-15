@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"net"
+	"net/http"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
 	"github.com/jauhararifin/ugrade/server/auth/simple/inmemory"
@@ -18,9 +18,11 @@ func main() {
 	grpcServer := grpc.NewServer()
 	server.RegisterAuthServiceServer(grpcServer, authServer)
 
-	lis, err := net.Listen("tcp", ":8888")
+	http.HandleFunc("/grpc", func(w http.ResponseWriter, r *http.Request) {
+		grpcServer.ServeHTTP(w, r)
+	})
+	err := http.ListenAndServe(":8888", nil)
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatal(err)
 	}
-	grpcServer.Serve(lis)
 }
