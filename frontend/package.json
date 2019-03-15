@@ -1,5 +1,8 @@
 {
   "name": "ugrade-frontend",
+  "author": "Jauhar Arifin",
+  "description": "Simple online judge using contestant PC as worker.",
+  "homepage": "./",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +12,7 @@
     "@matejmazur/react-mathjax": "^0.1.10",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.2.2",
+    "electron-is-dev": "^1.0.1",
     "formik": "^1.4.3",
     "github-markdown-css": "^3.0.1",
     "history": "^4.7.2",
@@ -37,15 +41,17 @@
     "yup": "^0.26.10"
   },
   "scripts": {
-    "start": "npm-run-all build:css --parallel watch:css start:ts",
-    "build": "npm-run-all build:css build:ts",
+    "start": "npm-run-all build:css --parallel watch:css start:ts start:electron",
+    "build": "npm-run-all build:css build:ts build:electron",
     "start:ts": "react-app-rewired start",
     "build:ts": "react-app-rewired build",
     "build:css": "node-sass-chokidar --quiet src/ -o src/ --importer=node_modules/node-sass-tilde-importer",
     "watch:css": "node-sass-chokidar --quiet src/ -o src/ --importer=node_modules/node-sass-tilde-importer --watch --recursive",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "lint": "tslint --project tsconfig.json --config tslint.json"
+    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "start:electron": "wait-on http://localhost:3000 && electron .",
+    "build:electron": "build -l snap"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -75,11 +81,26 @@
     "@types/redux-thunk": "^2.1.0",
     "@types/reselect": "^2.2.0",
     "@types/yup": "^0.26.7",
+    "concurrently": "^4.1.0",
+    "electron": "^4.1.0",
+    "electron-builder": "^20.39.0",
     "npm-run-all": "^4.1.5",
     "react-app-rewired": "^2.1.0",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
-    "tslint-react": "^3.6.0"
+    "tslint-react": "^3.6.0",
+    "wait-on": "^3.2.0"
+  },
+  "main": "public/electron.js",
+  "build": {
+    "appId": "github.com/jauhararifin/ugrade",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }
