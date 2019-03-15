@@ -1,0 +1,33 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
+.contest-announcements {
+  .item {
+    margin-top: 10px;
+    align-items: baseline;
+    display: flex;
+    .unread-indicator {
+      flex-grow: 0;
+      visibility: hidden;
+    }
+    .content {
+      margin-left: 10px;
+      flex-grow: 1;
+      .header {
+        display: flex;
+        margin-bottom: 0px;
+        justify-content: space-between;
+        .title {
+          text-align: left;
+        }
+        .info {
+          text-align: right;
+        }
+      }
+    }
+  }
+  .item.unread {
+    .unread-indicator {
+      visibility: visible;
+    }
+  }
+}

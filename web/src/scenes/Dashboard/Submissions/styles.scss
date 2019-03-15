@@ -1,0 +1,13 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
+.contest-submissions {
+  .submissions-table {
+    margin-top: 20px;
+    border-top: solid 1px $pt-divider-black;
+    width: 100%;
+    th,
+    td {
+      text-align: center;
+    }
+  }
+}

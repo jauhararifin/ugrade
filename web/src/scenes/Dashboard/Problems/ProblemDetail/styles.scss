@@ -1,0 +1,19 @@
+.contest-problems {
+  .item {
+    margin-top: 10px;
+    .header {
+      display: flex;
+      margin-bottom: 0px;
+      justify-content: space-between;
+      .title {
+        text-align: left;
+      }
+      .info {
+        text-align: right;
+      }
+    }
+  }
+  .item:hover {
+    cursor: pointer;
+  }
+}

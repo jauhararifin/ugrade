@@ -1,0 +1,24 @@
+.clarification-detail {
+  .info {
+    display: flex;
+    justify-content: space-between;
+  }
+  .content {
+    .entry {
+      margin-top: 10px;
+      display: flex;
+      align-items: baseline;
+      .unread-indicator {
+        visibility: hidden;
+      }
+      .entry-content {
+        margin-left: 10px;
+      }
+    }
+    .entry.unread {
+      .unread-indicator {
+        visibility: visible;
+      }
+    }
+  }
+}
