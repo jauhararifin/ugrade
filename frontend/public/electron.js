@@ -9,6 +9,7 @@ let mainWindow = undefined
 
 function createWindow() {
   mainWindow = new BrowserWindow()
+  mainWindow.maximize()
   mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
