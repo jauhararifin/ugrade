@@ -76,7 +76,8 @@ func TestInvalidStateUsersInContest(t *testing.T) {
 		mapIDUser:       make(map[string]*simple.User),
 		mapContestUsers: map[string][]string{"contestid": []string{"userone", "usertwo"}},
 	}
-	users, err := m.UsersInContest("contestid")
+	ctx := context.Background()
+	users, err := m.UsersInContest(ctx, "contestid")
 	if users != nil {
 		t.Errorf("Expecting users to be null, found %v instead", users)
 	}
