@@ -5022,6 +5022,11 @@ globule@^1.0.0:
     lodash "~4.17.10"
     minimatch "~3.0.2"
 
+google-protobuf@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.7.0.tgz#5c7228b68d24a7c93706c1a44efdb8ee883cea43"
+  integrity sha512-QZwgOBPfvnAdnYA+tizEs9CbE42mMXFPGCmYAh0podfJbGPkBIEC6vR9gMSGxjaSB8t2GCGLhOHiX9OrseOWCA==
+
 got@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/got/-/got-6.7.1.tgz#240cd05785a9a18e561dc1b44b41c763ef1e8db0"
@@ -11151,6 +11156,11 @@ ts-pnp@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.0.1.tgz#fde74a6371676a167abaeda1ffc0fdb423520098"
   integrity sha512-Zzg9XH0anaqhNSlDRibNC8Kp+B9KNM0uRIpLpGkGyrgRIttA7zZBhotTSEoEyuDrz3QW2LGtu2dxuk34HzIGnQ==
+
+ts-protoc-gen@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/ts-protoc-gen/-/ts-protoc-gen-0.9.0.tgz#3910a67dc4445acf4bc3c6f7f67709619e987a6e"
+  integrity sha512-cFEUTY9U9o6C4DPPfMHk2ZUdIAKL91hZN1fyx5Stz3g56BDVOC7hk+r5fEMCAGaaIgi2akkT1a2hrxu1wo2Phg==
 
 tslib@1.9.0:
   version "1.9.0"
