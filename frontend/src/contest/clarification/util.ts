@@ -1,4 +1,4 @@
-import { Clarification as ServiceClarification } from 'ugrade/services/contest/Clarification'
+import { Clarification as ServiceClarification } from 'ugrade/services/clarification'
 import { Clarification, ClarificationEntry } from '../store'
 
 export function normalizeClarification(

@@ -7,7 +7,7 @@ import {
   Language1,
   Language2,
 } from 'ugrade/services/contest/InMemoryContestService'
-import { Problem, ProblemType } from '../Problem'
+import { ProblemType } from '../Problem'
 import { ProblemSpec } from '../ProblemSpec'
 
 export const problem1: ProblemSpec = {

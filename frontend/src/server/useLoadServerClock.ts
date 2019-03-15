@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { globalErrorCatcher, useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'

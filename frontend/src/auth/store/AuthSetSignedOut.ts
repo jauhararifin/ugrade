@@ -22,5 +22,6 @@ export function setSignedOutReducer(
     isSignedIn: false,
     token: '',
     me: undefined,
+    users: {},
   }
 }
