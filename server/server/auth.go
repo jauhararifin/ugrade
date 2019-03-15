@@ -13,6 +13,13 @@ type authServer struct {
 	service auth.Service
 }
 
+// NewAuthServer create a new AuthServiceServer implementation
+func NewAuthServer(authService auth.Service) AuthServiceServer {
+	return &authServer{
+		service: authService,
+	}
+}
+
 func convertPermission(p int) Permission {
 	switch p {
 	case auth.PermissionInfoUpdate:
@@ -96,38 +103,83 @@ func (s *authServer) GetUserByID(_ context.Context, req *GetUserByIDRequest) (*G
 	}, err
 }
 
-func (s *authServer) GetUserByEmail(context.Context, *GetUserByEmailRequest) (*GetUserByEmailResponse, error) {
-
+func (s *authServer) GetUserByEmail(_ context.Context, req *GetUserByEmailRequest) (*GetUserByEmailResponse, error) {
+	user, err := s.service.UserByEmail(req.GetContestID(), req.GetEmail())
+	e, err := convertError(err)
+	return &GetUserByEmailResponse{
+		User:  convertUser(user),
+		Error: e,
+	}, err
 }
 
-func (s *authServer) GetUserByUsernames(context.Context, *GetUserByUsernamesRequest) (*GetUserByUsernamesResponse, error) {
-
+func (s *authServer) GetUserByUsernames(_ context.Context, req *GetUserByUsernamesRequest) (*GetUserByUsernamesResponse, error) {
+	users, err := s.service.UserByUsernames(req.GetContestID(), req.GetUsernames())
+	e, err := convertError(err)
+	result := make([]*User, 0, len(users))
+	for _, u := range users {
+		result = append(result, convertUser(u))
+	}
+	return &GetUserByUsernamesResponse{
+		User:  result,
+		Error: e,
+	}, err
 }
 
-func (s *authServer) SignIn(context.Context, *SignInRequest) (*SignInResponse, error) {
-
+func (s *authServer) SignIn(_ context.Context, req *SignInRequest) (*SignInResponse, error) {
+	token, err := s.service.SignIn(req.GetContestID(), req.GetEmail(), req.GetPassword())
+	e, err := convertError(err)
+	return &SignInResponse{
+		Token: token,
+		Error: e,
+	}, err
 }
 
-func (s *authServer) SignUp(context.Context, *SignUpRequest) (*SignUpResponse, error) {
-
+func (s *authServer) SignUp(_ context.Context, req *SignUpRequest) (*SignUpResponse, error) {
+	token, err := s.service.SignUp(req.GetContestID(), req.GetUsername(), req.GetEmail(), req.GetOneTimeCode(), req.GetPassword(), req.GetName())
+	e, err := convertError(err)
+	return &SignUpResponse{
+		Token: token,
+		Error: e,
+	}, err
 }
 
-func (s *authServer) ForgotPassword(context.Context, *ForgotPasswordRequest) (*Void, error) {
-
+func (s *authServer) ForgotPassword(_ context.Context, req *ForgotPasswordRequest) (*ForgotPasswordResponse, error) {
+	err := s.service.ForgotPassword(req.GetContestID(), req.GetEmail())
+	e, err := convertError(err)
+	return &ForgotPasswordResponse{
+		Error: e,
+	}, err
 }
 
-func (s *authServer) ResetPassword(context.Context, *ResetPasswordRequest) (*Void, error) {
-
+func (s *authServer) ResetPassword(_ context.Context, req *ResetPasswordRequest) (*ResetPasswordResponse, error) {
+	err := s.service.ResetPassword(req.GetContestID(), req.GetEmail(), req.GetOneTimeCode(), req.GetPassword())
+	e, err := convertError(err)
+	return &ResetPasswordResponse{
+		Error: e,
+	}, err
 }
 
-func (s *authServer) GetMe(context.Context, *GetMeRequest) (*GetMeResponse, error) {
-
+func (s *authServer) GetMe(_ context.Context, req *GetMeRequest) (*GetMeResponse, error) {
+	user, err := s.service.Me(req.GetToken())
+	e, err := convertError(err)
+	return &GetMeResponse{
+		Me:    convertUser(user),
+		Error: e,
+	}, err
 }
 
-func (s *authServer) SetMyPassword(context.Context, *SetMyPasswordRequest) (*Void, error) {
-
+func (s *authServer) SetMyPassword(_ context.Context, req *SetMyPasswordRequest) (*SetMyPasswordResponse, error) {
+	err := s.service.SetMyPassword(req.GetToken(), req.GetOldPassword(), req.GetNewPassword())
+	e, err := convertError(err)
+	return &SetMyPasswordResponse{
+		Error: e,
+	}, err
 }
 
-func (s *authServer) SetMyName(context.Context, *SetMyNameRequest) (*Void, error) {
-
+func (s *authServer) SetMyName(_ context.Context, req *SetMyNameRequest) (*SetMyNameResponse, error) {
+	err := s.service.SetMyName(req.GetToken(), req.GetName())
+	e, err := convertError(err)
+	return &SetMyNameResponse{
+		Error: e,
+	}, err
 }
