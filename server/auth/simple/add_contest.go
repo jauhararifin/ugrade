@@ -8,7 +8,7 @@ import (
 )
 
 // AddContest add new contest with specific email as admin.
-func (s *Simple) AddContest(contestID, adminEmail string) (*User, error) {
+func (s *Simple) AddContest(contestID, adminEmail string) (*auth.User, error) {
 	conExists, err := s.store.ContestExists(contestID)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot add new contest")
@@ -40,5 +40,5 @@ func (s *Simple) AddContest(contestID, adminEmail string) (*User, error) {
 		return nil, errors.Wrap(err, "cannot add new contest")
 	}
 
-	return admin, nil
+	return admin.User, nil
 }
