@@ -1,10 +1,14 @@
 package inmemory
 
-import "github.com/jauhararifin/ugrade/server/auth/simple"
+import (
+	"context"
 
-func (m *inMemory) UserByToken(token string) (*simple.User, error) {
+	"github.com/jauhararifin/ugrade/server/auth/simple"
+)
+
+func (m *inMemory) UserByToken(ctx context.Context, token string) (*simple.User, error) {
 	if uid, ok := m.mapToken[token]; ok {
-		return m.assertUserByID(uid, "mapContestEmail")
+		return m.assertUserByID(ctx, uid, "mapContestEmail")
 	}
 	return nil, &noSuchUser{}
 }

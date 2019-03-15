@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth"
@@ -16,8 +17,9 @@ func TestUpdate(t *testing.T) {
 	user := &simple.User{User: &auth.User{}}
 	m.mapIDUser["fakeuid"] = user
 
+	ctx := context.Background()
 	newUser := &simple.User{User: &auth.User{}}
-	err := m.Update("fakeuid", newUser)
+	err := m.Update(ctx, "fakeuid", newUser)
 
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
@@ -45,7 +47,8 @@ func TestUpdateChangeContest(t *testing.T) {
 
 	newUser := &simple.User{User: &auth.User{ID: "user1", ContestID: "contest2"}}
 
-	err := m.Update("user1", newUser)
+	ctx := context.Background()
+	err := m.Update(ctx, "user1", newUser)
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -84,7 +87,8 @@ func TestUpdateChangeUsername(t *testing.T) {
 
 	newUser := &simple.User{User: &auth.User{ID: "userid", ContestID: "contest", Username: "uname2"}}
 
-	err := m.Update("userid", newUser)
+	ctx := context.Background()
+	err := m.Update(ctx, "userid", newUser)
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -123,7 +127,8 @@ func TestUpdateChangeEmail(t *testing.T) {
 
 	newUser := &simple.User{User: &auth.User{ID: "userid", ContestID: "contest", Email: "email2"}}
 
-	err := m.Update("userid", newUser)
+	ctx := context.Background()
+	err := m.Update(ctx, "userid", newUser)
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -159,7 +164,8 @@ func TestUpdateWithMissingUser(t *testing.T) {
 	user := &simple.User{User: &auth.User{}}
 	m.mapIDUser["theone"] = user
 	newUser := &simple.User{User: &auth.User{}}
-	err := m.Update("fakeuid", newUser)
+	ctx := context.Background()
+	err := m.Update(ctx, "fakeuid", newUser)
 
 	if err == nil {
 		t.Errorf("Expecting error to be noSuchUser, found %T instead", err)

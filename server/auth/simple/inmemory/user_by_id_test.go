@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
@@ -12,7 +13,8 @@ func TestUserByID(t *testing.T) {
 	m := &inMemory{
 		mapIDUser: map[string]*simple.User{key: user},
 	}
-	item, err := m.UserByID(key)
+	ctx := context.Background()
+	item, err := m.UserByID(ctx, key)
 	if err != nil {
 		t.Errorf("UserByID returns error: %s", err.Error())
 	}
@@ -27,7 +29,8 @@ func TestNoSuchUserWithID(t *testing.T) {
 			"nouser": &simple.User{},
 		},
 	}
-	user, err := m.UserByID("somerandomstring")
+	ctx := context.Background()
+	user, err := m.UserByID(ctx, "somerandomstring")
 	if _, ok := err.(*noSuchUser); !ok {
 		t.Errorf("Expecting noSuchUser error, found %T", err)
 	}
@@ -42,7 +45,8 @@ func TestAssertUserById(t *testing.T) {
 	m := &inMemory{
 		mapIDUser: map[string]*simple.User{key: user},
 	}
-	item, err := m.assertUserByID(key, "fakeMap")
+	ctx := context.Background()
+	item, err := m.assertUserByID(ctx, key, "fakeMap")
 	if err != nil {
 		t.Errorf("assertUserById returns error: %s", err.Error())
 	}
@@ -57,7 +61,8 @@ func TestAssertUserByIdFail(t *testing.T) {
 	m := &inMemory{
 		mapIDUser: map[string]*simple.User{key: user},
 	}
-	item, err := m.assertUserByID("someotherrandomkey", "fakeMap")
+	ctx := context.Background()
+	item, err := m.assertUserByID(ctx, "someotherrandomkey", "fakeMap")
 	if err == nil {
 		t.Error("Expecting error but returned nil")
 	}

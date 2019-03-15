@@ -1,13 +1,14 @@
 package inmemory
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
 	"github.com/pkg/errors"
 )
 
-func (m *inMemory) Insert(users []*simple.User) error {
+func (m *inMemory) Insert(_ context.Context, users []*simple.User) error {
 	for _, user := range users {
 		if _, ok := m.mapIDUser[user.ID]; ok {
 			return errors.Errorf("user with id %s already defined", user.ID)

@@ -94,8 +94,8 @@ func convertError(e error) (*AuthError, error) {
 	}, errors.Wrap(e, "grpc error")
 }
 
-func (s *authServer) GetUserByID(_ context.Context, req *GetUserByIDRequest) (*GetUserByIDResponse, error) {
-	user, err := s.service.UserByID(req.GetUserID())
+func (s *authServer) GetUserByID(ctx context.Context, req *GetUserByIDRequest) (*GetUserByIDResponse, error) {
+	user, err := s.service.UserByID(ctx, req.GetUserID())
 	e, err := convertError(err)
 	return &GetUserByIDResponse{
 		User:  convertUser(user),
@@ -103,8 +103,8 @@ func (s *authServer) GetUserByID(_ context.Context, req *GetUserByIDRequest) (*G
 	}, err
 }
 
-func (s *authServer) GetUserByEmail(_ context.Context, req *GetUserByEmailRequest) (*GetUserByEmailResponse, error) {
-	user, err := s.service.UserByEmail(req.GetContestID(), req.GetEmail())
+func (s *authServer) GetUserByEmail(ctx context.Context, req *GetUserByEmailRequest) (*GetUserByEmailResponse, error) {
+	user, err := s.service.UserByEmail(ctx, req.GetContestID(), req.GetEmail())
 	e, err := convertError(err)
 	return &GetUserByEmailResponse{
 		User:  convertUser(user),
@@ -112,8 +112,8 @@ func (s *authServer) GetUserByEmail(_ context.Context, req *GetUserByEmailReques
 	}, err
 }
 
-func (s *authServer) GetUserByUsernames(_ context.Context, req *GetUserByUsernamesRequest) (*GetUserByUsernamesResponse, error) {
-	users, err := s.service.UserByUsernames(req.GetContestID(), req.GetUsernames())
+func (s *authServer) GetUserByUsernames(ctx context.Context, req *GetUserByUsernamesRequest) (*GetUserByUsernamesResponse, error) {
+	users, err := s.service.UserByUsernames(ctx, req.GetContestID(), req.GetUsernames())
 	e, err := convertError(err)
 	result := make([]*User, 0, len(users))
 	for _, u := range users {
@@ -125,8 +125,8 @@ func (s *authServer) GetUserByUsernames(_ context.Context, req *GetUserByUsernam
 	}, err
 }
 
-func (s *authServer) SignIn(_ context.Context, req *SignInRequest) (*SignInResponse, error) {
-	token, err := s.service.SignIn(req.GetContestID(), req.GetEmail(), req.GetPassword())
+func (s *authServer) SignIn(ctx context.Context, req *SignInRequest) (*SignInResponse, error) {
+	token, err := s.service.SignIn(ctx, req.GetContestID(), req.GetEmail(), req.GetPassword())
 	e, err := convertError(err)
 	return &SignInResponse{
 		Token: token,
@@ -134,8 +134,8 @@ func (s *authServer) SignIn(_ context.Context, req *SignInRequest) (*SignInRespo
 	}, err
 }
 
-func (s *authServer) SignUp(_ context.Context, req *SignUpRequest) (*SignUpResponse, error) {
-	token, err := s.service.SignUp(req.GetContestID(), req.GetUsername(), req.GetEmail(), req.GetOneTimeCode(), req.GetPassword(), req.GetName())
+func (s *authServer) SignUp(ctx context.Context, req *SignUpRequest) (*SignUpResponse, error) {
+	token, err := s.service.SignUp(ctx, req.GetContestID(), req.GetUsername(), req.GetEmail(), req.GetOneTimeCode(), req.GetPassword(), req.GetName())
 	e, err := convertError(err)
 	return &SignUpResponse{
 		Token: token,
@@ -143,24 +143,24 @@ func (s *authServer) SignUp(_ context.Context, req *SignUpRequest) (*SignUpRespo
 	}, err
 }
 
-func (s *authServer) ForgotPassword(_ context.Context, req *ForgotPasswordRequest) (*ForgotPasswordResponse, error) {
-	err := s.service.ForgotPassword(req.GetContestID(), req.GetEmail())
+func (s *authServer) ForgotPassword(ctx context.Context, req *ForgotPasswordRequest) (*ForgotPasswordResponse, error) {
+	err := s.service.ForgotPassword(ctx, req.GetContestID(), req.GetEmail())
 	e, err := convertError(err)
 	return &ForgotPasswordResponse{
 		Error: e,
 	}, err
 }
 
-func (s *authServer) ResetPassword(_ context.Context, req *ResetPasswordRequest) (*ResetPasswordResponse, error) {
-	err := s.service.ResetPassword(req.GetContestID(), req.GetEmail(), req.GetOneTimeCode(), req.GetPassword())
+func (s *authServer) ResetPassword(ctx context.Context, req *ResetPasswordRequest) (*ResetPasswordResponse, error) {
+	err := s.service.ResetPassword(ctx, req.GetContestID(), req.GetEmail(), req.GetOneTimeCode(), req.GetPassword())
 	e, err := convertError(err)
 	return &ResetPasswordResponse{
 		Error: e,
 	}, err
 }
 
-func (s *authServer) GetMe(_ context.Context, req *GetMeRequest) (*GetMeResponse, error) {
-	user, err := s.service.Me(req.GetToken())
+func (s *authServer) GetMe(ctx context.Context, req *GetMeRequest) (*GetMeResponse, error) {
+	user, err := s.service.Me(ctx, req.GetToken())
 	e, err := convertError(err)
 	return &GetMeResponse{
 		Me:    convertUser(user),
@@ -168,16 +168,16 @@ func (s *authServer) GetMe(_ context.Context, req *GetMeRequest) (*GetMeResponse
 	}, err
 }
 
-func (s *authServer) SetMyPassword(_ context.Context, req *SetMyPasswordRequest) (*SetMyPasswordResponse, error) {
-	err := s.service.SetMyPassword(req.GetToken(), req.GetOldPassword(), req.GetNewPassword())
+func (s *authServer) SetMyPassword(ctx context.Context, req *SetMyPasswordRequest) (*SetMyPasswordResponse, error) {
+	err := s.service.SetMyPassword(ctx, req.GetToken(), req.GetOldPassword(), req.GetNewPassword())
 	e, err := convertError(err)
 	return &SetMyPasswordResponse{
 		Error: e,
 	}, err
 }
 
-func (s *authServer) SetMyName(_ context.Context, req *SetMyNameRequest) (*SetMyNameResponse, error) {
-	err := s.service.SetMyName(req.GetToken(), req.GetName())
+func (s *authServer) SetMyName(ctx context.Context, req *SetMyNameRequest) (*SetMyNameResponse, error) {
+	err := s.service.SetMyName(ctx, req.GetToken(), req.GetName())
 	e, err := convertError(err)
 	return &SetMyNameResponse{
 		Error: e,

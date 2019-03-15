@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth"
@@ -24,7 +25,8 @@ func TestUsersInContest(t *testing.T) {
 		mapIDUser:       map[string]*simple.User{user1.ID: user1, user2.ID: user2},
 		mapContestUsers: map[string][]string{"contestid": []string{"userone", "usertwo"}},
 	}
-	users, err := m.UsersInContest("contestid")
+	ctx := context.Background()
+	users, err := m.UsersInContest(ctx, "contestid")
 	if err != nil {
 		t.Errorf("Expecting no error, found %s", err.Error())
 	}
@@ -56,7 +58,8 @@ func TestUsersInContestWithMissingContest(t *testing.T) {
 		mapIDUser:       map[string]*simple.User{user1.ID: user1, user2.ID: user2},
 		mapContestUsers: map[string][]string{"contestid": []string{"userone", "usertwo"}},
 	}
-	users, err := m.UsersInContest("othercontest")
+	ctx := context.Background()
+	users, err := m.UsersInContest(ctx, "othercontest")
 	if users != nil {
 		t.Errorf("Expecting users to be null, found %v instead", users)
 	}

@@ -1,14 +1,15 @@
 package inmemory
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
 	"github.com/pkg/errors"
 )
 
-func (m *inMemory) Update(userID string, newUser *simple.User) error {
-	user, err := m.UserByID(userID)
+func (m *inMemory) Update(ctx context.Context, userID string, newUser *simple.User) error {
+	user, err := m.UserByID(ctx, userID)
 	if err != nil {
 		if _, ok := err.(*noSuchUser); ok {
 			return &noSuchUser{}

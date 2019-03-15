@@ -1,12 +1,14 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/pkg/errors"
 )
 
 // UserByEmail returns specific user by combination if its contestID and email. When no such user if found, returned ErrNoSuchUser.
-func (s *Simple) UserByEmail(contestID, email string) (*auth.User, error) {
+func (s *Simple) UserByEmail(ctx context.Context, contestID, email string) (*auth.User, error) {
 	if err := validateEmail(email); err != nil {
 		return nil, &authErr{
 			msg: "invalid input",
@@ -15,7 +17,7 @@ func (s *Simple) UserByEmail(contestID, email string) (*auth.User, error) {
 			},
 		}
 	}
-	user, err := s.store.UserByEmail(contestID, email)
+	user, err := s.store.UserByEmail(ctx, contestID, email)
 	if auth.IsNoSuchUser(err) {
 		return nil, err
 	}

@@ -1,6 +1,8 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/jauhararifin/ugrade/server/otc"
 	"github.com/jauhararifin/ugrade/server/uuid"
@@ -8,8 +10,8 @@ import (
 )
 
 // AddUser invite other users to a contest.
-func (s *Simple) AddUser(token string, users map[string][]int) error {
-	user, err := s.store.UserByToken(token)
+func (s *Simple) AddUser(ctx context.Context, token string, users map[string][]int) error {
+	user, err := s.store.UserByToken(ctx, token)
 	if auth.IsNoSuchUser(err) {
 		return &authErr{
 			msg:            "invalid session token",
@@ -53,7 +55,7 @@ func (s *Simple) AddUser(token string, users map[string][]int) error {
 	}
 
 	for email := range users {
-		exists, err := s.store.EmailExists(user.ContestID, email)
+		exists, err := s.store.EmailExists(ctx, user.ContestID, email)
 		if err != nil {
 			return errors.Wrap(err, "cannot fetch email")
 		}
@@ -84,7 +86,7 @@ func (s *Simple) AddUser(token string, users map[string][]int) error {
 		})
 	}
 
-	if err := s.store.Insert(newUsers); err != nil {
+	if err := s.store.Insert(ctx, newUsers); err != nil {
 		return errors.Wrap(err, "cannot insert new user")
 	}
 	return nil

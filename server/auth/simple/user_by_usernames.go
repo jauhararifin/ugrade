@@ -1,13 +1,15 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/pkg/errors"
 )
 
 // UserByUsernames returns slices of users by its username in specific contest. When no such contest if found, returned ErrNoSuchContest.
-func (s *Simple) UserByUsernames(contestID string, usernames []string) ([]*auth.User, error) {
-	users, err := s.store.UserByUsernames(contestID, usernames)
+func (s *Simple) UserByUsernames(ctx context.Context, contestID string, usernames []string) ([]*auth.User, error) {
+	users, err := s.store.UserByUsernames(ctx, contestID, usernames)
 	if auth.IsNoSuchContest(err) {
 		return nil, err
 	}

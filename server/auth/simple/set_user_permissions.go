@@ -1,12 +1,14 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/pkg/errors"
 )
 
 // SetUserPermissions updates other user's permission list.
-func (s *Simple) SetUserPermissions(token, userID string, permissions []int) error {
+func (s *Simple) SetUserPermissions(ctx context.Context, token, userID string, permissions []int) error {
 	if err := validatePermissions(permissions); err != nil {
 		return &authErr{
 			msg: "invalid input",
@@ -16,7 +18,7 @@ func (s *Simple) SetUserPermissions(token, userID string, permissions []int) err
 		}
 	}
 
-	user, err := s.store.UserByToken(token)
+	user, err := s.store.UserByToken(ctx, token)
 	if auth.IsNoSuchUser(err) {
 		return &authErr{
 			msg:            "invalid session token",
@@ -51,7 +53,7 @@ func (s *Simple) SetUserPermissions(token, userID string, permissions []int) err
 	updatedUser := copyUser(user)
 	updatedUser.Permissions = permissions
 
-	if err := s.store.Update(user.ID, updatedUser); err != nil {
+	if err := s.store.Update(ctx, user.ID, updatedUser); err != nil {
 		return errors.Wrap(err, "cannot update user")
 	}
 	return nil

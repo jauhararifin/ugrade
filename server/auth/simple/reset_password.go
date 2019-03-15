@@ -1,13 +1,15 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // ResetPassword used by user to reset their password.
-func (s *Simple) ResetPassword(contestID, email, oneTimeCode, password string) error {
+func (s *Simple) ResetPassword(ctx context.Context, contestID, email, oneTimeCode, password string) error {
 	if err := validatePassword(password); err != nil {
 		return &authErr{
 			msg: "invalid input",
@@ -17,7 +19,7 @@ func (s *Simple) ResetPassword(contestID, email, oneTimeCode, password string) e
 		}
 	}
 
-	user, err := s.store.UserByEmail(contestID, email)
+	user, err := s.store.UserByEmail(ctx, contestID, email)
 	if auth.IsNoSuchUser(err) {
 		return err
 	}
@@ -39,7 +41,7 @@ func (s *Simple) ResetPassword(contestID, email, oneTimeCode, password string) e
 
 	user.Password = string(hashPass)
 	user.ResetPasswordOTC = ""
-	if err := s.store.Update(user.ID, user); err != nil {
+	if err := s.store.Update(ctx, user.ID, user); err != nil {
 		return errors.Wrap(err, "cannot update user")
 	}
 	return nil

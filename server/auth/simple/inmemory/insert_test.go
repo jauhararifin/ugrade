@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth"
@@ -42,7 +43,8 @@ func TestInsert(t *testing.T) {
 		ResetPasswordOTC: "00000002",
 	}
 
-	err := m.Insert([]*simple.User{newUser1, newUser2})
+	ctx := context.Background()
+	err := m.Insert(ctx, []*simple.User{newUser1, newUser2})
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -117,7 +119,8 @@ func TestInsertWithDuplicateID(t *testing.T) {
 		ResetPasswordOTC: "00000001",
 	}
 
-	err := m.Insert([]*simple.User{newUser})
+	ctx := context.Background()
+	err := m.Insert(ctx, []*simple.User{newUser})
 	if err == nil {
 		t.Errorf("Expecting error to be defined, nil found")
 	}
@@ -144,7 +147,8 @@ func TestInsertWithDuplicateEmail(t *testing.T) {
 		ResetPasswordOTC: "00000001",
 	}
 
-	err := m.Insert([]*simple.User{newUser})
+	ctx := context.Background()
+	err := m.Insert(ctx, []*simple.User{newUser})
 	if err == nil {
 		t.Errorf("Expecting error to be defined, nil found")
 	}
@@ -171,7 +175,8 @@ func TestInsertWithDuplicateUsername(t *testing.T) {
 		ResetPasswordOTC: "00000001",
 	}
 
-	err := m.Insert([]*simple.User{newUser})
+	ctx := context.Background()
+	err := m.Insert(ctx, []*simple.User{newUser})
 	if err == nil {
 		t.Errorf("Expecting error to be defined, nil found")
 	}
@@ -198,7 +203,8 @@ func TestInsertWithDuplicateToken(t *testing.T) {
 		ResetPasswordOTC: "00000001",
 	}
 
-	err := m.Insert([]*simple.User{newUser})
+	ctx := context.Background()
+	err := m.Insert(ctx, []*simple.User{newUser})
 	if err == nil {
 		t.Errorf("Expecting error to be defined, nil found")
 	}

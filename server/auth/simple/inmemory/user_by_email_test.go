@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -19,7 +20,8 @@ func TestUserByEmail(t *testing.T) {
 		mapIDUser:       map[string]*simple.User{uid: user},
 		mapContestEmail: map[string]string{key: user.ID},
 	}
-	item, err := m.UserByEmail(cid, uem)
+	ctx := context.Background()
+	item, err := m.UserByEmail(ctx, cid, uem)
 	if err != nil {
 		t.Errorf("UserByEmail returns error: %s", err.Error())
 	}
@@ -32,7 +34,8 @@ func TestMissingUserByEmail(t *testing.T) {
 	m := &inMemory{
 		mapContestEmail: make(map[string]string),
 	}
-	user, err := m.UserByEmail("somerandomcontest", "somerandomemail")
+	ctx := context.Background()
+	user, err := m.UserByEmail(ctx, "somerandomcontest", "somerandomemail")
 	if _, ok := err.(*noSuchUser); !ok {
 		t.Errorf("Expecting noSuchUser error, found %T", err)
 	}
@@ -46,7 +49,8 @@ func TestInvalidStateUserByEmail(t *testing.T) {
 		mapIDUser:       make(map[string]*simple.User),
 		mapContestEmail: map[string]string{"fakecontestid/fakeemail": "fakeuid"},
 	}
-	users, err := m.UserByEmail("fakecontestid", "fakeemail")
+	ctx := context.Background()
+	users, err := m.UserByEmail(ctx, "fakecontestid", "fakeemail")
 	if users != nil {
 		t.Errorf("Expecting users to be null, found %v instead", users)
 	}

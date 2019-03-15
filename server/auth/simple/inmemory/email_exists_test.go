@@ -1,6 +1,9 @@
 package inmemory
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
 func TestEmailExists(t *testing.T) {
 	m, ok := New().(*inMemory)
@@ -9,7 +12,8 @@ func TestEmailExists(t *testing.T) {
 	}
 
 	m.mapContestEmail["fakecontestid/fakeemail"] = "fakeuid"
-	r, err := m.EmailExists("fakecontestid", "fakeemail")
+	ctx := context.Background()
+	r, err := m.EmailExists(ctx, "fakecontestid", "fakeemail")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -26,7 +30,9 @@ func TestMissingEmail(t *testing.T) {
 
 	m.mapContestEmail["fakecontestid/nonemail"] = "nonuid"
 
-	r, err := m.EmailExists("fakecontestid", "fakeemail")
+	ctx := context.Background()
+
+	r, err := m.EmailExists(ctx, "fakecontestid", "fakeemail")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -34,7 +40,7 @@ func TestMissingEmail(t *testing.T) {
 		t.Errorf("Expecting r to be false, found %v instead", r)
 	}
 
-	r, err = m.EmailExists("someothercontestid", "fakeemail")
+	r, err = m.EmailExists(ctx, "someothercontestid", "fakeemail")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}

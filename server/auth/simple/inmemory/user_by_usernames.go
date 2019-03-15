@@ -1,12 +1,13 @@
 package inmemory
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
 )
 
-func (m *inMemory) UserByUsernames(contestID string, usernames []string) ([]*simple.User, error) {
+func (m *inMemory) UserByUsernames(ctx context.Context, contestID string, usernames []string) ([]*simple.User, error) {
 	if _, ok := m.mapContestUsers[contestID]; !ok {
 		return nil, &noSuchContest{}
 	}
@@ -14,7 +15,7 @@ func (m *inMemory) UserByUsernames(contestID string, usernames []string) ([]*sim
 	for _, uname := range usernames {
 		key := fmt.Sprintf("%s/%s", contestID, uname)
 		if uid, ok := m.mapContestUsername[key]; ok {
-			user, err := m.assertUserByID(uid, "mapContestEmail")
+			user, err := m.assertUserByID(ctx, uid, "mapContestEmail")
 			if err != nil {
 				return nil, err
 			}

@@ -1,6 +1,9 @@
 package inmemory
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
 func TestContestExists(t *testing.T) {
 	m, ok := New().(*inMemory)
@@ -8,8 +11,9 @@ func TestContestExists(t *testing.T) {
 		t.Errorf("Expecting inMemory, found %T", m)
 	}
 
+	ctx := context.Background()
 	m.mapContestUsers["fakecontestid"] = nil
-	r, err := m.ContestExists("fakecontestid")
+	r, err := m.ContestExists(ctx, "fakecontestid")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -26,7 +30,8 @@ func TestMissingContest(t *testing.T) {
 
 	m.mapContestUsers["fakecontestid"] = nil
 
-	r, err := m.ContestExists("otherfakecontestid")
+	ctx := context.Background()
+	r, err := m.ContestExists(ctx, "otherfakecontestid")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}

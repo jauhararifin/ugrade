@@ -1,6 +1,8 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/jauhararifin/ugrade/server/uuid"
 	"github.com/pkg/errors"
@@ -8,7 +10,7 @@ import (
 )
 
 // SignUp used by used when they first time join the contest. It takes user information such as name, username and passwod and returned session token when success.
-func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name string) (string, error) {
+func (s *Simple) SignUp(ctx context.Context, contestID, username, email, oneTimeCode, password, name string) (string, error) {
 	errUsername := validateUsername(username)
 	errName := validateName(name)
 	errPasswd := validatePassword(password)
@@ -29,7 +31,7 @@ func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name 
 		}
 	}
 
-	uu, err := s.store.UserByUsernames(contestID, []string{username})
+	uu, err := s.store.UserByUsernames(ctx, contestID, []string{username})
 	if auth.IsNoSuchContest(err) {
 		return "", err
 	}
@@ -43,7 +45,7 @@ func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name 
 		}
 	}
 
-	user, err := s.store.UserByEmail(contestID, email)
+	user, err := s.store.UserByEmail(ctx, contestID, email)
 	if auth.IsNoSuchUser(err) {
 		return "", err
 	}
@@ -79,7 +81,7 @@ func (s *Simple) SignUp(contestID, username, email, oneTimeCode, password, name 
 	updatedUser.SignUpOTC = ""
 	updatedUser.ResetPasswordOTC = ""
 
-	if err := s.store.Update(user.ID, updatedUser); err != nil {
+	if err := s.store.Update(ctx, user.ID, updatedUser); err != nil {
 		return "", errors.Wrap(err, "cannot update user")
 	}
 	return token, nil

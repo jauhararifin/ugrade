@@ -1,13 +1,15 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // SetMyPassword updates user password.
-func (s *Simple) SetMyPassword(token, oldPassword, newPassword string) error {
+func (s *Simple) SetMyPassword(ctx context.Context, token, oldPassword, newPassword string) error {
 	errOld := validatePassword(oldPassword)
 	errNew := validatePassword(newPassword)
 	if errOld != nil || errNew != nil {
@@ -25,7 +27,7 @@ func (s *Simple) SetMyPassword(token, oldPassword, newPassword string) error {
 		}
 	}
 
-	user, err := s.store.UserByToken(token)
+	user, err := s.store.UserByToken(ctx, token)
 	if auth.IsNoSuchUser(err) {
 		return &authErr{
 			msg:            "invalid session token",
@@ -51,7 +53,7 @@ func (s *Simple) SetMyPassword(token, oldPassword, newPassword string) error {
 	updatedUser := copyUser(user)
 	updatedUser.Password = string(hashPass)
 
-	if err := s.store.Update(user.ID, updatedUser); err != nil {
+	if err := s.store.Update(ctx, user.ID, updatedUser); err != nil {
 		return errors.Wrap(err, "cannot update user")
 	}
 	return nil

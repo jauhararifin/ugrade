@@ -1,6 +1,8 @@
 package simple
 
 import (
+	"context"
+
 	"github.com/jauhararifin/ugrade/server/auth"
 	"github.com/jauhararifin/ugrade/server/otc"
 	"github.com/jauhararifin/ugrade/server/uuid"
@@ -8,8 +10,8 @@ import (
 )
 
 // AddContest add new contest with specific email as admin.
-func (s *Simple) AddContest(contestID, adminEmail string) (*auth.User, error) {
-	conExists, err := s.store.ContestExists(contestID)
+func (s *Simple) AddContest(ctx context.Context, contestID, adminEmail string) (*auth.User, error) {
+	conExists, err := s.store.ContestExists(ctx, contestID)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot add new contest")
 	}
@@ -35,7 +37,7 @@ func (s *Simple) AddContest(contestID, adminEmail string) (*auth.User, error) {
 		ResetPasswordOTC: "",
 	}
 
-	err = s.store.Insert([]*User{admin})
+	err = s.store.Insert(ctx, []*User{admin})
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot add new contest")
 	}

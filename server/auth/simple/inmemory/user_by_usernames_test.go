@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
@@ -23,7 +24,8 @@ func TestUserByUsernames(t *testing.T) {
 	m.mapContestUsername["fakecontestid/fakeusername2"] = "fakeuid2"
 	m.mapContestUsername["fakecontestid/fakeusername3"] = "fakeuid3"
 
-	users, err := m.UserByUsernames("fakecontestid", []string{
+	ctx := context.Background()
+	users, err := m.UserByUsernames(ctx, "fakecontestid", []string{
 		"fakeusername1",
 		"fakeusername2",
 		"fakeusername3",
@@ -58,7 +60,8 @@ func TestMissingUserWithUsernames(t *testing.T) {
 	m.mapContestUsername["fakecontestid/fakeusername2"] = "fakeuid2"
 	m.mapContestUsername["fakecontestid/fakeusername3"] = "fakeuid3"
 
-	users, err := m.UserByUsernames("fakecontestid", []string{
+	ctx := context.Background()
+	users, err := m.UserByUsernames(ctx, "fakecontestid", []string{
 		"fakeusername1",
 		"fakeusername4",
 		"fakeusername2",
@@ -95,7 +98,8 @@ func TestUserByUsernamesWithEmptyUsernames(t *testing.T) {
 	m.mapContestUsername["fakecontestid/fakeusername2"] = "fakeuid2"
 	m.mapContestUsername["fakecontestid/fakeusername3"] = "fakeuid3"
 
-	users, err := m.UserByUsernames("fakecontestid", []string{})
+	ctx := context.Background()
+	users, err := m.UserByUsernames(ctx, "fakecontestid", []string{})
 
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
@@ -116,7 +120,8 @@ func TestUserByUsernamesWithMissingContest(t *testing.T) {
 	m.mapIDUser["fakeuid1"] = user1
 	m.mapContestUsername["fakecontestid/fakeusername1"] = "fakeuid1"
 
-	users, err := m.UserByUsernames("fakecontestid", []string{"fakeusername1"})
+	ctx := context.Background()
+	users, err := m.UserByUsernames(ctx, "fakecontestid", []string{"fakeusername1"})
 
 	if err == nil {
 		t.Errorf("Expecting error to be noSuchContest, found %T instead", err)
@@ -140,7 +145,8 @@ func TestInvalidStateUserByUsernames(t *testing.T) {
 	m.mapContestUsers["fakecontestid"] = []string{}
 	m.mapContestUsername["fakecontestid/fakeusername1"] = "fakeuid1"
 
-	users, err := m.UserByUsernames("fakecontestid", []string{"fakeusername1"})
+	ctx := context.Background()
+	users, err := m.UserByUsernames(ctx, "fakecontestid", []string{"fakeusername1"})
 
 	if err == nil {
 		t.Errorf("Expecting error to be invalidState, found %T instead", err)

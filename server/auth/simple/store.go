@@ -1,6 +1,10 @@
 package simple
 
-import "github.com/jauhararifin/ugrade/server/auth"
+import (
+	"context"
+
+	"github.com/jauhararifin/ugrade/server/auth"
+)
 
 // NoSuchUser indicates that no user is found.
 type NoSuchUser = auth.NoSuchUser
@@ -29,14 +33,14 @@ type User struct {
 
 // Store is the interface that wraps functionality of storing information that used by Service.
 type Store interface {
-	UserByID(userID string) (*User, error)
-	UsersInContest(contestID string) ([]*User, error)
-	UserByEmail(contestID, email string) (*User, error)
-	UserByUsernames(contestID string, usernames []string) ([]*User, error)
-	UserByToken(token string) (*User, error)
-	IssueToken(userID, token string) (string, error)
-	Update(userID string, user *User) error
-	Insert(users []*User) error
-	EmailExists(contestID, email string) (bool, error)
-	ContestExists(contestID string) (bool, error)
+	UserByID(ctx context.Context, userID string) (*User, error)
+	UsersInContest(ctx context.Context, contestID string) ([]*User, error)
+	UserByEmail(ctx context.Context, contestID, email string) (*User, error)
+	UserByUsernames(ctx context.Context, contestID string, usernames []string) ([]*User, error)
+	UserByToken(ctx context.Context, token string) (*User, error)
+	IssueToken(ctx context.Context, userID, token string) (string, error)
+	Update(ctx context.Context, userID string, user *User) error
+	Insert(ctx context.Context, users []*User) error
+	EmailExists(ctx context.Context, contestID, email string) (bool, error)
+	ContestExists(ctx context.Context, contestID string) (bool, error)
 }

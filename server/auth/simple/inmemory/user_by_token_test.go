@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth/simple"
@@ -14,7 +15,8 @@ func TestUserByToken(t *testing.T) {
 		mapIDUser: map[string]*simple.User{uid: user},
 		mapToken:  map[string]string{token: uid},
 	}
-	item, err := m.UserByToken(token)
+	ctx := context.Background()
+	item, err := m.UserByToken(ctx, token)
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -27,7 +29,8 @@ func TestMissingUserByToken(t *testing.T) {
 	m := &inMemory{
 		mapContestEmail: make(map[string]string),
 	}
-	user, err := m.UserByToken("somerandomtoken")
+	ctx := context.Background()
+	user, err := m.UserByToken(ctx, "somerandomtoken")
 	if _, ok := err.(*noSuchUser); !ok {
 		t.Errorf("Expecting noSuchUser error, found %T", err)
 	}
@@ -41,7 +44,8 @@ func TestInvalidStateUserByToken(t *testing.T) {
 		mapIDUser: make(map[string]*simple.User),
 		mapToken:  map[string]string{"faketoken": "fakeuid"},
 	}
-	users, err := m.UserByToken("faketoken")
+	ctx := context.Background()
+	users, err := m.UserByToken(ctx, "faketoken")
 	if users != nil {
 		t.Errorf("Expecting users to be null, found %v instead", users)
 	}

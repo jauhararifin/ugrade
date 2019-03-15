@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jauhararifin/ugrade/server/auth"
@@ -16,7 +17,8 @@ func TestIssueToken(t *testing.T) {
 	user := &simple.User{User: &auth.User{ID: "fakeuserid"}}
 	m.mapIDUser["fakeuserid"] = user
 
-	token, err := m.IssueToken("fakeuserid", "faketoken")
+	ctx := context.Background()
+	token, err := m.IssueToken(ctx, "fakeuserid", "faketoken")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -38,7 +40,8 @@ func TestTokenAlreadyIssued(t *testing.T) {
 	m.mapToken["longtoken"] = "fakeuserid"
 	m.mapIDUser["fakeuserid"] = user
 
-	token, err := m.IssueToken("fakeuserid", "faketoken")
+	ctx := context.Background()
+	token, err := m.IssueToken(ctx, "fakeuserid", "faketoken")
 	if err != nil {
 		t.Errorf("Expecting error to be nil, found %T instead", err)
 	}
@@ -60,7 +63,8 @@ func TestNoUserWithToken(t *testing.T) {
 	m.mapToken["longtoken"] = "fakeuserid"
 	m.mapIDUser["fakeuserid"] = user
 
-	token, err := m.IssueToken("nothing", "faketoken")
+	ctx := context.Background()
+	token, err := m.IssueToken(ctx, "nothing", "faketoken")
 	if _, ok := err.(*noSuchUser); !ok {
 		t.Errorf("Expecting error is noSuchUser, found %T instead", err)
 	}
