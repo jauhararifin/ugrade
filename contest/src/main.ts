@@ -9,12 +9,20 @@ import { InMemoryLanguageStore } from './language/store/inmemory'
 import { availableLanguages as languageFixture } from './language'
 import { InMemoryUserStore } from './user/store/inmemory'
 import { users as userFixture } from './user'
+import { InMemoryAuthStore } from './auth/store/inmemory'
+import { credentials as authFixture } from './auth'
 
 const contestStore = new InMemoryContestStore(contestFixture)
 const languageStore = new InMemoryLanguageStore(languageFixture)
 const userStore = new InMemoryUserStore(userFixture)
+const authStore = new InMemoryAuthStore(authFixture)
 
-const resolvers = createResolvers(contestStore, languageStore, userStore)
+const resolvers = createResolvers(
+  contestStore,
+  languageStore,
+  userStore,
+  authStore
+)
 
 const apollo = new ApolloServer({ typeDefs: schema, resolvers })
 const app = express()
