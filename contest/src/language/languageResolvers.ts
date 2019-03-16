@@ -1,15 +1,24 @@
-import { IFieldResolver } from 'graphql-tools'
-import { ContestModel } from 'ugrade/contest/store'
-import { NO_SUCH_LANGUAGE } from './errors'
-import { LanguageStore, NoSuchLanguage } from './store'
+import {
+  allLanguageResolver,
+  AllLanguageResolver,
+} from './allLanguagesResolver'
+import {
+  languageByIdResolver,
+  LanguageByIdResolver,
+} from './languageByIdResolver'
+import {
+  permittedLanguageResolver,
+  PermittedLanguageResolver,
+} from './permittedLanguagesResolver'
+import { LanguageStore } from './store'
 
 export interface LanguageResolvers {
   Query: {
-    languages: IFieldResolver<any, any, any>
-    languageById: IFieldResolver<any, any, { id: string }>
+    languages: AllLanguageResolver
+    languageById: LanguageByIdResolver
   }
   Contest: {
-    permittedLanguages: IFieldResolver<ContestModel, any, any>
+    permittedLanguages: PermittedLanguageResolver
   }
 }
 
@@ -17,19 +26,10 @@ export const createLanguageResolvers = (
   store: LanguageStore
 ): LanguageResolvers => ({
   Query: {
-    languages: () => store.getAvailableLanguages(),
-
-    languageById: async (_parent, { id }) => {
-      try {
-        return await store.getLanguageById(id)
-      } catch (error) {
-        if (error instanceof NoSuchLanguage) throw NO_SUCH_LANGUAGE
-        throw error
-      }
-    },
+    languages: allLanguageResolver(store),
+    languageById: languageByIdResolver(store),
   },
   Contest: {
-    permittedLanguages: ({ permittedLanguageIds }) =>
-      Promise.all(permittedLanguageIds.map(id => store.getLanguageById(id))),
+    permittedLanguages: permittedLanguageResolver(store),
   },
 })
