@@ -1,7 +1,7 @@
-import { AuthStore } from '../store'
-import { CredentialModel } from '../model'
 import lodash from 'lodash'
+import { CredentialModel } from '../model'
 import { NoSuchCredential } from '../NoSuchCredential'
+import { AuthStore } from '../store'
 
 export class InMemoryAuthStore implements AuthStore {
   private credentials: CredentialModel[]
@@ -40,10 +40,12 @@ export class InMemoryAuthStore implements AuthStore {
     this.credentials = this.credentials
       .filter(c => c.userId !== credential.userId)
       .slice()
-    if (this.credentialUser[credential.userId])
+    if (this.credentialUser[credential.userId]) {
       delete this.credentialUser[credential.userId]
-    if (credential.token.length > 0 && this.credentialToken[credential.token])
+    }
+    if (credential.token.length > 0 && this.credentialToken[credential.token]) {
       delete this.credentialToken[credential.token]
+    }
     const newCred = lodash.cloneDeep(credential)
     this.credentials.push(newCred)
     this.credentialUser[newCred.userId] = newCred

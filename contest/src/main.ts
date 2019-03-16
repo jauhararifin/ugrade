@@ -1,17 +1,17 @@
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import { schema } from './schema'
-import { createResolvers } from './resolvers'
 import { AddressInfo } from 'net'
-import { InMemoryContestStore } from './contest/store/inmemory'
-import { contests as contestFixture } from './contest/store'
-import { InMemoryLanguageStore } from './language/store/inmemory'
-import { availableLanguages as languageFixture } from './language/store'
-import { InMemoryUserStore } from './user/store/inmemory'
-import { users as userFixture } from './user/store'
-import { InMemoryAuthStore } from './auth/store/inmemory'
 import { credentials as authFixture } from './auth/store'
+import { InMemoryAuthStore } from './auth/store/inmemory'
+import { contests as contestFixture } from './contest/store'
+import { InMemoryContestStore } from './contest/store/inmemory'
 import { AppContext } from './context'
+import { availableLanguages as languageFixture } from './language/store'
+import { InMemoryLanguageStore } from './language/store/inmemory'
+import { createResolvers } from './resolvers'
+import { schema } from './schema'
+import { users as userFixture } from './user/store'
+import { InMemoryUserStore } from './user/store/inmemory'
 
 const contestStore = new InMemoryContestStore(contestFixture)
 const languageStore = new InMemoryLanguageStore(languageFixture)
@@ -41,7 +41,7 @@ const apollo = new ApolloServer({
 const app = express()
 apollo.applyMiddleware({ app })
 
-const port = Number.parseInt(process.env.PORT || '5000')
+const port = Number.parseInt(process.env.PORT || '5000', 10)
 const server = app.listen({ port }, () => {
   const addr = server.address() as AddressInfo
   console.log(

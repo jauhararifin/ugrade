@@ -1,7 +1,7 @@
 import { IFieldResolver } from 'graphql-tools'
-import { LanguageStore, NoSuchLanguage } from './store'
 import { ContestModel } from '../contest/store'
 import { NO_SUCH_LANGUAGE } from './errors'
+import { LanguageStore, NoSuchLanguage } from './store'
 
 export interface LanguageResolvers {
   Query: {

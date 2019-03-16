@@ -1,8 +1,7 @@
-import { UserStore, NoSuchUser } from './store'
 import { IFieldResolver } from 'graphql-tools'
-import { AppContext } from '../context'
 import { ContestModel } from '../contest/store'
 import { NO_SUCH_USER } from './errors'
+import { NoSuchUser, UserStore } from './store'
 
 export interface UserResolvers {
   Query: {

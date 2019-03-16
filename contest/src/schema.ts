@@ -1,6 +1,6 @@
+import { gql } from 'apollo-server-express'
 import fs from 'fs'
 import path from 'path'
-import { gql } from 'apollo-server-express'
 
 export const schemaStr = fs.readFileSync(
   path.join(__dirname, 'schema.gql'),

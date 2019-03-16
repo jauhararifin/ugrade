@@ -1,7 +1,7 @@
-import { UserModel } from '../model'
 import lodash from 'lodash'
-import { UserStore } from '../store'
+import { UserModel } from '../model'
 import { NoSuchUser } from '../NoSuchUser'
+import { UserStore } from '../store'
 
 export class InMemoryUserStore implements UserStore {
   private users: UserModel[]

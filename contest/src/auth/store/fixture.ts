@@ -1,16 +1,16 @@
+import { hashSync } from 'bcrypt'
 import { CredentialModel } from '.'
 import {
+  UserAdmin3,
   UserNewTest1,
+  UserNewTest2,
+  UserNewTest3,
+  UserNewTest4,
   UserTest1,
   UserTest2,
-  UserNewTest2,
   UserTest3,
-  UserNewTest3,
-  UserAdmin3,
   UserTest4,
-  UserNewTest4,
 } from '../../user/store'
-import { hashSync } from 'bcrypt'
 
 export const credentials: CredentialModel[] = [
   { userId: UserTest1.id, password: hashSync('test', 10), token: '' },

@@ -1,13 +1,13 @@
 import { IResolvers } from 'graphql-tools'
+import { merge } from 'lodash'
+import { createAuthResolvers } from './auth'
+import { AuthStore } from './auth/store'
 import { createContestResolvers } from './contest'
 import { ContestStore } from './contest/store'
-import { LanguageStore } from './language/store'
 import { createLanguageResolvers } from './language/languageResolvers'
-import { merge } from 'lodash'
-import { UserStore } from './user/store'
+import { LanguageStore } from './language/store'
 import { createUserResolvers } from './user'
-import { AuthStore } from './auth/store'
-import { createAuthResolvers } from './auth'
+import { UserStore } from './user/store'
 
 export function createResolvers(
   contestStore: ContestStore,

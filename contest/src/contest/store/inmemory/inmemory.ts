@@ -1,7 +1,7 @@
-import { ContestStore } from '../store'
 import lodash from 'lodash'
-import { NoSuchContest } from '../NoSuchContest'
 import { ContestModel } from '../model'
+import { NoSuchContest } from '../NoSuchContest'
+import { ContestStore } from '../store'
 
 export class InMemoryContestStore implements ContestStore {
   private contests: ContestModel[]

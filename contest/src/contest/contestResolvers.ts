@@ -1,7 +1,7 @@
-import { ContestStore, NoSuchContest } from './store'
 import { IFieldResolver } from 'graphql-tools'
 import { UserModel } from '../user/store'
 import { NO_SUCH_CONTEST } from './errors'
+import { ContestStore, NoSuchContest } from './store'
 
 export interface ContestResolvers {
   Query: {
@@ -30,7 +30,6 @@ export const createContestResolvers = (
       try {
         return await store.getContestByShortId(shortId)
       } catch (error) {
-        store.getContestByShortId(shortId)
         if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
         throw error
       }

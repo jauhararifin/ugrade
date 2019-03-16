@@ -1,11 +1,11 @@
-import { IFieldResolver } from 'graphql-tools'
-import { AppContext } from '../context'
-import { UserStore, NoSuchUser } from '../user/store'
-import { AuthStore, NoSuchCredential } from './store'
-import { ContestStore } from '../contest/store'
 import { compare } from 'bcrypt'
-import { genToken } from './util'
+import { IFieldResolver } from 'graphql-tools'
+import { ContestStore } from '../contest/store'
+import { AppContext } from '../context'
+import { NoSuchUser, UserStore } from '../user/store'
 import { INVALID_CREDENTIAL, INVALID_TOKEN } from './errors'
+import { AuthStore, NoSuchCredential } from './store'
+import { genToken } from './util'
 
 export interface AuthResolvers {
   Mutation: {
@@ -60,8 +60,9 @@ export const createAuthResolvers = (
         const cred = await authStore.getCredentialByToken(authToken)
         return await userStore.getUserById(cred.userId)
       } catch (error) {
-        if (error instanceof NoSuchUser || error instanceof NoSuchCredential)
+        if (error instanceof NoSuchUser || error instanceof NoSuchCredential) {
           throw INVALID_TOKEN
+        }
         throw error
       }
     },
@@ -71,8 +72,9 @@ export const createAuthResolvers = (
         const cred = await authStore.getCredentialByToken(authToken)
         return await contestStore.getContestById(cred.userId)
       } catch (error) {
-        if (error instanceof NoSuchUser || error instanceof NoSuchCredential)
+        if (error instanceof NoSuchUser || error instanceof NoSuchCredential) {
           throw INVALID_TOKEN
+        }
         throw error
       }
     },

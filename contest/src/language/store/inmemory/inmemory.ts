@@ -1,7 +1,7 @@
-import { LanguageStore } from '../store'
 import lodash from 'lodash'
-import { NoSuchLanguage } from '../NoSuchLanguage'
 import { LanguageModel } from '../model'
+import { NoSuchLanguage } from '../NoSuchLanguage'
+import { LanguageStore } from '../store'
 
 export class InMemoryLanguageStore implements LanguageStore {
   private languages: LanguageModel[]

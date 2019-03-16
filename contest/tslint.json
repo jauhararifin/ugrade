@@ -3,7 +3,6 @@
   "extends": [
     "tslint:latest",
     "tslint-config-standard",
-    "tslint-react",
     "tslint-config-prettier"
   ],
   "jsRules": {},
