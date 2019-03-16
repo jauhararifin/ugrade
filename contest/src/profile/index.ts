@@ -1,1 +1,5 @@
+export * from './profileByTokenResolver'
+export * from './profileByUserResolver'
 export * from './profileResolvers'
+export * from './setMyProfileResolver'
+export * from './userProfileResolver'
