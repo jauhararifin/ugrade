@@ -5,7 +5,6 @@ import { AuthStore, NoSuchCredential } from './store'
 import { ContestStore } from '../contest/store'
 import { compare } from 'bcrypt'
 import { genToken } from './util'
-import { InvalidCredential } from './InvalidCredential'
 import { INVALID_CREDENTIAL, INVALID_TOKEN } from './errors'
 
 export interface AuthResolvers {
@@ -45,13 +44,9 @@ export const createAuthResolvers = (
           const result = await authStore.putUserCredential(newCred)
           return result.token
         }
-        throw new InvalidCredential('Invalid Credential')
+        throw INVALID_CREDENTIAL
       } catch (error) {
-        if (
-          error instanceof NoSuchCredential ||
-          error instanceof NoSuchUser ||
-          error instanceof InvalidCredential
-        ) {
+        if (error instanceof NoSuchCredential || error instanceof NoSuchUser) {
           throw INVALID_CREDENTIAL
         }
         throw error
@@ -63,7 +58,7 @@ export const createAuthResolvers = (
     user: async (_parent, _args, { authToken }) => {
       try {
         const cred = await authStore.getCredentialByToken(authToken)
-        return userStore.getUserById(cred.userId)
+        return await userStore.getUserById(cred.userId)
       } catch (error) {
         if (error instanceof NoSuchUser || error instanceof NoSuchCredential)
           throw INVALID_TOKEN
@@ -74,7 +69,7 @@ export const createAuthResolvers = (
     contest: async (_parent, _args, { authToken }) => {
       try {
         const cred = await authStore.getCredentialByToken(authToken)
-        return contestStore.getContestById(cred.userId)
+        return await contestStore.getContestById(cred.userId)
       } catch (error) {
         if (error instanceof NoSuchUser || error instanceof NoSuchCredential)
           throw INVALID_TOKEN

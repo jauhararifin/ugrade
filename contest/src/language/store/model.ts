@@ -1,3 +1,4 @@
-import { Language } from '../language'
-
-export type LanguageModel = Language
+export interface LanguageModel {
+  id: string
+  name: string
+}

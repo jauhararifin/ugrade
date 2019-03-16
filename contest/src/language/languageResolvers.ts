@@ -1,6 +1,7 @@
 import { IFieldResolver } from 'graphql-tools'
-import { LanguageStore } from './store'
+import { LanguageStore, NoSuchLanguage } from './store'
 import { ContestModel } from '../contest/store'
+import { NO_SUCH_LANGUAGE } from './errors'
 
 export interface LanguageResolvers {
   Query: {
@@ -17,7 +18,15 @@ export const createLanguageResolvers = (
 ): LanguageResolvers => ({
   Query: {
     languages: () => store.getAvailableLanguages(),
-    languageById: (_parent, { id }) => store.getLanguageById(id),
+
+    languageById: async (_parent, { id }) => {
+      try {
+        return await store.getLanguageById(id)
+      } catch (error) {
+        if (error instanceof NoSuchLanguage) throw NO_SUCH_LANGUAGE
+        throw error
+      }
+    },
   },
   Contest: {
     permittedLanguages: ({ permittedLanguageIds }) =>

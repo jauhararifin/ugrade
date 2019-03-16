@@ -3,9 +3,9 @@ import {
   ContestArkav4Final,
   ContestArkav5Qual,
   ContestArkav5Final,
-} from '../contest'
-import { Permission } from './permission'
-import { UserModel } from './store'
+} from '../../contest/store'
+import { UserModel } from '.'
+import { Permission } from './model'
 
 export const adminPermissions = [
   Permission.InfoUpdate,

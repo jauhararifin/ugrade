@@ -1,7 +1,8 @@
-import { UserStore } from './store'
+import { UserStore, NoSuchUser } from './store'
 import { IFieldResolver } from 'graphql-tools'
 import { AppContext } from '../context'
 import { ContestModel } from '../contest/store'
+import { NO_SUCH_USER } from './errors'
 
 export interface UserResolvers {
   Query: {
@@ -20,11 +21,31 @@ export interface UserResolvers {
 
 export const createUserResolvers = (store: UserStore): UserResolvers => ({
   Query: {
-    userById: (_source, { id }) => store.getUserById(id),
-    userByEmail: (_source, { contestId, email }) =>
-      store.getUserByEmail(contestId, email),
-    userByUsername: (_source, { contestId, username }) =>
-      store.getUserByUsername(contestId, username),
+    userById: async (_source, { id }) => {
+      try {
+        return await store.getUserById(id)
+      } catch (error) {
+        if (error instanceof NoSuchUser) throw NO_SUCH_USER
+        throw error
+      }
+    },
+
+    userByEmail: async (_source, { contestId, email }) => {
+      try {
+        return await store.getUserByEmail(contestId, email)
+      } catch (error) {
+        if (error instanceof NoSuchUser) throw NO_SUCH_USER
+        throw error
+      }
+    },
+    userByUsername: async (_source, { contestId, username }) => {
+      try {
+        return await store.getUserByUsername(contestId, username)
+      } catch (error) {
+        if (error instanceof NoSuchUser) throw NO_SUCH_USER
+        throw error
+      }
+    },
   },
   Contest: {
     users: ({ id }) => store.getUsersInContest(id),

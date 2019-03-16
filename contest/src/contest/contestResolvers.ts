@@ -17,18 +17,18 @@ export const createContestResolvers = (
   store: ContestStore
 ): ContestResolvers => ({
   Query: {
-    contestById: (_parent, { id }) => {
+    contestById: async (_parent, { id }) => {
       try {
-        return store.getContestById(id)
+        return await store.getContestById(id)
       } catch (error) {
         if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
         throw error
       }
     },
 
-    contestByShortId: (_parent, { shortId }) => {
+    contestByShortId: async (_parent, { shortId }) => {
       try {
-        return store.getContestByShortId(shortId)
+        return await store.getContestByShortId(shortId)
       } catch (error) {
         store.getContestByShortId(shortId)
         if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
@@ -38,9 +38,9 @@ export const createContestResolvers = (
   },
 
   User: {
-    contest: parent => {
+    contest: async parent => {
       try {
-        return store.getContestById(parent.contestId)
+        return await store.getContestById(parent.contestId)
       } catch (error) {
         if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
         throw error

@@ -1,6 +1,3 @@
 export * from './authResolvers'
-export * from './AuthError'
-export * from './InvalidCredential'
-export * from './fixture'
 export * from './errors'
 export * from './util'

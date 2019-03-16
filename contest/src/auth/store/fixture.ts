@@ -1,4 +1,4 @@
-import { CredentialModel } from './store'
+import { CredentialModel } from '.'
 import {
   UserNewTest1,
   UserTest1,
@@ -9,7 +9,7 @@ import {
   UserAdmin3,
   UserTest4,
   UserNewTest4,
-} from '../user'
+} from '../../user/store'
 import { hashSync } from 'bcrypt'
 
 export const credentials: CredentialModel[] = [
