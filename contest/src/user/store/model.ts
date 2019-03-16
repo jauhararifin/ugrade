@@ -1,20 +1,20 @@
 export enum Permission {
-  InfoUpdate = 'info:update',
+  InfoUpdate = 'InfoUpdate',
 
-  AnnouncementCreate = 'announcement:create',
-  AnnouncementRead = 'announcement:read',
+  AnnouncementCreate = 'AnnouncementCreate',
+  AnnouncementRead = 'AnnouncementRead',
 
-  ProblemsCreate = 'problems:create',
-  ProblemsRead = 'problems:read',
-  ProblemsReadDisabled = 'problems:read-disabled',
-  ProblemsUpdate = 'problems:update',
-  ProblemsDelete = 'problems:delete',
+  ProblemsCreate = 'ProblemsCreate',
+  ProblemsRead = 'ProblemsRead',
+  ProblemsReadDisabled = 'ProblemsReadDisabled',
+  ProblemsUpdate = 'ProblemsUpdate',
+  ProblemsDelete = 'ProblemsDelete',
 
-  UsersInvite = 'users:invite',
-  UsersPermissionsUpdate = 'users:permissions:update',
-  UsersDelete = 'users:delete',
+  UsersInvite = 'UsersInvite',
+  UsersPermissionsUpdate = 'UsersPermissionsUpdate',
+  UsersDelete = 'UsersDelete',
 
-  ProfilesRead = 'profiles:read',
+  ProfilesRead = 'ProfilesRead',
 }
 
 export interface UserModel {
