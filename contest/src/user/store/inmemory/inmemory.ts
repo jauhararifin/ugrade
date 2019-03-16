@@ -46,4 +46,8 @@ export class InMemoryUserStore implements UserStore {
     }
     throw new NoSuchUser('No Such User')
   }
+
+  async getUsersInContest(contestId: string): Promise<UserModel[]> {
+    return lodash.cloneDeep(this.users.filter(u => u.contestId === contestId))
+  }
 }
