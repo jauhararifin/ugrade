@@ -1,10 +1,10 @@
-import { availableLanguages } from '../language'
-import { Language1 } from '../language'
-import { Language2 } from '../language'
-import { Language3 } from '../language'
-import { Language4 } from '../language'
-import { Language5 } from '../language'
-import { ContestModel } from './store'
+import { availableLanguages } from '../../language'
+import { Language1 } from '../../language'
+import { Language2 } from '../../language'
+import { Language3 } from '../../language'
+import { Language4 } from '../../language'
+import { Language5 } from '../../language'
+import { ContestModel } from '.'
 
 export const ContestArkav4Qual: ContestModel = {
   id: '1',

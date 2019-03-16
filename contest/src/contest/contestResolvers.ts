@@ -1,7 +1,7 @@
-import { ContestStore } from './store'
+import { ContestStore, NoSuchContest } from './store'
 import { IFieldResolver } from 'graphql-tools'
-import { AppContext } from '../context'
 import { UserModel } from '../user/store'
+import { NO_SUCH_CONTEST } from './errors'
 
 export interface ContestResolvers {
   Query: {
@@ -17,13 +17,34 @@ export const createContestResolvers = (
   store: ContestStore
 ): ContestResolvers => ({
   Query: {
-    contestById: (_parent, { id }) => store.getContestById(id),
+    contestById: (_parent, { id }) => {
+      try {
+        return store.getContestById(id)
+      } catch (error) {
+        if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
+        throw error
+      }
+    },
 
-    contestByShortId: (_parent, { shortId }) =>
-      store.getContestByShortId(shortId),
+    contestByShortId: (_parent, { shortId }) => {
+      try {
+        return store.getContestByShortId(shortId)
+      } catch (error) {
+        store.getContestByShortId(shortId)
+        if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
+        throw error
+      }
+    },
   },
 
   User: {
-    contest: parent => store.getContestById(parent.contestId),
+    contest: parent => {
+      try {
+        return store.getContestById(parent.contestId)
+      } catch (error) {
+        if (error instanceof NoSuchContest) throw NO_SUCH_CONTEST
+        throw error
+      }
+    },
   },
 })
