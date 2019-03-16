@@ -3,21 +3,17 @@ import { createContestResolvers } from './contest'
 import { ContestStore } from './contest/store'
 import { LanguageStore } from './language/store'
 import { createLanguageResolvers } from './language/languageResolvers'
+import { merge } from 'lodash'
+import { UserStore } from './user/store'
+import { createUserResolvers } from './user'
 
 export function createResolvers(
   contestStore: ContestStore,
-  languageStore: LanguageStore
+  languageStore: LanguageStore,
+  userStore: UserStore
 ): IResolvers {
   const contestResolvers = createContestResolvers(contestStore)
   const languageResolvers = createLanguageResolvers(languageStore)
-  return {
-    Query: {
-      contest: contestResolvers.contest,
-      contestById: contestResolvers.contestById,
-      contestByShortId: contestResolvers.contestByShortId,
-
-      languages: languageResolvers.languages,
-      languageById: languageResolvers.languageById,
-    },
-  }
+  const userResolvers = createUserResolvers(userStore)
+  return merge(contestResolvers, languageResolvers, userResolvers) as any
 }

@@ -1,4 +1,3 @@
-import { User } from './user'
 import {
   ContestArkav4Qual,
   ContestArkav4Final,
@@ -6,6 +5,7 @@ import {
   ContestArkav5Final,
 } from '../contest'
 import { Permission } from './permission'
+import { UserModel } from './store'
 
 export const adminPermissions = [
   Permission.InfoUpdate,
@@ -30,7 +30,7 @@ export const contestantPermissions = [
   Permission.ProblemsRead,
 ]
 
-export const UserTest1: User = {
+export const UserTest1: UserModel = {
   id: '1',
   contestId: ContestArkav4Qual.id,
   username: 'test',
@@ -39,7 +39,7 @@ export const UserTest1: User = {
   permissions: contestantPermissions,
 }
 
-export const UserNewTest1: User = {
+export const UserNewTest1: UserModel = {
   id: '2',
   contestId: ContestArkav4Qual.id,
   username: '',
@@ -48,7 +48,7 @@ export const UserNewTest1: User = {
   permissions: contestantPermissions,
 }
 
-export const UserTest2: User = {
+export const UserTest2: UserModel = {
   id: '3',
   contestId: ContestArkav4Final.id,
   username: 'test',
@@ -57,7 +57,7 @@ export const UserTest2: User = {
   permissions: contestantPermissions,
 }
 
-export const UserNewTest2: User = {
+export const UserNewTest2: UserModel = {
   id: '4',
   contestId: ContestArkav4Final.id,
   username: '',
@@ -66,7 +66,7 @@ export const UserNewTest2: User = {
   permissions: contestantPermissions,
 }
 
-export const UserAdmin3: User = {
+export const UserAdmin3: UserModel = {
   id: 'admin3',
   contestId: ContestArkav5Qual.id,
   username: 'admin',
@@ -75,7 +75,7 @@ export const UserAdmin3: User = {
   permissions: adminPermissions.slice(),
 }
 
-export const UserTest3: User = {
+export const UserTest3: UserModel = {
   id: '5',
   contestId: ContestArkav5Qual.id,
   username: 'test',
@@ -84,7 +84,7 @@ export const UserTest3: User = {
   permissions: contestantPermissions,
 }
 
-export const UserNewTest3: User = {
+export const UserNewTest3: UserModel = {
   id: '6',
   contestId: ContestArkav5Qual.id,
   username: '',
@@ -93,7 +93,7 @@ export const UserNewTest3: User = {
   permissions: contestantPermissions,
 }
 
-export const UserTest4: User = {
+export const UserTest4: UserModel = {
   id: '7',
   contestId: ContestArkav5Final.id,
   username: 'test',
@@ -102,7 +102,7 @@ export const UserTest4: User = {
   permissions: contestantPermissions,
 }
 
-export const UserNewTest4: User = {
+export const UserNewTest4: UserModel = {
   id: '8',
   contestId: ContestArkav5Final.id,
   username: '',
@@ -111,36 +111,14 @@ export const UserNewTest4: User = {
   permissions: contestantPermissions,
 }
 
-export const contestUserMap: {
-  [contestId: string]: { [userId: string]: User }
-} = {
-  [ContestArkav4Qual.id]: {
-    [UserTest1.id]: UserTest1,
-    [UserNewTest1.id]: UserNewTest1,
-  },
-  [ContestArkav4Final.id]: {
-    [UserTest2.id]: UserTest2,
-    [UserNewTest2.id]: UserNewTest2,
-  },
-  [ContestArkav5Qual.id]: {
-    [UserTest3.id]: UserTest3,
-    [UserNewTest3.id]: UserNewTest3,
-    [UserAdmin3.id]: UserAdmin3,
-  },
-  [ContestArkav5Final.id]: {
-    [UserTest4.id]: UserTest4,
-    [UserNewTest4.id]: UserNewTest4,
-  },
-}
-
-export const userPasswordMap: { [userId: string]: string } = {
-  [UserTest1.id]: 'test',
-  [UserNewTest1.id]: 'newtest',
-  [UserTest2.id]: 'test',
-  [UserNewTest2.id]: 'newtest',
-  [UserTest3.id]: 'test',
-  [UserNewTest3.id]: 'newtest',
-  [UserAdmin3.id]: 'admin',
-  [UserTest4.id]: 'test',
-  [UserNewTest4.id]: 'newtest',
-}
+export const users = [
+  UserTest1,
+  UserNewTest1,
+  UserTest2,
+  UserNewTest2,
+  UserTest3,
+  UserNewTest3,
+  UserAdmin3,
+  UserTest4,
+  UserNewTest4,
+]
