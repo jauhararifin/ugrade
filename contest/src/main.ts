@@ -9,6 +9,7 @@ import { InMemoryContestStore } from './contest/store/inmemory'
 import { AppContext } from './context'
 import { availableLanguages as languageFixture } from './language/store'
 import { InMemoryLanguageStore } from './language/store/inmemory'
+import { InMemoryProfileStore } from './profile/store/inmemory'
 import { createResolvers } from './resolvers'
 import { schema } from './schema'
 import { users as userFixture } from './user/store'
@@ -20,12 +21,14 @@ const contestStore = new InMemoryContestStore(contestFixture)
 const languageStore = new InMemoryLanguageStore(languageFixture)
 const userStore = new InMemoryUserStore(userFixture)
 const authStore = new InMemoryAuthStore(authFixture)
+const profileStore = new InMemoryProfileStore()
 
 const resolvers = createResolvers(
   contestStore,
   languageStore,
   userStore,
-  authStore
+  authStore,
+  profileStore
 )
 
 const apollo = new ApolloServer({

@@ -21,7 +21,29 @@ type User {
   username: String!
   email: String!
   name: String!
+
   permissions: [Permission!]!
+  profile: Profile!
+}
+
+enum GenderType {
+  Male
+  Female
+}
+
+enum ShirtSizeType {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+type Profile {
+  gender: GenderType
+  shirtSize: ShirtSizeType
+  address: String
 }
 
 type Language {
@@ -55,8 +77,16 @@ type Query {
 
   languages: [Language!]!
   languageById(id: String!): Language!
+
+  profile: Profile!
+  userProfile(userId: String!): Profile!
 }
 
 type Mutation {
   login(contestId: String!, email: String!, password: String!): String!
+  setMyProfile(
+    gender: GenderType
+    shirtSize: ShirtSizeType
+    address: String
+  ): Profile!
 }

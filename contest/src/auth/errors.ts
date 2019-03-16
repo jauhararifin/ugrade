@@ -6,3 +6,8 @@ export const INVALID_CREDENTIAL = new ApolloError(
 )
 
 export const INVALID_TOKEN = new ApolloError('Invalid Token', 'INVALID_TOKEN')
+
+export const FORBIDDEN_ACTION = new ApolloError(
+  'Fobidden Action',
+  'FORBIDDEN_ACTION'
+)
