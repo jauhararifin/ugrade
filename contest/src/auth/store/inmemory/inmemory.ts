@@ -9,7 +9,9 @@ export class InMemoryAuthStore implements AuthStore {
   private credentialToken: { [token: string]: CredentialModel }
 
   constructor(credentials: CredentialModel[]) {
-    this.credentials = lodash.cloneDeep(this.credentials)
+    this.credentials = lodash.cloneDeep(credentials)
+    this.credentialUser = {}
+    this.credentialToken = {}
     for (const cred of this.credentials) {
       this.credentialUser[cred.userId] = cred
       if (cred.token && cred.token.length > 0) {
