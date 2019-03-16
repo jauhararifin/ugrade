@@ -9,6 +9,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "ugrade/*": ["src/*"],
       "*": ["node_modules/*", "src/types/*"]
     }
   },
