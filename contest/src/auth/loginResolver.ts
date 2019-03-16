@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-core'
 import { compare } from 'bcrypt'
 import { IFieldResolver } from 'graphql-tools'
+import { logger } from 'ugrade/logger'
 import { AuthStore, NoSuchUser } from './store'
 import { genToken } from './util'
 
@@ -16,6 +17,7 @@ export function loginResolver(store: AuthStore): LoginResolver {
       const user = await store.getUserByEmail(contestId, email)
       const success = await compare(password, user.password)
       if (success) {
+        logger.info('User %s/%s logged in', contestId, user.id)
         if (user.token && user.token.length > 0) {
           return user.token
         }
@@ -28,6 +30,7 @@ export function loginResolver(store: AuthStore): LoginResolver {
       }
       throw new ApolloError('Invalid Credential', 'INVALID_CREDENTIAL')
     } catch (error) {
+      logger.error('User login failed contestId:%s email:%s', contestId, email)
       if (error instanceof NoSuchUser) {
         throw new ApolloError('Invalid Credential', 'INVALID_CREDENTIAL')
       }

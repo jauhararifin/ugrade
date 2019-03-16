@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server-express'
 import dotenv from 'dotenv'
 import express from 'express'
+import morgan from 'morgan'
 import { AddressInfo } from 'net'
 import { users as authFixture } from './auth/store'
 import { InMemoryAuthStore } from './auth/store/inmemory'
@@ -9,6 +10,7 @@ import { InMemoryContestStore } from './contest/store/inmemory'
 import { AppContext } from './context'
 import { availableLanguages as languageFixture } from './language/store'
 import { InMemoryLanguageStore } from './language/store/inmemory'
+import { logger } from './logger'
 import { InMemoryProfileStore } from './profile/store/inmemory'
 import { createResolvers } from './resolvers'
 import { schema } from './schema'
@@ -37,16 +39,26 @@ const apollo = new ApolloServer({
       const headerParts = req.headers.authorization.split(' ')
       if (headerParts[0].toLowerCase() === 'bearer') authToken = headerParts[1]
     }
-    return { authToken }
+
+    const requestIp = (
+      req.headers['x-forwarded-for'] ||
+      req.connection.remoteAddress ||
+      '-'
+    ).toString()
+    const requestId = Math.round(Math.random() * 1000000).toString()
+
+    return { authToken, requestId, requestIp }
   },
 })
 const app = express()
 apollo.applyMiddleware({ app })
 
+app.use(morgan('combined'))
+
 const port = Number.parseInt(process.env.PORT || '5000', 10)
 const server = app.listen({ port }, () => {
   const addr = server.address() as AddressInfo
-  console.log(
+  logger.info(
     `Server started at port: ${addr.address}:${addr.port}${apollo.graphqlPath}`
   )
 })
