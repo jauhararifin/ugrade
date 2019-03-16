@@ -8,7 +8,7 @@ export interface LanguageResolvers {
     languageById: IFieldResolver<any, any, { id: string }>
   }
   Contest: {
-    languages: IFieldResolver<ContestModel, any, any>
+    permittedLanguages: IFieldResolver<ContestModel, any, any>
   }
 }
 
@@ -20,7 +20,7 @@ export const createLanguageResolvers = (
     languageById: (_parent, { id }) => store.getLanguageById(id),
   },
   Contest: {
-    languages: ({ permittedLanguageIds }) =>
+    permittedLanguages: ({ permittedLanguageIds }) =>
       Promise.all(permittedLanguageIds.map(id => store.getLanguageById(id))),
   },
 })
