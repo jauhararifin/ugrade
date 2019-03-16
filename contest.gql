@@ -1,0 +1,49 @@
+scalar Date
+
+enum Permission {
+  InfoUpdate
+  AnnouncementCreate
+  AnnouncementRead
+  ProblemsCreate
+  ProblemsRead
+  ProblemsReadDisabled
+  ProblemsUpdate
+  ProblemsDelete
+  UsersInvite
+  UsersPermissionsUpdate
+  UsersDelete
+  ProfilesRead
+}
+
+type User {
+  id: String!
+  contestId: String!
+  username: String!
+  email: String!
+  name: String!
+  permissions: [Permission!]!
+}
+
+type Language {
+  id: String!
+  name: String!
+}
+
+type Contest {
+  id: String!
+  shortId: String!
+  name: String!
+  shortDescription: String
+  description: String
+  startTime: Date
+  freezed: Boolean
+  finishTime: Date
+  permittedLanguages: [Language!]!
+
+  users(email: String, username: String): [User!]!
+}
+
+type Query {
+  user(id: String): User
+  contest(id: String, shortId: String): Contest
+}
