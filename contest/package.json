@@ -1,0 +1,36 @@
+{
+  "name": "ugrade",
+  "version": "1.0.0",
+  "description": "Simple competitive programming contest platform using contestant PC as grader",
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "watch:ts": "tsc -w",
+    "watch:node": "nodemon dist/main.js",
+    "watch": "npm-run-all --parallel watch:ts watch:node",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jauhararifin/ugrade.git"
+  },
+  "author": "Jauhar Arifin",
+  "bugs": {
+    "url": "https://github.com/jauhararifin/ugrade/issues"
+  },
+  "homepage": "https://github.com/jauhararifin/ugrade#readme",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.0",
+    "@types/express": "^4.16.1",
+    "nodemon": "^1.18.10",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.3333"
+  }
+}
