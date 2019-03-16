@@ -1,5 +1,5 @@
 import { IFieldResolver } from 'graphql-tools'
-import { UserModel } from 'ugrade/user/store'
+import { UserModel } from 'ugrade/auth/store'
 import { NO_SUCH_CONTEST } from './errors'
 import { ContestStore, NoSuchContest } from './store'
 
