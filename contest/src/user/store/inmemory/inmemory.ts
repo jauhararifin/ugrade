@@ -31,7 +31,7 @@ export class InMemoryUserStore implements UserStore {
   async getUserByEmail(contestId: string, email: string): Promise<UserModel> {
     const key = `${contestId}/${email}`
     if (this.userEmail[key]) {
-      return this.userId[key]
+      return this.userEmail[key]
     }
     throw new NoSuchUser('No Such User')
   }
@@ -42,7 +42,7 @@ export class InMemoryUserStore implements UserStore {
   ): Promise<UserModel> {
     const key = `${contestId}/${username}`
     if (this.userUsername[key]) {
-      return this.userId[key]
+      return this.userUsername[key]
     }
     throw new NoSuchUser('No Such User')
   }
