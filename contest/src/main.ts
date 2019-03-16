@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-express'
+import dotenv from 'dotenv'
 import express from 'express'
 import { AddressInfo } from 'net'
 import { credentials as authFixture } from './auth/store'
@@ -12,6 +13,8 @@ import { createResolvers } from './resolvers'
 import { schema } from './schema'
 import { users as userFixture } from './user/store'
 import { InMemoryUserStore } from './user/store/inmemory'
+
+dotenv.config()
 
 const contestStore = new InMemoryContestStore(contestFixture)
 const languageStore = new InMemoryLanguageStore(languageFixture)

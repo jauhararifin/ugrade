@@ -1,4 +1,3 @@
-import { ContestModel } from '.'
 import {
   availableLanguages,
   Language1,
@@ -6,7 +5,8 @@ import {
   Language3,
   Language4,
   Language5,
-} from '../../language/store'
+} from 'ugrade/language/store'
+import { ContestModel } from '.'
 
 export const ContestArkav4Qual: ContestModel = {
   id: '1',

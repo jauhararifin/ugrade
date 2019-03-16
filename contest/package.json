@@ -3,14 +3,8 @@
   "version": "1.0.0",
   "description": "Simple competitive programming contest platform using contestant PC as grader",
   "scripts": {
-    "start": "node dist/main.js",
-    "build": "npm-run-all build:ts build:gql",
-    "watch:ts": "tsc -w",
-    "watch:node": "nodemon dist/main.js",
-    "build:ts": "tsc",
-    "build:gql": "cp src/schema.gql dist/",
-    "watch:gql": "nodemon --watch src/schema.gql --exec \"npm run build:gql\"",
-    "watch": "npm-run-all build:ts build:gql --parallel watch:ts watch:node watch:gql",
+    "start": "ts-node -r tsconfig-paths/register src/main.ts",
+    "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node -r tsconfig-paths/register src/main.ts src/main.ts",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,7 +24,8 @@
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "graphql": "^14.1.1",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "tsconfig-paths": "^3.8.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
