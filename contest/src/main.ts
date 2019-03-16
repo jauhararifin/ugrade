@@ -28,6 +28,7 @@ const resolvers = createResolvers(
 const apollo = new ApolloServer({
   typeDefs: schema,
   resolvers,
+  debug: process.env.NODE_ENV !== 'production',
   context: ({ req }): AppContext => {
     let authToken
     if (req.headers.authorization) {
