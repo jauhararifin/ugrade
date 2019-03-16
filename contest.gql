@@ -56,3 +56,7 @@ type Query {
   languages: [Language!]!
   languageById(id: String!): Language!
 }
+
+type Mutation {
+  login(contestId: String!, email: String!, password: String!): String!
+}
