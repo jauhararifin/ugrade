@@ -1,10 +1,8 @@
 import { compare } from 'bcrypt'
 import { IFieldResolver } from 'graphql-tools'
 import { AppContext } from 'ugrade'
-import { ContestStore } from 'ugrade/contest/store'
-import { NoSuchUser, UserStore } from 'ugrade/user/store'
-import { INVALID_CREDENTIAL, INVALID_TOKEN } from './errors'
-import { AuthStore, NoSuchCredential } from './store'
+import { INVALID_CREDENTIAL, INVALID_TOKEN, NO_SUCH_USER } from './errors'
+import { AuthStore, NoSuchUser } from './store'
 import { genToken } from './util'
 
 export interface AuthResolvers {
@@ -17,36 +15,36 @@ export interface AuthResolvers {
   }
   Query: {
     user: IFieldResolver<any, AppContext, any>
-    contest: IFieldResolver<any, AppContext, any>
+    userById: IFieldResolver<any, any, { id: string }>
+    userByEmail: IFieldResolver<any, any, { contestId: string; email: string }>
+    userByUsername: IFieldResolver<
+      any,
+      any,
+      { contestId: string; username: string }
+    >
   }
 }
 
-export const createAuthResolvers = (
-  userStore: UserStore,
-  authStore: AuthStore,
-  contestStore: ContestStore
-): AuthResolvers => ({
+export const createAuthResolvers = (store: AuthStore): AuthResolvers => ({
   Mutation: {
     login: async (_parent, { contestId, email, password }) => {
       try {
-        const user = await userStore.getUserByEmail(contestId, email)
-        const cred = await authStore.getCredentialByUserId(user.id)
-        const success = await compare(password, cred.password)
+        const user = await store.getUserByEmail(contestId, email)
+        const success = await compare(password, user.password)
         if (success) {
-          if (cred.token && cred.token.length > 0) {
-            return cred.token
+          if (user.token && user.token.length > 0) {
+            return user.token
           }
-          const newCred = {
-            userId: cred.userId,
-            password: cred.password,
+          const newUser = {
+            ...user,
             token: genToken(),
           }
-          const result = await authStore.putUserCredential(newCred)
+          const result = await store.putUser(newUser)
           return result.token
         }
         throw INVALID_CREDENTIAL
       } catch (error) {
-        if (error instanceof NoSuchCredential || error instanceof NoSuchUser) {
+        if (error instanceof NoSuchUser) {
           throw INVALID_CREDENTIAL
         }
         throw error
@@ -57,24 +55,37 @@ export const createAuthResolvers = (
   Query: {
     user: async (_parent, _args, { authToken }) => {
       try {
-        const cred = await authStore.getCredentialByToken(authToken)
-        return await userStore.getUserById(cred.userId)
+        const user = await store.getUserByToken(authToken)
+        return await store.getUserById(user.id)
       } catch (error) {
-        if (error instanceof NoSuchUser || error instanceof NoSuchCredential) {
-          throw INVALID_TOKEN
-        }
+        if (error instanceof NoSuchUser) throw INVALID_TOKEN
         throw error
       }
     },
 
-    contest: async (_parent, _args, { authToken }) => {
+    userById: async (_source, { id }) => {
       try {
-        const cred = await authStore.getCredentialByToken(authToken)
-        return await contestStore.getContestById(cred.userId)
+        return await store.getUserById(id)
       } catch (error) {
-        if (error instanceof NoSuchUser || error instanceof NoSuchCredential) {
-          throw INVALID_TOKEN
-        }
+        if (error instanceof NoSuchUser) throw NO_SUCH_USER
+        throw error
+      }
+    },
+
+    userByEmail: async (_source, { contestId, email }) => {
+      try {
+        return await store.getUserByEmail(contestId, email)
+      } catch (error) {
+        if (error instanceof NoSuchUser) throw NO_SUCH_USER
+        throw error
+      }
+    },
+
+    userByUsername: async (_source, { contestId, username }) => {
+      try {
+        return await store.getUserByUsername(contestId, username)
+      } catch (error) {
+        if (error instanceof NoSuchUser) throw NO_SUCH_USER
         throw error
       }
     },

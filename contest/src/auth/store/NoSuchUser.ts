@@ -1,6 +1,6 @@
-import { UserStoreError } from './UserStoreError'
+import { AuthStoreError } from './AuthStoreError'
 
-export class NoSuchUser extends UserStoreError {
+export class NoSuchUser extends AuthStoreError {
   constructor(m: string) {
     super(m)
     Object.setPrototypeOf(this, NoSuchUser.prototype)

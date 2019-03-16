@@ -11,3 +11,5 @@ export const FORBIDDEN_ACTION = new ApolloError(
   'Fobidden Action',
   'FORBIDDEN_ACTION'
 )
+
+export const NO_SUCH_USER = new ApolloError('No Such User', 'NO_SUCH_USER')

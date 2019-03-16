@@ -1,7 +1,9 @@
-import { CredentialModel } from './model'
+import { UserModel } from './model'
 
 export interface AuthStore {
-  getCredentialByUserId(userId: string): Promise<CredentialModel>
-  getCredentialByToken(token: string): Promise<CredentialModel>
-  putUserCredential(credential: CredentialModel): Promise<CredentialModel>
+  getUserById(id: string): Promise<UserModel>
+  getUserByEmail(contestId: string, email: string): Promise<UserModel>
+  getUserByUsername(contestId: string, username: string): Promise<UserModel>
+  getUserByToken(token: string): Promise<UserModel>
+  putUser(user: UserModel): Promise<UserModel>
 }

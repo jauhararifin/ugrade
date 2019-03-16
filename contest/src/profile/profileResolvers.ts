@@ -1,9 +1,7 @@
 import { IFieldResolver } from 'graphql-tools'
-import { FORBIDDEN_ACTION, INVALID_TOKEN } from 'ugrade/auth'
-import { AuthStore, NoSuchCredential } from 'ugrade/auth/store'
+import { FORBIDDEN_ACTION, INVALID_TOKEN, NO_SUCH_USER } from 'ugrade/auth'
+import { AuthStore, NoSuchUser, Permission, UserModel } from 'ugrade/auth/store'
 import { AppContext } from 'ugrade/context'
-import { NO_SUCH_USER } from 'ugrade/user'
-import { Permission, UserModel, UserStore } from 'ugrade/user/store'
 import { GenderType, NoSuchProfile, ProfileStore, ShirtSizeType } from './store'
 
 export interface ProfileResolvers {
@@ -25,16 +23,15 @@ export interface ProfileResolvers {
 
 export const createProfileResolvers = (
   profileStore: ProfileStore,
-  authStore: AuthStore,
-  userStore: UserStore
+  authStore: AuthStore
 ): ProfileResolvers => ({
   Query: {
     profile: async (_parent, _args, { authToken }) => {
       try {
-        const user = await authStore.getCredentialByToken(authToken)
-        return await profileStore.getProfile(user.userId)
+        const user = await authStore.getUserByToken(authToken)
+        return await profileStore.getProfile(user.id)
       } catch (error) {
-        if (error instanceof NoSuchCredential) throw INVALID_TOKEN
+        if (error instanceof NoSuchUser) throw INVALID_TOKEN
         if (error instanceof NoSuchProfile) return {}
         throw error
       }
@@ -42,20 +39,19 @@ export const createProfileResolvers = (
 
     userProfile: async (_parent, { userId }, { authToken }) => {
       try {
-        const me = await authStore.getCredentialByToken(authToken)
-        const userMe = await userStore.getUserById(me.userId)
-        const allowed = userMe.permissions.includes(Permission.ProfilesRead)
+        const me = await authStore.getUserByToken(authToken)
+        const allowed = me.permissions.includes(Permission.ProfilesRead)
         if (!allowed) throw FORBIDDEN_ACTION
 
         const [profile, user] = await Promise.all([
           profileStore.getProfile(userId),
-          userStore.getUserById(userId),
+          authStore.getUserById(userId),
         ])
-        if (user.contestId !== userMe.contestId) throw NO_SUCH_USER
+        if (user.contestId !== me.contestId) throw NO_SUCH_USER
 
         return profile
       } catch (error) {
-        if (error instanceof NoSuchCredential) throw INVALID_TOKEN
+        if (error instanceof NoSuchUser) throw INVALID_TOKEN
         if (error instanceof NoSuchProfile) return {}
         throw error
       }
@@ -64,13 +60,13 @@ export const createProfileResolvers = (
   Mutation: {
     setMyProfile: async (_parent, args, { authToken }) => {
       try {
-        const me = await authStore.getCredentialByToken(authToken)
+        const me = await authStore.getUserByToken(authToken)
         return await profileStore.putProfile({
-          userId: me.userId,
+          userId: me.id,
           ...args,
         })
       } catch (error) {
-        if (error instanceof NoSuchCredential) throw INVALID_TOKEN
+        if (error instanceof NoSuchUser) throw INVALID_TOKEN
         throw error
       }
     },
@@ -78,21 +74,19 @@ export const createProfileResolvers = (
   User: {
     profile: async ({ id }, _args, { authToken }) => {
       try {
-        const me = await authStore.getCredentialByToken(authToken)
-        const userMe = await userStore.getUserById(me.userId)
+        const me = await authStore.getUserByToken(authToken)
         const allowed =
-          me.userId === id ||
-          userMe.permissions.includes(Permission.ProfilesRead)
+          me.id === id || me.permissions.includes(Permission.ProfilesRead)
         if (!allowed) throw FORBIDDEN_ACTION
 
         const [profile, user] = await Promise.all([
           profileStore.getProfile(id),
-          userStore.getUserById(id),
+          authStore.getUserById(id),
         ])
-        if (user.contestId !== userMe.contestId) throw NO_SUCH_USER
+        if (user.contestId !== me.contestId) throw NO_SUCH_USER
         return profile
       } catch (error) {
-        if (error instanceof NoSuchCredential) throw INVALID_TOKEN
+        if (error instanceof NoSuchUser) throw INVALID_TOKEN
         if (error instanceof NoSuchProfile) return {}
         throw error
       }

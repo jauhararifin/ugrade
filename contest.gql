@@ -71,7 +71,6 @@ type Query {
   userByEmail(contestId: String!, email: String!): User!
   userByUsername(contestId: String!, username: String!): User!
 
-  contest: Contest!
   contestById(id: String!): Contest!
   contestByShortId(shortId: String!): Contest!
 
