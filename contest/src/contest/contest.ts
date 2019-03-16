@@ -1,4 +1,4 @@
-import { Language } from 'ugrade/language/language'
+import { Language } from '../language'
 
 export interface Contest {
   id: string

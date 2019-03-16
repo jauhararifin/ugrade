@@ -4,7 +4,7 @@ import {
   ContestArkav4Final,
   ContestArkav5Qual,
   ContestArkav5Final,
-} from 'ugrade/contest'
+} from '../contest'
 import { Permission } from './permission'
 
 export const adminPermissions = [

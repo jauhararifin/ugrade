@@ -1,8 +1,14 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import express from 'express'
 import { schema } from './schema'
-import { resolvers } from './resolvers'
+import { createResolvers } from './resolvers'
 import { AddressInfo } from 'net'
+import { InMemoryContestStore } from './contest/store/inmemory'
+import { contests as contestFixture } from './contest'
+
+const contestStore = new InMemoryContestStore(contestFixture)
+
+const resolvers = createResolvers(contestStore)
 
 const apollo = new ApolloServer({ typeDefs: schema, resolvers })
 const app = express()

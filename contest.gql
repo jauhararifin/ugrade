@@ -44,6 +44,7 @@ type Contest {
 }
 
 type Query {
-  user(id: String): User
-  contest(id: String, shortId: String): Contest
+  user(id: String!): User!
+  contest(id: String!): Contest!
+  contestByShortId(shortId: String!): Contest!
 }
