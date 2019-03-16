@@ -1,25 +1,34 @@
 import { ContestStore } from './store'
 import { IFieldResolver } from 'graphql-tools'
 import { AppContext } from '../context'
+import { UserModel } from '../user/store'
 
 export interface ContestResolvers {
-  contest: IFieldResolver<any, AppContext, any>
-  contestById: IFieldResolver<any, any, { id: string }>
-  contestByShortId: IFieldResolver<any, any, { shortId: string }>
+  Query: {
+    contest: IFieldResolver<any, AppContext, any>
+    contestById: IFieldResolver<any, any, { id: string }>
+    contestByShortId: IFieldResolver<any, any, { shortId: string }>
+  }
+  User: {
+    contest: IFieldResolver<UserModel, any, any>
+  }
 }
 
 export const createContestResolvers = (
   store: ContestStore
 ): ContestResolvers => ({
-  contest: (_parent, _args, { authToken }) => {
-    return null
+  Query: {
+    contest: (_parent, _args, { authToken }) => {
+      return null
+    },
+
+    contestById: (_parent, { id }) => store.getContestById(id),
+
+    contestByShortId: (_parent, { shortId }) =>
+      store.getContestByShortId(shortId),
   },
 
-  contestById: (_parent, { id }) => {
-    return store.getContestById(id)
-  },
-
-  contestByShortId: (_parent, { shortId }) => {
-    return store.getContestByShortId(shortId)
+  User: {
+    contest: parent => store.getContestById(parent.contestId),
   },
 })

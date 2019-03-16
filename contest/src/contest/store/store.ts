@@ -1,6 +1,6 @@
-import { Contest } from '../contest'
+import { ContestModel } from './model'
 
 export interface ContestStore {
-  getContestById(id: string): Promise<Contest>
-  getContestByShortId(shortId: string): Promise<Contest>
+  getContestById(id: string): Promise<ContestModel>
+  getContestByShortId(shortId: string): Promise<ContestModel>
 }

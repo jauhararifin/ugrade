@@ -1,12 +1,12 @@
-import { Contest } from './contest'
 import { availableLanguages } from '../language'
 import { Language1 } from '../language'
 import { Language2 } from '../language'
 import { Language3 } from '../language'
 import { Language4 } from '../language'
 import { Language5 } from '../language'
+import { ContestModel } from './store'
 
-export const ContestArkav4Qual: Contest = {
+export const ContestArkav4Qual: ContestModel = {
   id: '1',
   shortId: 'arkavidia-40-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 4.0',
@@ -56,10 +56,10 @@ export const ContestArkav4Qual: Contest = {
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
-  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
+  permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
 }
 
-export const ContestArkav4Final: Contest = {
+export const ContestArkav4Final: ContestModel = {
   id: '2',
   shortId: 'arkavidia-40-qualification',
   name: 'Final Competitive Programming Arkavidia 4.0',
@@ -71,10 +71,10 @@ export const ContestArkav4Final: Contest = {
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
-  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
+  permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
 }
 
-export const ContestArkav5Qual: Contest = {
+export const ContestArkav5Qual: ContestModel = {
   id: '3',
   shortId: 'arkavidia-50-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 5.0',
@@ -84,10 +84,10 @@ export const ContestArkav5Qual: Contest = {
   startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   freezed: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
-  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
+  permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
 }
 
-export const ContestArkav5Final: Contest = {
+export const ContestArkav5Final: ContestModel = {
   id: '4',
   shortId: 'arkavidia-50-final',
   name: 'Final Competitive Programming Arkavidia 5.0',
@@ -99,10 +99,10 @@ export const ContestArkav5Final: Contest = {
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
-  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
+  permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
 }
 
-export const contests: Contest[] = [
+export const contests: ContestModel[] = [
   ContestArkav4Qual,
   ContestArkav4Final,
   ContestArkav5Qual,

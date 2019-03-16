@@ -1,14 +1,14 @@
 import { ContestStore } from '../store'
-import { Contest } from '../../contest'
 import lodash from 'lodash'
 import { NoSuchContest } from '../NoSuchContest'
+import { ContestModel } from '../model'
 
 export class InMemoryContestStore implements ContestStore {
-  private contests: Contest[]
-  private contestId: { [id: string]: Contest }
-  private contestShortId: { [shortId: string]: Contest }
+  private contests: ContestModel[]
+  private contestId: { [id: string]: ContestModel }
+  private contestShortId: { [shortId: string]: ContestModel }
 
-  constructor(contests: Contest[]) {
+  constructor(contests: ContestModel[]) {
     this.contests = lodash.cloneDeep(contests)
     this.contestId = {}
     this.contestShortId = {}
@@ -18,14 +18,14 @@ export class InMemoryContestStore implements ContestStore {
     }
   }
 
-  async getContestById(id: string): Promise<Contest> {
+  async getContestById(id: string): Promise<ContestModel> {
     if (this.contestId[id]) {
       return lodash.cloneDeep(this.contestId[id])
     }
     throw new NoSuchContest('No Such Contest')
   }
 
-  async getContestByShortId(shortId: string): Promise<Contest> {
+  async getContestByShortId(shortId: string): Promise<ContestModel> {
     if (this.contestShortId[shortId]) {
       return lodash.cloneDeep(this.contestShortId[shortId])
     }
