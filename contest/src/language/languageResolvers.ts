@@ -1,18 +1,26 @@
 import { IFieldResolver } from 'graphql-tools'
 import { LanguageStore } from './store'
+import { ContestModel } from '../contest/store'
 
 export interface LanguageResolvers {
-  languages: IFieldResolver<any, any, any>
-  languageById: IFieldResolver<any, any, { id: string }>
+  Query: {
+    languages: IFieldResolver<any, any, any>
+    languageById: IFieldResolver<any, any, { id: string }>
+  }
+  Contest: {
+    languages: IFieldResolver<ContestModel, any, any>
+  }
 }
 
 export const createLanguageResolvers = (
   store: LanguageStore
 ): LanguageResolvers => ({
-  languages: () => {
-    return store.getAvailableLanguages()
+  Query: {
+    languages: () => store.getAvailableLanguages(),
+    languageById: (_parent, { id }) => store.getLanguageById(id),
   },
-  languageById: (_parent, { id }) => {
-    return store.getLanguageById(id)
+  Contest: {
+    languages: ({ permittedLanguageIds }) =>
+      Promise.all(permittedLanguageIds.map(id => store.getLanguageById(id))),
   },
 })

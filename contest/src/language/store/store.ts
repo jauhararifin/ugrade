@@ -1,6 +1,6 @@
-import { Language } from '../language'
+import { LanguageModel } from './model'
 
 export interface LanguageStore {
-  getLanguageById(id: string): Promise<Language>
-  getAvailableLanguages(): Promise<Language[]>
+  getLanguageById(id: string): Promise<LanguageModel>
+  getAvailableLanguages(): Promise<LanguageModel[]>
 }

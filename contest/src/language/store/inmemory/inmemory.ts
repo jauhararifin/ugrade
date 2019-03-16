@@ -1,13 +1,13 @@
 import { LanguageStore } from '../store'
-import { Language } from '../../language'
 import lodash from 'lodash'
 import { NoSuchLanguage } from '../NoSuchLanguage'
+import { LanguageModel } from '../model'
 
 export class InMemoryLanguageStore implements LanguageStore {
-  private languages: Language[]
-  private languageId: { [id: string]: Language }
+  private languages: LanguageModel[]
+  private languageId: { [id: string]: LanguageModel }
 
-  constructor(languages: Language[]) {
+  constructor(languages: LanguageModel[]) {
     this.languages = lodash.cloneDeep(languages)
     this.languageId = {}
     for (const lang of this.languages) {
@@ -15,11 +15,11 @@ export class InMemoryLanguageStore implements LanguageStore {
     }
   }
 
-  async getAvailableLanguages(): Promise<Language[]> {
+  async getAvailableLanguages(): Promise<LanguageModel[]> {
     return lodash.cloneDeep(this.languages)
   }
 
-  async getLanguageById(id: string): Promise<Language> {
+  async getLanguageById(id: string): Promise<LanguageModel> {
     if (this.languageId[id]) {
       return lodash.cloneDeep(this.languageId[id])
     }
