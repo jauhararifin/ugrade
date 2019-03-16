@@ -56,7 +56,7 @@ export const ContestArkav4Qual: Contest = {
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
-  permittedLanguages: availableLanguages.slice(),
+  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
 }
 
 export const ContestArkav4Final: Contest = {
@@ -71,7 +71,7 @@ export const ContestArkav4Final: Contest = {
   ),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
-  permittedLanguages: availableLanguages.slice(),
+  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
 }
 
 export const ContestArkav5Qual: Contest = {
@@ -84,7 +84,7 @@ export const ContestArkav5Qual: Contest = {
   startTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   freezed: true,
   finishTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 1000 * 60 * 60 * 5),
-  permittedLanguages: availableLanguages.slice(),
+  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
 }
 
 export const ContestArkav5Final: Contest = {
@@ -99,7 +99,7 @@ export const ContestArkav5Final: Contest = {
   finishTime: new Date(
     Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
   ),
-  permittedLanguages: availableLanguages.slice(),
+  permittedLanguages: availableLanguages.map(lang => lang.id).slice(),
 }
 
 export const contests: Contest[] = [

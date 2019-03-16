@@ -5,10 +5,13 @@ import { createResolvers } from './resolvers'
 import { AddressInfo } from 'net'
 import { InMemoryContestStore } from './contest/store/inmemory'
 import { contests as contestFixture } from './contest'
+import { InMemoryLanguageStore } from './language/store/inmemory'
+import { availableLanguages as languageFixture } from './language'
 
 const contestStore = new InMemoryContestStore(contestFixture)
+const languageStore = new InMemoryLanguageStore(languageFixture)
 
-const resolvers = createResolvers(contestStore)
+const resolvers = createResolvers(contestStore, languageStore)
 
 const apollo = new ApolloServer({ typeDefs: schema, resolvers })
 const app = express()

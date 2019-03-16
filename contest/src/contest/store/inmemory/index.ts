@@ -1,1 +1,1 @@
-export * from './InMemoryContestStore'
+export * from './inmemory'

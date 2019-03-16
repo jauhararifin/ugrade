@@ -1,5 +1,3 @@
-import { Language } from '../language'
-
 export interface Contest {
   id: string
   shortId: string
@@ -9,5 +7,5 @@ export interface Contest {
   startTime: Date
   freezed: boolean
   finishTime: Date
-  permittedLanguages: Language[]
+  permittedLanguages: string[]
 }
