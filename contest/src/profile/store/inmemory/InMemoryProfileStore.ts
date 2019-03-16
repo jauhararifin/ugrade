@@ -7,7 +7,7 @@ export class InMemoryProfileStore implements ProfileStore {
   private profiles: ProfileModel[]
   private userProfile: { [userId: string]: ProfileModel }
 
-  constructor(profiles: ProfileModel[]) {
+  constructor(profiles: ProfileModel[] = []) {
     this.profiles = lodash.cloneDeep(profiles)
     this.userProfile = {}
     for (const prof of this.profiles) {
@@ -24,7 +24,7 @@ export class InMemoryProfileStore implements ProfileStore {
 
   async putProfile(profile: ProfileModel): Promise<ProfileModel> {
     const newProfile = lodash.cloneDeep(profile)
-    if (this.userProfile[profile.userId]) {
+    if (this.userProfile[newProfile.userId]) {
       for (let i = 0; i < this.profiles.length; i++) {
         if (this.profiles[i].userId === newProfile.userId) {
           this.profiles[i] = newProfile
@@ -34,7 +34,7 @@ export class InMemoryProfileStore implements ProfileStore {
     } else {
       this.profiles.push(newProfile)
     }
-    this.userProfile[profile.userId] = newProfile
+    this.userProfile[newProfile.userId] = newProfile
     return lodash.cloneDeep(this.userProfile[profile.userId])
   }
 }
