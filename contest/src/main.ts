@@ -11,6 +11,7 @@ import { InMemoryUserStore } from './user/store/inmemory'
 import { users as userFixture } from './user'
 import { InMemoryAuthStore } from './auth/store/inmemory'
 import { credentials as authFixture } from './auth'
+import { AppContext } from './context'
 
 const contestStore = new InMemoryContestStore(contestFixture)
 const languageStore = new InMemoryLanguageStore(languageFixture)
@@ -24,7 +25,18 @@ const resolvers = createResolvers(
   authStore
 )
 
-const apollo = new ApolloServer({ typeDefs: schema, resolvers })
+const apollo = new ApolloServer({
+  typeDefs: schema,
+  resolvers,
+  context: ({ req }): AppContext => {
+    let authToken
+    if (req.headers.authorization) {
+      const headerParts = req.headers.authorization.split(' ')
+      if (headerParts[0].toLowerCase() === 'bearer') authToken = headerParts[1]
+    }
+    return { authToken }
+  },
+})
 const app = express()
 apollo.applyMiddleware({ app })
 
