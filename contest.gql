@@ -17,7 +17,7 @@ enum Permission {
 
 type User {
   id: String!
-  contestId: String!
+  contest: Contest!
   username: String!
   email: String!
   name: String!
