@@ -29,6 +29,9 @@ const resolvers = createResolvers(
   profileStore
 )
 
+const app = express()
+app.use(morgan('combined'))
+
 const apollo = new ApolloServer({
   typeDefs: schema,
   resolvers,
@@ -50,10 +53,7 @@ const apollo = new ApolloServer({
     return { authToken, requestId, requestIp }
   },
 })
-const app = express()
 apollo.applyMiddleware({ app })
-
-app.use(morgan('combined'))
 
 const port = Number.parseInt(process.env.PORT || '5000', 10)
 const server = app.listen({ port }, () => {
