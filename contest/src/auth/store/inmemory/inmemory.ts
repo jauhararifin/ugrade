@@ -31,4 +31,21 @@ export class InMemoryAuthStore implements AuthStore {
     }
     throw new NoSuchCredential('No Such Credential')
   }
+
+  async putUserCredential(
+    credential: CredentialModel
+  ): Promise<CredentialModel> {
+    this.credentials = this.credentials
+      .filter(c => c.userId !== credential.userId)
+      .slice()
+    if (this.credentialUser[credential.userId])
+      delete this.credentialUser[credential.userId]
+    if (credential.token.length > 0 && this.credentialToken[credential.token])
+      delete this.credentialToken[credential.token]
+    const newCred = lodash.cloneDeep(credential)
+    this.credentials.push(newCred)
+    this.credentialUser[newCred.userId] = newCred
+    this.credentialToken[newCred.token] = newCred
+    return newCred
+  }
 }
