@@ -106,7 +106,7 @@ type Mutation {
   addUser(email: String!, permission: [Permission!]!): User!
   setMyPassword(oldPassword: string, newPassword: string): User!
   setMyName(name: string): User!
-  setUserPermissions(userId: String!, permissions: [Permission!]!): User!
+  setPermissions(userId: String!, permissions: [Permission!]!): User!
   setMyProfile(
     gender: GenderType
     shirtSize: ShirtSizeType

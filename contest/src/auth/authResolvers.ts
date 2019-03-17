@@ -12,6 +12,10 @@ import {
   SetMyPasswordResolver,
   setMyPasswordResolver,
 } from './setMyPasswordResolver'
+import {
+  SetPermissionsResolver,
+  setPermissionsResolver,
+} from './setPermissionsResolver'
 import { SigninResolver, signinResolver } from './signinResolver'
 import { SignupResolver, signupResolver } from './signupResolver'
 import { AuthStore } from './store'
@@ -32,10 +36,7 @@ export interface AuthResolvers {
     addUser: AddUserResolver
     setMyPassword: SetMyPasswordResolver
     setMyName: SetMyNameResolver
-    // setUserPermissions(
-    //   userId: String!,
-    //   permissions: [Permission!]!
-    // ): User!
+    setPermissions: SetPermissionsResolver
     // setMyProfile(
     //   gender: GenderType,
     //   shirtSize: ShirtSizeType,
@@ -59,6 +60,7 @@ export const createAuthResolvers = (store: AuthStore): AuthResolvers => ({
     addUser: addUserResolver(store),
     setMyPassword: setMyPasswordResolver(store),
     setMyName: setMyNameResolver(store),
+    setPermissions: setPermissionsResolver(store),
   },
   Query: {
     user: userByTokenResolver(store),
