@@ -85,49 +85,31 @@ type Query {
   userProfile(userId: String!): Profile!
 }
 
-input NewUserInput {
-  email: String!
-  permissions: [Permission!]!
-}
-
 type Mutation {
+  #auth
   signin(contestId: String!, email: String!, password: String!): String!
-
   signup(
-    contestId: String!,
-    username: String!,
-    email: String!,
-    oneTimeCode: String!,
-    password: String!,
+    contestId: String!
+    username: String!
+    email: String!
+    oneTimeCode: String!
+    password: String!
     name: String!
   ): String!
-
   forgotPassword(contestId: String!, email: String!): User!
-
   resetPassword(
-    contestId: String!,
-    email: String!,
-    oneTimeCode: String!,
+    contestId: String!
+    email: String!
+    oneTimeCode: String!
     password: String!
   ): User!
-
   addUser(email: String!, permission: [Permission!]!): User!
-
-  setMyPassword(
-    oldPassword: string,
-    newPassword: string
-  ): User!
-
-  setMyName(name: string): Promise<void>
-
-  setUserPermissions(
-    userId: String!,
-    permissions: [Permission!]!
-  ): User!
-
+  setMyPassword(oldPassword: string, newPassword: string): User!
+  setMyName(name: string): User!
+  setUserPermissions(userId: String!, permissions: [Permission!]!): User!
   setMyProfile(
-    gender: GenderType,
-    shirtSize: ShirtSizeType,
+    gender: GenderType
+    shirtSize: ShirtSizeType
     address: String
   ): Profile!
 }
