@@ -24,11 +24,11 @@ export type CreateContestResolver = AppFieldResolver<
     email: string
     shortId: string
     name: string
-    shortDescription?: string
-    description?: string
-    startTime?: Date
-    finishTime?: Date
-    permittedLanguageIds?: string[]
+    shortDescription: string
+    description: string
+    startTime: Date
+    finishTime: Date
+    permittedLanguageIds: string[]
   },
   Promise<UserModel>
 >
@@ -58,23 +58,6 @@ export function createContestResolver(
       }
     }
 
-    // populate with default value
-    if (!args.shortDescription) {
-      args.shortDescription = 'Just another competitive programming competition'
-    }
-    if (!args.description) {
-      args.description = `**Lorem Ipsum** is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`
-    }
-    if (!args.startTime) {
-      args.startTime = new Date(Date.now() + 10 * 60 * 60 * 24)
-      args.finishTime = new Date(args.startTime.getTime() + 60 * 60 * 5)
-    }
-    const allLanguage = allLanguageResolver(languageStore)
-    if (!args.permittedLanguageIds) {
-      const langs = await allLanguage(source, args, context, info)
-      args.permittedLanguageIds = langs.map(lang => lang.id)
-    }
-
     // check taken shortId
     try {
       await contestStore.getContestByShortId(args.shortId)
@@ -98,14 +81,14 @@ export function createContestResolver(
     try {
       const contest = await contestStore.putContest({
         id: genId(),
-        shortId: args.shortId as string,
-        name: args.name as string,
-        shortDescription: args.shortDescription as string,
-        description: args.description as string,
-        startTime: args.startTime as Date,
+        shortId: args.shortId,
+        name: args.name,
+        shortDescription: args.shortDescription,
+        description: args.description,
+        startTime: args.startTime,
         freezed: false,
-        finishTime: args.finishTime as Date,
-        permittedLanguageIds: args.permittedLanguageIds as string[],
+        finishTime: args.finishTime,
+        permittedLanguageIds: args.permittedLanguageIds,
       })
       const user = await authStore.putUser({
         id: getUserId(),

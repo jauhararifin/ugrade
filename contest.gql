@@ -116,14 +116,14 @@ type Mutation {
   ): Profile!
 
   # contest
-  updateContest(
-    name: String
-    shortDescription: String
-    description: String
-    startTime: Date
-    freezed: Boolean
-    finishTime: Date
-    permittedLanguagesIds: [String!]
+  setMyContest(
+    name: String!
+    shortDescription: String!
+    description: String!
+    startTime: Date!
+    freezed: Boolean!
+    finishTime: Date!
+    permittedLanguagesIds: [String!]!
   ): Contest!
   createContest(
     email: String!
