@@ -4,6 +4,7 @@ import { AppFieldResolver } from 'ugrade/resolvers'
 import * as yup from 'yup'
 import { AuthStore, UserModel } from './store'
 import { userByEmailResolver } from './userByEmailResolver'
+import { oneTimeCodeSchema, passwordSchema } from './validationSchema'
 
 export type ResetPasswordResolver = AppFieldResolver<
   any,
@@ -19,17 +20,8 @@ export type ResetPasswordResolver = AppFieldResolver<
 export function resetPasswordResolver(store: AuthStore): ResetPasswordResolver {
   return async (source, args, context, info) => {
     const schema = yup.object().shape({
-      oneTimeCode: yup
-        .string()
-        .label('One Time Code')
-        .matches(/.{8}/, 'Invalid One Time Code')
-        .required(),
-      password: yup
-        .string()
-        .label('Password')
-        .min(8)
-        .max(255)
-        .required(),
+      oneTimeCode: oneTimeCodeSchema,
+      password: passwordSchema,
     })
 
     let { oneTimeCode, password } = args

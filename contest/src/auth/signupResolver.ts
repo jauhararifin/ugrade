@@ -5,6 +5,12 @@ import * as yup from 'yup'
 import { AuthStore, NoSuchUser } from './store'
 import { userByEmailResolver } from './userByEmailResolver'
 import { genToken } from './util'
+import {
+  nameSchema,
+  oneTimeCodeSchema,
+  passwordSchema,
+  usernameSchema,
+} from './validationSchema'
 
 export type SignupResolver = AppFieldResolver<
   any,
@@ -22,33 +28,10 @@ export type SignupResolver = AppFieldResolver<
 export function signupResolver(store: AuthStore): SignupResolver {
   return async (source, args, context, info) => {
     const schema = yup.object().shape({
-      username: yup
-        .string()
-        .label('Username')
-        .matches(
-          /[a-zA-Z0-9\-]+/,
-          'Should contain alphanumeric and dash character only'
-        )
-        .min(4)
-        .max(255)
-        .required(),
-      name: yup
-        .string()
-        .label('Name')
-        .min(4)
-        .max(255)
-        .required(),
-      oneTimeCode: yup
-        .string()
-        .label('One Time Code')
-        .matches(/.{8}/, 'Invalid One Time Code')
-        .required(),
-      password: yup
-        .string()
-        .label('Password')
-        .min(8)
-        .max(255)
-        .required(),
+      username: usernameSchema,
+      name: nameSchema,
+      oneTimeCode: oneTimeCodeSchema,
+      password: passwordSchema,
     })
 
     // validate user input
