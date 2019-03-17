@@ -86,7 +86,7 @@ type Query {
 }
 
 type Mutation {
-  #auth
+  # auth
   signin(contestId: String!, email: String!, password: String!): String!
   signup(
     contestId: String!
@@ -107,6 +107,8 @@ type Mutation {
   setMyPassword(oldPassword: string, newPassword: string): User!
   setMyName(name: string): User!
   setPermissions(userId: String!, permissions: [Permission!]!): User!
+
+  # profile
   setMyProfile(
     gender: GenderType
     shirtSize: ShirtSizeType

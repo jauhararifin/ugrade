@@ -1,8 +1,12 @@
 import { ApolloError } from 'apollo-server-core'
-import { IFieldResolver } from 'graphql-tools'
-import { LanguageStore, NoSuchLanguage } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { LanguageModel, LanguageStore, NoSuchLanguage } from './store'
 
-export type LanguageByIdResolver = IFieldResolver<any, any, { id: string }>
+export type LanguageByIdResolver = AppFieldResolver<
+  any,
+  { id: string },
+  Promise<LanguageModel>
+>
 
 export function languageByIdResolver(
   store: LanguageStore

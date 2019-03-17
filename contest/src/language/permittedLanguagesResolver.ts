@@ -1,9 +1,13 @@
-import { IFieldResolver } from 'graphql-tools'
 import { ContestModel } from 'ugrade/contest/store'
+import { AppFieldResolver } from 'ugrade/resolvers'
 import { languageByIdResolver } from './languageByIdResolver'
-import { LanguageStore } from './store'
+import { LanguageModel, LanguageStore } from './store'
 
-export type PermittedLanguageResolver = IFieldResolver<ContestModel, any, any>
+export type PermittedLanguageResolver = AppFieldResolver<
+  ContestModel,
+  any,
+  Promise<LanguageModel[]>
+>
 
 export function permittedLanguageResolver(
   store: LanguageStore
