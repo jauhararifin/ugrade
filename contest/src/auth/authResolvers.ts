@@ -1,3 +1,7 @@
+import {
+  ForgotPasswordResolver,
+  forgotPasswordResolver,
+} from './forgotPasswordResolver'
 import { SigninResolver, signinResolver } from './signinResolver'
 import { SignupResolver, signupResolver } from './signupResolver'
 import { AuthStore } from './store'
@@ -13,7 +17,7 @@ export interface AuthResolvers {
   Mutation: {
     signin: SigninResolver
     signup: SignupResolver
-    // forgotPassword(contestId: String!, email: String!): User!
+    forgotPassword: ForgotPasswordResolver
     // resetPassword(
     //   contestId: String!,
     //   email: String!,
@@ -48,6 +52,7 @@ export const createAuthResolvers = (store: AuthStore): AuthResolvers => ({
   Mutation: {
     signin: signinResolver(store),
     signup: signupResolver(store),
+    forgotPassword: forgotPasswordResolver(store),
   },
   Query: {
     user: userByTokenResolver(store),
