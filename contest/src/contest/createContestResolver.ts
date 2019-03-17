@@ -44,11 +44,11 @@ export function createContestResolver(
       email: emailSchema.required(),
       shortId: contestShortIdSchema.required(),
       name: contestNameSchema.required(),
-      shortDescription: contestShortDescriptionSchema,
-      description: contestDescriptionSchema,
-      startTime: startTimeSchema,
-      finishTime: finishTimeSchema,
-      permittedLanguageIds: permittedLanguagesSchema,
+      shortDescription: contestShortDescriptionSchema.required(),
+      description: contestDescriptionSchema.required(),
+      startTime: startTimeSchema.required(),
+      finishTime: finishTimeSchema.required(),
+      permittedLanguageIds: permittedLanguagesSchema.required(),
     })
     try {
       args = await schemas.validate(args)
