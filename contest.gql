@@ -104,8 +104,8 @@ type Mutation {
     password: String!
   ): User!
   addUser(email: String!, permission: [Permission!]!): User!
-  setMyPassword(oldPassword: string, newPassword: string): User!
-  setMyName(name: string): User!
+  setMyPassword(oldPassword: String!, newPassword: String!): User!
+  setMyName(name: String!): User!
   setPermissions(userId: String!, permissions: [Permission!]!): User!
 
   # profile
@@ -129,10 +129,10 @@ type Mutation {
     email: String!
     shortId: String!
     name: String!
-    shortDescription: String
-    description: String
-    startTime: Date
-    finishTime: Date
+    shortDescription: String!
+    description: String!
+    startTime: Date!
+    finishTime: Date!
     permittedLanguageIds: [String!]
   ): User!
 }
