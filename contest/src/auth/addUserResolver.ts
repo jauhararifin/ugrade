@@ -7,7 +7,7 @@ import { genId, genOTC } from './util'
 
 export type AddUserResolver = AppFieldResolver<
   any,
-  { email: string; permission: Permission[] },
+  { email: string; permissions: Permission[] },
   Promise<UserModel>
 >
 
@@ -38,7 +38,7 @@ export function addUserResolver(store: AuthStore): AddUserResolver {
     }
 
     // check given permission
-    for (const perm of args.permission) {
+    for (const perm of args.permissions) {
       if (!user.permissions.includes(perm)) {
         throw new ApolloError('Forbidden Action', 'FORBIDDEN_ACTION')
       }
@@ -58,7 +58,7 @@ export function addUserResolver(store: AuthStore): AddUserResolver {
       username: '',
       email: args.email,
       name: '',
-      permissions: args.permission,
+      permissions: args.permissions,
       password: '',
       token: '',
       signUpCode: genOTC(),
