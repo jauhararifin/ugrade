@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer, IResolvers } from 'apollo-server-express'
 import dotenv from 'dotenv'
 import express from 'express'
 import morgan from 'morgan'
@@ -34,7 +34,7 @@ app.use(morgan('combined'))
 
 const apollo = new ApolloServer({
   typeDefs: schema,
-  resolvers,
+  resolvers: resolvers as any,
   debug: process.env.NODE_ENV !== 'production',
   context: ({ req }): AppContext => {
     let authToken

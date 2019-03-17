@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-server-core'
-import { IFieldResolver } from 'graphql-tools'
-import { ContestStore, NoSuchContest } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { ContestModel, ContestStore, NoSuchContest } from './store'
 
-export type ContestByShortIdResolver = IFieldResolver<
+export type ContestByShortIdResolver = AppFieldResolver<
   any,
-  any,
-  { shortId: string }
+  { shortId: string },
+  Promise<ContestModel>
 >
 
 export function contestByShortIdResolver(

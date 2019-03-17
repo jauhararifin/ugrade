@@ -10,6 +10,10 @@ import {
   CreateContestResolver,
   createContestResolver,
 } from './createContestResolver'
+import {
+  SetMyContestResolver,
+  setMyContestResolver,
+} from './setMyContestResolver'
 import { ContestStore } from './store'
 
 export interface ContestResolvers {
@@ -19,6 +23,7 @@ export interface ContestResolvers {
   }
   Mutation: {
     createContest: CreateContestResolver
+    setMyContest: SetMyContestResolver
   }
   User: {
     contest: ContestByUserResolver
@@ -40,6 +45,7 @@ export const createContestResolvers = (
       authStore,
       languageStore
     ),
+    setMyContest: setMyContestResolver(contestStore, authStore, languageStore),
   },
   User: {
     contest: contestByUserResolver(contestStore),

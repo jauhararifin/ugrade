@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql'
-import { IResolvers, MergeInfo } from 'graphql-tools'
+import { MergeInfo } from 'graphql-tools'
 import { merge } from 'lodash'
 import {
   createAuthResolvers,
@@ -23,6 +23,7 @@ import {
   createContestResolvers,
 } from './contest'
 import { CreateContestResolver } from './contest/createContestResolver'
+import { SetMyContestResolver } from './contest/setMyContestResolver'
 import { ContestStore } from './contest/store'
 import { AppContext } from './context'
 import { AllLanguageResolver, LanguageByIdResolver } from './language'
@@ -73,7 +74,7 @@ export interface AppMutationResolver {
 
   setMyProfile: SetMyProfileResolver
 
-  // updateContest
+  setMyContest: SetMyContestResolver
   createContest: CreateContestResolver
 }
 

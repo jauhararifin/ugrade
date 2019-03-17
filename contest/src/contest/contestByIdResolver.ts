@@ -1,8 +1,12 @@
 import { ApolloError } from 'apollo-server-core'
-import { IFieldResolver } from 'graphql-tools'
-import { ContestStore, NoSuchContest } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { ContestModel, ContestStore, NoSuchContest } from './store'
 
-export type ContestByIdResolver = IFieldResolver<any, any, { id: string }>
+export type ContestByIdResolver = AppFieldResolver<
+  any,
+  { id: string },
+  Promise<ContestModel>
+>
 
 export function contestByIdResolver(store: ContestStore): ContestByIdResolver {
   return async (_parent, { id }) => {
