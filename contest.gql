@@ -114,4 +114,25 @@ type Mutation {
     shirtSize: ShirtSizeType
     address: String
   ): Profile!
+
+  # contest
+  updateContest(
+    name: String
+    shortDescription: String
+    description: String
+    startTime: Date
+    freezed: Boolean
+    finishTime: Date
+    permittedLanguages: [Language!]
+  ): Contest!
+  createContest(
+    email: String!
+    shortId: String!
+    name: String!
+    shortDescription: String!
+    description: String!
+    startTime: Date!
+    finishTime: Date!
+    permittedLanguages: [Language!]!
+  ): User!
 }
