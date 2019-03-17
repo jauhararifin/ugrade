@@ -2,6 +2,10 @@ import {
   ForgotPasswordResolver,
   forgotPasswordResolver,
 } from './forgotPasswordResolver'
+import {
+  ResetPasswordResolver,
+  resetPasswordResolver,
+} from './resetPasswordResolver'
 import { SigninResolver, signinResolver } from './signinResolver'
 import { SignupResolver, signupResolver } from './signupResolver'
 import { AuthStore } from './store'
@@ -18,12 +22,7 @@ export interface AuthResolvers {
     signin: SigninResolver
     signup: SignupResolver
     forgotPassword: ForgotPasswordResolver
-    // resetPassword(
-    //   contestId: String!,
-    //   email: String!,
-    //   oneTimeCode: String!,
-    //   password: String!
-    // ): User!
+    resetPassword: ResetPasswordResolver
     // addUser(email: String!, permission: [Permission!]!): User!
     // setMyPassword(
     //   oldPassword: string,
@@ -53,6 +52,7 @@ export const createAuthResolvers = (store: AuthStore): AuthResolvers => ({
     signin: signinResolver(store),
     signup: signupResolver(store),
     forgotPassword: forgotPasswordResolver(store),
+    resetPassword: resetPasswordResolver(store),
   },
   Query: {
     user: userByTokenResolver(store),
