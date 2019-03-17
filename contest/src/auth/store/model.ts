@@ -28,4 +28,7 @@ export interface UserModel {
 
   password: string
   token: string
+
+  signUpCode?: string
+  resetPasswordCode?: string
 }

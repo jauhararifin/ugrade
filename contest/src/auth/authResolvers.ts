@@ -1,4 +1,5 @@
-import { loginResolver, LoginResolver } from './loginResolver'
+import { SigninResolver, signinResolver } from './signinResolver'
+import { SignupResolver, signupResolver } from './signupResolver'
 import { AuthStore } from './store'
 import { userByEmailResolver, UserByEmailResolver } from './userByEmailResolver'
 import { userByIdResolver, UserByIdResolver } from './userByIdResolver'
@@ -10,7 +11,30 @@ import {
 
 export interface AuthResolvers {
   Mutation: {
-    login: LoginResolver
+    signin: SigninResolver
+    signup: SignupResolver
+    // forgotPassword(contestId: String!, email: String!): User!
+    // resetPassword(
+    //   contestId: String!,
+    //   email: String!,
+    //   oneTimeCode: String!,
+    //   password: String!
+    // ): User!
+    // addUser(email: String!, permission: [Permission!]!): User!
+    // setMyPassword(
+    //   oldPassword: string,
+    //   newPassword: string
+    // ): User!
+    // setMyName(name: string): Promise<void>
+    // setUserPermissions(
+    //   userId: String!,
+    //   permissions: [Permission!]!
+    // ): User!
+    // setMyProfile(
+    //   gender: GenderType,
+    //   shirtSize: ShirtSizeType,
+    //   address: String
+    // ): Profile!
   }
   Query: {
     user: UserByTokenResolver
@@ -22,7 +46,8 @@ export interface AuthResolvers {
 
 export const createAuthResolvers = (store: AuthStore): AuthResolvers => ({
   Mutation: {
-    login: loginResolver(store),
+    signin: signinResolver(store),
+    signup: signupResolver(store),
   },
   Query: {
     user: userByTokenResolver(store),

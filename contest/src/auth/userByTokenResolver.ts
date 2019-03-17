@@ -1,9 +1,8 @@
 import { ApolloError } from 'apollo-server-core'
 import { IFieldResolver } from 'graphql-tools'
-import { AppContext } from 'ugrade'
-import { AuthStore, NoSuchUser } from './store'
+import { AuthStore, NoSuchUser, UserModel } from './store'
 
-export type UserByTokenResolver = IFieldResolver<any, AppContext, any>
+export type UserByTokenResolver = IFieldResolver<any, any, Promise<UserModel>>
 
 export function userByTokenResolver(store: AuthStore): UserByTokenResolver {
   return async (_parent, _args, { authToken }) => {

@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-server-core'
-import { IFieldResolver } from 'graphql-tools'
-import { AuthStore, NoSuchUser } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { AuthStore, NoSuchUser, UserModel } from './store'
 
-export type UserByUsernameResolver = IFieldResolver<
+export type UserByUsernameResolver = AppFieldResolver<
   any,
-  any,
-  { contestId: string; username: string }
+  { contestId: string; username: string },
+  Promise<UserModel>
 >
 
 export function userByUsernameResolver(

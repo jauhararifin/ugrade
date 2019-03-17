@@ -1,17 +1,17 @@
 import { ApolloError } from 'apollo-server-core'
 import { compare } from 'bcrypt'
-import { IFieldResolver } from 'graphql-tools'
 import { logger } from 'ugrade/logger'
+import { AppFieldResolver } from 'ugrade/resolvers'
 import { AuthStore, NoSuchUser } from './store'
 import { genToken } from './util'
 
-export type LoginResolver = IFieldResolver<
+export type SigninResolver = AppFieldResolver<
   any,
-  any,
-  { contestId: string; email: string; password: string }
+  { contestId: string; email: string; password: string },
+  Promise<string>
 >
 
-export function loginResolver(store: AuthStore): LoginResolver {
+export function signinResolver(store: AuthStore): SigninResolver {
   return async (_parent, { contestId, email, password }) => {
     try {
       const user = await store.getUserByEmail(contestId, email)

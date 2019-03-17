@@ -1,15 +1,15 @@
 import { ApolloError } from 'apollo-server-core'
-import { IFieldResolver } from 'graphql-tools'
-import { AuthStore, NoSuchUser } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { AuthStore, NoSuchUser, UserModel } from './store'
 
-export type UserByEmailResolver = IFieldResolver<
+export type UserByEmailResolver = AppFieldResolver<
   any,
-  any,
-  { contestId: string; email: string }
+  { contestId: string; email: string },
+  Promise<UserModel>
 >
 
 export function userByEmailResolver(store: AuthStore): UserByEmailResolver {
-  return async (_source, { contestId, email }) => {
+  return async (_source, { contestId, email }): Promise<UserModel> => {
     try {
       return await store.getUserByEmail(contestId, email)
     } catch (error) {

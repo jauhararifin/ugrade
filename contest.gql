@@ -66,26 +66,68 @@ type Contest {
 }
 
 type Query {
+  # auth
   user: User!
   userById(id: String!): User!
   userByEmail(contestId: String!, email: String!): User!
   userByUsername(contestId: String!, username: String!): User!
 
+  # contest
   contestById(id: String!): Contest!
   contestByShortId(shortId: String!): Contest!
 
+  # language
   languages: [Language!]!
   languageById(id: String!): Language!
 
+  # profile
   profile: Profile!
   userProfile(userId: String!): Profile!
 }
 
+input NewUserInput {
+  email: String!
+  permissions: [Permission!]!
+}
+
 type Mutation {
-  login(contestId: String!, email: String!, password: String!): String!
+  signin(contestId: String!, email: String!, password: String!): String!
+
+  signup(
+    contestId: String!,
+    username: String!,
+    email: String!,
+    oneTimeCode: String!,
+    password: String!,
+    name: String!
+  ): String!
+
+  forgotPassword(contestId: String!, email: String!): User!
+
+  resetPassword(
+    contestId: String!,
+    email: String!,
+    oneTimeCode: String!,
+    password: String!
+  ): User!
+
+  addUser(email: String!, permission: [Permission!]!): User!
+
+  setMyPassword(
+    oldPassword: string,
+    newPassword: string
+  ): User!
+
+  setMyName(name: string): Promise<void>
+
+  setUserPermissions(
+    userId: String!,
+    permissions: [Permission!]!
+  ): User!
+
   setMyProfile(
-    gender: GenderType
-    shirtSize: ShirtSizeType
+    gender: GenderType,
+    shirtSize: ShirtSizeType,
     address: String
   ): Profile!
 }
