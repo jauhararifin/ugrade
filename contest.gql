@@ -123,7 +123,7 @@ type Mutation {
     startTime: Date!
     freezed: Boolean!
     finishTime: Date!
-    permittedLanguagesIds: [String!]!
+    permittedLanguageIds: [String!]!
   ): Contest!
   createContest(
     email: String!
@@ -133,6 +133,6 @@ type Mutation {
     description: String
     startTime: Date
     finishTime: Date
-    permittedLanguagesIds: [String!]
+    permittedLanguageIds: [String!]
   ): User!
 }
