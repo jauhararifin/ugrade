@@ -1,9 +1,15 @@
+import { AuthStore } from 'ugrade/auth/store'
+import { LanguageStore } from 'ugrade/language/store'
 import { ContestByIdResolver, contestByIdResolver } from './contestByIdResolver'
 import {
   ContestByShortIdResolver,
   contestByShortIdResolver,
 } from './contestByShortIdResolver'
-import { ContestByUserResolver } from './contestByUser'
+import { ContestByUserResolver, contestByUserResolver } from './contestByUser'
+import {
+  CreateContestResolver,
+  createContestResolver,
+} from './createContestResolver'
 import { ContestStore } from './store'
 
 export interface ContestResolvers {
@@ -11,19 +17,31 @@ export interface ContestResolvers {
     contestById: ContestByIdResolver
     contestByShortId: ContestByShortIdResolver
   }
+  Mutation: {
+    createContest: CreateContestResolver
+  }
   User: {
     contest: ContestByUserResolver
   }
 }
 
 export const createContestResolvers = (
-  store: ContestStore
+  contestStore: ContestStore,
+  authStore: AuthStore,
+  languageStore: LanguageStore
 ): ContestResolvers => ({
   Query: {
-    contestById: contestByIdResolver(store),
-    contestByShortId: contestByShortIdResolver(store),
+    contestById: contestByIdResolver(contestStore),
+    contestByShortId: contestByShortIdResolver(contestStore),
+  },
+  Mutation: {
+    createContest: createContestResolver(
+      contestStore,
+      authStore,
+      languageStore
+    ),
   },
   User: {
-    contest: contestByIdResolver(store),
+    contest: contestByUserResolver(contestStore),
   },
 })

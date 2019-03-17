@@ -22,6 +22,7 @@ import {
   ContestByShortIdResolver,
   createContestResolvers,
 } from './contest'
+import { CreateContestResolver } from './contest/createContestResolver'
 import { ContestStore } from './contest/store'
 import { AppContext } from './context'
 import { AllLanguageResolver, LanguageByIdResolver } from './language'
@@ -73,7 +74,7 @@ export interface AppMutationResolver {
   setMyProfile: SetMyProfileResolver
 
   // updateContest
-  // createContest
+  createContest: CreateContestResolver
 }
 
 export interface AppResolver {
@@ -87,7 +88,11 @@ export function createResolvers(
   authStore: AuthStore,
   profileStore: ProfileStore
 ): AppResolver {
-  const contestResolvers = createContestResolvers(contestStore)
+  const contestResolvers = createContestResolvers(
+    contestStore,
+    authStore,
+    languageStore
+  )
   const languageResolvers = createLanguageResolvers(languageStore)
   const authResolvers = createAuthResolvers(authStore)
   const profileResolvers = createProfileResolvers(profileStore, authStore)

@@ -1,9 +1,13 @@
 import { ApolloError } from 'apollo-server-core'
 import { IFieldResolver } from 'graphql-tools'
 import { UserModel } from 'ugrade/auth/store'
-import { ContestStore, NoSuchContest } from './store'
+import { ContestModel, ContestStore, NoSuchContest } from './store'
 
-export type ContestByUserResolver = IFieldResolver<UserModel, any, any>
+export type ContestByUserResolver = IFieldResolver<
+  UserModel,
+  any,
+  Promise<ContestModel>
+>
 
 export function contestByUserResolver(
   store: ContestStore
