@@ -11,7 +11,7 @@ import { LanguageStore } from './language/store'
 import { createProfileResolvers } from './profile'
 import { ProfileStore } from './profile/store'
 
-export type AppFieldResolver<TSource, TArgs, TReturn = any> = (
+export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
   source: TSource,
   args: TArgs,
   context: AppContext,

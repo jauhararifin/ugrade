@@ -1,14 +1,13 @@
-import { IFieldResolver } from 'graphql-tools'
 import { userByTokenResolver } from 'ugrade/auth'
 import { AuthStore } from 'ugrade/auth/store'
-import { AppContext } from 'ugrade/context'
 import { logger } from 'ugrade/logger'
-import { GenderType, ProfileStore, ShirtSizeType } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { GenderType, ProfileModel, ProfileStore, ShirtSizeType } from './store'
 
-export type SetMyProfileResolver = IFieldResolver<
+export type SetMyProfileResolver = AppFieldResolver<
   any,
-  AppContext,
-  { gender?: GenderType; shirtSize?: ShirtSizeType; address?: string }
+  { gender?: GenderType; shirtSize?: ShirtSizeType; address?: string },
+  Promise<ProfileModel>
 >
 
 export function setMyProfileResolver(

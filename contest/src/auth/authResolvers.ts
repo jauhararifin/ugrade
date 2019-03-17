@@ -37,11 +37,6 @@ export interface AuthResolvers {
     setMyPassword: SetMyPasswordResolver
     setMyName: SetMyNameResolver
     setPermissions: SetPermissionsResolver
-    // setMyProfile(
-    //   gender: GenderType,
-    //   shirtSize: ShirtSizeType,
-    //   address: String
-    // ): Profile!
   }
   Query: {
     user: UserByTokenResolver

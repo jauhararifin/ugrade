@@ -1,10 +1,14 @@
 import { ApolloError } from 'apollo-server-core'
-import { IFieldResolver } from 'graphql-tools'
 import { userByTokenResolver } from 'ugrade/auth'
 import { AuthStore, Permission, UserModel } from 'ugrade/auth/store'
-import { NoSuchProfile, ProfileStore } from './store'
+import { AppFieldResolver } from 'ugrade/resolvers'
+import { NoSuchProfile, ProfileModel, ProfileStore } from './store'
 
-export type ProfileByUserResolver = IFieldResolver<UserModel, any, any>
+export type ProfileByUserResolver = AppFieldResolver<
+  UserModel,
+  any,
+  Promise<ProfileModel>
+>
 
 export function profileByUserResolver(
   profileStore: ProfileStore,
@@ -12,8 +16,8 @@ export function profileByUserResolver(
 ): ProfileByUserResolver {
   return async (source, args, context, info) => {
     const userByToken = userByTokenResolver(authStore)
+    const me = await userByToken(source, args, context, info)
     try {
-      const me = await userByToken(source, args, context, info)
       const allowed =
         me.id === source.id || me.permissions.includes(Permission.ProfilesRead)
       if (!allowed) {
@@ -26,7 +30,7 @@ export function profileByUserResolver(
       }
       return profile
     } catch (error) {
-      if (error instanceof NoSuchProfile) return {}
+      if (error instanceof NoSuchProfile) return { userId: me.id }
       throw error
     }
   }
