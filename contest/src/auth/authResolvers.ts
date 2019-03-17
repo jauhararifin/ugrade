@@ -1,3 +1,4 @@
+import { AddUserResolver, addUserResolver } from './addUserResolver'
 import {
   ForgotPasswordResolver,
   forgotPasswordResolver,
@@ -23,7 +24,7 @@ export interface AuthResolvers {
     signup: SignupResolver
     forgotPassword: ForgotPasswordResolver
     resetPassword: ResetPasswordResolver
-    // addUser(email: String!, permission: [Permission!]!): User!
+    addUser: AddUserResolver
     // setMyPassword(
     //   oldPassword: string,
     //   newPassword: string
@@ -53,6 +54,7 @@ export const createAuthResolvers = (store: AuthStore): AuthResolvers => ({
     signup: signupResolver(store),
     forgotPassword: forgotPasswordResolver(store),
     resetPassword: resetPasswordResolver(store),
+    addUser: addUserResolver(store),
   },
   Query: {
     user: userByTokenResolver(store),
