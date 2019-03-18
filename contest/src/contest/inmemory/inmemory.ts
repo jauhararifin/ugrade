@@ -6,6 +6,7 @@ import { ContestIdTaken } from '../ContestIdTaken'
 import { NoSuchContest } from '../NoSuchContest'
 import { ContestService } from '../service'
 import { contestServiceValidator as validator } from '../validations'
+import { contests as contestFixture } from './fixture'
 import { genId } from './util'
 
 export class InMemoryContestService implements ContestService {
@@ -15,7 +16,13 @@ export class InMemoryContestService implements ContestService {
   private contestId: { [id: string]: Contest }
   private contestShortId: { [shortId: string]: Contest }
 
-  constructor(contests: Contest[]) {
+  constructor(
+    authService: AuthService,
+    languageService: LanguageService,
+    contests: Contest[] = contestFixture
+  ) {
+    this.authService = authService
+    this.languageService = languageService
     this.contests = lodash.cloneDeep(contests)
     this.contestId = {}
     this.contestShortId = {}
