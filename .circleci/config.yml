@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - checkout
+      - checkout:
           path: ~/ugrade
       - run:
           name: update-npm
@@ -24,7 +24,7 @@ jobs:
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - checkout
+      - checkout:
           path: ~/ugrade
       - run:
           name: test
