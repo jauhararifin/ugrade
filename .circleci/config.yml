@@ -3,7 +3,7 @@ jobs:
   build-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node
     steps:
       - checkout:
           path: ~/ugrade
@@ -22,7 +22,7 @@ jobs:
   test-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node
     steps:
       - checkout:
           path: ~/ugrade
