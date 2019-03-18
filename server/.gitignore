@@ -1,3 +1,4 @@
-vendor
-*.pb.go
-coverage.txt
+node_modules
+.vscode
+*.env
+dist
