@@ -1,5 +1,10 @@
 import * as yup from 'yup'
 
+export const idSchema = yup
+  .string()
+  .matches(/[a-zA-Z0-9]+/, 'Should contain alphanumeric characters only')
+  .length(32)
+
 export const contestShortIdSchema = yup
   .string()
   .min(4)
@@ -36,11 +41,5 @@ export const freezedSchema = yup.bool()
 
 export const permittedLanguagesSchema = yup
   .array()
-  .of(
-    yup
-      .string()
-      .max(512)
-      .matches(/[a-zA-Z0-9]+/)
-      .required()
-  )
+  .of(idSchema)
   .label('Permitted Languages')

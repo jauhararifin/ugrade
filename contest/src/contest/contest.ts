@@ -1,4 +1,4 @@
-export interface ContestModel {
+export interface Contest {
   id: string
   shortId: string
   name: string
