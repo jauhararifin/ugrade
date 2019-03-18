@@ -1,32 +1,28 @@
-import { ApolloServer, IResolvers } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import dotenv from 'dotenv'
 import express from 'express'
 import morgan from 'morgan'
 import { AddressInfo } from 'net'
-import { users as authFixture } from './auth/store'
-import { InMemoryAuthStore } from './auth/store/inmemory'
-import { contests as contestFixture } from './contest/store'
-import { InMemoryContestStore } from './contest/store/inmemory'
+import { createResolvers } from './api'
+import { InMemoryAuthService, users as authFixture } from './auth2/inmemory'
 import { AppContext } from './context'
-import { availableLanguages as languageFixture } from './language/store'
-import { InMemoryLanguageStore } from './language/store/inmemory'
 import { logger } from './logger'
-import { InMemoryProfileStore } from './profile/store/inmemory'
-import { createResolvers } from './resolvers'
 import { schema } from './schema'
 
 dotenv.config()
 
-const contestStore = new InMemoryContestStore(contestFixture)
-const languageStore = new InMemoryLanguageStore(languageFixture)
-const authStore = new InMemoryAuthStore(authFixture)
-const profileStore = new InMemoryProfileStore()
+// const contestStore = new InMemoryContestStore(contestFixture)
+// const languageStore = new InMemoryLanguageStore(languageFixture)
+// const authStore = new InMemoryAuthStore(authFixture)
+// const profileStore = new InMemoryProfileStore()
+
+const authService = new InMemoryAuthService(authFixture)
 
 const resolvers = createResolvers(
-  contestStore,
-  languageStore,
-  authStore,
-  profileStore
+  // contestStore,
+  // languageStore,
+  authService
+  // profileStore
 )
 
 const app = express()
