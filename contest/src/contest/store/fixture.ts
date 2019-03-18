@@ -5,7 +5,7 @@ import {
   Language3,
   Language4,
   Language5,
-} from 'ugrade/language/store'
+} from 'ugrade/language/inmemory'
 import { ContestModel } from '.'
 
 const padTo32 = (s: string) => `${'0'.repeat(32 - s.length)}${s}`
