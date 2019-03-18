@@ -3,6 +3,8 @@ import { MergeInfo } from 'graphql-tools'
 import { merge } from 'lodash'
 import { AuthService } from 'ugrade/auth'
 import { AppContext } from 'ugrade/context'
+import { LanguageService } from 'ugrade/language'
+import { ProfileService } from 'ugrade/profile/service'
 import {
   AddUserResolver,
   createAuthResolvers,
@@ -18,6 +20,16 @@ import {
   UserByTokenResolver,
   UserByUsernameResolver,
 } from './authResolvers'
+import {
+  AllLanguageResolver,
+  createLanguageResolvers,
+  LanguageByIdResolver,
+} from './languageResolvers'
+import {
+  createProfileResolvers,
+  SetMyProfileResolver,
+  UserProfileResolver,
+} from './profileResolvers'
 
 export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
   source: TSource,
@@ -37,11 +49,11 @@ export interface AppQueryResolver {
   // contestById: ContestByIdResolver
   // contestByShortId: ContestByShortIdResolver
 
-  // languages: AllLanguageResolver
-  // languageById: LanguageByIdResolver
+  languages: AllLanguageResolver
+  languageById: LanguageByIdResolver
 
   // profile: ProfileByTokenResolver
-  // userProfile: UserProfileResolver
+  userProfile: UserProfileResolver
 }
 
 export interface AppMutationResolver {
@@ -54,7 +66,7 @@ export interface AppMutationResolver {
   setMyName: SetMyNameResolver
   setPermissions: SetPermissionsResolver
 
-  // setMyProfile: SetMyProfileResolver
+  setMyProfile: SetMyProfileResolver
 
   // setMyContest: SetMyContestResolver
   // createContest: CreateContestResolver
@@ -65,19 +77,13 @@ export interface AppResolver {
   Mutation: AppMutationResolver
 }
 
-export function createResolvers(authService: AuthService): AppResolver {
-  //   const contestResolvers = createContestResolvers(
-  //     contestStore,
-  //     authStore,
-  //     languageStore
-  //   )
-  //   const languageResolvers = createLanguageResolvers(languageStore)
+export function createResolvers(
+  authService: AuthService,
+  languageService: LanguageService,
+  profileService: ProfileService
+): AppResolver {
+  const languageResolvers = createLanguageResolvers(languageService)
   const authResolvers = createAuthResolvers(authService)
-  //   const profileResolvers = createProfileResolvers(profileStore, authStore)
-  return merge(
-    // contestResolvers,
-    // languageResolvers,
-    authResolvers
-    // profileResolvers
-  )
+  const profileResolvers = createProfileResolvers(profileService, authService)
+  return merge(languageResolvers, authResolvers, profileResolvers)
 }
