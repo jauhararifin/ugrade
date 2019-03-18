@@ -17,7 +17,7 @@ export class InMemoryLanguageService implements LanguageService {
     }
   }
 
-  async getAllLanguage(): Promise<Language[]> {
+  async getAllLanguages(): Promise<Language[]> {
     return lodash.cloneDeep(this.languages)
   }
 
