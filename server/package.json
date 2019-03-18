@@ -6,7 +6,8 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node -r tsconfig-paths/register src/main.ts src/main.ts",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "test": "jest --watch --coverage"
+    "watch:test": "jest --watch --coverage",
+    "test": "jest --coverage"
   },
   "license": "MIT",
   "repository": {
