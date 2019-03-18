@@ -3,12 +3,13 @@ import { Language } from '../language'
 import { NoSuchLanguage } from '../NoSuchLanguage'
 import { LanguageService } from '../service'
 import { languageServiceValidator as validator } from '../validations'
+import { availableLanguages } from './fixture'
 
 export class InMemoryLanguageService implements LanguageService {
   private languages: Language[]
   private languageId: { [id: string]: Language }
 
-  constructor(languages: Language[]) {
+  constructor(languages: Language[] = availableLanguages) {
     this.languages = lodash.cloneDeep(languages)
     this.languageId = {}
     for (const lang of this.languages) {
