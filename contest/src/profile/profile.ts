@@ -12,7 +12,7 @@ export enum ShirtSizeType {
   XXL = 'XXL',
 }
 
-export interface ProfileModel {
+export interface Profile {
   userId: string
   gender?: GenderType
   shirtSize?: ShirtSizeType
