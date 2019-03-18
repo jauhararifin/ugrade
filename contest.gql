@@ -81,7 +81,6 @@ type Query {
   languageById(id: String!): Language!
 
   # profile
-  profile: Profile!
   userProfile(userId: String!): Profile!
 }
 
