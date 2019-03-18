@@ -1,7 +1,6 @@
-import { ApolloError } from 'apollo-server-core'
-import { AuthError, AuthService, Permission, User } from 'ugrade/auth'
-import { ValidationError } from 'yup'
+import { AuthService, Permission, User } from 'ugrade/auth'
 import { AppFieldResolver } from './resolvers'
+import { wrap } from './wrap'
 
 export type SigninResolver = AppFieldResolver<
   any,
@@ -103,19 +102,6 @@ export interface AuthResolvers {
 }
 
 export const createAuthResolvers = (service: AuthService): AuthResolvers => {
-  const wrap = async <T>(promise: Promise<T>): Promise<T> => {
-    try {
-      return await promise
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        throw new ApolloError(error.message, 'INVALID_INPUT', error.errors)
-      }
-      if (error instanceof AuthError) {
-        throw new ApolloError(error.message, 'AUTH_ERROR')
-      }
-      throw error
-    }
-  }
   return {
     Mutation: {
       signin: (_source, { contestId, email, password }) =>
