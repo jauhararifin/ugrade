@@ -11,6 +11,7 @@ import { AuthService } from '../service'
 import { Permission, User } from '../user'
 import { authServiceValidator as validator } from '../validations'
 import { WrongPassword } from '../WrongPassword'
+import { users as usersFixture } from './fixture'
 import { genId, genOTC, genToken } from './util'
 
 export class InMemoryAuthService implements AuthService {
@@ -20,7 +21,7 @@ export class InMemoryAuthService implements AuthService {
   private userUsername: { [uid: string]: User }
   private userToken: { [token: string]: User }
 
-  constructor(users: User[]) {
+  constructor(users: User[] = usersFixture) {
     this.users = lodash.cloneDeep(users)
     this.userId = {}
     this.userEmail = {}
