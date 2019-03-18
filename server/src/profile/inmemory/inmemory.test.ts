@@ -4,7 +4,6 @@ import { ProfileService } from '../service'
 import { profileServiceValidator } from '../validations/validator'
 import { InMemoryProfileService } from './inmemory'
 
-// TODO: complete this
 describe('test in memory profile service', () => {
   const genService = (): [ProfileService, any] => {
     const authService = {
@@ -98,4 +97,18 @@ describe('test in memory profile service', () => {
       NoSuchUser
     )
   })
+
+  test.todo('getUserProfile should throw no such profile when profile is empty')
+
+  test.todo('getUserProfile should return new profile when succeded')
+
+  test.todo('setMyProfile should throw validation error')
+
+  test.todo('setMyProfile should throw invalid token')
+
+  test.todo('setMyProfile should update old profile if already exists')
+
+  test.todo('setMyProfile should insert new profile if not yet exists')
+
+  test.todo('getUserProfile should return right profile after setMyProfile')
 })
