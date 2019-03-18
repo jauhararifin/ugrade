@@ -8,6 +8,7 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "jest"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/jauhararifin/ugrade.git"
