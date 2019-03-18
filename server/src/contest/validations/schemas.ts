@@ -2,7 +2,7 @@ import * as yup from 'yup'
 
 export const idSchema = yup
   .string()
-  .matches(/[a-zA-Z0-9]+/, 'Should contain alphanumeric characters only')
+  .matches(/^[a-zA-Z0-9]+$/, 'Should contain alphanumeric characters only')
   .length(32)
 
 export const contestShortIdSchema = yup
@@ -11,7 +11,7 @@ export const contestShortIdSchema = yup
   .max(255)
   .label('Contest ID')
   .matches(
-    /[a-zA-Z0-9\-]+/,
+    /^[a-zA-Z0-9\-]+$/,
     'Contest ID contains alphanumeric and dash character only'
   )
 
