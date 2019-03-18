@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-core'
-import { AuthError, AuthService, Permission, User } from 'ugrade/auth2'
+import { AuthError, AuthService, Permission, User } from 'ugrade/auth'
 import { ValidationError } from 'yup'
 import { AppFieldResolver } from './resolvers'
 

@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql'
 import { MergeInfo } from 'graphql-tools'
 import { merge } from 'lodash'
-import { AuthService } from 'ugrade/auth2'
+import { AuthService } from 'ugrade/auth'
 import { AppContext } from 'ugrade/context'
 import {
   AddUserResolver,
