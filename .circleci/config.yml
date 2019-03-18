@@ -19,6 +19,7 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+    
   test-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
@@ -26,9 +27,33 @@ jobs:
     steps:
       - checkout:
           path: ~/ugrade
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: test
           command: yarn test
+
+  build-ugrade-web:
+    working_directory: ~/ugrade/web
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
 
 workflows:
   version: 2
@@ -38,3 +63,4 @@ workflows:
       - test-ugrade-server:
           requires:
             - build-ugrade-server
+      - build-ugrade-web
