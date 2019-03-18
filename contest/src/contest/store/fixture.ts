@@ -8,8 +8,10 @@ import {
 } from 'ugrade/language/store'
 import { ContestModel } from '.'
 
+const padTo32 = (s: string) => `${'0'.repeat(32 - s.length)}${s}`
+
 export const ContestArkav4Qual: ContestModel = {
-  id: '1',
+  id: padTo32('1'),
   shortId: 'arkavidia-40-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 4.0',
   shortDescription:
@@ -62,7 +64,7 @@ export const ContestArkav4Qual: ContestModel = {
 }
 
 export const ContestArkav4Final: ContestModel = {
-  id: '2',
+  id: padTo32('2'),
   shortId: 'arkavidia-40-qualification',
   name: 'Final Competitive Programming Arkavidia 4.0',
   shortDescription:
@@ -77,7 +79,7 @@ export const ContestArkav4Final: ContestModel = {
 }
 
 export const ContestArkav5Qual: ContestModel = {
-  id: '3',
+  id: padTo32('3'),
   shortId: 'arkavidia-50-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 5.0',
   shortDescription:
@@ -90,7 +92,7 @@ export const ContestArkav5Qual: ContestModel = {
 }
 
 export const ContestArkav5Final: ContestModel = {
-  id: '4',
+  id: padTo32('4'),
   shortId: 'arkavidia-50-final',
   name: 'Final Competitive Programming Arkavidia 5.0',
   shortDescription:

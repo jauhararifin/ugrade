@@ -30,8 +30,12 @@ export const contestantPermissions = [
   Permission.ProblemsRead,
 ]
 
+function padTo32(s: string): string {
+  return '0'.repeat(32 - s.length) + s
+}
+
 export const UserTest1: User = {
-  id: '1',
+  id: padTo32('1'),
   contestId: ContestArkav4Qual.id,
   username: 'test',
   email: 'test@example.com',
@@ -42,7 +46,7 @@ export const UserTest1: User = {
 }
 
 export const UserNewTest1: User = {
-  id: '2',
+  id: padTo32('2'),
   contestId: ContestArkav4Qual.id,
   username: '',
   email: 'newtest@example.com',
@@ -53,7 +57,7 @@ export const UserNewTest1: User = {
 }
 
 export const UserTest2: User = {
-  id: '3',
+  id: padTo32('3'),
   contestId: ContestArkav4Final.id,
   username: 'test',
   email: 'test@example.com',
@@ -64,7 +68,7 @@ export const UserTest2: User = {
 }
 
 export const UserNewTest2: User = {
-  id: '4',
+  id: padTo32('4'),
   contestId: ContestArkav4Final.id,
   username: '',
   email: 'newtest@example.com',
@@ -75,7 +79,7 @@ export const UserNewTest2: User = {
 }
 
 export const UserAdmin3: User = {
-  id: 'admin3',
+  id: padTo32('admin3'),
   contestId: ContestArkav5Qual.id,
   username: 'admin',
   email: 'admin@example.com',
@@ -86,7 +90,7 @@ export const UserAdmin3: User = {
 }
 
 export const UserTest3: User = {
-  id: '5',
+  id: padTo32('5'),
   contestId: ContestArkav5Qual.id,
   username: 'test',
   email: 'test@example.com',
@@ -97,7 +101,7 @@ export const UserTest3: User = {
 }
 
 export const UserNewTest3: User = {
-  id: '6',
+  id: padTo32('6'),
   contestId: ContestArkav5Qual.id,
   username: '',
   email: 'newtest@example.com',
@@ -108,7 +112,7 @@ export const UserNewTest3: User = {
 }
 
 export const UserTest4: User = {
-  id: '7',
+  id: padTo32('7'),
   contestId: ContestArkav5Final.id,
   username: 'test',
   email: 'test@example.com',
@@ -119,7 +123,7 @@ export const UserTest4: User = {
 }
 
 export const UserNewTest4: User = {
-  id: '8',
+  id: padTo32('8'),
   contestId: ContestArkav5Final.id,
   username: '',
   email: 'newtest@example.com',
