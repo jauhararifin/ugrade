@@ -21,13 +21,10 @@ describe('language module validator', () => {
     '                                ',
     'SoMe4lPh109sad122Mmda012asdfasdfa34567',
   ])('using %s as language id should rejected', async () => {
-    try {
-      await languageServiceValidator.getLanguageById(
-        'SoMe4lPh109sad122Mmda01234567'
-      )
-    } catch (error) {
-      expect(error).toBeInstanceOf(ValidationError)
-      expect(error.errors).toBeDefined()
-    }
+    const result = languageServiceValidator.getLanguageById(
+      'SoMe4lPh109sad122Mmda01234567'
+    )
+    await expect(result).rejects.toBeInstanceOf(ValidationError)
+    await expect(result).rejects.toHaveProperty('errors')
   })
 })
