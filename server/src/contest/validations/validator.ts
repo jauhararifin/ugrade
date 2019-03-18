@@ -5,6 +5,7 @@ import {
   contestDescriptionSchema,
   contestNameSchema,
   contestShortDescriptionSchema,
+  contestShortIdSchema,
   finishTimeSchema,
   freezedSchema,
   permittedLanguagesSchema,
@@ -23,7 +24,7 @@ export const contestServiceValidator = {
     yup
       .object()
       .shape({
-        shortId: idSchema.required(),
+        shortId: contestShortIdSchema.required(),
       })
       .validate({ shortId }),
   createContest: (
@@ -40,7 +41,7 @@ export const contestServiceValidator = {
       .object()
       .shape({
         email: emailSchema.required(),
-        shortId: idSchema.required(),
+        shortId: contestShortIdSchema.required(),
         name: nameSchema.required(),
         shortDescription: contestShortDescriptionSchema.required(),
         description: contestShortDescriptionSchema.required(),
