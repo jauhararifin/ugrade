@@ -1,12 +1,13 @@
-import {
-  emailSchema,
-  nameSchema,
-  passwordSchema,
-  usernameSchema,
-} from 'ugrade/auth/validationSchema'
 import * as yup from 'yup'
 import { Permission } from '../user'
-import { idSchema, oneTimeCodeSchema } from './validationSchemas'
+import {
+  emailSchema,
+  idSchema,
+  nameSchema,
+  oneTimeCodeSchema,
+  passwordSchema,
+  usernameSchema,
+} from './schemas'
 
 export const authServiceValidator = {
   signin: (contestId: string, email: string, password: string) =>
