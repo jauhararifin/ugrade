@@ -6,24 +6,18 @@ import { AddressInfo } from 'net'
 import { createResolvers } from './api'
 import { InMemoryAuthService, users as authFixture } from './auth/inmemory'
 import { AppContext } from './context'
+import { InMemoryLanguageService } from './language/inmemory'
 import { logger } from './logger'
+import { InMemoryProfileService } from './profile/inmemory'
 import { schema } from './schema'
 
 dotenv.config()
 
-// const contestStore = new InMemoryContestStore(contestFixture)
-// const languageStore = new InMemoryLanguageStore(languageFixture)
-// const authStore = new InMemoryAuthStore(authFixture)
-// const profileStore = new InMemoryProfileStore()
+const authService = new InMemoryAuthService()
+const languageService = new InMemoryLanguageService()
+const profileService = new InMemoryProfileService(authService)
 
-const authService = new InMemoryAuthService(authFixture)
-
-const resolvers = createResolvers(
-  // contestStore,
-  // languageStore,
-  authService
-  // profileStore
-)
+const resolvers = createResolvers(authService, languageService, profileService)
 
 const app = express()
 app.use(morgan('combined'))
