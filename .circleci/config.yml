@@ -28,7 +28,7 @@ jobs:
           path: ~/ugrade
       - run:
           name: test
-          command: npm test
+          command: yarn test
 
 workflows:
   version: 2
