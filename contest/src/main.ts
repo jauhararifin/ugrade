@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import { AddressInfo } from 'net'
 import { createResolvers } from './api'
 import { InMemoryAuthService, users as authFixture } from './auth/inmemory'
+import { InMemoryContestService } from './contest/inmemory'
 import { AppContext } from './context'
 import { InMemoryLanguageService } from './language/inmemory'
 import { logger } from './logger'
@@ -16,8 +17,14 @@ dotenv.config()
 const authService = new InMemoryAuthService()
 const languageService = new InMemoryLanguageService()
 const profileService = new InMemoryProfileService(authService)
+const contestService = new InMemoryContestService(authService, languageService)
 
-const resolvers = createResolvers(authService, languageService, profileService)
+const resolvers = createResolvers(
+  authService,
+  languageService,
+  profileService,
+  contestService
+)
 
 const app = express()
 app.use(morgan('combined'))

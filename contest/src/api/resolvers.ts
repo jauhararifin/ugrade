@@ -2,6 +2,7 @@ import { GraphQLResolveInfo } from 'graphql'
 import { MergeInfo } from 'graphql-tools'
 import { merge } from 'lodash'
 import { AuthService } from 'ugrade/auth'
+import { ContestService } from 'ugrade/contest'
 import { AppContext } from 'ugrade/context'
 import { LanguageService } from 'ugrade/language'
 import { ProfileService } from 'ugrade/profile/service'
@@ -20,6 +21,13 @@ import {
   UserByTokenResolver,
   UserByUsernameResolver,
 } from './authResolvers'
+import {
+  ContestByIdResolver,
+  ContestByShortIdResolver,
+  CreateContestResolver,
+  createContestResolvers,
+  SetMyContestResolver,
+} from './contestResolvers'
 import {
   AllLanguageResolver,
   createLanguageResolvers,
@@ -46,8 +54,8 @@ export interface AppQueryResolver {
   userByEmail: UserByEmailResolver
   userByUsername: UserByUsernameResolver
 
-  // contestById: ContestByIdResolver
-  // contestByShortId: ContestByShortIdResolver
+  contestById: ContestByIdResolver
+  contestByShortId: ContestByShortIdResolver
 
   languages: AllLanguageResolver
   languageById: LanguageByIdResolver
@@ -68,8 +76,8 @@ export interface AppMutationResolver {
 
   setMyProfile: SetMyProfileResolver
 
-  // setMyContest: SetMyContestResolver
-  // createContest: CreateContestResolver
+  setMyContest: SetMyContestResolver
+  createContest: CreateContestResolver
 }
 
 export interface AppResolver {
@@ -80,10 +88,17 @@ export interface AppResolver {
 export function createResolvers(
   authService: AuthService,
   languageService: LanguageService,
-  profileService: ProfileService
+  profileService: ProfileService,
+  contestService: ContestService
 ): AppResolver {
   const languageResolvers = createLanguageResolvers(languageService)
   const authResolvers = createAuthResolvers(authService)
   const profileResolvers = createProfileResolvers(profileService, authService)
-  return merge(languageResolvers, authResolvers, profileResolvers)
+  const contestResolvers = createContestResolvers(contestService)
+  return merge(
+    languageResolvers,
+    authResolvers,
+    profileResolvers,
+    contestResolvers
+  )
 }
