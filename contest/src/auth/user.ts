@@ -13,6 +13,21 @@ export enum Permission {
   ProfilesRead = 'ProfilesRead',
 }
 
+export const allPermissions = [
+  Permission.InfoUpdate,
+  Permission.AnnouncementCreate,
+  Permission.AnnouncementRead,
+  Permission.ProblemsCreate,
+  Permission.ProblemsRead,
+  Permission.ProblemsReadDisabled,
+  Permission.ProblemsUpdate,
+  Permission.ProblemsDelete,
+  Permission.UsersInvite,
+  Permission.UsersPermissionsUpdate,
+  Permission.UsersDelete,
+  Permission.ProfilesRead,
+]
+
 export interface User {
   id: string
   contestId: string

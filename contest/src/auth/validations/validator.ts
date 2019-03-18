@@ -82,6 +82,15 @@ export const authServiceValidator = {
       })
       .validate({ token, email, permissions }),
 
+  addContest: (email: string, contestId: string) =>
+    yup
+      .object()
+      .shape({
+        email: emailSchema.required(),
+        contestId: idSchema.required(),
+      })
+      .validate({ email, contestId }),
+
   setMyPassword: (token: string, oldPassword: string, newPassword: string) =>
     yup
       .object()

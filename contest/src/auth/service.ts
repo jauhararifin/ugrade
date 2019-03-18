@@ -22,6 +22,7 @@ export interface AuthService {
     email: string,
     permissions: Permission[]
   ): Promise<User>
+  addContest(email: string, contestId: string): Promise<User>
   setMyPassword(
     token: string,
     oldPassword: string,

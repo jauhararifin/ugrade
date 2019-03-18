@@ -8,7 +8,7 @@ import { InvalidCode } from '../InvalidCode'
 import { InvalidCredential } from '../InvalidCredential'
 import { NoSuchUser } from '../NoSuchUser'
 import { AuthService } from '../service'
-import { Permission, User } from '../user'
+import { allPermissions, Permission, User } from '../user'
 import { authServiceValidator as validator } from '../validations'
 import { WrongPassword } from '../WrongPassword'
 import { users as usersFixture } from './fixture'
@@ -181,6 +181,36 @@ export class InMemoryAuthService implements AuthService {
       token: '',
       signUpCode: genOTC(),
     }
+    this.users.push(newUser)
+    this.userId[newUser.id] = newUser
+    this.userEmail[newUser.email] = newUser
+    this.userUsername[newUser.username] = newUser
+    this.userToken[newUser.token] = newUser
+
+    return lodash.cloneDeep(newUser)
+  }
+
+  async addContest(email: string, contestId: string): Promise<User> {
+    await validator.addContest(email, contestId)
+
+    const newUser: User = {
+      id: genId(),
+      contestId,
+      username: '',
+      email,
+      name: '',
+      permissions: allPermissions,
+      password: '',
+      token: '',
+      signUpCode: genOTC(),
+    }
+
+    for (const user of this.users) {
+      if (user.contestId === contestId) {
+        throw new ForbiddenAction('Contest Already Exists')
+      }
+    }
+
     this.users.push(newUser)
     this.userId[newUser.id] = newUser
     this.userEmail[newUser.email] = newUser
