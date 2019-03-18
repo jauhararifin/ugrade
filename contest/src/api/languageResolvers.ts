@@ -1,4 +1,4 @@
-import { ContestModel } from 'ugrade/contest/store'
+import { Contest } from 'ugrade/contest'
 import { Language, LanguageService } from 'ugrade/language'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
@@ -16,7 +16,7 @@ export type LanguageByIdResolver = AppFieldResolver<
 >
 
 export type PermittedLanguageResolver = AppFieldResolver<
-  ContestModel,
+  Contest,
   any,
   Promise<Language[]>
 >
@@ -36,7 +36,7 @@ export const createLanguageResolvers = (
 ): LanguageResolvers => {
   return {
     Query: {
-      languages: () => wrap(languageService.getAllLanguage()),
+      languages: () => wrap(languageService.getAllLanguages()),
       languageById: (_source, { id }) =>
         wrap(languageService.getLanguageById(id)),
     },
