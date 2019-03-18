@@ -1,5 +1,11 @@
 import lodash from 'lodash'
-import { AuthService, ForbiddenAction, Permission, User } from 'ugrade/auth'
+import {
+  AuthService,
+  ForbiddenAction,
+  NoSuchUser,
+  Permission,
+  User,
+} from 'ugrade/auth'
 import { NoSuchProfile } from '../NoSuchProfile'
 import { GenderType, Profile, ShirtSizeType } from '../profile'
 import { ProfileService } from '../service'
@@ -31,13 +37,14 @@ export class InMemoryProfileService implements ProfileService {
       throw new ForbiddenAction()
     }
 
+    // check user exists
+    const resultUser = await this.authService.getUserById(userId)
+    if (resultUser.contestId !== issuer.contestId) {
+      throw new NoSuchUser()
+    }
+
     if (this.userProfile[userId]) {
-      const result = lodash.cloneDeep(this.userProfile[userId])
-      const resultUser = await this.authService.getUserById(result.userId)
-      if (resultUser.contestId !== issuer.contestId) {
-        throw new NoSuchProfile()
-      }
-      return result
+      return lodash.cloneDeep(this.userProfile[userId])
     }
     throw new NoSuchProfile()
   }
