@@ -1,5 +1,5 @@
 import lodash from 'lodash'
-import { AuthService, Permission } from 'ugrade/auth'
+import { AuthService, Permission, ForbiddenAction } from 'ugrade/auth'
 import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
 import { ClarificationService } from '../service'
@@ -96,7 +96,18 @@ export class InMemoryClarificationService implements ClarificationService {
       token,
       contestId
     )
-    throw new Error('not yet implemented')
+
+    const me = await this.authService.getMe(token)
+    if (me.contestId !== contestId) throw new ForbiddenAction()
+
+    const result = this.clarifications.filter(
+      clarif =>
+        clarif.contestId === contestId &&
+        (me.permissions.includes(Permission.ClarificationsRead) ||
+          clarif.issuerId === me.id)
+    )
+
+    return lodash.cloneDeep(result)
   }
 
   async createClarification(
