@@ -1,11 +1,4 @@
-import {
-  availableLanguages,
-  Language1,
-  Language2,
-  Language3,
-  Language4,
-  Language5,
-} from 'ugrade/language/inmemory'
+import { availableLanguages } from 'ugrade/language/inmemory'
 import { Contest } from '../contest'
 
 const padTo32 = (s: string) => `${'0'.repeat(32 - s.length)}${s}`

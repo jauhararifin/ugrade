@@ -5,6 +5,7 @@ import lodash from 'lodash'
 import { AuthService, Permission, ForbiddenAction } from 'ugrade/auth'
 import { genId } from './util'
 import { NoSuchAnnouncement } from '../NoSuchAnnouncement'
+import { announcements as fixture } from './fixture'
 
 export class InMemoryAnnouncementService implements AnnouncementService {
   private authService: AuthService
@@ -13,7 +14,10 @@ export class InMemoryAnnouncementService implements AnnouncementService {
   private idAnnouncements: { [id: string]: Announcement }
   private announcementRead: { [key: string]: boolean }
 
-  constructor(authService: AuthService, announcements: Announcement[] = []) {
+  constructor(
+    authService: AuthService,
+    announcements: Announcement[] = fixture
+  ) {
     this.authService = authService
     const fixture = lodash.cloneDeep(announcements)
     this.announcements = fixture
