@@ -4,7 +4,6 @@ import { ValidationError } from 'yup'
 import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
 import { InMemoryClarificationService } from './inmemory'
-import { clarificationServiceValidator } from '../validation'
 import { NoSuchClarificationEntry } from '../NoSuchClarificationEntry'
 
 describe('test in memory clarification service', () => {
