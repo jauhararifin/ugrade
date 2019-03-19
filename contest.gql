@@ -65,6 +65,8 @@ type Contest {
   users: [User!]!
   userByEmail(contestId: String!, email: String!): User!
   userByUsername(contestId: String!, username: String!): User!
+
+  announcements: [Announcement!]!
 }
 
 type Announcement {
@@ -72,6 +74,10 @@ type Announcement {
   title: String!
   content: String!
   issuedTime: Date!
+
+  issuer: User!
+  # is the specific user has read the announcement, based on their token
+  read: Boolean!
 }
 
 type Query {
@@ -141,4 +147,8 @@ type Mutation {
     finishTime: Date!
     permittedLanguageIds: [String!]
   ): User!
+
+  # announcement
+  createAnnouncement(title: String!, content: String!): Announcement!
+  readAnnouncement(ids: [String!]!): Announcement!
 }
