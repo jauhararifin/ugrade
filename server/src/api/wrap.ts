@@ -5,6 +5,12 @@ import { ContestError } from 'ugrade/contest'
 import { LanguageError } from 'ugrade/language'
 import { ProfileError } from 'ugrade/profile/ProfileError'
 
+/**
+ * wrap wraps result that returned by ugrade services and convert error to apollo error.
+ * It takes promise `promise` and return another promise. When `promise` is resolved, it just
+ * return the `promise`. When `promise` is rejected it returns another rejected promise that
+ * has been converted to ApolloError.
+ */
 export const wrap = async <T>(promise: Promise<T>): Promise<T> => {
   try {
     return await promise
