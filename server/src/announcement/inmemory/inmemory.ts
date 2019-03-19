@@ -4,6 +4,7 @@ import { announcementServiceValidator as validator } from '../validations'
 import lodash from 'lodash'
 import { AuthService, Permission, ForbiddenAction } from 'ugrade/auth'
 import { genId } from './util'
+import { NoSuchAnnouncement } from '../NoSuchAnnouncement'
 
 export class InMemoryAnnouncementService implements AnnouncementService {
   private authService: AuthService
@@ -90,6 +91,21 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     token: string,
     announcementId: string
   ): Promise<Announcement> {
-    throw 'not yet implemented'
+    await validator.readAnnouncement(token, announcementId)
+
+    // check permission
+    const me = await this.authService.getMe(token)
+    if (!me.permissions.includes(Permission.AnnouncementRead))
+      throw new ForbiddenAction()
+
+    // check announcement
+    if (!this.idAnnouncements[announcementId]) throw new NoSuchAnnouncement()
+    const announcement = this.idAnnouncements[announcementId]
+    if (announcement.contestId !== me.contestId) throw new NoSuchAnnouncement()
+
+    // update read
+    this.announcementRead[`${announcement.id}:${me.id}`] = true
+
+    return lodash.cloneDeep({ ...announcement, read: true })
   }
 }
