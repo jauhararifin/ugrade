@@ -4,7 +4,6 @@ import {
   ForbiddenAction,
   NoSuchUser,
   Permission,
-  User,
 } from 'ugrade/auth'
 import { NoSuchProfile } from '../NoSuchProfile'
 import { GenderType, Profile, ShirtSizeType } from '../profile'

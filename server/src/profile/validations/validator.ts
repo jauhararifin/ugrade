@@ -1,12 +1,14 @@
+import { tokenSchema } from 'ugrade/auth/validations'
+import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
 import { GenderType, ShirtSizeType } from '../profile'
-import { addressSchema, idSchema } from './schemas'
+import { addressSchema } from './schemas'
 
 export const profileServiceValidator = {
   getUserProfile: (token: string, userId: string) =>
     yup
       .object()
-      .shape({ token: idSchema.required(), userId: idSchema.required() })
+      .shape({ token: tokenSchema.required(), userId: uuidSchema.required() })
       .validate({ token, userId }),
 
   setMyProfile: (
@@ -18,7 +20,7 @@ export const profileServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
+        token: uuidSchema.required(),
         address: addressSchema,
       })
       .validate({ token, address }),

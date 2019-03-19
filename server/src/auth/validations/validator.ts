@@ -1,8 +1,8 @@
+import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
 import { Permission } from '../user'
 import {
   emailSchema,
-  idSchema,
   nameSchema,
   oneTimeCodeSchema,
   passwordSchema,
@@ -14,7 +14,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
         email: emailSchema.required(),
         password: passwordSchema.required(),
       })
@@ -31,7 +31,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
         username: usernameSchema.required(),
         name: nameSchema.required(),
         email: emailSchema.required(),
@@ -51,7 +51,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
         email: emailSchema.required(),
       })
       .validate({ contestId, email }),
@@ -65,7 +65,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
         email: emailSchema.required(),
         oneTimeCode: oneTimeCodeSchema.required(),
         password: passwordSchema.required(),
@@ -76,7 +76,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
+        token: uuidSchema.required(),
         email: emailSchema.required(),
         permissions: yup.array().required(),
       })
@@ -87,7 +87,7 @@ export const authServiceValidator = {
       .object()
       .shape({
         email: emailSchema.required(),
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
       })
       .validate({ email, contestId }),
 
@@ -95,7 +95,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
+        token: uuidSchema.required(),
         oldPassword: passwordSchema.required(),
         newPassword: passwordSchema.required(),
       })
@@ -105,7 +105,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
+        token: uuidSchema.required(),
         name: nameSchema.required(),
       })
       .validate({ token, name }),
@@ -114,21 +114,21 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
-        userId: idSchema.required(),
+        token: uuidSchema.required(),
+        userId: uuidSchema.required(),
         permissions: yup.array().required(),
       })
       .validate({ token, permissions }),
 
-  getMe: (token: string) => idSchema.required().validate(token),
+  getMe: (token: string) => uuidSchema.required().validate(token),
 
-  getUserById: (id: string) => idSchema.required().validate(id),
+  getUserById: (id: string) => uuidSchema.required().validate(id),
 
   getUserByEmail: (contestId: string, email: string) =>
     yup
       .object()
       .shape({
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
         email: emailSchema.required(),
       })
       .validate({ contestId, email }),
@@ -137,7 +137,7 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
         username: usernameSchema.required(),
       })
       .validate({ contestId, username }),
@@ -146,8 +146,8 @@ export const authServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
-        contestId: idSchema.required(),
+        token: uuidSchema.required(),
+        contestId: uuidSchema.required(),
       })
       .validate({ token, contestId }),
 }

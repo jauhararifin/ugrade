@@ -1,11 +1,11 @@
-import { AnnouncementService } from '../service'
-import { Announcement } from '../announcement'
-import { announcementServiceValidator as validator } from '../validations'
 import lodash from 'lodash'
-import { AuthService, Permission, ForbiddenAction } from 'ugrade/auth'
-import { genId } from './util'
+import { AuthService, ForbiddenAction, Permission } from 'ugrade/auth'
+import { genUUID } from 'ugrade/uuid'
+import { Announcement } from '../announcement'
 import { NoSuchAnnouncement } from '../NoSuchAnnouncement'
-import { announcements as fixture } from './fixture'
+import { AnnouncementService } from '../service'
+import { announcementServiceValidator as validator } from '../validations'
+import { announcements as announcementsFixture } from './fixture'
 
 export class InMemoryAnnouncementService implements AnnouncementService {
   private authService: AuthService
@@ -16,7 +16,7 @@ export class InMemoryAnnouncementService implements AnnouncementService {
 
   constructor(
     authService: AuthService,
-    announcements: Announcement[] = fixture
+    announcements: Announcement[] = announcementsFixture
   ) {
     this.authService = authService
     const fixture = lodash.cloneDeep(announcements)
@@ -26,19 +26,11 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     this.announcementRead = {}
     for (const ann of this.announcements) {
       this.idAnnouncements[ann.id] = ann
-      if (!this.contestAnnouncements[ann.contestId])
+      if (!this.contestAnnouncements[ann.contestId]) {
         this.contestAnnouncements[ann.contestId] = []
+      }
       this.contestAnnouncements[ann.contestId].push(ann)
     }
-  }
-
-  private readWrapper(
-    userId: string
-  ): (announcement: Announcement) => Announcement {
-    return announcement => ({
-      ...announcement,
-      read: !!this.announcementRead[`${announcement.id}:${userId}`],
-    })
   }
 
   async getContestAnnouncements(
@@ -49,12 +41,14 @@ export class InMemoryAnnouncementService implements AnnouncementService {
 
     // check permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.AnnouncementRead))
+    if (!me.permissions.includes(Permission.AnnouncementRead)) {
       throw new ForbiddenAction()
+    }
     if (me.contestId !== contestId) throw new ForbiddenAction()
 
-    if (!this.contestAnnouncements[me.contestId])
+    if (!this.contestAnnouncements[me.contestId]) {
       this.contestAnnouncements[me.contestId] = []
+    }
     return lodash.cloneDeep(
       this.contestAnnouncements[me.contestId].map(this.readWrapper(me.id))
     )
@@ -68,11 +62,12 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     await validator.createAnnouncement(token, title, content)
 
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.AnnouncementCreate))
+    if (!me.permissions.includes(Permission.AnnouncementCreate)) {
       throw new ForbiddenAction()
+    }
 
     const newAnnouncement: Announcement = {
-      id: genId(),
+      id: genUUID(),
       contestId: me.contestId,
       title,
       content,
@@ -82,8 +77,9 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     }
 
     this.announcements.push(newAnnouncement)
-    if (!this.contestAnnouncements[me.contestId])
+    if (!this.contestAnnouncements[me.contestId]) {
       this.contestAnnouncements[me.contestId] = []
+    }
     this.contestAnnouncements[me.contestId].push(newAnnouncement)
     this.idAnnouncements[newAnnouncement.id] = newAnnouncement
     this.announcementRead[`${newAnnouncement.id}:${me.id}`] = true
@@ -99,8 +95,9 @@ export class InMemoryAnnouncementService implements AnnouncementService {
 
     // check permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.AnnouncementRead))
+    if (!me.permissions.includes(Permission.AnnouncementRead)) {
       throw new ForbiddenAction()
+    }
 
     // check announcement
     if (!this.idAnnouncements[announcementId]) throw new NoSuchAnnouncement()
@@ -111,5 +108,14 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     this.announcementRead[`${announcement.id}:${me.id}`] = true
 
     return lodash.cloneDeep({ ...announcement, read: true })
+  }
+
+  private readWrapper(
+    userId: string
+  ): (announcement: Announcement) => Announcement {
+    return announcement => ({
+      ...announcement,
+      read: !!this.announcementRead[`${announcement.id}:${userId}`],
+    })
   }
 }

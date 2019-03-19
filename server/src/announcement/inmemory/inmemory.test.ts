@@ -1,9 +1,9 @@
-import { InMemoryAnnouncementService } from './inmemory'
-import { ValidationError } from 'yup'
-import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked'
 import { ForbiddenAction, Permission } from 'ugrade/auth'
-import { NoSuchAnnouncement } from '../NoSuchAnnouncement'
+import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked'
+import { ValidationError } from 'yup'
 import { Announcement } from '../announcement'
+import { NoSuchAnnouncement } from '../NoSuchAnnouncement'
+import { InMemoryAnnouncementService } from './inmemory'
 
 describe('test in memory announcement service', () => {
   const getService = (
@@ -17,20 +17,19 @@ describe('test in memory announcement service', () => {
     return [announcementService, authService]
   }
 
+  const token = '12345678901234567890123456789009'
+  const cid = token
+
   test('test getContestAnnouncements validation', async () => {
     const [service, _] = getService()
     await expect(
       service.getContestAnnouncements('ivalidtoken', 'invalidcid')
     ).rejects.toBeInstanceOf(ValidationError)
 
-    const token = '12345678901234567890123456789009'
     await service
       .getContestAnnouncements(token, token)
       .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
   })
-
-  const token = '12345678901234567890123456789009'
-  const cid = token
 
   test('test getContestAnnouncements should fail when user has no permission', async () => {
     const [service, authService] = getService()

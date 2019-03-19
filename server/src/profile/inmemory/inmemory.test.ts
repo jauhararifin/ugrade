@@ -1,14 +1,9 @@
-import {
-  ForbiddenAction,
-  NoSuchUser,
-  Permission,
-  AuthService,
-} from 'ugrade/auth'
+import { ForbiddenAction, NoSuchUser, Permission } from 'ugrade/auth'
+import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked/mocked'
 import { ValidationError } from 'yup'
 import { ProfileService } from '../service'
 import { profileServiceValidator } from '../validations/validator'
 import { InMemoryProfileService } from './inmemory'
-import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked/mocked'
 
 describe('test in memory profile service', () => {
   const genService = (): [ProfileService, MockedAuthService] => {

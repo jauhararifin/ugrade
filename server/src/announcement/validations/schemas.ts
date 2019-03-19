@@ -1,9 +1,7 @@
+import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
 
-export const announcementIdSchema = yup
-  .string()
-  .matches(/^[a-zA-Z0-9]+$/, 'Should contain alphanumeric characters only')
-  .length(32)
+export const announcementIdSchema = uuidSchema
 
 export const titleSchema = yup
   .string()

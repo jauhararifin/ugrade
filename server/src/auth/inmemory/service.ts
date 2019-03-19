@@ -1,5 +1,6 @@
 import { compare, hash } from 'bcrypt'
 import lodash from 'lodash'
+import { genUUID } from 'ugrade/uuid'
 import { AlreadyInvitedUser } from '../AlreadyInvitedUser'
 import { AlreadyRegistered } from '../AlreadyRegistered'
 import { AlreadyUsedUsername } from '../AlreadyUsedUsername'
@@ -7,12 +8,12 @@ import { ForbiddenAction } from '../ForbiddenAction'
 import { InvalidCode } from '../InvalidCode'
 import { InvalidCredential } from '../InvalidCredential'
 import { NoSuchUser } from '../NoSuchUser'
+import { genOTC } from '../otc'
 import { AuthService } from '../service'
 import { allPermissions, Permission, User } from '../user'
 import { authServiceValidator as validator } from '../validations'
 import { WrongPassword } from '../WrongPassword'
 import { users as usersFixture } from './fixture'
-import { genId, genOTC, genToken } from './util'
 
 export class InMemoryAuthService implements AuthService {
   private users: User[]
@@ -60,7 +61,7 @@ export class InMemoryAuthService implements AuthService {
       if (user.token && user.token.length > 0) {
         return user.token
       }
-      this.userId[user.id].token = genToken()
+      this.userId[user.id].token = genUUID()
       return this.userId[user.id].token
     } else {
       throw new InvalidCredential()
@@ -102,7 +103,7 @@ export class InMemoryAuthService implements AuthService {
     }
 
     // update user
-    this.userId[user.id].token = genToken()
+    this.userId[user.id].token = genUUID()
     this.userId[user.id].username = username
     this.userId[user.id].password = await hash(password, 10)
     this.userId[user.id].name = name
@@ -171,7 +172,7 @@ export class InMemoryAuthService implements AuthService {
 
     // update user
     const newUser: User = {
-      id: genId(),
+      id: genUUID(),
       contestId: user.contestId,
       username: '',
       email,
@@ -194,7 +195,7 @@ export class InMemoryAuthService implements AuthService {
     await validator.addContest(email, contestId)
 
     const newUser: User = {
-      id: genId(),
+      id: genUUID(),
       contestId,
       username: '',
       email,

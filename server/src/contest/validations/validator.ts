@@ -1,5 +1,5 @@
-import { emailSchema, nameSchema } from 'ugrade/auth/validations'
-import { idSchema } from 'ugrade/language/validations'
+import { emailSchema, nameSchema, tokenSchema } from 'ugrade/auth/validations'
+import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
 import {
   contestDescriptionSchema,
@@ -17,7 +17,7 @@ export const contestServiceValidator = {
     yup
       .object()
       .shape({
-        id: idSchema.required(),
+        id: uuidSchema.required(),
       })
       .validate({ id }),
   getContestByShortId: (shortId: string) =>
@@ -72,7 +72,7 @@ export const contestServiceValidator = {
     yup
       .object()
       .shape({
-        token: idSchema.required(),
+        token: tokenSchema.required(),
         name: contestNameSchema.required(),
         shortDescription: contestShortDescriptionSchema.required(),
         description: contestDescriptionSchema.required(),

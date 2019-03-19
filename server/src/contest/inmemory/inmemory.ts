@@ -1,13 +1,13 @@
 import lodash from 'lodash'
 import { AuthService } from 'ugrade/auth'
 import { LanguageService, NoSuchLanguage } from 'ugrade/language'
+import { genUUID } from 'ugrade/uuid'
 import { Contest } from '../contest'
 import { ContestIdTaken } from '../ContestIdTaken'
 import { NoSuchContest } from '../NoSuchContest'
 import { ContestService } from '../service'
 import { contestServiceValidator as validator } from '../validations'
 import { contests as contestFixture } from './fixture'
-import { genId } from './util'
 
 export class InMemoryContestService implements ContestService {
   private languageService: LanguageService
@@ -88,7 +88,7 @@ export class InMemoryContestService implements ContestService {
 
     // add admin to the auth service
     const newContest = {
-      id: genId(),
+      id: genUUID(),
       shortId,
       name,
       shortDescription,

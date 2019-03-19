@@ -1,6 +1,6 @@
-import * as yup from 'yup'
 import { tokenSchema } from 'ugrade/auth/validations'
-import { announcementIdSchema, titleSchema, contentSchema } from './schemas'
+import * as yup from 'yup'
+import { announcementIdSchema, contentSchema, titleSchema } from './schemas'
 
 export const announcementServiceValidator = {
   getContestAnnouncements: (token: string, contestId: string) =>

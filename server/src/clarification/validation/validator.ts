@@ -1,5 +1,5 @@
 import { tokenSchema } from 'ugrade/auth/validations'
-import { idSchema } from 'ugrade/contest/validations'
+import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
 import {
   clarificationEntryIdSchema,
@@ -33,7 +33,7 @@ export const clarificationServiceValidator = {
       .object()
       .shape({
         token: tokenSchema.required(),
-        contestId: idSchema.required(),
+        contestId: uuidSchema.required(),
       })
       .validate({ token, contestId }),
 

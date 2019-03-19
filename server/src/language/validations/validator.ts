@@ -1,12 +1,12 @@
+import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
-import { idSchema } from './schemas'
 
 export const languageServiceValidator = {
   getLanguageById: (id: string) =>
     yup
       .object()
       .shape({
-        id: idSchema.required(),
+        id: uuidSchema.required(),
       })
       .validate({ id }),
 }
