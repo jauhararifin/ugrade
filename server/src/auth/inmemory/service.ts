@@ -305,4 +305,12 @@ export class InMemoryAuthService implements AuthService {
     }
     throw new NoSuchUser()
   }
+
+  async getUsersInContest(token: string, contestId: string): Promise<User[]> {
+    await validator.getUsersInContest(token, contestId)
+    const me = await this.getMe(token)
+    if (me.contestId !== contestId) throw new ForbiddenAction()
+    const users = this.users.filter(u => u.contestId === contestId)
+    return lodash.cloneDeep(users)
+  }
 }

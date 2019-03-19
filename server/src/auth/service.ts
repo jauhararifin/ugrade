@@ -38,4 +38,6 @@ export interface AuthService {
   getUserById(id: string): Promise<User>
   getUserByEmail(contestId: string, email: string): Promise<User>
   getUserByUsername(contestId: string, username: string): Promise<User>
+
+  getUsersInContest(token: string, contestId: string): Promise<User[]>
 }

@@ -141,4 +141,13 @@ export const authServiceValidator = {
         username: usernameSchema.required(),
       })
       .validate({ contestId, username }),
+
+  getUsersInContest: (token: string, contestId: string) =>
+    yup
+      .object()
+      .shape({
+        token: idSchema.required(),
+        contestId: idSchema.required(),
+      })
+      .validate({ token, contestId }),
 }

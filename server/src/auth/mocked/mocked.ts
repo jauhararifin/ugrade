@@ -14,6 +14,7 @@ export interface MockedAuthService extends AuthService {
   getUserById: jest.Mock
   getUserByEmail: jest.Mock
   getUserByUsername: jest.Mock
+  getUsersInContest: jest.Mock
 }
 
 export function mockAuthService(): MockedAuthService {
@@ -31,5 +32,6 @@ export function mockAuthService(): MockedAuthService {
     getUserById: jest.fn(),
     getUserByEmail: jest.fn(),
     getUserByUsername: jest.fn(),
+    getUsersInContest: jest.fn(),
   }
 }
