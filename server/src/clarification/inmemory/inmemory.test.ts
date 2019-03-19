@@ -397,6 +397,84 @@ describe('test in memory clarification service', () => {
     })
   })
 
+  test('replyClarification validation', async () => {
+    const [service, _] = getService()
+    await expect(
+      service.replyClarification('ivalidtoken', '', 'a'.repeat(1024))
+    ).rejects.toBeInstanceOf(ValidationError)
+
+    await service
+      .replyClarification(token, '00000000000000000000000000000000', 'subject')
+      .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+  })
+
+  test('replyClarification should throw forbidden action when dont have pemission to create clarification', async () => {
+    const [clarifService, authService] = getService()
+    authService.getMe.mockReturnValue({
+      permissions: [],
+    })
+    await expect(
+      clarifService.replyClarification(
+        token,
+        '00000000000000000000000000000000',
+        'subject'
+      )
+    ).rejects.toBeInstanceOf(ForbiddenAction)
+  })
+
+  test('replyClarification should resolved', async () => {
+    const [clarifService, authService] = getService([
+      {
+        id: cid,
+        contestId: 'cid1',
+        title: 'title1',
+        subject: 'subject1',
+        issuerId: 'uid1',
+        issuedTime: new Date(),
+        entryIds: [],
+      },
+    ])
+    authService.getMe.mockReturnValue({
+      id: 'uid1',
+      contestId: 'cid1',
+      permissions: [Permission.ClarificationsCreate],
+    })
+
+    const initResult = await clarifService.getClarificationEntries(token, cid)
+    expect(initResult).toHaveLength(0)
+
+    const result = await clarifService.replyClarification(
+      token,
+      cid,
+      'my content'
+    )
+    expect({
+      senderId: result.senderId,
+      clarificationId: result.clarificationId,
+      content: result.content,
+      read: result.read,
+    }).toEqual({
+      senderId: 'uid1',
+      clarificationId: cid,
+      content: 'my content',
+      read: true,
+    })
+
+    const getResult = await clarifService.getClarificationEntries(token, cid)
+    expect(getResult).toHaveLength(1)
+    expect({
+      senderId: getResult[0].senderId,
+      clarificationId: getResult[0].clarificationId,
+      content: getResult[0].content,
+      read: getResult[0].read,
+    }).toEqual({
+      senderId: 'uid1',
+      clarificationId: cid,
+      content: 'my content',
+      read: true,
+    })
+  })
+
   test('readClarificationEntry validation', async () => {
     const [service, _] = getService()
     await expect(

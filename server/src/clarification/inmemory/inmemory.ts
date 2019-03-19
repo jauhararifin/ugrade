@@ -149,7 +149,30 @@ export class InMemoryClarificationService implements ClarificationService {
     content: string
   ): Promise<ClarificationEntry> {
     await validator.replyClarification(token, clarificationId, content)
-    throw new Error('not yet implemented')
+
+    const me = await this.authService.getMe(token)
+    if (!me.permissions.includes(Permission.ClarificationsCreate))
+      throw new ForbiddenAction()
+
+    const clarification = await this.getClarificationById(
+      token,
+      clarificationId
+    )
+    const newEntry: ClarificationEntry = {
+      id: genUUID(),
+      clarificationId: clarification.id,
+      senderId: me.id,
+      content,
+      issuedTime: new Date(),
+      read: true,
+    }
+
+    this.idClarifications[clarification.id].entryIds.push(newEntry.id)
+    this.entries.push(newEntry)
+    this.idEntries[newEntry.id] = newEntry
+    this.entryRead[`${me.id}:${newEntry.id}`] = true
+
+    return lodash.cloneDeep(newEntry)
   }
 
   async readClarificationEntry(
