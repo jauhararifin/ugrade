@@ -35,8 +35,7 @@ export interface ProfileResolvers {
 }
 
 export const createProfileResolvers = (
-  profileService: ProfileService,
-  authService: AuthService
+  profileService: ProfileService
 ): ProfileResolvers => ({
   Query: {
     userProfile: (_source, { userId }, { authToken }) =>

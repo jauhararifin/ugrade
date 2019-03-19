@@ -20,6 +20,7 @@ import {
   UserByIdResolver,
   UserByTokenResolver,
   UserByUsernameResolver,
+  UsersByContest,
 } from './authResolvers'
 import {
   ContestByIdResolver,
@@ -27,16 +28,19 @@ import {
   CreateContestResolver,
   createContestResolvers,
   SetMyContestResolver,
+  ContestByUserResolver,
 } from './contestResolvers'
 import {
   AllLanguageResolver,
   createLanguageResolvers,
   LanguageByIdResolver,
+  PermittedLanguageResolver,
 } from './languageResolvers'
 import {
   createProfileResolvers,
   SetMyProfileResolver,
   UserProfileResolver,
+  ProfileByUserResolver,
 } from './profileResolvers'
 
 export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
@@ -48,41 +52,39 @@ export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
   }
 ) => TReturn
 
-export interface AppQueryResolver {
-  user: UserByTokenResolver
-  userById: UserByIdResolver
-  userByEmail: UserByEmailResolver
-  userByUsername: UserByUsernameResolver
-
-  contestById: ContestByIdResolver
-  contestByShortId: ContestByShortIdResolver
-
-  languages: AllLanguageResolver
-  languageById: LanguageByIdResolver
-
-  // profile: ProfileByTokenResolver
-  userProfile: UserProfileResolver
-}
-
-export interface AppMutationResolver {
-  signin: SigninResolver
-  signup: SignupResolver
-  forgotPassword: ForgotPasswordResolver
-  resetPassword: ResetPasswordResolver
-  addUser: AddUserResolver
-  setMyPassword: SetMyPasswordResolver
-  setMyName: SetMyNameResolver
-  setPermissions: SetPermissionsResolver
-
-  setMyProfile: SetMyProfileResolver
-
-  setMyContest: SetMyContestResolver
-  createContest: CreateContestResolver
-}
-
 export interface AppResolver {
-  Query: AppQueryResolver
-  Mutation: AppMutationResolver
+  Query: {
+    user: UserByTokenResolver
+    userById: UserByIdResolver
+    contestById: ContestByIdResolver
+    contestByShortId: ContestByShortIdResolver
+    languages: AllLanguageResolver
+    languageById: LanguageByIdResolver
+    userProfile: UserProfileResolver
+  }
+  Mutation: {
+    signin: SigninResolver
+    signup: SignupResolver
+    forgotPassword: ForgotPasswordResolver
+    resetPassword: ResetPasswordResolver
+    addUser: AddUserResolver
+    setMyPassword: SetMyPasswordResolver
+    setMyName: SetMyNameResolver
+    setPermissions: SetPermissionsResolver
+    setMyProfile: SetMyProfileResolver
+    createContest: CreateContestResolver
+    setMyContest: SetMyContestResolver
+  }
+  Contest: {
+    permittedLanguages: PermittedLanguageResolver
+    userByEmail: UserByEmailResolver
+    userByUsername: UserByUsernameResolver
+    users: UsersByContest
+  }
+  User: {
+    profile: ProfileByUserResolver
+    contest: ContestByUserResolver
+  }
 }
 
 export function createResolvers(
@@ -93,7 +95,7 @@ export function createResolvers(
 ): AppResolver {
   const languageResolvers = createLanguageResolvers(languageService)
   const authResolvers = createAuthResolvers(authService)
-  const profileResolvers = createProfileResolvers(profileService, authService)
+  const profileResolvers = createProfileResolvers(profileService)
   const contestResolvers = createContestResolvers(contestService)
   return merge(
     languageResolvers,
