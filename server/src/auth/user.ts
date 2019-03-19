@@ -2,6 +2,9 @@ export enum Permission {
   InfoUpdate = 'InfoUpdate',
   AnnouncementCreate = 'AnnouncementCreate',
   AnnouncementRead = 'AnnouncementRead',
+  ClarificationsRead = 'ClarificationsRead', // can read all clarification
+  ClarificationsCreate = 'ClarificationsCreate', // can create and read own clarification
+  ClarificationReply = 'ClarificationReply', // can reply all clarification
   ProblemsCreate = 'ProblemsCreate',
   ProblemsRead = 'ProblemsRead',
   ProblemsReadDisabled = 'ProblemsReadDisabled',
@@ -17,6 +20,9 @@ export const allPermissions = [
   Permission.InfoUpdate,
   Permission.AnnouncementCreate,
   Permission.AnnouncementRead,
+  Permission.ClarificationsRead,
+  Permission.ClarificationsCreate,
+  Permission.ClarificationReply,
   Permission.ProblemsCreate,
   Permission.ProblemsRead,
   Permission.ProblemsReadDisabled,
