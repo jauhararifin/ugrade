@@ -2,6 +2,7 @@ import { AuthService, Permission, User } from 'ugrade/auth'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
 import { Contest } from 'ugrade/contest'
+import { Announcement } from 'ugrade/announcement'
 
 export type SigninResolver = AppFieldResolver<
   any,
@@ -83,7 +84,17 @@ export type UserByUsernameResolver = AppFieldResolver<
   Promise<User>
 >
 
-export type UsersByContest = AppFieldResolver<Contest, any, Promise<User[]>>
+export type UsersByContestResolver = AppFieldResolver<
+  Contest,
+  any,
+  Promise<User[]>
+>
+
+export type UserByAnnouncementResolver = AppFieldResolver<
+  Announcement,
+  any,
+  Promise<User>
+>
 
 export interface AuthResolvers {
   Mutation: {
@@ -103,7 +114,10 @@ export interface AuthResolvers {
   Contest: {
     userByEmail: UserByEmailResolver
     userByUsername: UserByUsernameResolver
-    users: UsersByContest
+    users: UsersByContestResolver
+  }
+  Announcement: {
+    issuer: UserByAnnouncementResolver
   }
 }
 
@@ -150,6 +164,9 @@ export const createAuthResolvers = (service: AuthService): AuthResolvers => {
         wrap(service.getUserByUsername(source.id, username)),
       users: ({ id }, _args, { authToken }) =>
         wrap(service.getUsersInContest(authToken, id)),
+    },
+    Announcement: {
+      issuer: ({ issuerId }, _args) => wrap(service.getUserById(issuerId)),
     },
   }
 }

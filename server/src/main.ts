@@ -4,13 +4,14 @@ import express from 'express'
 import morgan from 'morgan'
 import { AddressInfo } from 'net'
 import { createResolvers } from './api'
-import { InMemoryAuthService, users as authFixture } from './auth/inmemory'
+import { InMemoryAuthService } from './auth/inmemory'
 import { InMemoryContestService } from './contest/inmemory'
 import { AppContext } from './context'
 import { InMemoryLanguageService } from './language/inmemory'
 import { logger } from './logger'
 import { InMemoryProfileService } from './profile/inmemory'
 import { schema } from './schema'
+import { InMemoryAnnouncementService } from './announcement/inmemory'
 
 dotenv.config()
 
@@ -18,12 +19,14 @@ const authService = new InMemoryAuthService()
 const languageService = new InMemoryLanguageService()
 const profileService = new InMemoryProfileService(authService)
 const contestService = new InMemoryContestService(authService, languageService)
+const announcementService = new InMemoryAnnouncementService(authService)
 
 const resolvers = createResolvers(
   authService,
   languageService,
   profileService,
-  contestService
+  contestService,
+  announcementService
 )
 
 const app = express()

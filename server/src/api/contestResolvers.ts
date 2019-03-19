@@ -2,6 +2,7 @@ import { User } from 'ugrade/auth'
 import { Contest, ContestService } from 'ugrade/contest'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
+import { Announcement } from 'ugrade/announcement'
 
 export type ContestByIdResolver = AppFieldResolver<
   any,
@@ -50,6 +51,12 @@ export type CreateContestResolver = AppFieldResolver<
   Promise<Contest>
 >
 
+export type ContestByAnnouncementResolver = AppFieldResolver<
+  Announcement,
+  any,
+  Promise<Contest>
+>
+
 export interface ContestResolvers {
   Query: {
     contestById: ContestByIdResolver
@@ -61,6 +68,9 @@ export interface ContestResolvers {
   }
   User: {
     contest: ContestByUserResolver
+  }
+  Announcement: {
+    contest: ContestByAnnouncementResolver
   }
 }
 
@@ -126,5 +136,8 @@ export const createContestResolvers = (
   },
   User: {
     contest: source => wrap(contestService.getContestById(source.contestId)),
+  },
+  Announcement: {
+    contest: ({ contestId }) => wrap(contestService.getContestById(contestId)),
   },
 })

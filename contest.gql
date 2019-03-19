@@ -76,6 +76,8 @@ type Announcement {
   issuedTime: Date!
 
   issuer: User!
+  contest: Contest!
+
   # is the specific user has read the announcement, based on their token
   read: Boolean!
 }

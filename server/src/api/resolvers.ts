@@ -20,7 +20,8 @@ import {
   UserByIdResolver,
   UserByTokenResolver,
   UserByUsernameResolver,
-  UsersByContest,
+  UserByAnnouncementResolver,
+  UsersByContestResolver,
 } from './authResolvers'
 import {
   ContestByIdResolver,
@@ -29,6 +30,7 @@ import {
   createContestResolvers,
   SetMyContestResolver,
   ContestByUserResolver,
+  ContestByAnnouncementResolver,
 } from './contestResolvers'
 import {
   AllLanguageResolver,
@@ -42,6 +44,13 @@ import {
   UserProfileResolver,
   ProfileByUserResolver,
 } from './profileResolvers'
+import {
+  ReadAnnouncementResolver,
+  CreateAnnouncementResolver,
+  AnnouncementsByContestResolver,
+  createAnnouncementResolvers,
+} from './announcementResolvers'
+import { AnnouncementService } from 'ugrade/announcement'
 
 export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
   source: TSource,
@@ -74,16 +83,23 @@ export interface AppResolver {
     setMyProfile: SetMyProfileResolver
     createContest: CreateContestResolver
     setMyContest: SetMyContestResolver
+    createAnnouncement: CreateAnnouncementResolver
+    readAnnouncement: ReadAnnouncementResolver
   }
   Contest: {
     permittedLanguages: PermittedLanguageResolver
     userByEmail: UserByEmailResolver
     userByUsername: UserByUsernameResolver
-    users: UsersByContest
+    users: UsersByContestResolver
+    announcements: AnnouncementsByContestResolver
   }
   User: {
     profile: ProfileByUserResolver
     contest: ContestByUserResolver
+  }
+  Announcement: {
+    contest: ContestByAnnouncementResolver
+    issuer: UserByAnnouncementResolver
   }
 }
 
@@ -91,16 +107,19 @@ export function createResolvers(
   authService: AuthService,
   languageService: LanguageService,
   profileService: ProfileService,
-  contestService: ContestService
+  contestService: ContestService,
+  announcementService: AnnouncementService
 ): AppResolver {
   const languageResolvers = createLanguageResolvers(languageService)
   const authResolvers = createAuthResolvers(authService)
   const profileResolvers = createProfileResolvers(profileService)
   const contestResolvers = createContestResolvers(contestService)
+  const announcementResolvers = createAnnouncementResolvers(announcementService)
   return merge(
     languageResolvers,
     authResolvers,
     profileResolvers,
-    contestResolvers
+    contestResolvers,
+    announcementResolvers
   )
 }
