@@ -53,6 +53,20 @@ export const clarificationServiceValidator = {
       })
       .validate({ token, title, subject, content }),
 
+  replyClarification: (
+    token: string,
+    clarificationId: string,
+    content: string
+  ) =>
+    yup
+      .object()
+      .shape({
+        token: tokenSchema.required(),
+        clarificationId: clarificationIdSchema.required(),
+        content: contentSchema.required(),
+      })
+      .validate({ token, clarificationId, content }),
+
   readClarificationEntry: (token: string, clarificationEntryId: string) =>
     yup
       .object()

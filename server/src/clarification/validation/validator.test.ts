@@ -143,6 +143,66 @@ describe('test clarification validation', () => {
   )
 
   test.each([
+    ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', '', 'content'],
+    [
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'content',
+    ],
+    [
+      'dQRjAQKKvmA3gAeHYzLpfCs84Vjs',
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8',
+      'content',
+    ],
+    [
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuS',
+      'content',
+    ],
+    [
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      '',
+    ],
+    [
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'a'.repeat(4 * 1024 + 1),
+    ],
+  ])(
+    'replyClarification should throw validation error',
+    async (token, clarifId, content) => {
+      const result = clarificationServiceValidator.replyClarification(
+        token,
+        clarifId,
+        content
+      )
+      await expect(result).rejects.toBeInstanceOf(ValidationError)
+      await expect(result).rejects.toHaveProperty('errors')
+    }
+  )
+
+  test.each([
+    [
+      'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'content',
+    ],
+    [
+      'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      'dQRjAQKK9vmA3gAeH9YzLpfC9s849Vjs',
+      'a'.repeat(4 * 1024),
+    ],
+  ])('replyClarification should resolved', async (token, clarifId, content) => {
+    const result = clarificationServiceValidator.replyClarification(
+      token,
+      clarifId,
+      content
+    )
+    await expect(result).resolves.toBeDefined()
+  })
+
+  test.each([
     ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', ''],
     ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
     ['dQRjAQKKvmA3gAeHYzLpfCs84Vjs', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8'],

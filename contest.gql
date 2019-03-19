@@ -180,5 +180,9 @@ type Mutation {
     subject: String!
     content: String!
   ): Clarification!
-  readClarificationEntry(clarificationEntryId: String!): Clarification!
+  replyClarification(
+    clarificationId: String!
+    content: String!
+  ): ClarificationEntry!
+  readClarificationEntry(clarificationEntryId: String!): ClarificationEntry!
 }

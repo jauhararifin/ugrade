@@ -3,7 +3,7 @@ import { AuthService, Permission, ForbiddenAction } from 'ugrade/auth'
 import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
 import { ClarificationService } from '../service'
-import { clarificationServiceValidator } from '../validation'
+import { clarificationServiceValidator as validator } from '../validation'
 
 export class InMemoryClarificationService implements ClarificationService {
   private authService: AuthService
@@ -37,10 +37,7 @@ export class InMemoryClarificationService implements ClarificationService {
     token: string,
     clarificationId: string
   ): Promise<Clarification> {
-    await clarificationServiceValidator.getClarificationById(
-      token,
-      clarificationId
-    )
+    await validator.getClarificationById(token, clarificationId)
 
     // throw NoSuchClarification
     if (!this.idClarifications[clarificationId]) throw new NoSuchClarification()
@@ -76,10 +73,7 @@ export class InMemoryClarificationService implements ClarificationService {
     token: string,
     clarificationId: string
   ): Promise<ClarificationEntry[]> {
-    await clarificationServiceValidator.getClarificationEntries(
-      token,
-      clarificationId
-    )
+    await validator.getClarificationEntries(token, clarificationId)
     const clarif = await this.getClarificationById(token, clarificationId)
     const me = await this.authService.getMe(token)
     const result = clarif.entryIds
@@ -92,10 +86,7 @@ export class InMemoryClarificationService implements ClarificationService {
     token: string,
     contestId: string
   ): Promise<Clarification[]> {
-    await clarificationServiceValidator.getContestClarifications(
-      token,
-      contestId
-    )
+    await validator.getContestClarifications(token, contestId)
 
     const me = await this.authService.getMe(token)
     if (me.contestId !== contestId) throw new ForbiddenAction()
@@ -116,23 +107,24 @@ export class InMemoryClarificationService implements ClarificationService {
     subject: string,
     content: string
   ): Promise<Clarification> {
-    await clarificationServiceValidator.createClarification(
-      token,
-      title,
-      subject,
-      content
-    )
+    await validator.createClarification(token, title, subject, content)
+    throw new Error('not yet implemented')
+  }
+
+  async replyClarification(
+    token: string,
+    clarificationId: string,
+    content: string
+  ): Promise<ClarificationEntry> {
+    await validator.replyClarification(token, clarificationId, content)
     throw new Error('not yet implemented')
   }
 
   async readClarificationEntry(
     token: string,
     clarificationEntryId: string
-  ): Promise<Clarification> {
-    await clarificationServiceValidator.readClarificationEntry(
-      token,
-      clarificationEntryId
-    )
+  ): Promise<ClarificationEntry> {
+    await validator.readClarificationEntry(token, clarificationEntryId)
     throw new Error('not yet implemented')
   }
 }

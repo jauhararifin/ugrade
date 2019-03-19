@@ -19,8 +19,13 @@ export interface ClarificationService {
     subject: string,
     content: string
   ): Promise<Clarification>
+  replyClarification(
+    token: string,
+    clarificationId: string,
+    content: string
+  ): Promise<ClarificationEntry>
   readClarificationEntry(
     token: string,
     clarificationEntryId: string
-  ): Promise<Clarification>
+  ): Promise<ClarificationEntry>
 }
