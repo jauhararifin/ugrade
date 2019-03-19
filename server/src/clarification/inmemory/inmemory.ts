@@ -4,6 +4,7 @@ import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
 import { ClarificationService } from '../service'
 import { clarificationServiceValidator as validator } from '../validation'
+import { genUUID } from 'ugrade/uuid'
 
 export class InMemoryClarificationService implements ClarificationService {
   private authService: AuthService
@@ -108,7 +109,37 @@ export class InMemoryClarificationService implements ClarificationService {
     content: string
   ): Promise<Clarification> {
     await validator.createClarification(token, title, subject, content)
-    throw new Error('not yet implemented')
+
+    const me = await this.authService.getMe(token)
+    if (!me.permissions.includes(Permission.ClarificationsCreate))
+      throw new ForbiddenAction()
+
+    const [clarifId, entryId] = [genUUID(), genUUID()]
+    const newEntry: ClarificationEntry = {
+      id: entryId,
+      clarificationId: clarifId,
+      senderId: me.id,
+      content,
+      issuedTime: new Date(),
+      read: true,
+    }
+    const newClarification: Clarification = {
+      id: clarifId,
+      contestId: me.contestId,
+      title,
+      subject,
+      issuerId: me.id,
+      issuedTime: new Date(),
+      entryIds: [entryId],
+    }
+
+    this.clarifications.push(newClarification)
+    this.idClarifications[newClarification.id] = newClarification
+    this.entries.push(newEntry)
+    this.idEntries[newEntry.id] = newEntry
+    this.entryRead[`${me.id}:${clarifId}`] = true
+
+    return lodash.cloneDeep(newClarification)
   }
 
   async replyClarification(

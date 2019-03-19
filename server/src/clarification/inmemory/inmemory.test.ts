@@ -307,4 +307,65 @@ describe('test in memory clarification service', () => {
       )
     ).resolves.toEqual([clarif2, clarif3])
   })
+
+  test('createClarification validation', async () => {
+    const [service, _] = getService()
+    await expect(
+      service.createClarification('ivalidtoken', '', 'a'.repeat(1024), '')
+    ).rejects.toBeInstanceOf(ValidationError)
+
+    await service
+      .createClarification(token, 'title', 'subject', 'content')
+      .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+  })
+
+  test('createClarification should throw forbidden action when dont have pemission to create clarification', async () => {
+    const [clarifService, authService] = getService()
+    authService.getMe.mockReturnValue({
+      permissions: [],
+    })
+    await expect(
+      clarifService.createClarification(token, 'title', 'subject', 'content')
+    ).rejects.toBeInstanceOf(ForbiddenAction)
+  })
+
+  test('createClarification should resolved', async () => {
+    const [clarifService, authService] = getService()
+    authService.getMe.mockReturnValue({
+      id: 'uid1',
+      contestId: 'cid1',
+      permissions: [Permission.ClarificationsCreate],
+    })
+
+    const result = await clarifService.createClarification(
+      token,
+      'title1',
+      'subject1',
+      'content1'
+    )
+    expect({
+      issuerId: result.issuerId,
+      contestId: result.contestId,
+      title: result.title,
+      subject: result.subject,
+    }).toEqual({
+      issuerId: 'uid1',
+      contestId: 'cid1',
+      title: 'title1',
+      subject: 'subject1',
+    })
+
+    const getResult = await clarifService.getClarificationById(token, result.id)
+    expect({
+      issuerId: getResult.issuerId,
+      contestId: getResult.contestId,
+      title: getResult.title,
+      subject: getResult.subject,
+    }).toEqual({
+      issuerId: 'uid1',
+      contestId: 'cid1',
+      title: 'title1',
+      subject: 'subject1',
+    })
+  })
 })
