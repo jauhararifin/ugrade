@@ -11,6 +11,7 @@ export class InMemoryClarificationService implements ClarificationService {
   private idClarifications: { [id: string]: Clarification }
   private entries: ClarificationEntry[]
   private idEntries: { [id: string]: ClarificationEntry }
+  private entryRead: { [key: string]: boolean }
 
   constructor(
     authService: AuthService,
@@ -28,6 +29,8 @@ export class InMemoryClarificationService implements ClarificationService {
     this.entries = lodash.cloneDeep(entries)
     this.idEntries = {}
     for (const entry of this.entries) this.idEntries[entry.id] = entry
+
+    this.entryRead = {}
   }
 
   async getClarificationById(
@@ -60,6 +63,15 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.cloneDeep(clarification)
   }
 
+  private readWrapper(
+    userId: string
+  ): (entry: ClarificationEntry) => ClarificationEntry {
+    return entry => ({
+      ...entry,
+      read: !!this.entryRead[`${userId}:${entry.id}`],
+    })
+  }
+
   async getClarificationEntries(
     token: string,
     clarificationId: string
@@ -68,7 +80,12 @@ export class InMemoryClarificationService implements ClarificationService {
       token,
       clarificationId
     )
-    throw new Error('not yet implemented')
+    const clarif = await this.getClarificationById(token, clarificationId)
+    const me = await this.authService.getMe(token)
+    const result = clarif.entryIds
+      .map(i => this.idEntries[i])
+      .map(this.readWrapper(me.id))
+    return lodash.cloneDeep(result)
   }
 
   async getContestClarifications(
