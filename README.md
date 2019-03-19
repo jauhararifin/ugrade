@@ -1,4 +1,6 @@
-# UGrade
+[![CircleCI](https://circleci.com/gh/jauhararifin/ugrade.svg?style=svg)](https://circleci.com/gh/jauhararifin/ugrade)
+
+# UGrade 
 Simple competitive programming contest platform using contestant PC as grader
 
 ## Motivation
