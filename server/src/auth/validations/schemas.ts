@@ -5,6 +5,8 @@ export const idSchema = yup
   .matches(/^[a-zA-Z0-9]+$/, 'Should contain alphanumeric characters only')
   .length(32)
 
+export const tokenSchema = idSchema
+
 export const usernameSchema = yup
   .string()
   .label('Username')
