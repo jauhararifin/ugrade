@@ -8,9 +8,11 @@ export const announcementIdSchema = yup
 export const titleSchema = yup
   .string()
   .label('Title')
+  .max(255)
   .required()
 
 export const contentSchema = yup
   .string()
   .label('Content')
+  .max(4 * 1024)
   .required()
