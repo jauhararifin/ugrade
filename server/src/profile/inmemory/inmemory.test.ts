@@ -1,26 +1,18 @@
-import { ForbiddenAction, NoSuchUser, Permission } from 'ugrade/auth'
+import {
+  ForbiddenAction,
+  NoSuchUser,
+  Permission,
+  AuthService,
+} from 'ugrade/auth'
 import { ValidationError } from 'yup'
 import { ProfileService } from '../service'
 import { profileServiceValidator } from '../validations/validator'
 import { InMemoryProfileService } from './inmemory'
+import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked/mocked'
 
 describe('test in memory profile service', () => {
-  const genService = (): [ProfileService, any] => {
-    const authService = {
-      signin: jest.fn() as any,
-      signup: jest.fn() as any,
-      forgotPassword: jest.fn() as any,
-      resetPassword: jest.fn() as any,
-      addUser: jest.fn() as any,
-      addContest: jest.fn() as any,
-      setMyPassword: jest.fn() as any,
-      setMyName: jest.fn() as any,
-      setPermissions: jest.fn() as any,
-      getMe: jest.fn() as any,
-      getUserById: jest.fn() as any,
-      getUserByEmail: jest.fn() as any,
-      getUserByUsername: jest.fn() as any,
-    }
+  const genService = (): [ProfileService, MockedAuthService] => {
+    const authService = mockAuthService()
     const profileService = new InMemoryProfileService(authService)
     return [profileService, authService]
   }
