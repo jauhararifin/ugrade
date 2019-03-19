@@ -5,6 +5,7 @@ import { NoSuchClarification } from '../NoSuchClarification'
 import { ClarificationService } from '../service'
 import { clarificationServiceValidator as validator } from '../validation'
 import { genUUID } from 'ugrade/uuid'
+import { NoSuchClarificationEntry } from '../NoSuchClarificationEntry'
 
 export class InMemoryClarificationService implements ClarificationService {
   private authService: AuthService
@@ -156,6 +157,17 @@ export class InMemoryClarificationService implements ClarificationService {
     clarificationEntryId: string
   ): Promise<ClarificationEntry> {
     await validator.readClarificationEntry(token, clarificationEntryId)
-    throw new Error('not yet implemented')
+
+    if (!this.idEntries[clarificationEntryId])
+      throw new NoSuchClarificationEntry()
+    const entry = this.idEntries[clarificationEntryId]
+    await this.getClarificationById(token, entry.clarificationId)
+    const me = await this.authService.getMe(token)
+
+    this.entryRead[`${me.id}:${entry.id}`] = true
+    return lodash.clone({
+      ...entry,
+      read: true,
+    })
   }
 }

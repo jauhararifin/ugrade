@@ -5,6 +5,7 @@ import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
 import { InMemoryClarificationService } from './inmemory'
 import { clarificationServiceValidator } from '../validation'
+import { NoSuchClarificationEntry } from '../NoSuchClarificationEntry'
 
 describe('test in memory clarification service', () => {
   const getService = (
@@ -42,9 +43,18 @@ describe('test in memory clarification service', () => {
   })
 
   test('getClarificationById should throw no such clarification when clarification is in different contest', async () => {
-    const [service, authService] = getService()
+    const [service, authService] = getService([
+      {
+        id: cid,
+        contestId: 'cid2',
+        title: 'title1',
+        subject: 'subject1',
+        issuerId: 'uidanon',
+        issuedTime: new Date(),
+        entryIds: [],
+      },
+    ])
     authService.getMe.mockResolvedValue({ contestId: 'cid1' })
-    authService.getUserById.mockResolvedValue({ contestId: 'cid2' })
     await expect(
       service.getClarificationById(token, cid)
     ).rejects.toBeInstanceOf(NoSuchClarification)
@@ -136,9 +146,18 @@ describe('test in memory clarification service', () => {
   })
 
   test('getClarificationEntries should throw no such clarification when clarification is in different contest', async () => {
-    const [service, authService] = getService()
+    const [service, authService] = getService([
+      {
+        id: cid,
+        contestId: 'cid2',
+        title: 'title1',
+        subject: 'subject1',
+        issuerId: 'uidanon',
+        issuedTime: new Date(),
+        entryIds: [],
+      },
+    ])
     authService.getMe.mockResolvedValue({ contestId: 'cid1' })
-    authService.getUserById.mockResolvedValue({ contestId: 'cid2' })
     await expect(
       service.getClarificationEntries(token, cid)
     ).rejects.toBeInstanceOf(NoSuchClarification)
@@ -239,7 +258,17 @@ describe('test in memory clarification service', () => {
   })
 
   test('getContestClarifications should throw forbidden action when accessing different contest', async () => {
-    const [clarifService, authService] = getService()
+    const [clarifService, authService] = getService([
+      {
+        id: cid,
+        contestId: 'cid2',
+        title: 'title1',
+        subject: 'subject1',
+        issuerId: 'uidanon',
+        issuedTime: new Date(),
+        entryIds: [],
+      },
+    ])
     authService.getMe.mockReturnValue({
       contestId: '000000000000000000000000somecid1',
     })
@@ -367,5 +396,132 @@ describe('test in memory clarification service', () => {
       title: 'title1',
       subject: 'subject1',
     })
+  })
+
+  test('readClarificationEntry validation', async () => {
+    const [service, _] = getService()
+    await expect(
+      service.readClarificationEntry('ivalidtoken', 'invalidcid')
+    ).rejects.toBeInstanceOf(ValidationError)
+
+    await service
+      .readClarificationEntry(token, token)
+      .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+  })
+
+  test('readClarificationEntry should throw no such clarification entry', async () => {
+    const [service, _] = getService()
+    await expect(
+      service.readClarificationEntry(token, cid)
+    ).rejects.toBeInstanceOf(NoSuchClarificationEntry)
+  })
+
+  test('readClarificationEntry should throw no such clarification when clarification is in different contest', async () => {
+    const [service, authService] = getService(
+      [
+        {
+          id: cid,
+          contestId: 'cid2',
+          title: 'title1',
+          subject: 'subject1',
+          issuerId: 'uid1',
+          issuedTime: new Date(),
+          entryIds: ['eid1'],
+        },
+      ],
+      [
+        {
+          id: '0000000000000000000000000000eid1',
+          clarificationId: cid,
+          senderId: 'uid1',
+          content: 'content2',
+          issuedTime: new Date(),
+          read: false,
+        },
+      ]
+    )
+    authService.getMe.mockResolvedValue({ contestId: 'cid1' })
+    await expect(
+      service.readClarificationEntry(token, '0000000000000000000000000000eid1')
+    ).rejects.toBeInstanceOf(NoSuchClarification)
+  })
+
+  test('readClarificationEntry should throw no such clarification', async () => {
+    const [service, authService] = getService(
+      [
+        {
+          id: cid,
+          contestId: 'cid2',
+          title: 'title1',
+          subject: 'subject1',
+          issuerId: 'uid3',
+          issuedTime: new Date(),
+          entryIds: ['eid1'],
+        },
+      ],
+      [
+        {
+          id: '0000000000000000000000000000eid1',
+          clarificationId: cid,
+          senderId: 'uid1',
+          content: 'content2',
+          issuedTime: new Date(),
+          read: false,
+        },
+      ]
+    )
+    authService.getMe.mockResolvedValue({ contestId: 'cid2', permissions: [] })
+    await expect(
+      service.readClarificationEntry(token, '0000000000000000000000000000eid1')
+    ).rejects.toBeInstanceOf(NoSuchClarification)
+  })
+
+  test('readClarificationEntry should resolves', async () => {
+    const [service, authService] = getService(
+      [
+        {
+          id: cid,
+          contestId: 'cid2',
+          title: 'title1',
+          subject: 'subject1',
+          issuerId: 'uid1',
+          issuedTime: new Date(),
+          entryIds: ['0000000000000000000000000000eid1'],
+        },
+      ],
+      [
+        {
+          id: '0000000000000000000000000000eid1',
+          clarificationId: cid,
+          senderId: 'uid1',
+          content: 'content2',
+          issuedTime: new Date(),
+          read: false,
+        },
+      ]
+    )
+
+    authService.getMe.mockResolvedValue({
+      contestId: 'cid2',
+      permissions: [Permission.ClarificationsRead],
+    })
+
+    // initially read = false
+    const getResultBefore = await service.getClarificationEntries(token, cid)
+    expect(getResultBefore).toHaveLength(1)
+    expect(getResultBefore[0].read).toBeFalsy()
+
+    // then read
+    const result = await service.readClarificationEntry(
+      token,
+      '0000000000000000000000000000eid1'
+    )
+    expect(result.id).toEqual('0000000000000000000000000000eid1')
+    expect(result.read).toBeTruthy()
+
+    // then read = true
+    const getResult = await service.getClarificationEntries(token, cid)
+    expect(getResult).toHaveLength(1)
+    expect(getResult[0].read).toBeTruthy()
   })
 })
