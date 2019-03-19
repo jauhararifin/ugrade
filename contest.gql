@@ -67,6 +67,8 @@ type Contest {
   userByUsername(contestId: String!, username: String!): User!
 
   announcements: [Announcement!]!
+
+  clarifications: [Clarification!]!
 }
 
 type Announcement {
@@ -80,6 +82,24 @@ type Announcement {
 
   # is the specific user has read the announcement, based on their token
   read: Boolean!
+}
+
+type ClarificationEntry {
+  id: String!
+  issuer: String!
+  content: String!
+  issuedTime: Date!
+
+  # is the specific user has read the entry
+  read: Boolean!
+}
+
+type Clarification {
+  id: String!
+  title: String!
+  subject: String!
+  issuedTime: Date!
+  entries: [ClarificationEntry]!
 }
 
 type Query {
@@ -153,4 +173,12 @@ type Mutation {
   # announcement
   createAnnouncement(title: String!, content: String!): Announcement!
   readAnnouncement(ids: [String!]!): Announcement!
+
+  # clarification
+  createClarification(
+    title: String!
+    subject: String!
+    content: String!
+  ): Clarification!
+  readClarificationEntry(clarificationEntryId: String!): Clarification!
 }
