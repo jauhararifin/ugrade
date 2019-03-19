@@ -48,8 +48,8 @@ export class InMemoryClarificationService implements ClarificationService {
     // throw NoSuchClarification if clarification in different contest
     const clarification = this.idClarifications[clarificationId]
     const me = await this.authService.getMe(token)
-    const issuer = await this.authService.getUserById(clarification.issuerId)
-    if (me.contestId !== issuer.contestId) throw new NoSuchClarification()
+    if (me.contestId !== clarification.contestId)
+      throw new NoSuchClarification()
 
     // if has no permission to read all clarification
     // and not own target clarification

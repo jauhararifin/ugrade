@@ -53,6 +53,7 @@ describe('test in memory clarification service', () => {
     const [service, authService] = getService([
       {
         id: cid,
+        contestId: 'cid1',
         title: 'title1',
         subject: 'subject1',
         issuerId: 'uidanon',
@@ -74,6 +75,7 @@ describe('test in memory clarification service', () => {
   test('getClarificationById should resolved when accessing own clarification', async () => {
     const clarif = {
       id: cid,
+      contestId: 'cid1',
       title: 'title1',
       subject: 'subject1',
       issuerId: 'uid1',
@@ -95,6 +97,7 @@ describe('test in memory clarification service', () => {
   test('getClarificationById should resolved when has clarifications:read permission', async () => {
     const clarif = {
       id: cid,
+      contestId: 'cid1',
       title: 'title1',
       subject: 'subject1',
       issuerId: 'uid1',
@@ -144,6 +147,7 @@ describe('test in memory clarification service', () => {
     const [service, authService] = getService([
       {
         id: cid,
+        contestId: 'cid1',
         title: 'title1',
         subject: 'subject1',
         issuerId: 'uidanon',
@@ -165,6 +169,7 @@ describe('test in memory clarification service', () => {
   test('getClarificationEntries should resolved when accessing own clarification', async () => {
     const clarif = {
       id: cid,
+      contestId: 'cid1',
       title: 'title1',
       subject: 'subject1',
       issuerId: 'uid1',
@@ -194,6 +199,7 @@ describe('test in memory clarification service', () => {
   test('getClarificationEntries should resolved when has clarifications:read permission', async () => {
     const clarif = {
       id: cid,
+      contestId: 'cid1',
       title: 'title1',
       subject: 'subject1',
       issuerId: 'uid1',

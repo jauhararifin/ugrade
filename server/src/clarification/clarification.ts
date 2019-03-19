@@ -9,6 +9,7 @@ export interface ClarificationEntry {
 
 export interface Clarification {
   id: string
+  contestId: string
   title: string
   subject: string
   issuerId: string
