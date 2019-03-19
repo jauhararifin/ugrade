@@ -55,22 +55,29 @@ type Contest {
   id: String!
   shortId: String!
   name: String!
-  shortDescription: String
-  description: String
-  startTime: Date
-  freezed: Boolean
-  finishTime: Date
+  shortDescription: String!
+  description: String!
+  startTime: Date!
+  freezed: Boolean!
+  finishTime: Date!
   permittedLanguages: [Language!]!
 
-  users(email: String, username: String): [User!]!
+  users: [User!]!
+  userByEmail(contestId: String!, email: String!): User!
+  userByUsername(contestId: String!, username: String!): User!
+}
+
+type Announcement {
+  id: String!
+  title: String!
+  content: String!
+  issuedTime: Date!
 }
 
 type Query {
   # auth
   user: User!
   userById(id: String!): User!
-  userByEmail(contestId: String!, email: String!): User!
-  userByUsername(contestId: String!, username: String!): User!
 
   # contest
   contestById(id: String!): Contest!

@@ -1,6 +1,7 @@
 import { AuthService, Permission, User } from 'ugrade/auth'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
+import { Contest } from 'ugrade/contest'
 
 export type SigninResolver = AppFieldResolver<
   any,
@@ -71,16 +72,18 @@ export type UserByIdResolver = AppFieldResolver<
 >
 
 export type UserByEmailResolver = AppFieldResolver<
-  any,
-  { contestId: string; email: string },
+  Contest,
+  { email: string },
   Promise<User>
 >
 
 export type UserByUsernameResolver = AppFieldResolver<
-  any,
-  { contestId: string; username: string },
+  Contest,
+  { username: string },
   Promise<User>
 >
+
+export type UsersByContest = AppFieldResolver<Contest, any, Promise<User[]>>
 
 export interface AuthResolvers {
   Mutation: {
@@ -96,8 +99,11 @@ export interface AuthResolvers {
   Query: {
     user: UserByTokenResolver
     userById: UserByIdResolver
+  }
+  Contest: {
     userByEmail: UserByEmailResolver
     userByUsername: UserByUsernameResolver
+    users: UsersByContest
   }
 }
 
@@ -136,10 +142,14 @@ export const createAuthResolvers = (service: AuthService): AuthResolvers => {
     Query: {
       user: (_source, _args, { authToken }) => wrap(service.getMe(authToken)),
       userById: (_source, { id }) => wrap(service.getUserById(id)),
-      userByEmail: (_source, { contestId, email }) =>
-        wrap(service.getUserByEmail(contestId, email)),
-      userByUsername: (_source, { contestId, username }) =>
-        wrap(service.getUserByUsername(contestId, username)),
+    },
+    Contest: {
+      userByEmail: (source, { email }) =>
+        wrap(service.getUserByEmail(source.id, email)),
+      userByUsername: (source, { username }) =>
+        wrap(service.getUserByUsername(source.id, username)),
+      users: ({ id }, _args, { authToken }) =>
+        wrap(service.getUsersInContest(authToken, id)),
     },
   }
 }
