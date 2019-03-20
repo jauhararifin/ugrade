@@ -69,6 +69,29 @@ type Contest {
   announcements: [Announcement!]!
 
   clarifications: [Clarification!]!
+
+  problems: [Problem!]!
+  problemById: (problemId: String!): Problem!
+}
+
+enum ProblemType {
+  Batch
+  Interactive
+}
+
+type Problem {
+  id: String!
+  shortId: String!
+  name: String!
+  statement: String!
+  type: ProblemType!
+  disabled: Boolean!
+  issuedTime: Date!
+  order: Int!
+  timeLimit: Int!
+  tolerance: Float!
+  memoryLimit: Int!
+  outputLimit: Int!
 }
 
 type Announcement {
@@ -189,4 +212,30 @@ type Mutation {
     content: String!
   ): ClarificationEntry!
   readClarificationEntry(clarificationEntryId: String!): ClarificationEntry!
+
+  # problem
+  createProblem(
+    shortId: String!,
+    name: String!,
+    statement: String!,
+    type: ProblemType!,
+    disabled: Boolean!,
+    timeLimit: Int!,
+    tolerance: Float!,
+    memoryLimit: Int!,
+    outputLimit: Int!
+  ): Problem!
+  updateProblem(
+    problemId: String!,
+    name: String!,
+    statement: String!,
+    type: ProblemType!,
+    disabled: Boolean!,
+    order: Int!,
+    timeLimit: Int!,
+    tolerance: Float!,
+    memoryLimit: Int!,
+    outputLimit: Int!
+  ): Problem!
+  deleteProblem(problemId: String!): Problem!
 }

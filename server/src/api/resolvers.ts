@@ -7,6 +7,7 @@ import { ClarificationService } from 'ugrade/clarification'
 import { ContestService } from 'ugrade/contest'
 import { AppContext } from 'ugrade/context'
 import { LanguageService } from 'ugrade/language'
+import { ProblemService } from 'ugrade/problem/service'
 import { ProfileService } from 'ugrade/profile/service'
 import {
   AnnouncementsByContestResolver,
@@ -59,6 +60,16 @@ import {
   PermittedLanguageResolver,
 } from './languageResolvers'
 import {
+  ContestByProblemResolver,
+  CreateProblemResolver,
+  createProblemResolvers,
+  DeleteProblemResolver,
+  ProblemByContestResolver,
+  ProblemsByContestResolver,
+  UpdateProblemResolver,
+  UserByProblemResolver,
+} from './problemResolvers'
+import {
   createProfileResolvers,
   ProfileByUserResolver,
   SetMyProfileResolver,
@@ -101,6 +112,9 @@ export interface AppResolver {
     createClarification: CreateClarificationResolver
     replyClarification: ReplyClarificationResolver
     readClarificationEntry: ReadClarificationEntryResolver
+    createProblem: CreateProblemResolver
+    updateProblem: UpdateProblemResolver
+    deleteProblem: DeleteProblemResolver
   }
   Contest: {
     permittedLanguages: PermittedLanguageResolver
@@ -109,6 +123,8 @@ export interface AppResolver {
     users: UsersByContestResolver
     announcements: AnnouncementsByContestResolver
     clarifications: ClarificationsByContestResolver
+    problems: ProblemsByContestResolver
+    problemById: ProblemByContestResolver
   }
   User: {
     profile: ProfileByUserResolver
@@ -127,6 +143,10 @@ export interface AppResolver {
     sender: UserByEntryResolver
     clarification: ClarificationByEntryResolver
   }
+  Problem: {
+    contest: ContestByProblemResolver
+    issuer: UserByProblemResolver
+  }
 }
 
 export function createResolvers(
@@ -135,7 +155,8 @@ export function createResolvers(
   profileService: ProfileService,
   contestService: ContestService,
   announcementService: AnnouncementService,
-  clarificationService: ClarificationService
+  clarificationService: ClarificationService,
+  problemService: ProblemService
 ): AppResolver {
   const languageResolvers = createLanguageResolvers(languageService)
   const authResolvers = createAuthResolvers(authService)
@@ -143,12 +164,14 @@ export function createResolvers(
   const contestResolvers = createContestResolvers(contestService)
   const announcementResolvers = createAnnouncementResolvers(announcementService)
   const clarificationResolvers = createClarificationResolvers(clarificationService, authService, contestService)
+  const problemResolvers = createProblemResolvers(problemService, authService, contestService)
   return merge(
     languageResolvers,
     authResolvers,
     profileResolvers,
     contestResolvers,
     announcementResolvers,
-    clarificationResolvers
+    clarificationResolvers,
+    problemResolvers
   )
 }

@@ -11,6 +11,7 @@ import { InMemoryContestService } from './contest/inmemory'
 import { AppContext } from './context'
 import { InMemoryLanguageService } from './language/inmemory'
 import { logger } from './logger'
+import { InMemoryProblemService } from './problem/inmemory'
 import { InMemoryProfileService } from './profile/inmemory'
 import { schema } from './schema'
 
@@ -22,6 +23,7 @@ const profileService = new InMemoryProfileService(authService)
 const contestService = new InMemoryContestService(authService, languageService)
 const announcementService = new InMemoryAnnouncementService(authService)
 const clarificationService = new InMemoryClarificationService(authService)
+const problemService = new InMemoryProblemService(authService, contestService)
 
 const resolvers = createResolvers(
   authService,
@@ -29,7 +31,8 @@ const resolvers = createResolvers(
   profileService,
   contestService,
   announcementService,
-  clarificationService
+  clarificationService,
+  problemService
 )
 
 const app = express()
