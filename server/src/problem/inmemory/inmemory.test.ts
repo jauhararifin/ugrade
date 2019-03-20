@@ -3,6 +3,7 @@ import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked'
 import { NoSuchContest } from 'ugrade/contest'
 import { mockContestService, MockedContestService } from 'ugrade/contest/mocked'
 import { ValidationError } from 'yup'
+import { AlreadyUsedId } from '../AlreadUsedId'
 import { NoSuchProblem } from '../NoSuchProblem'
 import { Problem, ProblemType } from '../problem'
 import { InMemoryProblemService } from './inmemory'
@@ -186,6 +187,61 @@ describe('test in memory problem service', () => {
         contestId,
         disabled: false,
       })
+    })
+  })
+
+  describe('test createProblem', () => {
+    type argsT = [string, string, string, string, ProblemType, boolean, number, number, number, number]
+    const argsTemplate: argsT = [
+      token,
+      'some-problem-id',
+      'name',
+      'stmt',
+      ProblemType.Batch,
+      true,
+      1000,
+      1.1,
+      16 * 1024 * 1024,
+      2,
+    ]
+
+    test('createProblem validation', async () => {
+      const [service, _] = getService()
+      await expect(
+        service.createProblem('ivalidtoken', 'sid', '', '', ProblemType.Batch, true, 1, 1, 1, 1)
+      ).rejects.toBeInstanceOf(ValidationError)
+
+      await service.createProblem(...argsTemplate).catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    })
+
+    test('createProblem should throw ForbiddenAction when user doesnt has ProblemsCreate permission', async () => {
+      const [service, authService] = getService()
+      authService.getMe.mockResolvedValue({ permissions: [] })
+      await expect(service.createProblem(...argsTemplate)).rejects.toBeInstanceOf(ForbiddenAction)
+    })
+
+    test('createProblem should throw AlreadyUsedId when shortId already used', async () => {
+      const [service, authService] = getService([{ ...problemTemplate, contestId: 'cid1', shortId: 'some-short-id-1' }])
+      authService.getMe.mockResolvedValue({ contestId: 'cid1', permissions: [Permission.ProblemsCreate] })
+      const args = [...argsTemplate] as argsT
+      args[1] = 'some-short-id-1'
+      await expect(service.createProblem(...args)).rejects.toBeInstanceOf(AlreadyUsedId)
+    })
+
+    test('createProblem should resolved', async () => {
+      const [service, authService] = getService([{ ...problemTemplate, contestId, shortId: 'some-short-id-1' }])
+      authService.getMe.mockResolvedValue({ contestId, id: 'uid1', permissions: [Permission.ProblemsCreate] })
+      const args = [...argsTemplate] as argsT
+      args[1] = 'problem1' // shortId
+      args[5] = false // enable
+      const result = await service.createProblem(...args)
+      expect(result.name).toEqual(args[2])
+      expect(result.contestId).toEqual(contestId)
+      expect(result.issuerId).toEqual('uid1')
+
+      authService.getMe.mockResolvedValue({ contestId, id: 'uid1', permissions: [Permission.ProblemsRead] })
+      const result2 = await service.getContestProblemById(token, contestId, result.id)
+      expect(result2).toEqual(result)
     })
   })
 })
