@@ -12,6 +12,7 @@ import { logger } from './logger'
 import { InMemoryProfileService } from './profile/inmemory'
 import { schema } from './schema'
 import { InMemoryAnnouncementService } from './announcement/inmemory'
+import { InMemoryClarificationService } from './clarification/inmemory/inmemory'
 
 dotenv.config()
 
@@ -20,13 +21,15 @@ const languageService = new InMemoryLanguageService()
 const profileService = new InMemoryProfileService(authService)
 const contestService = new InMemoryContestService(authService, languageService)
 const announcementService = new InMemoryAnnouncementService(authService)
+const clarificationService = new InMemoryClarificationService(authService)
 
 const resolvers = createResolvers(
   authService,
   languageService,
   profileService,
   contestService,
-  announcementService
+  announcementService,
+  clarificationService
 )
 
 const app = express()

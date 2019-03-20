@@ -51,6 +51,19 @@ import {
   createAnnouncementResolvers,
 } from './announcementResolvers'
 import { AnnouncementService } from 'ugrade/announcement'
+import {
+  CreateClarificationResolver,
+  ReplyClarificationResolver,
+  ReadClarificationEntryResolver,
+  ClarificationsByContestResolver,
+  UserByClarificationResolver,
+  ContestByClarificationResolver,
+  EntryByClarificationResolver,
+  UserByEntryResolver,
+  ClarificationByEntryResolver,
+  createClarificationResolvers,
+} from './clarificationResolvers'
+import { ClarificationService } from 'ugrade/clarification'
 
 export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
   source: TSource,
@@ -85,6 +98,9 @@ export interface AppResolver {
     setMyContest: SetMyContestResolver
     createAnnouncement: CreateAnnouncementResolver
     readAnnouncement: ReadAnnouncementResolver
+    createClarification: CreateClarificationResolver
+    replyClarification: ReplyClarificationResolver
+    readClarificationEntry: ReadClarificationEntryResolver
   }
   Contest: {
     permittedLanguages: PermittedLanguageResolver
@@ -92,6 +108,7 @@ export interface AppResolver {
     userByUsername: UserByUsernameResolver
     users: UsersByContestResolver
     announcements: AnnouncementsByContestResolver
+    clarifications: ClarificationsByContestResolver
   }
   User: {
     profile: ProfileByUserResolver
@@ -101,6 +118,15 @@ export interface AppResolver {
     contest: ContestByAnnouncementResolver
     issuer: UserByAnnouncementResolver
   }
+  Clarification: {
+    issuer: UserByClarificationResolver
+    contest: ContestByClarificationResolver
+    entries: EntryByClarificationResolver
+  }
+  ClarificationEntry: {
+    sender: UserByEntryResolver
+    clarification: ClarificationByEntryResolver
+  }
 }
 
 export function createResolvers(
@@ -108,18 +134,25 @@ export function createResolvers(
   languageService: LanguageService,
   profileService: ProfileService,
   contestService: ContestService,
-  announcementService: AnnouncementService
+  announcementService: AnnouncementService,
+  clarificationService: ClarificationService
 ): AppResolver {
   const languageResolvers = createLanguageResolvers(languageService)
   const authResolvers = createAuthResolvers(authService)
   const profileResolvers = createProfileResolvers(profileService)
   const contestResolvers = createContestResolvers(contestService)
   const announcementResolvers = createAnnouncementResolvers(announcementService)
+  const clarificationResolvers = createClarificationResolvers(
+    clarificationService,
+    authService,
+    contestService
+  )
   return merge(
     languageResolvers,
     authResolvers,
     profileResolvers,
     contestResolvers,
-    announcementResolvers
+    announcementResolvers,
+    clarificationResolvers
   )
 }

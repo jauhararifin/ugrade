@@ -86,12 +86,13 @@ type Announcement {
 
 type ClarificationEntry {
   id: String!
-  issuer: String!
   content: String!
   issuedTime: Date!
 
+  sender: User!
   # is the specific user has read the entry
   read: Boolean!
+  clarification: Clarification!
 }
 
 type Clarification {
@@ -99,6 +100,9 @@ type Clarification {
   title: String!
   subject: String!
   issuedTime: Date!
+
+  issuer: User!
+  contest: Contest!
   entries: [ClarificationEntry]!
 }
 
