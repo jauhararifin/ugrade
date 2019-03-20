@@ -36,10 +36,7 @@ export const allPermissions = [
 
 export const adminPermissions = allPermissions
 
-export const contestantPermissions = [
-  UserPermission.AnnouncementRead,
-  UserPermission.ProblemsRead,
-]
+export const contestantPermissions = [UserPermission.AnnouncementRead, UserPermission.ProblemsRead]
 
 export interface User {
   id: string
@@ -58,12 +55,7 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
-  isSignedIn:
-    (sessionStorage.getItem(AUTH_IS_SIGNED_IN_KEY) ||
-      localStorage.getItem(AUTH_IS_SIGNED_IN_KEY)) === 'true',
-  token:
-    sessionStorage.getItem(AUTH_TOKEN_KEY) ||
-    localStorage.getItem(AUTH_TOKEN_KEY) ||
-    '',
+  isSignedIn: (sessionStorage.getItem(AUTH_IS_SIGNED_IN_KEY) || localStorage.getItem(AUTH_IS_SIGNED_IN_KEY)) === 'true',
+  token: sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY) || '',
   users: {},
 }

@@ -6,11 +6,7 @@ import { SubmissionValidationError } from '../errors'
 import { SubmissionSubmitError } from '../errors/SubmissionSubmitError'
 import { GradingVerdict } from '../Grading'
 import { Submission } from '../Submission'
-import {
-  SubmissionsCallback,
-  SubmissionService,
-  SubmissionsUnsubscribe,
-} from '../SubmissionService'
+import { SubmissionsCallback, SubmissionService, SubmissionsUnsubscribe } from '../SubmissionService'
 
 export class InMemorySubmissionService implements SubmissionService {
   private authService: AuthService
@@ -33,28 +29,18 @@ export class InMemorySubmissionService implements SubmissionService {
     return lodash.cloneDeep(this.submissionsMap[contestId])
   }
 
-  subscribeSubmissions(
-    token: string,
-    callback: SubmissionsCallback
-  ): SubmissionsUnsubscribe {
+  subscribeSubmissions(token: string, callback: SubmissionsCallback): SubmissionsUnsubscribe {
     return simplePublisher(this.getSubmissions.bind(this, token), callback)
   }
 
-  async submitSolution(
-    token: string,
-    problemId: string,
-    languageId: string,
-    sourceCode: string
-  ): Promise<Submission> {
+  async submitSolution(token: string, problemId: string, languageId: string, sourceCode: string): Promise<Submission> {
     const me = await this.authService.getMe(token)
     const contest = await this.contestService.getMyContest(token)
 
     if (new Date() >= contest.finishTime) {
       throw new SubmissionSubmitError('Contest Already Finished')
     }
-    const language = contest.permittedLanguages
-      .filter(lang => lang.id === languageId)
-      .pop()
+    const language = contest.permittedLanguages.filter(lang => lang.id === languageId).pop()
     if (!language) {
       throw new SubmissionValidationError('No Such Language')
     }

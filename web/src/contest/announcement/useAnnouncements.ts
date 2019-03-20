@@ -5,9 +5,7 @@ import { AppState, AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { setAnnouncements } from '../store'
 
-export const subscribeAnnouncementsAction = (): AppThunkAction<
-  AnnouncementsUnsubscribe
-> => {
+export const subscribeAnnouncementsAction = (): AppThunkAction<AnnouncementsUnsubscribe> => {
   return async (dispatch, getState, { announcementService }) => {
     const token = getState().auth.token
     return announcementService.subscribeAnnouncements(token, announcements => {

@@ -1,23 +1,14 @@
 import { IBreadcrumbProps } from '@blueprintjs/core'
 import { Location } from 'history'
 import { createSelector } from 'reselect'
-import {
-  ContestInfo,
-  getContestInfo,
-  getProblems,
-  Problem,
-} from 'ugrade/contest/store'
+import { ContestInfo, getContestInfo, getProblems, Problem } from 'ugrade/contest/store'
 import { AppState } from 'ugrade/store'
 
 export const selectBreadcrumb = createSelector(
   (state: AppState) => state.router.location,
   getContestInfo,
   getProblems,
-  (
-    loc: Location,
-    contestInfo?: ContestInfo,
-    problems?: { [problemId: string]: Problem }
-  ): IBreadcrumbProps[] => {
+  (loc: Location, contestInfo?: ContestInfo, problems?: { [problemId: string]: Problem }): IBreadcrumbProps[] => {
     const location = loc.pathname
       .slice()
       .split('/')

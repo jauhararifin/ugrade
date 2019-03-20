@@ -2,11 +2,7 @@ import { Problem, ProblemType } from './problem'
 
 export interface ProblemService {
   getContestProblems(token: string, contestId: string): Promise<Problem[]>
-  getContestProblemById(
-    token: string,
-    contestId: string,
-    problemId: string
-  ): Promise<Problem>
+  getContestProblemById(token: string, contestId: string, problemId: string): Promise<Problem>
   createProblem(
     token: string,
     shortId: string,

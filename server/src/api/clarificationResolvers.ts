@@ -1,9 +1,5 @@
 import { AppFieldResolver } from './resolvers'
-import {
-  Clarification,
-  ClarificationEntry,
-  ClarificationService,
-} from 'ugrade/clarification'
+import { Clarification, ClarificationEntry, ClarificationService } from 'ugrade/clarification'
 import { User, AuthService } from 'ugrade/auth'
 import { Contest, ContestService } from 'ugrade/contest'
 import { wrap } from './wrap'
@@ -26,41 +22,17 @@ export type ReadClarificationEntryResolver = AppFieldResolver<
   Promise<ClarificationEntry>
 >
 
-export type ClarificationsByContestResolver = AppFieldResolver<
-  Contest,
-  any,
-  Promise<Clarification[]>
->
+export type ClarificationsByContestResolver = AppFieldResolver<Contest, any, Promise<Clarification[]>>
 
-export type UserByClarificationResolver = AppFieldResolver<
-  Clarification,
-  any,
-  Promise<User>
->
+export type UserByClarificationResolver = AppFieldResolver<Clarification, any, Promise<User>>
 
-export type ContestByClarificationResolver = AppFieldResolver<
-  Clarification,
-  any,
-  Promise<Contest>
->
+export type ContestByClarificationResolver = AppFieldResolver<Clarification, any, Promise<Contest>>
 
-export type EntryByClarificationResolver = AppFieldResolver<
-  Clarification,
-  any,
-  Promise<ClarificationEntry[]>
->
+export type EntryByClarificationResolver = AppFieldResolver<Clarification, any, Promise<ClarificationEntry[]>>
 
-export type UserByEntryResolver = AppFieldResolver<
-  ClarificationEntry,
-  any,
-  Promise<User>
->
+export type UserByEntryResolver = AppFieldResolver<ClarificationEntry, any, Promise<User>>
 
-export type ClarificationByEntryResolver = AppFieldResolver<
-  ClarificationEntry,
-  any,
-  Promise<Clarification>
->
+export type ClarificationByEntryResolver = AppFieldResolver<ClarificationEntry, any, Promise<Clarification>>
 
 export interface ClarificationResolvers {
   Contest: {
@@ -94,52 +66,19 @@ export const createClarificationResolvers = (
   Clarification: {
     issuer: ({ issuerId }) => wrap(authService.getUserById(issuerId)),
     contest: ({ contestId }) => wrap(contestService.getContestById(contestId)),
-    entries: ({ id }, _args, { authToken }) =>
-      wrap(clarificationService.getClarificationEntries(authToken, id)),
+    entries: ({ id }, _args, { authToken }) => wrap(clarificationService.getClarificationEntries(authToken, id)),
   },
   ClarificationEntry: {
     sender: ({ senderId }) => wrap(authService.getUserById(senderId)),
     clarification: ({ clarificationId }, _args, { authToken }) =>
-      wrap(
-        clarificationService.getClarificationById(authToken, clarificationId)
-      ),
+      wrap(clarificationService.getClarificationById(authToken, clarificationId)),
   },
   Mutation: {
-    createClarification: (
-      _source,
-      { title, subject, content },
-      { authToken }
-    ) =>
-      wrap(
-        clarificationService.createClarification(
-          authToken,
-          title,
-          subject,
-          content
-        )
-      ),
-    replyClarification: (
-      _source,
-      { clarificationId, content },
-      { authToken }
-    ) =>
-      wrap(
-        clarificationService.replyClarification(
-          authToken,
-          clarificationId,
-          content
-        )
-      ),
-    readClarificationEntry: (
-      _source,
-      { clarificationEntryId },
-      { authToken }
-    ) =>
-      wrap(
-        clarificationService.readClarificationEntry(
-          authToken,
-          clarificationEntryId
-        )
-      ),
+    createClarification: (_source, { title, subject, content }, { authToken }) =>
+      wrap(clarificationService.createClarification(authToken, title, subject, content)),
+    replyClarification: (_source, { clarificationId, content }, { authToken }) =>
+      wrap(clarificationService.replyClarification(authToken, clarificationId, content)),
+    readClarificationEntry: (_source, { clarificationEntryId }, { authToken }) =>
+      wrap(clarificationService.readClarificationEntry(authToken, clarificationEntryId)),
   },
 })

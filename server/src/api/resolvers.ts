@@ -142,11 +142,7 @@ export function createResolvers(
   const profileResolvers = createProfileResolvers(profileService)
   const contestResolvers = createContestResolvers(contestService)
   const announcementResolvers = createAnnouncementResolvers(announcementService)
-  const clarificationResolvers = createClarificationResolvers(
-    clarificationService,
-    authService,
-    contestService
-  )
+  const clarificationResolvers = createClarificationResolvers(clarificationService, authService, contestService)
   return merge(
     languageResolvers,
     authResolvers,

@@ -12,9 +12,7 @@ export function getAvailableLanguagesAction(): AppThunkAction<Language[]> {
 
 export function useAvailableLanguages() {
   const dispatch = useAppThunkDispatch()
-  const [languages, setLanguages] = useState(undefined as
-    | Language[]
-    | undefined)
+  const [languages, setLanguages] = useState(undefined as Language[] | undefined)
   useEffect(() => {
     dispatch(getAvailableLanguagesAction())
       .then(setLanguages)

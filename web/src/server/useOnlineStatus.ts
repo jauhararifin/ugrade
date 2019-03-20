@@ -6,15 +6,9 @@ import { getIsOnline, setOnline } from './store'
 
 export type CancelFunction = () => any
 
-export const pingingAction = (
-  delay: number = 500
-): [AppThunkAction, CancelFunction] => {
+export const pingingAction = (delay: number = 500): [AppThunkAction, CancelFunction] => {
   let cancelled = false
-  const action: AppThunkAction = async (
-    dispatch,
-    getState,
-    { serverStatusService }
-  ) => {
+  const action: AppThunkAction = async (dispatch, getState, { serverStatusService }) => {
     while (!cancelled) {
       await new Promise(resolve => setTimeout(resolve, delay))
       try {

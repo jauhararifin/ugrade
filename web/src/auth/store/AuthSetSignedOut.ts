@@ -9,10 +9,7 @@ export const setSignedOut = (): AuthSetSignedOut => ({
   type: AuthActionType.SetSignedOut,
 })
 
-export function setSignedOutReducer(
-  _state: AuthState,
-  _action: AuthSetSignedOut
-): AuthState {
+export function setSignedOutReducer(_state: AuthState, _action: AuthSetSignedOut): AuthState {
   sessionStorage.removeItem(AUTH_IS_SIGNED_IN_KEY)
   sessionStorage.removeItem(AUTH_TOKEN_KEY)
   localStorage.removeItem(AUTH_IS_SIGNED_IN_KEY)

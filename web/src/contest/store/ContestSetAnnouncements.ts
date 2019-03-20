@@ -7,25 +7,18 @@ export interface ContestSetAnnouncements {
   announcements: Announcement[]
 }
 
-export function setAnnouncements(
-  announcements: Announcement[]
-): ContestSetAnnouncements {
+export function setAnnouncements(announcements: Announcement[]): ContestSetAnnouncements {
   return {
     type: ContestActionType.SetAnnouncements,
     announcements,
   }
 }
 
-export function setAnnouncementsReducer(
-  state: ContestState,
-  action: ContestSetAnnouncements
-): ContestState {
+export function setAnnouncementsReducer(state: ContestState, action: ContestSetAnnouncements): ContestState {
   const nextState = lodash.cloneDeep(state)
   const oldAnnouncements = nextState.announcements || {}
   const newAnnouncements: { [annoucementId: string]: Announcement } = {}
-  action.announcements
-    .slice()
-    .forEach(value => (newAnnouncements[value.id] = value))
+  action.announcements.slice().forEach(value => (newAnnouncements[value.id] = value))
   return {
     ...state,
     announcements: { ...oldAnnouncements, ...newAnnouncements },

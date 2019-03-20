@@ -3,21 +3,14 @@ import { AuthService } from 'ugrade/services/auth/AuthService'
 import { InMemoryProblemService } from 'ugrade/services/problem/InMemoryProblemService'
 import { simplePublisher } from 'ugrade/utils'
 import { ProblemScore, Scoreboard } from '../Scoreboard'
-import {
-  ScoreboardCallback,
-  ScoreboardService,
-  ScoreboardUnsubscribe,
-} from '../ScoreboardService'
+import { ScoreboardCallback, ScoreboardService, ScoreboardUnsubscribe } from '../ScoreboardService'
 
 export class InMemoryScoreboardService implements ScoreboardService {
   private authService: AuthService
   private problemService: InMemoryProblemService
   private scoreboardMap: { [contestId: string]: Scoreboard }
 
-  constructor(
-    authService: AuthService,
-    problemService: InMemoryProblemService
-  ) {
+  constructor(authService: AuthService, problemService: InMemoryProblemService) {
     this.authService = authService
     this.problemService = problemService
     this.scoreboardMap = {}
@@ -28,17 +21,12 @@ export class InMemoryScoreboardService implements ScoreboardService {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
     if (!this.scoreboardMap[contestId]) {
-      this.scoreboardMap[contestId] = await this.createEmptyScoreboard(
-        contestId
-      )
+      this.scoreboardMap[contestId] = await this.createEmptyScoreboard(contestId)
     }
     return lodash.cloneDeep(this.scoreboardMap[contestId])
   }
 
-  subscribeScoreboard(
-    token: string,
-    callback: ScoreboardCallback
-  ): ScoreboardUnsubscribe {
+  subscribeScoreboard(token: string, callback: ScoreboardCallback): ScoreboardUnsubscribe {
     return simplePublisher(this.getScoreboard.bind(this, token), callback)
   }
 
@@ -81,9 +69,7 @@ export class InMemoryScoreboardService implements ScoreboardService {
   private handleSubscription() {
     setInterval(() => {
       for (const contestId of Object.keys(this.scoreboardMap)) {
-        const problemIds = Object.keys(
-          this.problemService.problemsMap[contestId]
-        )
+        const problemIds = Object.keys(this.problemService.problemsMap[contestId])
         const scoreboard = this.scoreboardMap[contestId]
         scoreboard.lastUpdated = new Date()
         const entr = Math.floor(Math.random() * scoreboard.entries.length)
@@ -95,12 +81,8 @@ export class InMemoryScoreboardService implements ScoreboardService {
         probScore.passed = Math.random() > 0.5
         probScore.penalty += Math.round(Math.random() * 120)
         const probS = lodash.values(scoreboard.entries[entr].problemScores)
-        scoreboard.entries[entr].totalPassed = probS.filter(
-          p => p.passed
-        ).length
-        scoreboard.entries[entr].totalPenalty = lodash.sum(
-          probS.map(s => s.penalty)
-        )
+        scoreboard.entries[entr].totalPassed = probS.filter(p => p.passed).length
+        scoreboard.entries[entr].totalPenalty = lodash.sum(probS.map(s => s.penalty))
         scoreboard.entries.sort((a, b) => {
           if (a.totalPassed === b.totalPassed) {
             return a.totalPenalty - b.totalPenalty
@@ -111,10 +93,7 @@ export class InMemoryScoreboardService implements ScoreboardService {
         let lastPassed = -1
         let lastPenalty = -1
         for (const en of scoreboard.entries) {
-          if (
-            en.totalPassed !== lastPassed ||
-            en.totalPenalty !== lastPenalty
-          ) {
+          if (en.totalPassed !== lastPassed || en.totalPenalty !== lastPenalty) {
             lastRank++
           }
           en.rank = lastRank

@@ -1,14 +1,8 @@
 import { Reducer } from 'redux'
 
 import { ServerStatusActionType } from './ServerStatusAction'
-import {
-  ServerStatusSetOnline,
-  setOnlineReducer,
-} from './ServerStatusSetOnline'
-import {
-  ServerStatusSetServerClock,
-  setServerClockReducer,
-} from './ServerStatusSetServerClock'
+import { ServerStatusSetOnline, setOnlineReducer } from './ServerStatusSetOnline'
+import { ServerStatusSetServerClock, setServerClockReducer } from './ServerStatusSetServerClock'
 import { initialState, ServerStatusState } from './ServerStatusState'
 
 export const serverStatusReducer: Reducer<ServerStatusState> = (

@@ -7,19 +7,14 @@ export interface ContestSetClarifications {
   clarifications: Clarification[]
 }
 
-export function setClarifications(
-  clarifications: Clarification[]
-): ContestSetClarifications {
+export function setClarifications(clarifications: Clarification[]): ContestSetClarifications {
   return {
     type: ContestActionType.SetClarifications,
     clarifications,
   }
 }
 
-export function setClarrificationsReducer(
-  state: ContestState,
-  action: ContestSetClarifications
-): ContestState {
+export function setClarrificationsReducer(state: ContestState, action: ContestSetClarifications): ContestState {
   const nextState = lodash.cloneDeep(state)
   const clarifications = nextState.clarifications || {}
   for (const newClarif of action.clarifications) {

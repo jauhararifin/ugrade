@@ -14,10 +14,7 @@ export function deleteProblems(problems: string[]): ContestDeleteProblems {
   }
 }
 
-export function deleteProblemsReducer(
-  state: ContestState,
-  action: ContestDeleteProblems
-): ContestState {
+export function deleteProblemsReducer(state: ContestState, action: ContestDeleteProblems): ContestState {
   state = lodash.cloneDeep(state)
   if (state.problems) {
     for (const id of action.problems) delete state.problems[id]

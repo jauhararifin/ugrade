@@ -16,11 +16,7 @@ export class InMemoryContestService implements ContestService {
   private contestId: { [id: string]: Contest }
   private contestShortId: { [shortId: string]: Contest }
 
-  constructor(
-    authService: AuthService,
-    languageService: LanguageService,
-    contests: Contest[] = contestFixture
-  ) {
+  constructor(authService: AuthService, languageService: LanguageService, contests: Contest[] = contestFixture) {
     this.authService = authService
     this.languageService = languageService
     this.contests = lodash.cloneDeep(contests)

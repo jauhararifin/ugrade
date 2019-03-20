@@ -30,10 +30,6 @@ export const setProfileAction = (
 
 export function useSetProfile() {
   const dispatch = useAppThunkDispatch()
-  return (
-    name: string,
-    shirtSize?: ShirtSizeType,
-    gender?: GenderType,
-    address?: string
-  ) => dispatch(setProfileAction(name, shirtSize, gender, address))
+  return (name: string, shirtSize?: ShirtSizeType, gender?: GenderType, address?: string) =>
+    dispatch(setProfileAction(name, shirtSize, gender, address))
 }

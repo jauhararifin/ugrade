@@ -38,11 +38,7 @@ export class InMemoryAuthService implements AuthService {
     }
   }
 
-  async signin(
-    contestId: string,
-    email: string,
-    password: string
-  ): Promise<string> {
+  async signin(contestId: string, email: string, password: string): Promise<string> {
     // validate input
     await validator.signin(contestId, email, password)
 
@@ -77,14 +73,7 @@ export class InMemoryAuthService implements AuthService {
     name: string
   ): Promise<string> {
     // validate input
-    await validator.signup(
-      contestId,
-      username,
-      email,
-      oneTimeCode,
-      password,
-      name
-    )
+    await validator.signup(contestId, username, email, oneTimeCode, password, name)
 
     const user = await this.getUserByEmail(contestId, email)
     if (user.username !== '') throw new AlreadyRegistered()
@@ -121,12 +110,7 @@ export class InMemoryAuthService implements AuthService {
     return lodash.cloneDeep(user)
   }
 
-  async resetPassword(
-    contestId: string,
-    email: string,
-    oneTimeCode: string,
-    password: string
-  ): Promise<User> {
+  async resetPassword(contestId: string, email: string, oneTimeCode: string, password: string): Promise<User> {
     await validator.resetPassword(contestId, email, oneTimeCode, password)
 
     // check otc
@@ -142,11 +126,7 @@ export class InMemoryAuthService implements AuthService {
     return lodash.cloneDeep(this.userId[user.id])
   }
 
-  async addUser(
-    token: string,
-    email: string,
-    permissions: Permission[]
-  ): Promise<User> {
+  async addUser(token: string, email: string, permissions: Permission[]): Promise<User> {
     await validator.addUser(token, email, permissions)
 
     // check user permission
@@ -221,11 +201,7 @@ export class InMemoryAuthService implements AuthService {
     return lodash.cloneDeep(newUser)
   }
 
-  async setMyPassword(
-    token: string,
-    oldPassword: string,
-    newPassword: string
-  ): Promise<User> {
+  async setMyPassword(token: string, oldPassword: string, newPassword: string): Promise<User> {
     await validator.setMyPassword(token, oldPassword, newPassword)
 
     // check old password
@@ -248,11 +224,7 @@ export class InMemoryAuthService implements AuthService {
     return lodash.cloneDeep(this.userId[user.id])
   }
 
-  async setPermissions(
-    token: string,
-    userId: string,
-    permissions: Permission[]
-  ): Promise<User> {
+  async setPermissions(token: string, userId: string, permissions: Permission[]): Promise<User> {
     await validator.setPermissions(token, userId, permissions)
 
     // check user permission

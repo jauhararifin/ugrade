@@ -1,9 +1,6 @@
 import { Reducer } from 'redux'
 import { UserProfileActionType } from './UserProfileAction'
-import {
-  setUserProfileReducer,
-  UserProfileSetUserProfile,
-} from './UserProfileSetUserProfile'
+import { setUserProfileReducer, UserProfileSetUserProfile } from './UserProfileSetUserProfile'
 import { initialState, UserProfileState } from './UserProfileState'
 
 export const userProfileReducer: Reducer<UserProfileState> = (

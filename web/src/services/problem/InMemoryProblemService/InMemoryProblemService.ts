@@ -1,17 +1,9 @@
 import lodash from 'lodash'
-import {
-  AuthService,
-  ForbiddenActionError,
-  UserPermission,
-} from 'ugrade/services/auth'
+import { AuthService, ForbiddenActionError, UserPermission } from 'ugrade/services/auth'
 import { simplePublisher } from 'ugrade/utils'
 import { NoSuchProblemError, ProblemIdAlreadyTaken } from '../errors'
 import { Problem, ProblemType } from '../Problem'
-import {
-  ProblemsCallback,
-  ProblemService,
-  ProblemsUnsubscribe,
-} from '../ProblemService'
+import { ProblemsCallback, ProblemService, ProblemsUnsubscribe } from '../ProblemService'
 import { problemsMap } from './fixtures'
 
 export class InMemoryProblemService implements ProblemService {
@@ -38,9 +30,7 @@ export class InMemoryProblemService implements ProblemService {
   ): Promise<Problem> {
     const user = await this.authService.getMe(token)
     if (!user.permissions.includes(UserPermission.ProblemsCreate)) {
-      throw new ForbiddenActionError(
-        `User Doesn't Have Create Problem Permission`
-      )
+      throw new ForbiddenActionError(`User Doesn't Have Create Problem Permission`)
     }
 
     const contestId = user.contestId
@@ -72,9 +62,7 @@ export class InMemoryProblemService implements ProblemService {
   async getProblemById(token: string, problemId: string): Promise<Problem> {
     const user = await this.authService.getMe(token)
     const contestId = user.contestId
-    const canReadDisabled = user.permissions.includes(
-      UserPermission.ProblemsReadDisabled
-    )
+    const canReadDisabled = user.permissions.includes(UserPermission.ProblemsReadDisabled)
     const problem = this.problemsMap[contestId]
       .filter(prob => {
         return canReadDisabled || !prob.disabled
@@ -88,9 +76,7 @@ export class InMemoryProblemService implements ProblemService {
   async getProblems(token: string): Promise<Problem[]> {
     const user = await this.authService.getMe(token)
     const contestId = user.contestId
-    const canReadDisabled = user.permissions.includes(
-      UserPermission.ProblemsReadDisabled
-    )
+    const canReadDisabled = user.permissions.includes(UserPermission.ProblemsReadDisabled)
 
     if (!this.problemsMap[contestId]) {
       this.problemsMap[contestId] = []
@@ -102,10 +88,7 @@ export class InMemoryProblemService implements ProblemService {
     )
   }
 
-  subscribeProblems(
-    token: string,
-    callback: ProblemsCallback
-  ): ProblemsUnsubscribe {
+  subscribeProblems(token: string, callback: ProblemsCallback): ProblemsUnsubscribe {
     return simplePublisher(this.getProblems.bind(this, token), callback)
   }
 
@@ -124,18 +107,14 @@ export class InMemoryProblemService implements ProblemService {
   ): Promise<Problem> {
     const me = await this.authService.getMe(token)
     if (!me.permissions.includes(UserPermission.ProblemsUpdate)) {
-      throw new ForbiddenActionError(
-        `User doesn't have permission to update problem`
-      )
+      throw new ForbiddenActionError(`User doesn't have permission to update problem`)
     }
 
     const contestId = me.contestId
     if (!this.problemsMap[contestId]) this.problemsMap[contestId] = []
 
     const problems = this.problemsMap[contestId]
-    const usedSIds = problems
-      .filter(p => p.id !== problemId)
-      .map(p => p.shortId)
+    const usedSIds = problems.filter(p => p.id !== problemId).map(p => p.shortId)
     for (const problem of problems) {
       if (problem.id === problemId) {
         if (shortId) {

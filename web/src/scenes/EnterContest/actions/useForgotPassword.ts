@@ -10,11 +10,7 @@ export function forgotPasswordAction(): AppThunkAction {
       await authService.forgotPassword(contest.id, user.email)
       const nowContest = getState().contest.info
       const nowUser = getState().auth.me
-      const stillRelevant =
-        nowContest &&
-        nowUser &&
-        nowContest.id === contest.id &&
-        nowUser.id === user.id
+      const stillRelevant = nowContest && nowUser && nowContest.id === contest.id && nowUser.id === user.id
       if (stillRelevant) {
         dispatch(push('/enter-contest/reset-password'))
       }

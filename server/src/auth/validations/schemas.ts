@@ -6,10 +6,7 @@ export const tokenSchema = uuidSchema
 export const usernameSchema = yup
   .string()
   .label('Username')
-  .matches(
-    /^[a-zA-Z0-9\-]+$/,
-    'Should contain alphanumeric and dash character only'
-  )
+  .matches(/^[a-zA-Z0-9\-]+$/, 'Should contain alphanumeric and dash character only')
   .min(4)
   .max(255)
 

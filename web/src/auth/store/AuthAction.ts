@@ -10,8 +10,4 @@ export enum AuthActionType {
   SetUser = 'AUTH_ACTION_SET_USER',
 }
 
-export type AuthAction =
-  | AuthSetSignedIn
-  | AuthSetMe
-  | AuthSetSignedOut
-  | AuthSetUser
+export type AuthAction = AuthSetSignedIn | AuthSetMe | AuthSetSignedOut | AuthSetUser

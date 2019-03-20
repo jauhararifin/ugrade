@@ -24,13 +24,11 @@ export const problem1: ProblemSpec = {
   order: 1,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -49,13 +47,11 @@ export const problem2: ProblemSpec = {
   order: 2,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -74,13 +70,11 @@ export const problem3: ProblemSpec = {
   order: 3,
   disabled: false,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -99,13 +93,11 @@ export const problem4: ProblemSpec = {
   order: 4,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -124,13 +116,11 @@ export const problem5: ProblemSpec = {
   order: 5,
   disabled: false,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -149,13 +139,11 @@ export const problem6: ProblemSpec = {
   order: 6,
   disabled: false,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -174,13 +162,11 @@ export const problem7: ProblemSpec = {
   order: 7,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -199,13 +185,11 @@ export const problem8: ProblemSpec = {
   order: 8,
   disabled: false,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -224,13 +208,11 @@ export const problem9: ProblemSpec = {
   order: 9,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -249,13 +231,11 @@ export const problem10: ProblemSpec = {
   order: 10,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -274,13 +254,11 @@ export const problem11: ProblemSpec = {
   order: 11,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -299,13 +277,11 @@ export const problem12: ProblemSpec = {
   order: 12,
   disabled: false,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -324,13 +300,11 @@ export const problem13: ProblemSpec = {
   order: 13,
   disabled: true,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }
@@ -349,13 +323,11 @@ export const problem14: ProblemSpec = {
   order: 14,
   disabled: false,
   solution: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language1.id,
   },
   testcaseGenerator: {
-    sourceCode:
-      'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
+    sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/codeforces_442_div2/a.cpp',
     languageId: Language2.id,
   },
 }

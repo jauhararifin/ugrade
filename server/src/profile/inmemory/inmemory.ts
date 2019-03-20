@@ -1,10 +1,5 @@
 import lodash from 'lodash'
-import {
-  AuthService,
-  ForbiddenAction,
-  NoSuchUser,
-  Permission,
-} from 'ugrade/auth'
+import { AuthService, ForbiddenAction, NoSuchUser, Permission } from 'ugrade/auth'
 import { NoSuchProfile } from '../NoSuchProfile'
 import { GenderType, Profile, ShirtSizeType } from '../profile'
 import { ProfileService } from '../service'
@@ -29,10 +24,7 @@ export class InMemoryProfileService implements ProfileService {
 
     // check permission
     const issuer = await this.authService.getMe(token)
-    if (
-      issuer.id !== userId &&
-      !issuer.permissions.includes(Permission.ProfilesRead)
-    ) {
+    if (issuer.id !== userId && !issuer.permissions.includes(Permission.ProfilesRead)) {
       throw new ForbiddenAction()
     }
 

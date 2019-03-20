@@ -4,11 +4,7 @@ import { InMemoryAuthService } from 'ugrade/services/auth/InMemoryAuthService'
 import { ServerStatusService } from 'ugrade/services/serverStatus'
 import { simplePublisher } from 'ugrade/utils'
 import { Contest, Language } from '../Contest'
-import {
-  ContestService,
-  SubscriptionCallback,
-  UnsubscriptionFunction,
-} from '../ContestService'
+import { ContestService, SubscriptionCallback, UnsubscriptionFunction } from '../ContestService'
 import { ContestIdTaken, NoSuchContest } from '../errors'
 import { NoSuchLanguage } from '../errors/NoSuchLanguage'
 import { contests, languages } from './fixtures'
@@ -20,10 +16,7 @@ export class InMemoryContestService implements ContestService {
 
   private languages: { [id: string]: Language } = {}
 
-  constructor(
-    serverStatusService: ServerStatusService,
-    authService: InMemoryAuthService
-  ) {
+  constructor(serverStatusService: ServerStatusService, authService: InMemoryAuthService) {
     this.serverStatusService = serverStatusService
     this.authService = authService
     this.languages = languages
@@ -90,10 +83,7 @@ export class InMemoryContestService implements ContestService {
     return lodash.cloneDeep(contest)
   }
 
-  subscribeMyContest(
-    token: string,
-    callback: SubscriptionCallback<Contest>
-  ): UnsubscriptionFunction {
+  subscribeMyContest(token: string, callback: SubscriptionCallback<Contest>): UnsubscriptionFunction {
     return simplePublisher(this.getMyContest.bind(this, token), callback)
   }
 
@@ -128,10 +118,7 @@ export class InMemoryContestService implements ContestService {
       permittedLanguages: langs,
     }
     this.contests.push(newContest)
-    const user = await this.authService.registerContestAdmin(
-      newContest.id,
-      email
-    )
+    const user = await this.authService.registerContestAdmin(newContest.id, email)
     return lodash.cloneDeep<[Contest, User]>([newContest, user])
   }
 }

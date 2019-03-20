@@ -55,10 +55,7 @@ export class InMemoryAuthService implements AuthService {
     return user
   }
 
-  async getUserByUsernames(
-    contestId: string,
-    usernames: string[]
-  ): Promise<User[]> {
+  async getUserByUsernames(contestId: string, usernames: string[]): Promise<User[]> {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
@@ -69,11 +66,7 @@ export class InMemoryAuthService implements AuthService {
     return users
   }
 
-  async signin(
-    contestId: string,
-    email: string,
-    password: string
-  ): Promise<string> {
+  async signin(contestId: string, email: string, password: string): Promise<string> {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
@@ -137,12 +130,7 @@ export class InMemoryAuthService implements AuthService {
     }
   }
 
-  async resetPassword(
-    contestId: string,
-    email: string,
-    oneTimeCode: string,
-    password: string
-  ): Promise<void> {
+  async resetPassword(contestId: string, email: string, oneTimeCode: string, password: string): Promise<void> {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) {
@@ -160,15 +148,10 @@ export class InMemoryAuthService implements AuthService {
     this.userPasswordMap[user.id] = password
   }
 
-  async addUser(
-    token: string,
-    users: Array<{ email: string; permissions: UserPermission[] }>
-  ): Promise<string[]> {
+  async addUser(token: string, users: Array<{ email: string; permissions: UserPermission[] }>): Promise<string[]> {
     const me = await this.getMe(token)
     if (!me.permissions.includes(UserPermission.UsersInvite)) {
-      throw new ForbiddenActionError(
-        `User Doesn't Have Permission To Invite Other Users`
-      )
+      throw new ForbiddenActionError(`User Doesn't Have Permission To Invite Other Users`)
     }
 
     const userMap = this.contestUserMap[me.contestId]
@@ -179,17 +162,13 @@ export class InMemoryAuthService implements AuthService {
     }
 
     if (!me.permissions.includes(UserPermission.UsersPermissionsUpdate)) {
-      throw new ForbiddenActionError(
-        `User's doesn't Have Permission To Update User's Permissions`
-      )
+      throw new ForbiddenActionError(`User's doesn't Have Permission To Update User's Permissions`)
     }
 
     const req = lodash.union(...users.map(u => u.permissions))
     for (const reqPerm of req) {
       if (!me.permissions.includes(reqPerm)) {
-        throw new ForbiddenActionError(
-          `User's doesn't Have Permission To Give User's ${reqPerm}`
-        )
+        throw new ForbiddenActionError(`User's doesn't Have Permission To Give User's ${reqPerm}`)
       }
     }
 
@@ -223,11 +202,7 @@ export class InMemoryAuthService implements AuthService {
     throw new InvalidTokenError('Invalid Token')
   }
 
-  async setMyPassword(
-    token: string,
-    oldPassword: string,
-    newPassword: string
-  ): Promise<void> {
+  async setMyPassword(token: string, oldPassword: string, newPassword: string): Promise<void> {
     const user = await this.getMe(token)
     if (this.userPasswordMap[user.id] !== oldPassword) {
       throw new AuthError('Wrong Password')
@@ -240,16 +215,10 @@ export class InMemoryAuthService implements AuthService {
     this.contestUserMap[user.contestId][user.id].name = name
   }
 
-  async setUserPermissions(
-    token: string,
-    userId: string,
-    permissions: UserPermission[]
-  ): Promise<UserPermission[]> {
+  async setUserPermissions(token: string, userId: string, permissions: UserPermission[]): Promise<UserPermission[]> {
     const me = await this.getMe(token)
     if (!me.permissions.includes(UserPermission.UsersPermissionsUpdate)) {
-      throw new ForbiddenActionError(
-        `User's doesn't Have Permission To Update User's Permissions`
-      )
+      throw new ForbiddenActionError(`User's doesn't Have Permission To Update User's Permissions`)
     }
 
     for (const p of permissions) {

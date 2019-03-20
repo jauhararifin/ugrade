@@ -7,22 +7,16 @@ export interface ContestReadAnnouncements {
   announcements: string[]
 }
 
-export function readAnnouncements(
-  announcements: string[]
-): ContestReadAnnouncements {
+export function readAnnouncements(announcements: string[]): ContestReadAnnouncements {
   return {
     type: ContestActionType.ReadAnnouncements,
     announcements,
   }
 }
 
-export function readAnnouncementsReducer(
-  state: ContestState,
-  action: ContestReadAnnouncements
-): ContestState {
+export function readAnnouncementsReducer(state: ContestState, action: ContestReadAnnouncements): ContestState {
   const nextState = lodash.cloneDeep(state)
-  const announcements: { [id: string]: Announcement } =
-    nextState.announcements || {}
+  const announcements: { [id: string]: Announcement } = nextState.announcements || {}
   action.announcements.forEach(id => {
     if (announcements[id]) announcements[id].read = true
   })

@@ -13,10 +13,7 @@ export function setProblems(problems: Problem[]): ContestSetProblems {
   }
 }
 
-export function setProblemsReducer(
-  state: ContestState,
-  action: ContestSetProblems
-): ContestState {
+export function setProblemsReducer(state: ContestState, action: ContestSetProblems): ContestState {
   const nextProblems: { [id: string]: Problem } = {}
   action.problems.slice().forEach(prob => (nextProblems[prob.id] = prob))
   return {

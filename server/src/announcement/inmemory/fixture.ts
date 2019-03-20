@@ -1,16 +1,6 @@
 import lodash from 'lodash'
-import {
-  UserTest1,
-  UserTest2,
-  UserTest3,
-  UserTest4,
-} from 'ugrade/auth/inmemory'
-import {
-  ContestArkav4Final,
-  ContestArkav4Qual,
-  ContestArkav5Final,
-  ContestArkav5Qual,
-} from 'ugrade/contest/inmemory'
+import { UserTest1, UserTest2, UserTest3, UserTest4 } from 'ugrade/auth/inmemory'
+import { ContestArkav4Final, ContestArkav4Qual, ContestArkav5Final, ContestArkav5Qual } from 'ugrade/contest/inmemory'
 import { Announcement } from '../announcement'
 
 export const AnnouncementExample1 = {

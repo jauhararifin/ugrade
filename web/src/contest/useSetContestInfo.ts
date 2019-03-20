@@ -39,14 +39,6 @@ export function useSetContestInfo() {
     permittedLanguages?: string[]
   ) =>
     dispatch(
-      setContestInfoAction(
-        name,
-        shortDescription,
-        description,
-        startTime,
-        freezed,
-        finishTime,
-        permittedLanguages
-      )
+      setContestInfoAction(name, shortDescription, description, startTime, freezed, finishTime, permittedLanguages)
     )
 }

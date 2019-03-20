@@ -11,10 +11,7 @@ export const setUsers = (users: { [userId: string]: User }): AuthSetUser => ({
   users,
 })
 
-export function setUserReducer(
-  state: AuthState,
-  action: AuthSetUser
-): AuthState {
+export function setUserReducer(state: AuthState, action: AuthSetUser): AuthState {
   return {
     ...state,
     users: {

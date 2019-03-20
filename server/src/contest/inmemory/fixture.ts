@@ -7,8 +7,7 @@ export const ContestArkav4Qual: Contest = {
   id: padTo32('1'),
   shortId: 'arkavidia-40-qualification',
   name: 'Penyisihan Competitive Programming Arkavidia 4.0',
-  shortDescription:
-    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: `# Arkavidia
     
     Kompetisi merupakan salah satu main event pada Arkavidia Informatics & IT Festival yang diselenggarakan untuk menggali dan mengasah potensipotensi yang ada untuk berani unjuk diri berinovasi dan menghasilkan karya terbaik dalam bidang teknologi informasi yang diharapkan dapat menjadi jawaban dalam permasalahan perekonomian di Indonesia. Terdapat empat kompetisi yang diselenggarakan dalam Arkavidia Informatics & IT Festival, yakni Programming Contest, Capture The Flag, Technovation, serta Arkalogica.
@@ -48,9 +47,7 @@ export const ContestArkav4Qual: Contest = {
     11. Panitia berhak mendiskualikasi tim yang melakukan tindak kecurangan maupun pelanggaran terhadap aturan kompetisi.
     12. Panitia berhak untuk mencabut gelar juara dari pemenang jika ditemukan kecurangan atau pelanggaran hukum dalam karya yang dilombakan ataupun dalam proses pelaksanaan perlombaan.
     13. Peserta dilarang bekerjasama dengan peserta/tim lain dalam bentuk apapun.`,
-  startTime: new Date(
-    Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 60 * 5
-  ),
+  startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10 - 1000 * 60 * 60 * 5),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
   permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
@@ -60,12 +57,9 @@ export const ContestArkav4Final: Contest = {
   id: padTo32('2'),
   shortId: 'arkavidia-40-qualification',
   name: 'Final Competitive Programming Arkavidia 4.0',
-  shortDescription:
-    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
-  startTime: new Date(
-    Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 60 * 5
-  ),
+  startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5 - 1000 * 60 * 60 * 5),
   freezed: false,
   finishTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
   permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
@@ -88,20 +82,12 @@ export const ContestArkav5Final: Contest = {
   id: padTo32('4'),
   shortId: 'arkavidia-50-final',
   name: 'Final Competitive Programming Arkavidia 5.0',
-  shortDescription:
-    'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
   description: ContestArkav4Qual.description,
   startTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5),
   freezed: false,
-  finishTime: new Date(
-    Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5
-  ),
+  finishTime: new Date(Date.now() + 1000 * 60 * 60 * 5 + 1000 * 60 * 60 * 24 * 5),
   permittedLanguageIds: availableLanguages.map(lang => lang.id).slice(),
 }
 
-export const contests: Contest[] = [
-  ContestArkav4Qual,
-  ContestArkav4Final,
-  ContestArkav5Qual,
-  ContestArkav5Final,
-]
+export const contests: Contest[] = [ContestArkav4Qual, ContestArkav4Final, ContestArkav5Qual, ContestArkav5Final]

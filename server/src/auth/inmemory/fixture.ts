@@ -1,10 +1,5 @@
 import { hashSync } from 'bcrypt'
-import {
-  ContestArkav4Final,
-  ContestArkav4Qual,
-  ContestArkav5Final,
-  ContestArkav5Qual,
-} from 'ugrade/contest/inmemory'
+import { ContestArkav4Final, ContestArkav4Qual, ContestArkav5Final, ContestArkav5Qual } from 'ugrade/contest/inmemory'
 import { Permission, User } from '../user'
 
 export const adminPermissions = [
@@ -25,10 +20,7 @@ export const adminPermissions = [
   Permission.ProfilesRead,
 ]
 
-export const contestantPermissions = [
-  Permission.AnnouncementRead,
-  Permission.ProblemsRead,
-]
+export const contestantPermissions = [Permission.AnnouncementRead, Permission.ProblemsRead]
 
 function padTo32(s: string): string {
   return '0'.repeat(32 - s.length) + s

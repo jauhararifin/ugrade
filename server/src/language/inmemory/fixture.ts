@@ -21,10 +21,4 @@ export const Language5: Language = {
   name: 'Python3',
 }
 
-export const availableLanguages: Language[] = [
-  Language1,
-  Language2,
-  Language3,
-  Language4,
-  Language5,
-]
+export const availableLanguages: Language[] = [Language1, Language2, Language3, Language4, Language5]

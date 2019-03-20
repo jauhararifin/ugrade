@@ -21,11 +21,7 @@ export const getMeAction = (): AppThunkAction => {
 
 export function useMe() {
   const dispatch = useAppThunkDispatch()
-  useSingleEffect(
-    'USE_ME_PERIODIC_CALL',
-    () => doPeriodically(async () => dispatch(getMeAction())),
-    []
-  )
+  useSingleEffect('USE_ME_PERIODIC_CALL', () => doPeriodically(async () => dispatch(getMeAction())), [])
 
   return useMappedState(getMe)
 }

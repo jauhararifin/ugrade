@@ -1,13 +1,7 @@
 import { tokenSchema } from 'ugrade/auth/validations'
 import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
-import {
-  clarificationEntryIdSchema,
-  clarificationIdSchema,
-  contentSchema,
-  subjectSchema,
-  titleSchema,
-} from './schemas'
+import { clarificationEntryIdSchema, clarificationIdSchema, contentSchema, subjectSchema, titleSchema } from './schemas'
 
 export const clarificationServiceValidator = {
   getClarificationById: (token: string, clarificationId: string) =>
@@ -37,12 +31,7 @@ export const clarificationServiceValidator = {
       })
       .validate({ token, contestId }),
 
-  createClarification: (
-    token: string,
-    title: string,
-    subject: string,
-    content: string
-  ) =>
+  createClarification: (token: string, title: string, subject: string, content: string) =>
     yup
       .object()
       .shape({
@@ -53,11 +42,7 @@ export const clarificationServiceValidator = {
       })
       .validate({ token, title, subject, content }),
 
-  replyClarification: (
-    token: string,
-    clarificationId: string,
-    content: string
-  ) =>
+  replyClarification: (token: string, clarificationId: string, content: string) =>
     yup
       .object()
       .shape({

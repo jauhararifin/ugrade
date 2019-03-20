@@ -7,8 +7,5 @@ export type ScoreboardUnsubscribe = () => any
 export interface ScoreboardService {
   getScoreboard(token: string): Promise<Scoreboard>
 
-  subscribeScoreboard(
-    token: string,
-    callback: ScoreboardCallback
-  ): ScoreboardUnsubscribe
+  subscribeScoreboard(token: string, callback: ScoreboardCallback): ScoreboardUnsubscribe
 }

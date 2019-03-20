@@ -3,11 +3,7 @@ import { wrap } from './wrap'
 import { Contest } from 'ugrade/contest'
 import { Announcement, AnnouncementService } from 'ugrade/announcement'
 
-export type AnnouncementsByContestResolver = AppFieldResolver<
-  Contest,
-  any,
-  Promise<Announcement[]>
->
+export type AnnouncementsByContestResolver = AppFieldResolver<Contest, any, Promise<Announcement[]>>
 
 export type CreateAnnouncementResolver = AppFieldResolver<
   any,
@@ -18,11 +14,7 @@ export type CreateAnnouncementResolver = AppFieldResolver<
   Promise<Announcement>
 >
 
-export type ReadAnnouncementResolver = AppFieldResolver<
-  any,
-  { id: string },
-  Promise<Announcement>
->
+export type ReadAnnouncementResolver = AppFieldResolver<any, { id: string }, Promise<Announcement>>
 
 export interface AnnouncementResolvers {
   Mutation: {
@@ -34,17 +26,13 @@ export interface AnnouncementResolvers {
   }
 }
 
-export const createAnnouncementResolvers = (
-  announcementService: AnnouncementService
-): AnnouncementResolvers => ({
+export const createAnnouncementResolvers = (announcementService: AnnouncementService): AnnouncementResolvers => ({
   Mutation: {
     createAnnouncement: (_source, { title, content }, { authToken }) =>
       wrap(announcementService.createAnnouncement(authToken, title, content)),
-    readAnnouncement: (_source, { id }, { authToken }) =>
-      wrap(announcementService.readAnnouncement(authToken, id)),
+    readAnnouncement: (_source, { id }, { authToken }) => wrap(announcementService.readAnnouncement(authToken, id)),
   },
   Contest: {
-    announcements: ({ id }, _args, { authToken }) =>
-      wrap(announcementService.getContestAnnouncements(authToken, id)),
+    announcements: ({ id }, _args, { authToken }) => wrap(announcementService.getContestAnnouncements(authToken, id)),
   },
 })

@@ -15,11 +15,7 @@ export class InMemoryClarificationService implements ClarificationService {
   private idEntries: { [id: string]: ClarificationEntry }
   private entryRead: { [key: string]: boolean }
 
-  constructor(
-    authService: AuthService,
-    clarifications: Clarification[] = [],
-    entries: ClarificationEntry[] = []
-  ) {
+  constructor(authService: AuthService, clarifications: Clarification[] = [], entries: ClarificationEntry[] = []) {
     this.authService = authService
 
     this.clarifications = lodash.cloneDeep(clarifications)
@@ -35,10 +31,7 @@ export class InMemoryClarificationService implements ClarificationService {
     this.entryRead = {}
   }
 
-  async getClarificationById(
-    token: string,
-    clarificationId: string
-  ): Promise<Clarification> {
+  async getClarificationById(token: string, clarificationId: string): Promise<Clarification> {
     await validator.getClarificationById(token, clarificationId)
 
     // throw NoSuchClarification
@@ -53,33 +46,22 @@ export class InMemoryClarificationService implements ClarificationService {
 
     // if has no permission to read all clarification
     // and not own target clarification
-    if (
-      !me.permissions.includes(Permission.ClarificationsRead) &&
-      me.id !== clarification.issuerId
-    ) {
+    if (!me.permissions.includes(Permission.ClarificationsRead) && me.id !== clarification.issuerId) {
       throw new NoSuchClarification()
     }
 
     return lodash.cloneDeep(clarification)
   }
 
-  async getClarificationEntries(
-    token: string,
-    clarificationId: string
-  ): Promise<ClarificationEntry[]> {
+  async getClarificationEntries(token: string, clarificationId: string): Promise<ClarificationEntry[]> {
     await validator.getClarificationEntries(token, clarificationId)
     const clarif = await this.getClarificationById(token, clarificationId)
     const me = await this.authService.getMe(token)
-    const result = clarif.entryIds
-      .map(i => this.idEntries[i])
-      .map(this.readWrapper(me.id))
+    const result = clarif.entryIds.map(i => this.idEntries[i]).map(this.readWrapper(me.id))
     return lodash.cloneDeep(result)
   }
 
-  async getContestClarifications(
-    token: string,
-    contestId: string
-  ): Promise<Clarification[]> {
+  async getContestClarifications(token: string, contestId: string): Promise<Clarification[]> {
     await validator.getContestClarifications(token, contestId)
 
     const me = await this.authService.getMe(token)
@@ -88,19 +70,13 @@ export class InMemoryClarificationService implements ClarificationService {
     const result = this.clarifications.filter(
       clarif =>
         clarif.contestId === contestId &&
-        (me.permissions.includes(Permission.ClarificationsRead) ||
-          clarif.issuerId === me.id)
+        (me.permissions.includes(Permission.ClarificationsRead) || clarif.issuerId === me.id)
     )
 
     return lodash.cloneDeep(result)
   }
 
-  async createClarification(
-    token: string,
-    title: string,
-    subject: string,
-    content: string
-  ): Promise<Clarification> {
+  async createClarification(token: string, title: string, subject: string, content: string): Promise<Clarification> {
     await validator.createClarification(token, title, subject, content)
 
     const me = await this.authService.getMe(token)
@@ -136,11 +112,7 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.cloneDeep(newClarification)
   }
 
-  async replyClarification(
-    token: string,
-    clarificationId: string,
-    content: string
-  ): Promise<ClarificationEntry> {
+  async replyClarification(token: string, clarificationId: string, content: string): Promise<ClarificationEntry> {
     await validator.replyClarification(token, clarificationId, content)
 
     const me = await this.authService.getMe(token)
@@ -148,10 +120,7 @@ export class InMemoryClarificationService implements ClarificationService {
       throw new ForbiddenAction()
     }
 
-    const clarification = await this.getClarificationById(
-      token,
-      clarificationId
-    )
+    const clarification = await this.getClarificationById(token, clarificationId)
     const newEntry: ClarificationEntry = {
       id: genUUID(),
       clarificationId: clarification.id,
@@ -169,10 +138,7 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.cloneDeep(newEntry)
   }
 
-  async readClarificationEntry(
-    token: string,
-    clarificationEntryId: string
-  ): Promise<ClarificationEntry> {
+  async readClarificationEntry(token: string, clarificationEntryId: string): Promise<ClarificationEntry> {
     await validator.readClarificationEntry(token, clarificationEntryId)
 
     if (!this.idEntries[clarificationEntryId]) {
@@ -189,9 +155,7 @@ export class InMemoryClarificationService implements ClarificationService {
     })
   }
 
-  private readWrapper(
-    userId: string
-  ): (entry: ClarificationEntry) => ClarificationEntry {
+  private readWrapper(userId: string): (entry: ClarificationEntry) => ClarificationEntry {
     return entry => ({
       ...entry,
       read: !!this.entryRead[`${userId}:${entry.id}`],

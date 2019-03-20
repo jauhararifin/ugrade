@@ -19,10 +19,7 @@ export const setUserProfile = (
   address,
 })
 
-export function setUserProfileReducer(
-  state: UserProfileState,
-  action: UserProfileSetUserProfile
-): UserProfileState {
+export function setUserProfileReducer(state: UserProfileState, action: UserProfileSetUserProfile): UserProfileState {
   const nextState = {
     ...state,
     gender: action.gender,

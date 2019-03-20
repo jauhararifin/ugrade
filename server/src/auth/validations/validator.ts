@@ -1,13 +1,7 @@
 import { uuidSchema } from 'ugrade/uuid'
 import * as yup from 'yup'
 import { Permission } from '../user'
-import {
-  emailSchema,
-  nameSchema,
-  oneTimeCodeSchema,
-  passwordSchema,
-  usernameSchema,
-} from './schemas'
+import { emailSchema, nameSchema, oneTimeCodeSchema, passwordSchema, usernameSchema } from './schemas'
 
 export const authServiceValidator = {
   signin: (contestId: string, email: string, password: string) =>
@@ -20,14 +14,7 @@ export const authServiceValidator = {
       })
       .validate({ contestId, email, password }),
 
-  signup: (
-    contestId: string,
-    username: string,
-    email: string,
-    oneTimeCode: string,
-    password: string,
-    name: string
-  ) =>
+  signup: (contestId: string, username: string, email: string, oneTimeCode: string, password: string, name: string) =>
     yup
       .object()
       .shape({
@@ -56,12 +43,7 @@ export const authServiceValidator = {
       })
       .validate({ contestId, email }),
 
-  resetPassword: (
-    contestId: string,
-    email: string,
-    oneTimeCode: string,
-    password: string
-  ) =>
+  resetPassword: (contestId: string, email: string, oneTimeCode: string, password: string) =>
     yup
       .object()
       .shape({

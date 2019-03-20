@@ -7,9 +7,7 @@ import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { normalizeClarification } from './util'
 
-export const subscribeClarificationsAction = (): AppThunkAction<
-  ClarificationsUnsubscribe
-> => {
+export const subscribeClarificationsAction = (): AppThunkAction<ClarificationsUnsubscribe> => {
   return async (dispatch, getState, { clarificationService }) => {
     const token = getState().auth.token
     return clarificationService.subscribeClarifications(token, items => {

@@ -6,14 +6,9 @@ import { NoSuchAnnouncement } from '../NoSuchAnnouncement'
 import { InMemoryAnnouncementService } from './inmemory'
 
 describe('test in memory announcement service', () => {
-  const getService = (
-    announcements: Announcement[] = []
-  ): [InMemoryAnnouncementService, MockedAuthService] => {
+  const getService = (announcements: Announcement[] = []): [InMemoryAnnouncementService, MockedAuthService] => {
     const authService = mockAuthService()
-    const announcementService = new InMemoryAnnouncementService(
-      authService,
-      announcements
-    )
+    const announcementService = new InMemoryAnnouncementService(authService, announcements)
     return [announcementService, authService]
   }
 
@@ -22,22 +17,16 @@ describe('test in memory announcement service', () => {
 
   test('test getContestAnnouncements validation', async () => {
     const [service, _] = getService()
-    await expect(
-      service.getContestAnnouncements('ivalidtoken', 'invalidcid')
-    ).rejects.toBeInstanceOf(ValidationError)
+    await expect(service.getContestAnnouncements('ivalidtoken', 'invalidcid')).rejects.toBeInstanceOf(ValidationError)
 
-    await service
-      .getContestAnnouncements(token, token)
-      .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    await service.getContestAnnouncements(token, token).catch(err => expect(err).not.toBeInstanceOf(ValidationError))
   })
 
   test('test getContestAnnouncements should fail when user has no permission', async () => {
     const [service, authService] = getService()
     authService.getMe.mockResolvedValue({ permissions: [] })
 
-    await expect(
-      service.getContestAnnouncements(token, token)
-    ).rejects.toBeInstanceOf(ForbiddenAction)
+    await expect(service.getContestAnnouncements(token, token)).rejects.toBeInstanceOf(ForbiddenAction)
   })
 
   test(`test getContestAnnouncements should fail when contest is different from user's contest`, async () => {
@@ -46,9 +35,7 @@ describe('test in memory announcement service', () => {
       permissions: [Permission.AnnouncementRead],
       contestId: 'someweirdid',
     })
-    await expect(
-      service.getContestAnnouncements(token, token)
-    ).rejects.toBeInstanceOf(ForbiddenAction)
+    await expect(service.getContestAnnouncements(token, token)).rejects.toBeInstanceOf(ForbiddenAction)
   })
 
   test('test getContestAnnouncements should resolved', async () => {
@@ -57,16 +44,12 @@ describe('test in memory announcement service', () => {
       permissions: [Permission.AnnouncementRead],
       contestId: cid,
     })
-    await expect(
-      service.getContestAnnouncements(token, token)
-    ).resolves.toBeDefined()
+    await expect(service.getContestAnnouncements(token, token)).resolves.toBeDefined()
   })
 
   test('test createAnnouncement validation', async () => {
     const [service, _] = getService()
-    await expect(
-      service.createAnnouncement('ivalidtoken', '', '')
-    ).rejects.toBeInstanceOf(ValidationError)
+    await expect(service.createAnnouncement('ivalidtoken', '', '')).rejects.toBeInstanceOf(ValidationError)
     await service
       .createAnnouncement(token, 'title', 'content')
       .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
@@ -75,9 +58,7 @@ describe('test in memory announcement service', () => {
   test('test createAnnouncement should fail when user has no permission', async () => {
     const [service, authService] = getService()
     authService.getMe.mockResolvedValue({ permissions: [] })
-    await expect(
-      service.createAnnouncement(token, 'title', 'content')
-    ).rejects.toBeInstanceOf(ForbiddenAction)
+    await expect(service.createAnnouncement(token, 'title', 'content')).rejects.toBeInstanceOf(ForbiddenAction)
   })
 
   test('createAnnouncement should resolves', async () => {
@@ -114,21 +95,15 @@ describe('test in memory announcement service', () => {
 
   test('readAnnouncement validation', async () => {
     const [service, _] = getService()
-    await expect(
-      service.readAnnouncement('ivalidtoken', 'invalidcid')
-    ).rejects.toBeInstanceOf(ValidationError)
+    await expect(service.readAnnouncement('ivalidtoken', 'invalidcid')).rejects.toBeInstanceOf(ValidationError)
 
-    await service
-      .readAnnouncement(token, token)
-      .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    await service.readAnnouncement(token, token).catch(err => expect(err).not.toBeInstanceOf(ValidationError))
   })
 
   test('readAnnouncement should fail when user has no permission', async () => {
     const [service, authService] = getService()
     authService.getMe.mockResolvedValue({ permissions: [] })
-    await expect(service.readAnnouncement(token, token)).rejects.toBeInstanceOf(
-      ForbiddenAction
-    )
+    await expect(service.readAnnouncement(token, token)).rejects.toBeInstanceOf(ForbiddenAction)
   })
 
   test('readAnnouncement should fail when no announcement found', async () => {
@@ -136,9 +111,7 @@ describe('test in memory announcement service', () => {
     authService.getMe.mockResolvedValue({
       permissions: [Permission.AnnouncementRead],
     })
-    await expect(
-      service.readAnnouncement(token, 'a'.repeat(32))
-    ).rejects.toBeInstanceOf(NoSuchAnnouncement)
+    await expect(service.readAnnouncement(token, 'a'.repeat(32))).rejects.toBeInstanceOf(NoSuchAnnouncement)
   })
 
   test('readAnnouncement should fail when announcement is in different contest', async () => {
@@ -158,9 +131,7 @@ describe('test in memory announcement service', () => {
       contestId: 'usercid',
       permissions: [Permission.AnnouncementRead],
     })
-    await expect(service.readAnnouncement(token, annId)).rejects.toBeInstanceOf(
-      NoSuchAnnouncement
-    )
+    await expect(service.readAnnouncement(token, annId)).rejects.toBeInstanceOf(NoSuchAnnouncement)
   })
 
   test('readAnnouncement should resolve', async () => {

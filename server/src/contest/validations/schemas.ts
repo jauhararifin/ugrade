@@ -6,10 +6,7 @@ export const contestShortIdSchema = yup
   .min(4)
   .max(255)
   .label('Contest ID')
-  .matches(
-    /^[a-zA-Z0-9\-]+$/,
-    'Contest ID contains alphanumeric and dash character only'
-  )
+  .matches(/^[a-zA-Z0-9\-]+$/, 'Contest ID contains alphanumeric and dash character only')
 
 export const contestNameSchema = yup
   .string()

@@ -1,9 +1,5 @@
 import lodash from 'lodash'
-import {
-  AuthService,
-  ForbiddenActionError,
-  UserPermission,
-} from 'ugrade/services/auth'
+import { AuthService, ForbiddenActionError, UserPermission } from 'ugrade/services/auth'
 import { GenderType, ShirtSizeType, UserProfile } from '../UserProfile'
 import { UserService } from '../UserService'
 
@@ -39,9 +35,7 @@ export class InMemoryUserService implements UserService {
   async getUserProfile(token: string, userId: string): Promise<UserProfile> {
     const user = await this.authService.getMe(token)
     if (!user.permissions.includes(UserPermission.ProfilesRead)) {
-      throw new ForbiddenActionError(
-        `User Doesn't Have Read Profile Permission`
-      )
+      throw new ForbiddenActionError(`User Doesn't Have Read Profile Permission`)
     }
     if (!this.userProfile[userId]) this.userProfile[userId] = {}
     return lodash.cloneDeep(this.userProfile[userId])

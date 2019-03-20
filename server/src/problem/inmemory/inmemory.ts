@@ -16,11 +16,7 @@ export class InMemoryProblemService implements ProblemService {
   private contestProblem: { [contestId: string]: Problem[] }
   private contestShortId: { [key: string]: boolean }
 
-  constructor(
-    authService: AuthService,
-    contestService: ContestService,
-    problems: Problem[] = []
-  ) {
+  constructor(authService: AuthService, contestService: ContestService, problems: Problem[] = []) {
     this.authService = authService
     this.contestService = contestService
     this.problems = lodash.cloneDeep(problems)
@@ -37,10 +33,7 @@ export class InMemoryProblemService implements ProblemService {
     }
   }
 
-  async getContestProblems(
-    token: string,
-    contestId: string
-  ): Promise<Problem[]> {
+  async getContestProblems(token: string, contestId: string): Promise<Problem[]> {
     await problemServiceValidator.getContestProblems(token, contestId)
 
     // check read permission
@@ -66,16 +59,8 @@ export class InMemoryProblemService implements ProblemService {
     return lodash.cloneDeep(result)
   }
 
-  async getContestProblemById(
-    token: string,
-    contestId: string,
-    problemId: string
-  ): Promise<Problem> {
-    await problemServiceValidator.getContestProblemById(
-      token,
-      contestId,
-      problemId
-    )
+  async getContestProblemById(token: string, contestId: string, problemId: string): Promise<Problem> {
+    await problemServiceValidator.getContestProblemById(token, contestId, problemId)
 
     // check read permission
     const me = await this.authService.getMe(token)
@@ -93,10 +78,7 @@ export class InMemoryProblemService implements ProblemService {
     if (!this.idProblem[problemId]) throw new NoSuchProblem()
     const problem = this.idProblem[problemId]
     if (problem.contestId !== me.contestId) throw new NoSuchProblem()
-    if (
-      !me.permissions.includes(Permission.ProblemsReadDisabled) &&
-      problem.disabled
-    ) {
+    if (!me.permissions.includes(Permission.ProblemsReadDisabled) && problem.disabled) {
       throw new NoSuchProblem()
     }
 
@@ -203,11 +185,7 @@ export class InMemoryProblemService implements ProblemService {
     }
 
     // get the problem and check permission
-    const problem = await this.getContestProblemById(
-      token,
-      me.contestId,
-      problemId
-    )
+    const problem = await this.getContestProblemById(token, me.contestId, problemId)
 
     // generate new problem
     const newProblem: Problem = {
@@ -258,11 +236,7 @@ export class InMemoryProblemService implements ProblemService {
     }
 
     // get the problem and check permission
-    const problem = await this.getContestProblemById(
-      token,
-      me.contestId,
-      problemId
-    )
+    const problem = await this.getContestProblemById(token, me.contestId, problemId)
 
     // update storage
     this.problems = lodash.remove(this.problems, p => p.id === problemId)

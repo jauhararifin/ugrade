@@ -9,12 +9,7 @@ export const submitSolutionAction = (
 ): AppThunkAction<Submission> => {
   return async (dispatch, getState, { submissionService }) => {
     const token = getState().auth.token
-    const submission = await submissionService.submitSolution(
-      token,
-      problemId,
-      languageId,
-      sourceCode
-    )
+    const submission = await submissionService.submitSolution(token, problemId, languageId, sourceCode)
     const stillRelevant = token === getState().auth.token
     if (stillRelevant) dispatch(setSubmissions([submission]))
     return submission

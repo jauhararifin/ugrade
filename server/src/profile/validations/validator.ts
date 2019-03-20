@@ -11,12 +11,7 @@ export const profileServiceValidator = {
       .shape({ token: tokenSchema.required(), userId: uuidSchema.required() })
       .validate({ token, userId }),
 
-  setMyProfile: (
-    token: string,
-    _gender?: GenderType,
-    _shirtSize?: ShirtSizeType,
-    address?: string
-  ) =>
+  setMyProfile: (token: string, _gender?: GenderType, _shirtSize?: ShirtSizeType, address?: string) =>
     yup
       .object()
       .shape({

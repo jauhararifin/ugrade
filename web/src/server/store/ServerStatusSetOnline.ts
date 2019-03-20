@@ -13,10 +13,7 @@ export function setOnline(online: boolean): ServerStatusSetOnline {
   }
 }
 
-export function setOnlineReducer(
-  state: ServerStatusState = initialState,
-  action: ServerStatusSetOnline
-) {
+export function setOnlineReducer(state: ServerStatusState = initialState, action: ServerStatusSetOnline) {
   return {
     ...state,
     online: action.online,

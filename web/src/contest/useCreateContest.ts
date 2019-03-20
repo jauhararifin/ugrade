@@ -18,9 +18,7 @@ export function createContestAction(
     const description = `Your new competitive programming contest`
     const serverDate = getState().server.clock || new Date()
     const localDate = getState().server.localClock || new Date()
-    const startMoment = moment(
-      new Date().getTime() - localDate.getTime() + serverDate.getTime()
-    ).add(10, 'days')
+    const startMoment = moment(new Date().getTime() - localDate.getTime() + serverDate.getTime()).add(10, 'days')
     const startDate = startMoment.toDate()
     const finishDate = startMoment.add(5, 'days').toDate()
 
@@ -41,14 +39,7 @@ export function createContestAction(
 
 export function useCreateContest() {
   const dispatch = useAppThunkDispatch()
-  return (
-    email: string,
-    contestShortId: string,
-    contestName: string,
-    shortDescription?: string
-  ) => {
-    return dispatch(
-      createContestAction(email, contestShortId, contestName, shortDescription)
-    )
+  return (email: string, contestShortId: string, contestName: string, shortDescription?: string) => {
+    return dispatch(createContestAction(email, contestShortId, contestName, shortDescription))
   }
 }

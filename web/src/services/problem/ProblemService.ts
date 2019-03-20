@@ -22,10 +22,7 @@ export interface ProblemService {
 
   getProblems(token: string): Promise<Problem[]>
 
-  subscribeProblems(
-    token: string,
-    callback: ProblemsCallback
-  ): ProblemsUnsubscribe
+  subscribeProblems(token: string, callback: ProblemsCallback): ProblemsUnsubscribe
 
   updateProblem(
     token: string,

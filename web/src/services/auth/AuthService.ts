@@ -85,12 +85,7 @@ export interface AuthService {
    * @param oneTimeCode - One time code for verifying user's email
    * @param password - User's new password
    */
-  resetPassword(
-    contestId: string,
-    email: string,
-    oneTimeCode: string,
-    password: string
-  ): Promise<void>
+  resetPassword(contestId: string, email: string, oneTimeCode: string, password: string): Promise<void>
 
   /**
    * Add users to the contests
@@ -99,10 +94,7 @@ export interface AuthService {
    * @param users list of user's email and permissions
    * @returns List of string contains added user emails
    */
-  addUser(
-    token: string,
-    users: Array<{ email: string; permissions: UserPermission[] }>
-  ): Promise<string[]>
+  addUser(token: string, users: Array<{ email: string; permissions: UserPermission[] }>): Promise<string[]>
 
   /**
    * Get user's information (id, contest id and username) from server.
@@ -118,11 +110,7 @@ export interface AuthService {
    * @param oldPassword User's old password
    * @param newPassword User's new password
    */
-  setMyPassword(
-    token: string,
-    oldPassword: string,
-    newPassword: string
-  ): Promise<void>
+  setMyPassword(token: string, oldPassword: string, newPassword: string): Promise<void>
 
   /**
    * Set users's fullname
@@ -139,9 +127,5 @@ export interface AuthService {
    * @param name User's id
    * @param permissions User's new permission after updated
    */
-  setUserPermissions(
-    token: string,
-    userId: string,
-    permissions: UserPermission[]
-  ): Promise<UserPermission[]>
+  setUserPermissions(token: string, userId: string, permissions: UserPermission[]): Promise<UserPermission[]>
 }

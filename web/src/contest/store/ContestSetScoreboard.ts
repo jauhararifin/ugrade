@@ -13,10 +13,7 @@ export function setScoreboard(scoreboard: Scoreboard): ContestSetScoreboard {
   }
 }
 
-export function setScoreboardReducer(
-  state: ContestState,
-  action: ContestSetScoreboard
-): ContestState {
+export function setScoreboardReducer(state: ContestState, action: ContestSetScoreboard): ContestState {
   return {
     ...state,
     scoreboard: action.scoreboard,

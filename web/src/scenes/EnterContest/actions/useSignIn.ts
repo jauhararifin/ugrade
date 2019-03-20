@@ -3,10 +3,7 @@ import { setSignedIn } from 'ugrade/auth/store'
 import { useAppThunkDispatch } from 'ugrade/common'
 import { AppThunkAction } from 'ugrade/store'
 
-export function signinAction(
-  password: string,
-  rememberMe: boolean
-): AppThunkAction {
+export function signinAction(password: string, rememberMe: boolean): AppThunkAction {
   return async (dispatch, getState, { authService }) => {
     const contest = getState().contest.info
     const user = getState().auth.me
@@ -27,6 +24,5 @@ export function signinAction(
 
 export function useSignIn() {
   const dispatch = useAppThunkDispatch()
-  return (password: string, rememberMe: boolean) =>
-    dispatch(signinAction(password, rememberMe))
+  return (password: string, rememberMe: boolean) => dispatch(signinAction(password, rememberMe))
 }

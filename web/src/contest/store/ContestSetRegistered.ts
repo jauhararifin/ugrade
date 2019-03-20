@@ -13,10 +13,7 @@ export function setRegistered(registered: boolean): ContestSetRegistered {
   }
 }
 
-export function setRegisteredReducer(
-  state: ContestState,
-  action: ContestSetRegistered
-): ContestState {
+export function setRegisteredReducer(state: ContestState, action: ContestSetRegistered): ContestState {
   return {
     ...state,
     registered: action.registered,

@@ -5,9 +5,7 @@ import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { getSubmissions, setSubmissions } from '../store'
 
-export const subscribeSubmissionsAction = (): AppThunkAction<
-  UnsubscriptionFunction
-> => {
+export const subscribeSubmissionsAction = (): AppThunkAction<UnsubscriptionFunction> => {
   return async (dispatch, getState, { submissionService }) => {
     const token = getState().auth.token
     return submissionService.subscribeSubmissions(token, newSubmissions => {

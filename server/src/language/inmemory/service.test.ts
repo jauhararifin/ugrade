@@ -20,9 +20,7 @@ describe('test in memory language service', () => {
     '1234567890123456789012345678921',
   ])('test getLanguageById %s', async id => {
     const service = new InMemoryLanguageService()
-    await expect(service.getLanguageById(id)).rejects.toBeInstanceOf(
-      ValidationError
-    )
+    await expect(service.getLanguageById(id)).rejects.toBeInstanceOf(ValidationError)
   })
 
   test.each(availableLanguages)('test getLanguageById %j', async lang => {

@@ -7,15 +7,7 @@ export type SubmissionsUnsubscribe = () => any
 export interface SubmissionService {
   getSubmissions(token: string): Promise<Submission[]>
 
-  subscribeSubmissions(
-    token: string,
-    callback: SubmissionsCallback
-  ): SubmissionsUnsubscribe
+  subscribeSubmissions(token: string, callback: SubmissionsCallback): SubmissionsUnsubscribe
 
-  submitSolution(
-    token: string,
-    problemId: string,
-    languageId: string,
-    sourceCode: string
-  ): Promise<Submission>
+  submitSolution(token: string, problemId: string, languageId: string, sourceCode: string): Promise<Submission>
 }

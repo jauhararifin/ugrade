@@ -6,22 +6,15 @@ export interface ContestSetSubmissions {
   submissions: Submission[]
 }
 
-export function setSubmissions(
-  submissions: Submission[]
-): ContestSetSubmissions {
+export function setSubmissions(submissions: Submission[]): ContestSetSubmissions {
   return {
     type: ContestActionType.SetSubmissions,
     submissions,
   }
 }
 
-export function setSubmissionReducer(
-  state: ContestState,
-  action: ContestSetSubmissions
-): ContestState {
+export function setSubmissionReducer(state: ContestState, action: ContestSetSubmissions): ContestState {
   const nextSubmission: { [id: string]: Submission } = {}
-  action.submissions
-    .slice()
-    .forEach(value => (nextSubmission[value.id] = value))
+  action.submissions.slice().forEach(value => (nextSubmission[value.id] = value))
   return { ...state, submissions: { ...state.submissions, ...nextSubmission } }
 }

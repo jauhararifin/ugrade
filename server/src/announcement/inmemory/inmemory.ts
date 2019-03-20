@@ -14,10 +14,7 @@ export class InMemoryAnnouncementService implements AnnouncementService {
   private idAnnouncements: { [id: string]: Announcement }
   private announcementRead: { [key: string]: boolean }
 
-  constructor(
-    authService: AuthService,
-    announcements: Announcement[] = announcementsFixture
-  ) {
+  constructor(authService: AuthService, announcements: Announcement[] = announcementsFixture) {
     this.authService = authService
     const fixture = lodash.cloneDeep(announcements)
     this.announcements = fixture
@@ -33,10 +30,7 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     }
   }
 
-  async getContestAnnouncements(
-    token: string,
-    contestId: string
-  ): Promise<Announcement[]> {
+  async getContestAnnouncements(token: string, contestId: string): Promise<Announcement[]> {
     await validator.getContestAnnouncements(token, contestId)
 
     // check permission
@@ -49,16 +43,10 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     if (!this.contestAnnouncements[me.contestId]) {
       this.contestAnnouncements[me.contestId] = []
     }
-    return lodash.cloneDeep(
-      this.contestAnnouncements[me.contestId].map(this.readWrapper(me.id))
-    )
+    return lodash.cloneDeep(this.contestAnnouncements[me.contestId].map(this.readWrapper(me.id)))
   }
 
-  async createAnnouncement(
-    token: string,
-    title: string,
-    content: string
-  ): Promise<Announcement> {
+  async createAnnouncement(token: string, title: string, content: string): Promise<Announcement> {
     await validator.createAnnouncement(token, title, content)
 
     const me = await this.authService.getMe(token)
@@ -87,10 +75,7 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     return lodash.cloneDeep(newAnnouncement)
   }
 
-  async readAnnouncement(
-    token: string,
-    announcementId: string
-  ): Promise<Announcement> {
+  async readAnnouncement(token: string, announcementId: string): Promise<Announcement> {
     await validator.readAnnouncement(token, announcementId)
 
     // check permission
@@ -110,9 +95,7 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     return lodash.cloneDeep({ ...announcement, read: true })
   }
 
-  private readWrapper(
-    userId: string
-  ): (announcement: Announcement) => Announcement {
+  private readWrapper(userId: string): (announcement: Announcement) => Announcement {
     return announcement => ({
       ...announcement,
       read: !!this.announcementRead[`${announcement.id}:${userId}`],

@@ -11,13 +11,7 @@ export const getMyProfileAction = (): AppThunkAction => {
       const myProfile = await userService.getMyProfile(token)
       const stillRelevant = getState().auth.token === token
       if (stillRelevant) {
-        dispatch(
-          setUserProfile(
-            myProfile.gender,
-            myProfile.shirtSize,
-            myProfile.address
-          )
-        )
+        dispatch(setUserProfile(myProfile.gender, myProfile.shirtSize, myProfile.address))
       }
     }
   }

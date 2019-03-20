@@ -8,9 +8,7 @@ describe('language module validator', () => {
     'qwertyuiopasdfghjklzxcvbnmjauvna',
     'UIQHWOIEVQOJQOMWJDNQOWJDKCJQFQWQ',
   ])('using %s as language id should resolved', async langId => {
-    await expect(
-      languageServiceValidator.getLanguageById(langId)
-    ).resolves.toBeDefined()
+    await expect(languageServiceValidator.getLanguageById(langId)).resolves.toBeDefined()
   })
 
   test.each([

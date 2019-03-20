@@ -60,10 +60,7 @@ export interface ContestService {
     permittedLanguages?: string[]
   ): Promise<Contest>
 
-  subscribeMyContest(
-    token: string,
-    callback: SubscriptionCallback<Contest>
-  ): UnsubscriptionFunction
+  subscribeMyContest(token: string, callback: SubscriptionCallback<Contest>): UnsubscriptionFunction
 
   createContest(
     email: string,

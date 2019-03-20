@@ -5,9 +5,7 @@ import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { getContestInfo, setInfo } from './store'
 
-export function subscribeContestInfoAction(): AppThunkAction<
-  UnsubscriptionFunction
-> {
+export function subscribeContestInfoAction(): AppThunkAction<UnsubscriptionFunction> {
   return async (dispatch, getState, { contestService }) => {
     const token = getState().auth.token
     const unsub = contestService.subscribeMyContest(token, contest => {

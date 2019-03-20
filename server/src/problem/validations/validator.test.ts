@@ -7,85 +7,38 @@ describe('test problem service validator', () => {
     test.each([
       ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', ''],
       ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
-      [
-        'dQRjAQKKvmA3gAeHYzLpfCs84Vjs',
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8',
-      ],
+      ['dQRjAQKKvmA3gAeHYzLpfCs84Vjs', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8'],
       ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuS'],
     ])('getContestProblems should fail', async (token, contestId) => {
-      await expect(
-        problemServiceValidator.getContestProblems(token, contestId)
-      ).rejects.toBeInstanceOf(ValidationError)
+      await expect(problemServiceValidator.getContestProblems(token, contestId)).rejects.toBeInstanceOf(ValidationError)
     })
 
     test.each([
       ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
       ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV'],
     ])('getContestProblems should resolved', async (token, contestId) => {
-      await expect(
-        problemServiceValidator.getContestProblems(token, contestId)
-      ).resolves.toBeDefined()
+      await expect(problemServiceValidator.getContestProblems(token, contestId)).resolves.toBeDefined()
     })
   })
 
   describe('test getContestProblemById', () => {
     test.each([
-      [
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-        '',
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-      ],
-      [
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-        '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
-      ],
-      [
-        'dQRjAQKKvmA3gAeHYzLpfCs84Vjs',
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8',
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-      ],
-      [
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuS',
-      ],
-    ])(
-      'getContestProblemById should fail',
-      async (token, contestId, problemId) => {
-        await expect(
-          problemServiceValidator.getContestProblemById(
-            token,
-            contestId,
-            problemId
-          )
-        ).rejects.toBeInstanceOf(ValidationError)
-      }
-    )
+      ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', '', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ'],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
+      ['dQRjAQKKvmA3gAeHYzLpfCs84Vjs', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ'],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuS'],
+    ])('getContestProblemById should fail', async (token, contestId, problemId) => {
+      await expect(problemServiceValidator.getContestProblemById(token, contestId, problemId)).rejects.toBeInstanceOf(
+        ValidationError
+      )
+    })
 
     test.each([
-      [
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
-        'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV',
-      ],
-      [
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-        'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV',
-      ],
-    ])(
-      'getContestProblemById should resolved',
-      async (token, contestId, problemId) => {
-        await expect(
-          problemServiceValidator.getContestProblemById(
-            token,
-            contestId,
-            problemId
-          )
-        ).resolves.toBeDefined()
-      }
-    )
+      ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV'],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV'],
+    ])('getContestProblemById should resolved', async (token, contestId, problemId) => {
+      await expect(problemServiceValidator.getContestProblemById(token, contestId, problemId)).resolves.toBeDefined()
+    })
   })
 
   describe('test createProblem', () => {
@@ -284,18 +237,7 @@ describe('test problem service validator', () => {
       ],
     ])(
       'createProblem should fail',
-      async (
-        token,
-        shortId,
-        name,
-        statement,
-        type,
-        disabled,
-        timeLimit,
-        tolerance,
-        memoryLimit,
-        outputLimit
-      ) => {
+      async (token, shortId, name, statement, type, disabled, timeLimit, tolerance, memoryLimit, outputLimit) => {
         await expect(
           problemServiceValidator.createProblem(
             token as string,
@@ -460,18 +402,7 @@ describe('test problem service validator', () => {
       ],
     ])(
       'createProblem should resolved',
-      async (
-        token,
-        shortId,
-        name,
-        statement,
-        type,
-        disabled,
-        timeLimit,
-        tolerance,
-        memoryLimit,
-        outputLimit
-      ) => {
+      async (token, shortId, name, statement, type, disabled, timeLimit, tolerance, memoryLimit, outputLimit) => {
         await expect(
           problemServiceValidator.createProblem(
             token as string,
@@ -915,24 +846,17 @@ describe('test problem service validator', () => {
     test.each([
       ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', ''],
       ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
-      [
-        'dQRjAQKKvmA3gAeHYzLpfCs84Vjs',
-        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8',
-      ],
+      ['dQRjAQKKvmA3gAeHYzLpfCs84Vjs', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8'],
       ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuS'],
     ])('deleteProblem should fail', async (token, problemId) => {
-      await expect(
-        problemServiceValidator.deleteProblem(token, problemId)
-      ).rejects.toBeInstanceOf(ValidationError)
+      await expect(problemServiceValidator.deleteProblem(token, problemId)).rejects.toBeInstanceOf(ValidationError)
     })
 
     test.each([
       ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
       ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV'],
     ])('deleteProblem should resolved', async (token, problemId) => {
-      await expect(
-        problemServiceValidator.deleteProblem(token, problemId)
-      ).resolves.toBeDefined()
+      await expect(problemServiceValidator.deleteProblem(token, problemId)).resolves.toBeDefined()
     })
   })
 })

@@ -48,16 +48,6 @@ export function useCreateProblem() {
     outputLimit: number
   ) =>
     dispatch(
-      createProblemAction(
-        shortId,
-        name,
-        statement,
-        type,
-        disabled,
-        timeLimit,
-        tolerance,
-        memoryLimit,
-        outputLimit
-      )
+      createProblemAction(shortId, name, statement, type, disabled, timeLimit, tolerance, memoryLimit, outputLimit)
     )
 }

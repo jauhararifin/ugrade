@@ -11,9 +11,6 @@ export function unsetContest(): ContestUnsetContest {
   }
 }
 
-export function unsetContestReducer(
-  _state: ContestState,
-  _action: ContestUnsetContest
-): ContestState {
+export function unsetContestReducer(_state: ContestState, _action: ContestUnsetContest): ContestState {
   return {}
 }

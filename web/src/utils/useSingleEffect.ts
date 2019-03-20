@@ -16,11 +16,7 @@ const singleEffectMemo: { [id: string]: boolean } = {}
  * @param deps - If present, effect will only activate if the values in the
  * list change.
  */
-export function useSingleEffect(
-  effectId: string,
-  effect: EffectCallback,
-  deps?: DependencyList
-) {
+export function useSingleEffect(effectId: string, effect: EffectCallback, deps?: DependencyList) {
   useEffect(() => {
     if (!singleEffectMemo[effectId]) {
       singleEffectMemo[effectId] = true

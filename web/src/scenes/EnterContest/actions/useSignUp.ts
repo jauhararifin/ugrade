@@ -14,21 +14,10 @@ export function signupAction(
     const contest = getState().contest.info
     const user = getState().auth.me
     if (contest && user) {
-      const token = await authService.signup(
-        contest.id,
-        username,
-        user.email,
-        oneTimeCode,
-        password,
-        name
-      )
+      const token = await authService.signup(contest.id, username, user.email, oneTimeCode, password, name)
       const nowContest = getState().contest.info
       const nowUser = getState().auth.me
-      const stillRelevant =
-        nowContest &&
-        nowUser &&
-        nowContest.id === contest.id &&
-        nowUser.id === user.id
+      const stillRelevant = nowContest && nowUser && nowContest.id === contest.id && nowUser.id === user.id
       if (stillRelevant) {
         dispatch(setSignedIn(token, rememberMe))
       }
@@ -43,11 +32,6 @@ export function signupAction(
 
 export function useSignUp() {
   const dispatch = useAppThunkDispatch()
-  return (
-    username: string,
-    oneTimeCode: string,
-    password: string,
-    name: string,
-    rememberMe: boolean
-  ) => dispatch(signupAction(username, oneTimeCode, password, name, rememberMe))
+  return (username: string, oneTimeCode: string, password: string, name: string, rememberMe: boolean) =>
+    dispatch(signupAction(username, oneTimeCode, password, name, rememberMe))
 }

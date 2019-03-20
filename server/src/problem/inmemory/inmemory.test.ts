@@ -8,16 +8,10 @@ import { Problem, ProblemType } from '../problem'
 import { InMemoryProblemService } from './inmemory'
 
 describe('test in memory problem service', () => {
-  const getService = (
-    problems: Problem[] = []
-  ): [InMemoryProblemService, MockedAuthService, MockedContestService] => {
+  const getService = (problems: Problem[] = []): [InMemoryProblemService, MockedAuthService, MockedContestService] => {
     const authService = mockAuthService()
     const contestService = mockContestService()
-    const problemService = new InMemoryProblemService(
-      authService,
-      contestService,
-      problems
-    )
+    const problemService = new InMemoryProblemService(authService, contestService, problems)
     return [problemService, authService, contestService]
   }
 
@@ -44,21 +38,15 @@ describe('test in memory problem service', () => {
   describe('test getContestProblems', () => {
     test('getContestProblems validation', async () => {
       const [service, _] = getService()
-      await expect(
-        service.getContestProblems('ivalidtoken', 'invalidcid')
-      ).rejects.toBeInstanceOf(ValidationError)
+      await expect(service.getContestProblems('ivalidtoken', 'invalidcid')).rejects.toBeInstanceOf(ValidationError)
 
-      await service
-        .getContestProblems(token, token)
-        .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+      await service.getContestProblems(token, token).catch(err => expect(err).not.toBeInstanceOf(ValidationError))
     })
 
     test('getContestProblems should throw ForbiddenAction when user doesnt has ProblemsRead permission', async () => {
       const [service, authService] = getService()
       authService.getMe.mockResolvedValue({ permissions: [] })
-      await expect(
-        service.getContestProblems(token, token)
-      ).rejects.toBeInstanceOf(ForbiddenAction)
+      await expect(service.getContestProblems(token, token)).rejects.toBeInstanceOf(ForbiddenAction)
     })
 
     test('getContestProblems should throw NoSuchContest when no contest is found', async () => {
@@ -67,9 +55,7 @@ describe('test in memory problem service', () => {
         permissions: [Permission.ProblemsRead],
       })
       contestService.getContestById.mockRejectedValue(new NoSuchContest())
-      await expect(
-        service.getContestProblems(token, token)
-      ).rejects.toBeInstanceOf(NoSuchContest)
+      await expect(service.getContestProblems(token, token)).rejects.toBeInstanceOf(NoSuchContest)
     })
 
     test('getContestProblems should throw ForbiddenError when contestId is belong to different contest', async () => {
@@ -78,9 +64,7 @@ describe('test in memory problem service', () => {
         permissions: [Permission.ProblemsRead],
       })
       contestService.getContestById.mockResolvedValue({ id: 'someotherid' })
-      await expect(
-        service.getContestProblems(token, token)
-      ).rejects.toBeInstanceOf(ForbiddenAction)
+      await expect(service.getContestProblems(token, token)).rejects.toBeInstanceOf(ForbiddenAction)
     })
 
     test('getContestProblems should not returns disabled problem when user doesnt have ProblemsReadDisabled permission', async () => {
@@ -118,23 +102,16 @@ describe('test in memory problem service', () => {
       contestService.getContestById.mockResolvedValue({ id: contestId })
       const result = await service.getContestProblems(token, contestId)
       expect(result).toHaveLength(6)
-      expect(result.map(r => r.id)).toEqual([
-        'id1',
-        'id2',
-        'id3',
-        'id4',
-        'id5',
-        'id6',
-      ])
+      expect(result.map(r => r.id)).toEqual(['id1', 'id2', 'id3', 'id4', 'id5', 'id6'])
     })
   })
 
   describe('test getContestProblemById', () => {
     test('getContestProblemById validation', async () => {
       const [service, _] = getService()
-      await expect(
-        service.getContestProblemById('ivalidtoken', 'invalidcid', 'invalidpid')
-      ).rejects.toBeInstanceOf(ValidationError)
+      await expect(service.getContestProblemById('ivalidtoken', 'invalidcid', 'invalidpid')).rejects.toBeInstanceOf(
+        ValidationError
+      )
 
       await service
         .getContestProblemById(token, contestId, problemId)
@@ -144,9 +121,7 @@ describe('test in memory problem service', () => {
     test('getContestProblemById should throw ForbiddenAction when user doesnt has ProblemsRead permission', async () => {
       const [service, authService] = getService()
       authService.getMe.mockResolvedValue({ permissions: [] })
-      await expect(
-        service.getContestProblemById(token, contestId, problemId)
-      ).rejects.toBeInstanceOf(ForbiddenAction)
+      await expect(service.getContestProblemById(token, contestId, problemId)).rejects.toBeInstanceOf(ForbiddenAction)
     })
 
     test('getContestProblemById should throw NoSuchContest when no contest is found', async () => {
@@ -155,9 +130,7 @@ describe('test in memory problem service', () => {
         permissions: [Permission.ProblemsRead],
       })
       contestService.getContestById.mockRejectedValue(new NoSuchContest())
-      await expect(
-        service.getContestProblemById(token, contestId, problemId)
-      ).rejects.toBeInstanceOf(NoSuchContest)
+      await expect(service.getContestProblemById(token, contestId, problemId)).rejects.toBeInstanceOf(NoSuchContest)
     })
 
     test('getContestProblemById should throw ForbiddenError when contestId is belong to different contest', async () => {
@@ -166,9 +139,7 @@ describe('test in memory problem service', () => {
         permissions: [Permission.ProblemsRead],
       })
       contestService.getContestById.mockResolvedValue({ id: 'someotherid' })
-      await expect(
-        service.getContestProblemById(token, contestId, problemId)
-      ).rejects.toBeInstanceOf(ForbiddenAction)
+      await expect(service.getContestProblemById(token, contestId, problemId)).rejects.toBeInstanceOf(ForbiddenAction)
     })
 
     test('getContestProblemById should throw NoSuchProblem when user doesnt have ProblemsReadDisabled permission', async () => {
@@ -180,9 +151,7 @@ describe('test in memory problem service', () => {
         contestId,
       })
       contestService.getContestById.mockResolvedValue({ id: contestId })
-      await expect(
-        service.getContestProblemById(token, contestId, problemId)
-      ).rejects.toBeInstanceOf(NoSuchProblem)
+      await expect(service.getContestProblemById(token, contestId, problemId)).rejects.toBeInstanceOf(NoSuchProblem)
     })
 
     test('getContestProblemById should returns disabled problem when user have ProblemsReadDisabled permission', async () => {
@@ -194,9 +163,7 @@ describe('test in memory problem service', () => {
         contestId,
       })
       contestService.getContestById.mockResolvedValue({ id: contestId })
-      await expect(
-        service.getContestProblemById(token, contestId, problemId)
-      ).resolves.toEqual({
+      await expect(service.getContestProblemById(token, contestId, problemId)).resolves.toEqual({
         ...problemTemplate,
         id: problemId,
         contestId,
@@ -213,9 +180,7 @@ describe('test in memory problem service', () => {
         contestId,
       })
       contestService.getContestById.mockResolvedValue({ id: contestId })
-      await expect(
-        service.getContestProblemById(token, contestId, problemId)
-      ).resolves.toEqual({
+      await expect(service.getContestProblemById(token, contestId, problemId)).resolves.toEqual({
         ...problemTemplate,
         id: problemId,
         contestId,

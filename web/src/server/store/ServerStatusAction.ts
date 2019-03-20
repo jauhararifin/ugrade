@@ -6,6 +6,4 @@ export enum ServerStatusActionType {
   SetOnline = 'SERVER_STATUS_SET_ONLINE',
 }
 
-export type ServerStatusAction =
-  | ServerStatusSetServerClock
-  | ServerStatusSetOnline
+export type ServerStatusAction = ServerStatusSetServerClock | ServerStatusSetOnline

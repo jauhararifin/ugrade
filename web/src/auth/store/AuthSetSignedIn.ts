@@ -7,19 +7,13 @@ export interface AuthSetSignedIn {
   rememberMe: boolean
 }
 
-export const setSignedIn = (
-  token: string,
-  rememberMe: boolean = false
-): AuthSetSignedIn => ({
+export const setSignedIn = (token: string, rememberMe: boolean = false): AuthSetSignedIn => ({
   type: AuthActionType.SetSignedIn,
   token,
   rememberMe,
 })
 
-export function setSignedInReducer(
-  state: AuthState,
-  action: AuthSetSignedIn
-): AuthState {
+export function setSignedInReducer(state: AuthState, action: AuthSetSignedIn): AuthState {
   const nextState = {
     ...state,
     isSignedIn: true,
@@ -31,10 +25,7 @@ export function setSignedInReducer(
 
   if (action.rememberMe) {
     localStorage.setItem(AUTH_TOKEN_KEY, nextState.token)
-    localStorage.setItem(
-      AUTH_IS_SIGNED_IN_KEY,
-      nextState.isSignedIn ? 'true' : 'false'
-    )
+    localStorage.setItem(AUTH_IS_SIGNED_IN_KEY, nextState.isSignedIn ? 'true' : 'false')
   }
 
   return nextState

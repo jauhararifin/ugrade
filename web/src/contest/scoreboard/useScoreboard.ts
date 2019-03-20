@@ -5,9 +5,7 @@ import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 import { getScoreboard, setScoreboard } from '../store'
 
-export function subscribeScoreboardAction(): AppThunkAction<
-  UnsubscriptionFunction
-> {
+export function subscribeScoreboardAction(): AppThunkAction<UnsubscriptionFunction> {
   return async (dispatch, getState, { scoreboardService }) => {
     const token = getState().auth.token
     const unsub = scoreboardService.subscribeScoreboard(token, scoreboard => {

@@ -46,11 +46,7 @@ const apollo = new ApolloServer({
       if (headerParts[0].toLowerCase() === 'bearer') authToken = headerParts[1]
     }
 
-    const requestIp = (
-      req.headers['x-forwarded-for'] ||
-      req.connection.remoteAddress ||
-      '-'
-    ).toString()
+    const requestIp = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-').toString()
     const requestId = Math.round(Math.random() * 1000000).toString()
 
     return { authToken, requestId, requestIp }
@@ -61,7 +57,5 @@ apollo.applyMiddleware({ app })
 const port = Number.parseInt(process.env.PORT || '5000', 10)
 const server = app.listen({ port }, () => {
   const addr = server.address() as AddressInfo
-  logger.info(
-    `Server started at port: ${addr.address}:${addr.port}${apollo.graphqlPath}`
-  )
+  logger.info(`Server started at port: ${addr.address}:${addr.port}${apollo.graphqlPath}`)
 })

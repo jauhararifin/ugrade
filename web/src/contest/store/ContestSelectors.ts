@@ -2,12 +2,7 @@ import lodash from 'lodash'
 import { createSelector } from 'reselect'
 import { getAuth } from 'ugrade/auth/store'
 import { AppState } from 'ugrade/store'
-import {
-  ClarificationEntry,
-  ContestInfo,
-  ContestState,
-  Language,
-} from './ContestState'
+import { ClarificationEntry, ContestInfo, ContestState, Language } from './ContestState'
 
 export function getContest(state: AppState): ContestState {
   return state.contest
@@ -57,9 +52,7 @@ export const getAnnouncementList = createSelector(
   contest => {
     const announcements = contest.announcements
     if (announcements) {
-      return lodash
-        .values(announcements)
-        .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
+      return lodash.values(announcements).sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
     }
     return undefined
   }
@@ -75,9 +68,7 @@ export const getClarificationList = createSelector(
   contest => {
     const clarifications = contest.clarifications
     if (clarifications) {
-      return lodash
-        .values(clarifications)
-        .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
+      return lodash.values(clarifications).sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
     }
     return undefined
   }
@@ -111,9 +102,7 @@ export const getUnReadClarification = createSelector(
       if (clarifEntryList.hasOwnProperty(clarifId)) {
         const entries = clarifEntryList[clarifId]
         if (entries) {
-          result[clarifId] = entries
-            .filter(entry => !entry.read)
-            .map(entry => entry.id)
+          result[clarifId] = entries.filter(entry => !entry.read).map(entry => entry.id)
         }
       }
     }
@@ -129,9 +118,7 @@ export const getSubmissionList = createSelector(
   getSubmissions,
   submissions => {
     if (submissions) {
-      return lodash
-        .values(submissions)
-        .sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
+      return lodash.values(submissions).sort((a, b) => a.issuedTime.getTime() - b.issuedTime.getTime())
     }
     return undefined
   }
@@ -149,9 +136,7 @@ export const getRank = createSelector(
     if (scoreboard) {
       const me = auth.me
       if (me && me.id) {
-        const entry = scoreboard.entries
-          .filter(en => en.contestant === me.username)
-          .pop()
+        const entry = scoreboard.entries.filter(en => en.contestant === me.username).pop()
         if (entry) return entry.rank
       }
     }

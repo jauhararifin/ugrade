@@ -13,10 +13,7 @@ export function setInfo(contestInfo: ContestInfo): ContestSetInfo {
   }
 }
 
-export function setInfoReducer(
-  state: ContestState,
-  action: ContestSetInfo
-): ContestState {
+export function setInfoReducer(state: ContestState, action: ContestSetInfo): ContestState {
   if (!state.info || state.info.id === action.contestInfo.id) {
     return {
       ...state,

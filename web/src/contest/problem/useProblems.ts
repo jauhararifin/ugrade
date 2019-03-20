@@ -5,9 +5,7 @@ import { UnsubscriptionFunction } from 'ugrade/services/contest/ContestService'
 import { AppThunkAction } from 'ugrade/store'
 import { useSingleEffect } from 'ugrade/utils'
 
-export const subscribeProblemsAction = (): AppThunkAction<
-  UnsubscriptionFunction
-> => {
+export const subscribeProblemsAction = (): AppThunkAction<UnsubscriptionFunction> => {
   return async (dispatch, getState, { problemService }) => {
     const token = getState().auth.token
     return problemService.subscribeProblems(token, newProblems => {

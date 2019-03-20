@@ -7,10 +7,7 @@ import { AuthSetSignedOut, setSignedOutReducer } from './AuthSetSignedOut'
 import { AuthSetUser, setUserReducer } from './AuthSetUser'
 import { AuthState, initialState } from './AuthState'
 
-export const authReducer: Reducer<AuthState> = (
-  state: AuthState = initialState,
-  action
-): AuthState => {
+export const authReducer: Reducer<AuthState> = (state: AuthState = initialState, action): AuthState => {
   switch (action.type) {
     case AuthActionType.SetSignedIn:
       return setSignedInReducer(state, action as AuthSetSignedIn)

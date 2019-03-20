@@ -15,12 +15,7 @@ export interface SettingSetProxy {
   password: string
 }
 
-export function setProxy(
-  host: string,
-  port: string | number,
-  username?: string,
-  password?: string
-): SettingSetProxy {
+export function setProxy(host: string, port: string | number, username?: string, password?: string): SettingSetProxy {
   return {
     type: SettingActionType.SetProxy,
     host,

@@ -10,11 +10,7 @@ export const options = {
 }
 
 export const logger = createLogger({
-  format: format.combine(
-    format.timestamp(),
-    format.splat(),
-    format.prettyPrint()
-  ),
+  format: format.combine(format.timestamp(), format.splat(), format.prettyPrint()),
   transports: [new transports.Console(options.console)],
   exitOnError: false,
 })

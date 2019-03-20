@@ -42,7 +42,4 @@ export const adminPermissions = [
   UserPermission.ProfilesRead,
 ]
 
-export const contestantPermissions = [
-  UserPermission.AnnouncementRead,
-  UserPermission.ProblemsRead,
-]
+export const contestantPermissions = [UserPermission.AnnouncementRead, UserPermission.ProblemsRead]

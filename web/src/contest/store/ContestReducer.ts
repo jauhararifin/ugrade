@@ -1,42 +1,18 @@
 import { Reducer } from 'redux'
 import { ContestActionType } from './ContestAction'
-import {
-  ContestDeleteProblems,
-  deleteProblemsReducer,
-} from './ContestDeleteProblems'
-import {
-  ContestReadAnnouncements,
-  readAnnouncementsReducer,
-} from './ContestReadAnnouncements'
-import {
-  ContestSetAnnouncements,
-  setAnnouncementsReducer,
-} from './ContestSetAnnouncements'
-import {
-  ContestSetClarifications,
-  setClarrificationsReducer,
-} from './ContestSetClarrifications'
+import { ContestDeleteProblems, deleteProblemsReducer } from './ContestDeleteProblems'
+import { ContestReadAnnouncements, readAnnouncementsReducer } from './ContestReadAnnouncements'
+import { ContestSetAnnouncements, setAnnouncementsReducer } from './ContestSetAnnouncements'
+import { ContestSetClarifications, setClarrificationsReducer } from './ContestSetClarrifications'
 import { ContestSetInfo, setInfoReducer } from './ContestSetInfo'
 import { ContestSetProblems, setProblemsReducer } from './ContestSetProblems'
-import {
-  ContestSetRegistered,
-  setRegisteredReducer,
-} from './ContestSetRegistered'
-import {
-  ContestSetScoreboard,
-  setScoreboardReducer,
-} from './ContestSetScoreboard'
-import {
-  ContestSetSubmissions,
-  setSubmissionReducer,
-} from './ContestSetSubmissions'
+import { ContestSetRegistered, setRegisteredReducer } from './ContestSetRegistered'
+import { ContestSetScoreboard, setScoreboardReducer } from './ContestSetScoreboard'
+import { ContestSetSubmissions, setSubmissionReducer } from './ContestSetSubmissions'
 import { ContestState, initialValue } from './ContestState'
 import { ContestUnsetContest, unsetContestReducer } from './ContestUnsetContest'
 
-export const contestReducer: Reducer<ContestState> = (
-  state: ContestState = initialValue,
-  action
-): ContestState => {
+export const contestReducer: Reducer<ContestState> = (state: ContestState = initialValue, action): ContestState => {
   switch (action.type) {
     case ContestActionType.SetInfo:
       return setInfoReducer(state, action as ContestSetInfo)
@@ -60,10 +36,7 @@ export const contestReducer: Reducer<ContestState> = (
       return readAnnouncementsReducer(state, action as ContestReadAnnouncements)
 
     case ContestActionType.SetClarifications:
-      return setClarrificationsReducer(
-        state,
-        action as ContestSetClarifications
-      )
+      return setClarrificationsReducer(state, action as ContestSetClarifications)
 
     case ContestActionType.SetSubmissions:
       return setSubmissionReducer(state, action as ContestSetSubmissions)

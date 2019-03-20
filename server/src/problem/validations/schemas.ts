@@ -6,10 +6,7 @@ export const shortIdSchema = yup
   .label('Problem ID')
   .min(4)
   .max(255)
-  .matches(
-    /[a-zA-Z0-9\-]+/,
-    'Must contain alpha numeric or dash character only'
-  )
+  .matches(/[a-zA-Z0-9\-]+/, 'Must contain alpha numeric or dash character only')
 
 export const nameSchema = yup
   .string()
@@ -22,9 +19,7 @@ export const statementSchema = yup
   .max(4 * 1024)
   .label('Problem Statement')
 
-export const typeSchema = yup
-  .string()
-  .oneOf([ProblemType.Batch, ProblemType.Interactive])
+export const typeSchema = yup.string().oneOf([ProblemType.Batch, ProblemType.Interactive])
 
 export const disabledSchema = yup.bool()
 

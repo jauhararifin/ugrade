@@ -5,11 +5,7 @@ import { AuthService } from 'ugrade/services/auth'
 import { simplePublisher } from 'ugrade/utils'
 import { Clarification } from '../Clarification'
 import { ClarificationEntry } from '../ClarificationEntry'
-import {
-  ClarificationsCallback,
-  ClarificationService,
-  ClarificationsUnsubscribe,
-} from '../ClarificationService'
+import { ClarificationsCallback, ClarificationService, ClarificationsUnsubscribe } from '../ClarificationService'
 import { NoSuchClarificationError } from '../errors'
 import { ClarificationValidationError } from '../errors/ClarificationValidationError'
 import { clarificationMap } from './fixtures'
@@ -33,19 +29,11 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.cloneDeep(this.clarificationsMap[contestId])
   }
 
-  subscribeClarifications(
-    token: string,
-    callback: ClarificationsCallback
-  ): ClarificationsUnsubscribe {
+  subscribeClarifications(token: string, callback: ClarificationsCallback): ClarificationsUnsubscribe {
     return simplePublisher(this.getClarifications.bind(this, token), callback)
   }
 
-  async createClarification(
-    token: string,
-    title: string,
-    subject: string,
-    content: string
-  ): Promise<Clarification> {
+  async createClarification(token: string, title: string, subject: string, content: string): Promise<Clarification> {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
     if (title === 'Forbidden') {
@@ -74,11 +62,7 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.cloneDeep(clarification)
   }
 
-  async createClarificationEntry(
-    token: string,
-    clarificationId: string,
-    content: string
-  ): Promise<Clarification> {
+  async createClarificationEntry(token: string, clarificationId: string, content: string): Promise<Clarification> {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
 
@@ -105,18 +89,11 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.cloneDeep(clarification)
   }
 
-  async readClarificationEntries(
-    token: string,
-    clarificationId: string,
-    entryIds: string[]
-  ): Promise<Clarification> {
+  async readClarificationEntries(token: string, clarificationId: string, entryIds: string[]): Promise<Clarification> {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
 
-    const clarification = lodash.find(
-      this.clarificationsMap[contestId],
-      c => c.id === clarificationId
-    )
+    const clarification = lodash.find(this.clarificationsMap[contestId], c => c.id === clarificationId)
 
     if (!clarification) {
       throw new NoSuchClarificationError('No Such Clarification')

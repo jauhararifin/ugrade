@@ -8,11 +8,7 @@ export function updateUserPermissionsAction(
 ): AppThunkAction<UserPermission[]> {
   return async (dispatch, getState, { authService }) => {
     const token = getState().auth.token
-    const newPermissions = await authService.setUserPermissions(
-      token,
-      userId,
-      permissions
-    )
+    const newPermissions = await authService.setUserPermissions(token, userId, permissions)
     const stillRelevant = getState().auth.token === token
     if (stillRelevant) {
       const me = getState().auth.me
@@ -26,6 +22,5 @@ export function updateUserPermissionsAction(
 
 export function useUpdateUserPermissions() {
   const dispatch = useAppThunkDispatch()
-  return (userId: string, permissions: UserPermission[]) =>
-    dispatch(updateUserPermissionsAction(userId, permissions))
+  return (userId: string, permissions: UserPermission[]) => dispatch(updateUserPermissionsAction(userId, permissions))
 }

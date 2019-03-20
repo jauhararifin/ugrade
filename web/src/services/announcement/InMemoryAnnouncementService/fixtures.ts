@@ -39,11 +39,7 @@ export const AnnouncementExample3: Announcement = {
   read: false,
 }
 
-export const annoucements: Announcement[] = [
-  AnnouncementExample1,
-  AnnouncementExample2,
-  AnnouncementExample3,
-]
+export const annoucements: Announcement[] = [AnnouncementExample1, AnnouncementExample2, AnnouncementExample3]
 
 export const announcementsMap = {
   [ContestArkav4Qual.id]: lodash.cloneDeep(annoucements),

@@ -4,11 +4,7 @@ import { globalErrorCatcher } from 'ugrade/common'
 import { AuthService } from 'ugrade/services/auth'
 import { simplePublisher } from 'ugrade/utils'
 import { Announcement } from '../Announcement'
-import {
-  AnnouncementsCallback,
-  AnnouncementService,
-  AnnouncementsUnsubscribe,
-} from '../AnnouncementService'
+import { AnnouncementsCallback, AnnouncementService, AnnouncementsUnsubscribe } from '../AnnouncementService'
 import { AnnouncementValidationError } from '../errors'
 import { announcementsMap } from './fixtures'
 
@@ -30,11 +26,7 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     return lodash.cloneDeep(this.announcementMap[contestId])
   }
 
-  async createAnnouncement(
-    token: string,
-    title: string,
-    content: string
-  ): Promise<Announcement> {
+  async createAnnouncement(token: string, title: string, content: string): Promise<Announcement> {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
     if (title === 'Forbidden') {
@@ -52,24 +44,14 @@ export class InMemoryAnnouncementService implements AnnouncementService {
     return lodash.cloneDeep(newAnnouncement)
   }
 
-  subscribeAnnouncements(
-    token: string,
-    callback: AnnouncementsCallback
-  ): AnnouncementsUnsubscribe {
-    return simplePublisher(
-      this.getAnnouncements.bind(this, token),
-      callback,
-      lodash.isEqual,
-      lodash.difference
-    )
+  subscribeAnnouncements(token: string, callback: AnnouncementsCallback): AnnouncementsUnsubscribe {
+    return simplePublisher(this.getAnnouncements.bind(this, token), callback, lodash.isEqual, lodash.difference)
   }
 
   async readAnnouncements(token: string, ids: string[]): Promise<void> {
     const me = await this.authService.getMe(token)
     const contestId = me.contestId
-    this.announcementMap[contestId]
-      .filter(i => ids.includes(i.id))
-      .forEach(val => (val.read = true))
+    this.announcementMap[contestId].filter(i => ids.includes(i.id)).forEach(val => (val.read = true))
   }
 
   private async handleSubscribe() {

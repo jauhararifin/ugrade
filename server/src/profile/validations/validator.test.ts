@@ -8,9 +8,7 @@ describe('test profile service validator', () => {
     ['QWERTYUIOPASDFGHJKLZXCVBNMQWERTY', 'QWERTYUIOPLKJHGFDSAZXCVBNMPOIUQH'],
     ['IOPAaskKa870ajLau80aALaJAD70123L', 'KansfiAKCMja91930Jd1jD19283JLASD'],
   ])('getUserProfile %j', async (token, userId) => {
-    await expect(
-      profileServiceValidator.getUserProfile(token, userId)
-    ).resolves.toBeDefined()
+    await expect(profileServiceValidator.getUserProfile(token, userId)).resolves.toBeDefined()
   })
 
   test.each([
@@ -36,9 +34,7 @@ describe('test profile service validator', () => {
     ['IOPAaskKa870ajLau80aALaJAD70123L', 'a'.repeat(255)],
     ['KansfiAKCMja91930Jd1jD19283JLASD', 'a'],
   ])('setMyProfile %j', async (token, address) => {
-    await expect(
-      profileServiceValidator.setMyProfile(token, undefined, undefined, address)
-    ).resolves.toBeDefined()
+    await expect(profileServiceValidator.setMyProfile(token, undefined, undefined, address)).resolves.toBeDefined()
   })
 
   test.each([
@@ -55,12 +51,7 @@ describe('test profile service validator', () => {
     ['IOPAaskKa870ajLau80aALaJAD70123L.', '-'],
     ['KansfiAKCMja91930Jd1jD19283JLASD', '-'.repeat(256)],
   ])('setMyProfile %j should fail', async (token, address) => {
-    const result = profileServiceValidator.setMyProfile(
-      token,
-      undefined,
-      undefined,
-      address
-    )
+    const result = profileServiceValidator.setMyProfile(token, undefined, undefined, address)
     await expect(result).rejects.toBeInstanceOf(ValidationError)
     await expect(result).rejects.toHaveProperty('errors')
   })

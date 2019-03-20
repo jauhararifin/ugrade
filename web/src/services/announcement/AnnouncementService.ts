@@ -19,11 +19,7 @@ export interface AnnouncementService {
    * @param content Announcement content
    * @return New announcement that created
    */
-  createAnnouncement(
-    token: string,
-    title: string,
-    content: string
-  ): Promise<Announcement>
+  createAnnouncement(token: string, title: string, content: string): Promise<Announcement>
 
   /**
    * Subscibe to announcements
@@ -31,10 +27,7 @@ export interface AnnouncementService {
    * @param callback Function that called when there is change in announcements
    * @returns Function to unsubscribe
    */
-  subscribeAnnouncements(
-    token: string,
-    callback: AnnouncementsCallback
-  ): AnnouncementsUnsubscribe
+  subscribeAnnouncements(token: string, callback: AnnouncementsCallback): AnnouncementsUnsubscribe
 
   /**
    * Read announcements

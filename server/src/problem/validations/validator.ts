@@ -23,11 +23,7 @@ export const problemServiceValidator = {
       })
       .validate({ token, contestId }),
 
-  getContestProblemById: (
-    token: string,
-    contestId: string,
-    problemId: string
-  ) =>
+  getContestProblemById: (token: string, contestId: string, problemId: string) =>
     yup
       .object()
       .shape({
