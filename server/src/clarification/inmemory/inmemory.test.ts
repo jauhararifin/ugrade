@@ -1,10 +1,10 @@
-import { Permission, ForbiddenAction } from 'ugrade/auth'
+import { ForbiddenAction, Permission } from 'ugrade/auth'
 import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked'
 import { ValidationError } from 'yup'
 import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
-import { InMemoryClarificationService } from './inmemory'
 import { NoSuchClarificationEntry } from '../NoSuchClarificationEntry'
+import { InMemoryClarificationService } from './inmemory'
 
 describe('test in memory clarification service', () => {
   const getService = (

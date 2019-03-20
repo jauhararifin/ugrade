@@ -1,11 +1,11 @@
 import lodash from 'lodash'
-import { AuthService, Permission, ForbiddenAction } from 'ugrade/auth'
+import { AuthService, ForbiddenAction, Permission } from 'ugrade/auth'
+import { genUUID } from 'ugrade/uuid'
 import { Clarification, ClarificationEntry } from '../clarification'
 import { NoSuchClarification } from '../NoSuchClarification'
+import { NoSuchClarificationEntry } from '../NoSuchClarificationEntry'
 import { ClarificationService } from '../service'
 import { clarificationServiceValidator as validator } from '../validation'
-import { genUUID } from 'ugrade/uuid'
-import { NoSuchClarificationEntry } from '../NoSuchClarificationEntry'
 
 export class InMemoryClarificationService implements ClarificationService {
   private authService: AuthService
@@ -47,8 +47,9 @@ export class InMemoryClarificationService implements ClarificationService {
     // throw NoSuchClarification if clarification in different contest
     const clarification = this.idClarifications[clarificationId]
     const me = await this.authService.getMe(token)
-    if (me.contestId !== clarification.contestId)
+    if (me.contestId !== clarification.contestId) {
       throw new NoSuchClarification()
+    }
 
     // if has no permission to read all clarification
     // and not own target clarification
@@ -60,15 +61,6 @@ export class InMemoryClarificationService implements ClarificationService {
     }
 
     return lodash.cloneDeep(clarification)
-  }
-
-  private readWrapper(
-    userId: string
-  ): (entry: ClarificationEntry) => ClarificationEntry {
-    return entry => ({
-      ...entry,
-      read: !!this.entryRead[`${userId}:${entry.id}`],
-    })
   }
 
   async getClarificationEntries(
@@ -112,8 +104,9 @@ export class InMemoryClarificationService implements ClarificationService {
     await validator.createClarification(token, title, subject, content)
 
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ClarificationsCreate))
+    if (!me.permissions.includes(Permission.ClarificationsCreate)) {
       throw new ForbiddenAction()
+    }
 
     const [clarifId, entryId] = [genUUID(), genUUID()]
     const newEntry: ClarificationEntry = {
@@ -151,8 +144,9 @@ export class InMemoryClarificationService implements ClarificationService {
     await validator.replyClarification(token, clarificationId, content)
 
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ClarificationsCreate))
+    if (!me.permissions.includes(Permission.ClarificationsCreate)) {
       throw new ForbiddenAction()
+    }
 
     const clarification = await this.getClarificationById(
       token,
@@ -181,8 +175,9 @@ export class InMemoryClarificationService implements ClarificationService {
   ): Promise<ClarificationEntry> {
     await validator.readClarificationEntry(token, clarificationEntryId)
 
-    if (!this.idEntries[clarificationEntryId])
+    if (!this.idEntries[clarificationEntryId]) {
       throw new NoSuchClarificationEntry()
+    }
     const entry = this.idEntries[clarificationEntryId]
     await this.getClarificationById(token, entry.clarificationId)
     const me = await this.authService.getMe(token)
@@ -191,6 +186,15 @@ export class InMemoryClarificationService implements ClarificationService {
     return lodash.clone({
       ...entry,
       read: true,
+    })
+  }
+
+  private readWrapper(
+    userId: string
+  ): (entry: ClarificationEntry) => ClarificationEntry {
+    return entry => ({
+      ...entry,
+      read: !!this.entryRead[`${userId}:${entry.id}`],
     })
   }
 }
