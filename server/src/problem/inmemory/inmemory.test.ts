@@ -1,4 +1,4 @@
-import { ForbiddenAction, Permission } from 'ugrade/auth'
+import { ForbiddenAction, NoSuchUser, Permission } from 'ugrade/auth'
 import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked'
 import { NoSuchContest } from 'ugrade/contest'
 import { mockContestService, MockedContestService } from 'ugrade/contest/mocked'
@@ -329,6 +329,74 @@ describe('test in memory problem service', () => {
       authService.getMe.mockResolvedValue({ contestId, id: 'uid1', permissions: [Permission.ProblemsRead] })
       const result2 = await service.getContestProblemById(token, contestId, result.id)
       expect(result2).toEqual(result)
+    })
+  })
+
+  describe('test deleteProblem', () => {
+    test('deleteProblem validation', async () => {
+      const [service, _] = getService()
+      await expect(service.deleteProblem('ivalidtoken', 'invalidpid')).rejects.toBeInstanceOf(ValidationError)
+      await service.deleteProblem(token, contestId).catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    })
+
+    test('deleteProblem should throw ForbiddenAction when user doesnt has ProblemsDelete permission', async () => {
+      const [service, authService] = getService()
+      authService.getMe.mockResolvedValue({ permissions: [] })
+      await expect(service.deleteProblem(token, problemId)).rejects.toBeInstanceOf(ForbiddenAction)
+    })
+
+    test('deleteProblem should throw NoSuchContest when no contest is found', async () => {
+      const [service, authService, contestService] = getService()
+      authService.getMe.mockResolvedValue({
+        contestId: 'somefakecontestidthat32bytelong0',
+        permissions: [Permission.ProblemsRead, Permission.ProblemsDelete],
+      })
+      contestService.getContestById.mockRejectedValue(new NoSuchContest())
+      await expect(service.deleteProblem(token, problemId)).rejects.toBeInstanceOf(NoSuchContest)
+    })
+
+    test('deleteProblem should throw NoSuchProblem when contestId is belong to different contest', async () => {
+      const [service, authService, contestService] = getService()
+      authService.getMe.mockResolvedValue({
+        contestId: 'somefakecontestidthat32bytelong0',
+        permissions: [Permission.ProblemsRead, Permission.ProblemsDelete],
+      })
+      contestService.getContestById.mockResolvedValue({ id: 'someotherid' })
+      await expect(service.deleteProblem(token, problemId)).rejects.toBeInstanceOf(NoSuchProblem)
+    })
+
+    test('deleteProblem should throw NoSuchProblem when user doesnt have ProblemsReadDisabled permission', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId, disabled: true },
+      ])
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead, Permission.ProblemsDelete],
+        contestId,
+      })
+      contestService.getContestById.mockResolvedValue({ id: contestId })
+      await expect(service.deleteProblem(token, problemId)).rejects.toBeInstanceOf(NoSuchProblem)
+    })
+
+    test('deleteProblem should resolve', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId, disabled: false },
+      ])
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead, Permission.ProblemsDelete],
+        contestId,
+      })
+      contestService.getContestById.mockResolvedValue({ id: contestId })
+      const deleteResult = await service.deleteProblem(token, problemId)
+      expect(deleteResult).toEqual({
+        ...problemTemplate,
+        id: problemId,
+        contestId,
+        disabled: false,
+      })
+
+      await expect(service.getContestProblemById(token, contestId, deleteResult.id)).rejects.toBeInstanceOf(
+        NoSuchProblem
+      )
     })
   })
 })

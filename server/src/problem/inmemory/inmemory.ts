@@ -249,6 +249,6 @@ export class InMemoryProblemService implements ProblemService {
     }
     this.contestShortId[`${problem.contestId}:${problem.shortId}`] = false
 
-    throw new Error('not yet implemented')
+    return lodash.cloneDeep(problem)
   }
 }
