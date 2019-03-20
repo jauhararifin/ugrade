@@ -45,7 +45,7 @@ export class InMemorySubmissionService implements SubmissionService {
     // filter based on Permission.SubmissionsRead
     if (!this.contestSubmissions[contest.id]) this.contestSubmissions[contest.id] = []
     const canReadAll = me.permissions.includes(Permission.SubmissionsRead)
-    const result = this.contestSubmissions[contest.id].filter(s => s.id === me.id || canReadAll)
+    const result = this.contestSubmissions[contest.id].filter(s => s.issuerId === me.id || canReadAll)
 
     return lodash.cloneDeep(result)
   }
