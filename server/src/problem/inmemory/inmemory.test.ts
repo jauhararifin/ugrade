@@ -244,4 +244,91 @@ describe('test in memory problem service', () => {
       expect(result2).toEqual(result)
     })
   })
+
+  describe('test updateProblem', () => {
+    type argsT = [string, string, string, string, ProblemType, boolean, number, number, number, number, number]
+    const argsTemplate: argsT = [
+      token,
+      problemId,
+      'name',
+      'stmt',
+      ProblemType.Batch,
+      true,
+      7,
+      1000,
+      1.1,
+      16 * 1024 * 1024,
+      2,
+    ]
+
+    test('updateProblem validation', async () => {
+      const [service, _] = getService()
+      await expect(
+        service.updateProblem('ivalidtoken', 'sid', '', '', ProblemType.Batch, true, 7, 1, 1, 1, 1)
+      ).rejects.toBeInstanceOf(ValidationError)
+
+      await service.updateProblem(...argsTemplate).catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    })
+
+    test('updateProblem should throw ForbiddenAction when user doesnt has ProblemsUpdate permission', async () => {
+      const [service, authService] = getService()
+      authService.getMe.mockResolvedValue({ permissions: [] })
+      await expect(service.updateProblem(...argsTemplate)).rejects.toBeInstanceOf(ForbiddenAction)
+    })
+
+    test('updateProblem should throw NoSuchContest when no contest is found', async () => {
+      const [service, authService, contestService] = getService()
+      authService.getMe.mockResolvedValue({
+        contestId,
+        permissions: [Permission.ProblemsRead, Permission.ProblemsUpdate],
+      })
+      contestService.getContestById.mockRejectedValue(new NoSuchContest())
+      await expect(service.updateProblem(...argsTemplate)).rejects.toBeInstanceOf(NoSuchContest)
+    })
+
+    test('updateProblem should throw NoSuchProblem when problem belong to different contest', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId: 'some-other-contest', disabled: false },
+      ])
+      authService.getMe.mockResolvedValue({
+        contestId,
+        permissions: [Permission.ProblemsRead, Permission.ProblemsUpdate],
+      })
+      contestService.getContestById.mockResolvedValue({ id: 'someotherid' })
+      await expect(service.updateProblem(...argsTemplate)).rejects.toBeInstanceOf(NoSuchProblem)
+    })
+
+    test('updateProblem should throw NoSuchProblem when user doesnt have ProblemsReadDisabled permission', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId, disabled: true },
+      ])
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead, Permission.ProblemsUpdate],
+        contestId,
+      })
+      contestService.getContestById.mockResolvedValue({ id: contestId })
+      await expect(service.updateProblem(...argsTemplate)).rejects.toBeInstanceOf(NoSuchProblem)
+    })
+
+    test('updateProblem should resolved', async () => {
+      const [service, authService] = getService([
+        { ...problemTemplate, id: problemId, issuerId: 'uuu', contestId, shortId: 'some-short-id-1', disabled: false },
+      ])
+      authService.getMe.mockResolvedValue({
+        contestId,
+        permissions: [Permission.ProblemsRead, Permission.ProblemsUpdate],
+      })
+      const args = [...argsTemplate] as argsT
+      args[2] = 'new name'
+      args[5] = false // enable
+      const result = await service.updateProblem(...args)
+      expect(result.name).toEqual(args[2])
+      expect(result.contestId).toEqual(contestId)
+      expect(result.issuerId).toEqual('uuu')
+
+      authService.getMe.mockResolvedValue({ contestId, id: 'uid1', permissions: [Permission.ProblemsRead] })
+      const result2 = await service.getContestProblemById(token, contestId, result.id)
+      expect(result2).toEqual(result)
+    })
+  })
 })

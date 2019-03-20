@@ -180,7 +180,7 @@ export class InMemoryProblemService implements ProblemService {
 
     // check update permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ProblemsCreate)) {
+    if (!me.permissions.includes(Permission.ProblemsUpdate)) {
       throw new ForbiddenAction()
     }
 
