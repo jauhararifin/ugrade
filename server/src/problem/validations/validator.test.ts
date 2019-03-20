@@ -92,6 +92,7 @@ describe('test problem service validator', () => {
     test.each([
       [
         '-n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -102,18 +103,8 @@ describe('test problem service validator', () => {
         1,
       ],
       [
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
-        '',
-        'statement',
-        ProblemType.Batch,
-        true,
-        1000,
-        0.2,
-        16 * 1024 * 1024,
-        1,
-      ],
-      [
-        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        '-n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'a'.repeat(256),
         'statement',
         ProblemType.Batch,
@@ -125,6 +116,43 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
+        '',
+        'statement',
+        ProblemType.Batch,
+        true,
+        1000,
+        0.2,
+        16 * 1024 * 1024,
+        1,
+      ],
+      [
+        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
+        '',
+        'statement',
+        ProblemType.Batch,
+        true,
+        1000,
+        0.2,
+        16 * 1024 * 1024,
+        1,
+      ],
+      [
+        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
+        'a'.repeat(256),
+        'statement',
+        ProblemType.Batch,
+        true,
+        1000,
+        0.2,
+        16 * 1024 * 1024,
+        1,
+      ],
+      [
+        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         '',
         ProblemType.Batch,
@@ -136,6 +164,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'a'.repeat(4 * 1024 + 1),
         ProblemType.Batch,
@@ -147,6 +176,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -158,6 +188,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -169,6 +200,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -180,6 +212,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -191,6 +224,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -202,6 +236,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -213,6 +248,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -224,6 +260,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -235,6 +272,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -248,6 +286,7 @@ describe('test problem service validator', () => {
       'createProblem should fail',
       async (
         token,
+        shortId,
         name,
         statement,
         type,
@@ -260,6 +299,7 @@ describe('test problem service validator', () => {
         await expect(
           problemServiceValidator.createProblem(
             token as string,
+            shortId as string,
             name as string,
             statement as string,
             type as ProblemType,
@@ -276,6 +316,7 @@ describe('test problem service validator', () => {
     test.each([
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -288,6 +329,7 @@ describe('test problem service validator', () => {
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
         'aaaa',
+        'name',
         'statement',
         ProblemType.Batch,
         true,
@@ -299,6 +341,7 @@ describe('test problem service validator', () => {
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
         'a'.repeat(255),
+        'name',
         'statement',
         ProblemType.Batch,
         true,
@@ -309,6 +352,31 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
+        'aaaa',
+        'statement',
+        ProblemType.Batch,
+        true,
+        1000,
+        0.2,
+        16 * 1024 * 1024,
+        1,
+      ],
+      [
+        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
+        'a'.repeat(255),
+        'statement',
+        ProblemType.Batch,
+        true,
+        1000,
+        0.2,
+        16 * 1024 * 1024,
+        1,
+      ],
+      [
+        'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         's',
         ProblemType.Batch,
@@ -320,6 +388,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         's'.repeat(255),
         ProblemType.Batch,
@@ -331,6 +400,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -342,6 +412,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -353,6 +424,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -364,6 +436,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -375,6 +448,7 @@ describe('test problem service validator', () => {
       ],
       [
         'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ',
+        'short-id-test',
         'name',
         'statement',
         ProblemType.Batch,
@@ -388,6 +462,7 @@ describe('test problem service validator', () => {
       'createProblem should resolved',
       async (
         token,
+        shortId,
         name,
         statement,
         type,
@@ -400,6 +475,7 @@ describe('test problem service validator', () => {
         await expect(
           problemServiceValidator.createProblem(
             token as string,
+            shortId as string,
             name as string,
             statement as string,
             type as ProblemType,

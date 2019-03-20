@@ -9,6 +9,7 @@ export interface ProblemService {
   ): Promise<Problem>
   createProblem(
     token: string,
+    shortId: string,
     name: string,
     statement: string,
     type: ProblemType,

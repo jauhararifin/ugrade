@@ -9,6 +9,7 @@ import {
   toleranceSchema,
   memoryLimitSchema,
   outputLimitSchema,
+  shortIdSchema,
 } from './schemas'
 import { ProblemType } from '../problem'
 
@@ -38,6 +39,7 @@ export const problemServiceValidator = {
 
   createProblem: (
     token: string,
+    shortId: string,
     name: string,
     statement: string,
     type: ProblemType,
@@ -51,6 +53,7 @@ export const problemServiceValidator = {
       .object()
       .shape({
         token: tokenSchema.required(),
+        shortId: shortIdSchema.required(),
         name: nameSchema.required(),
         statement: statementSchema.required(),
         type: typeSchema.required(),
@@ -62,6 +65,7 @@ export const problemServiceValidator = {
       })
       .validate({
         token,
+        shortId,
         name,
         statement,
         type,
