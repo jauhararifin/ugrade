@@ -7,6 +7,7 @@ import { NoSuchProblem } from '../NoSuchProblem'
 import { Problem, ProblemType } from '../problem'
 import { ProblemService } from '../service'
 import { problemServiceValidator } from '../validations'
+import { problems as fixture } from './fixture'
 
 export class InMemoryProblemService implements ProblemService {
   private authService: AuthService
@@ -16,7 +17,7 @@ export class InMemoryProblemService implements ProblemService {
   private contestProblem: { [contestId: string]: Problem[] }
   private contestShortId: { [key: string]: boolean }
 
-  constructor(authService: AuthService, contestService: ContestService, problems: Problem[] = []) {
+  constructor(authService: AuthService, contestService: ContestService, problems: Problem[] = fixture) {
     this.authService = authService
     this.contestService = contestService
     this.problems = lodash.cloneDeep(problems)
