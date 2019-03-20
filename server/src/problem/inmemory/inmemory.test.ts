@@ -3,6 +3,7 @@ import { mockAuthService, MockedAuthService } from 'ugrade/auth/mocked'
 import { NoSuchContest } from 'ugrade/contest'
 import { mockContestService, MockedContestService } from 'ugrade/contest/mocked'
 import { ValidationError } from 'yup'
+import { NoSuchProblem } from '../NoSuchProblem'
 import { Problem, ProblemType } from '../problem'
 import { InMemoryProblemService } from './inmemory'
 
@@ -22,6 +23,7 @@ describe('test in memory problem service', () => {
 
   const token = 'kasd892AS09dLSd1829SD0123jrH51Lp'
   const contestId = 'cuxXeoFFMfiAwMBUNeNsfujXFqKZBKw8'
+  const problemId = '93VMyb2LzNihs70qVla6xYF3JOgkixHT'
   const problemTemplate: Problem = {
     id: '',
     contestId: '',
@@ -124,6 +126,101 @@ describe('test in memory problem service', () => {
         'id5',
         'id6',
       ])
+    })
+  })
+
+  describe('test getContestProblemById', () => {
+    test('getContestProblemById validation', async () => {
+      const [service, _] = getService()
+      await expect(
+        service.getContestProblemById('ivalidtoken', 'invalidcid', 'invalidpid')
+      ).rejects.toBeInstanceOf(ValidationError)
+
+      await service
+        .getContestProblemById(token, contestId, problemId)
+        .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    })
+
+    test('getContestProblemById should throw ForbiddenAction when user doesnt has ProblemsRead permission', async () => {
+      const [service, authService] = getService()
+      authService.getMe.mockResolvedValue({ permissions: [] })
+      await expect(
+        service.getContestProblemById(token, contestId, problemId)
+      ).rejects.toBeInstanceOf(ForbiddenAction)
+    })
+
+    test('getContestProblemById should throw NoSuchContest when no contest is found', async () => {
+      const [service, authService, contestService] = getService()
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead],
+      })
+      contestService.getContestById.mockRejectedValue(new NoSuchContest())
+      await expect(
+        service.getContestProblemById(token, contestId, problemId)
+      ).rejects.toBeInstanceOf(NoSuchContest)
+    })
+
+    test('getContestProblemById should throw ForbiddenError when contestId is belong to different contest', async () => {
+      const [service, authService, contestService] = getService()
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead],
+      })
+      contestService.getContestById.mockResolvedValue({ id: 'someotherid' })
+      await expect(
+        service.getContestProblemById(token, contestId, problemId)
+      ).rejects.toBeInstanceOf(ForbiddenAction)
+    })
+
+    test('getContestProblemById should throw NoSuchProblem when user doesnt have ProblemsReadDisabled permission', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId, disabled: true },
+      ])
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead],
+        contestId,
+      })
+      contestService.getContestById.mockResolvedValue({ id: contestId })
+      await expect(
+        service.getContestProblemById(token, contestId, problemId)
+      ).rejects.toBeInstanceOf(NoSuchProblem)
+    })
+
+    test('getContestProblemById should returns disabled problem when user have ProblemsReadDisabled permission', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId, disabled: true },
+      ])
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead, Permission.ProblemsReadDisabled],
+        contestId,
+      })
+      contestService.getContestById.mockResolvedValue({ id: contestId })
+      await expect(
+        service.getContestProblemById(token, contestId, problemId)
+      ).resolves.toEqual({
+        ...problemTemplate,
+        id: problemId,
+        contestId,
+        disabled: true,
+      })
+    })
+
+    test('getContestProblemById should resolve', async () => {
+      const [service, authService, contestService] = getService([
+        { ...problemTemplate, id: problemId, contestId, disabled: false },
+      ])
+      authService.getMe.mockResolvedValue({
+        permissions: [Permission.ProblemsRead],
+        contestId,
+      })
+      contestService.getContestById.mockResolvedValue({ id: contestId })
+      await expect(
+        service.getContestProblemById(token, contestId, problemId)
+      ).resolves.toEqual({
+        ...problemTemplate,
+        id: problemId,
+        contestId,
+        disabled: false,
+      })
     })
   })
 })
