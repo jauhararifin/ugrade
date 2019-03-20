@@ -1,6 +1,7 @@
 import { UserTest1, UserTest2, UserTest3, UserTest4 } from 'ugrade/auth/inmemory'
 import { ContestArkav4Final, ContestArkav4Qual, ContestArkav5Final, ContestArkav5Qual } from 'ugrade/contest/inmemory'
 import { Problem, ProblemType } from '../problem'
+import lodash from 'lodash'
 
 export const problem1: Problem = {
   id: '00000000000000000000000000000001',
@@ -257,7 +258,7 @@ export const problem14: Problem = {
 const p1 = [problem1, problem2, problem3, problem4, problem5, problem6]
 const p2 = [problem7, problem8, problem9, problem10, problem11, problem12, problem13, problem14]
 export const problems: Problem[] = [
-  ...p1.flatMap(p => [
+  ...lodash.flatMap(p1, p => [
     {
       ...p,
       issuerId: UserTest1.id,
@@ -269,7 +270,7 @@ export const problems: Problem[] = [
       contestId: ContestArkav5Qual.id,
     },
   ]),
-  ...p2.flatMap(p => [
+  ...lodash.flatMap(p2, p => [
     {
       ...p,
       issuerId: UserTest2.id,
