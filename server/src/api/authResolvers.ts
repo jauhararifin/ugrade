@@ -1,8 +1,8 @@
+import { Announcement } from 'ugrade/announcement'
 import { AuthService, Permission, User } from 'ugrade/auth'
+import { Contest } from 'ugrade/contest'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
-import { Contest } from 'ugrade/contest'
-import { Announcement } from 'ugrade/announcement'
 
 export type SigninResolver = AppFieldResolver<
   any,

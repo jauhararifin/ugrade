@@ -3,16 +3,16 @@ import dotenv from 'dotenv'
 import express from 'express'
 import morgan from 'morgan'
 import { AddressInfo } from 'net'
+import { InMemoryAnnouncementService } from './announcement/inmemory'
 import { createResolvers } from './api'
 import { InMemoryAuthService } from './auth/inmemory'
+import { InMemoryClarificationService } from './clarification/inmemory/inmemory'
 import { InMemoryContestService } from './contest/inmemory'
 import { AppContext } from './context'
 import { InMemoryLanguageService } from './language/inmemory'
 import { logger } from './logger'
 import { InMemoryProfileService } from './profile/inmemory'
 import { schema } from './schema'
-import { InMemoryAnnouncementService } from './announcement/inmemory'
-import { InMemoryClarificationService } from './clarification/inmemory/inmemory'
 
 dotenv.config()
 

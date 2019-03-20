@@ -1,9 +1,9 @@
 import { ApolloError } from 'apollo-server-core'
 import { AuthError } from 'ugrade/auth'
-import { ValidationError } from 'yup'
 import { ContestError } from 'ugrade/contest'
 import { LanguageError } from 'ugrade/language'
 import { ProfileError } from 'ugrade/profile/ProfileError'
+import { ValidationError } from 'yup'
 
 /**
  * wrap wraps result that returned by ugrade services and convert error to apollo error.

@@ -1,4 +1,4 @@
-import { AuthService, User } from 'ugrade/auth'
+import { User } from 'ugrade/auth'
 import { GenderType, Profile, ShirtSizeType } from 'ugrade/profile/profile'
 import { ProfileService } from 'ugrade/profile/service'
 import { AppFieldResolver } from './resolvers'

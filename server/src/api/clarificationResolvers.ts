@@ -1,7 +1,7 @@
-import { AppFieldResolver } from './resolvers'
+import { AuthService, User } from 'ugrade/auth'
 import { Clarification, ClarificationEntry, ClarificationService } from 'ugrade/clarification'
-import { User, AuthService } from 'ugrade/auth'
 import { Contest, ContestService } from 'ugrade/contest'
+import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
 
 export type CreateClarificationResolver = AppFieldResolver<

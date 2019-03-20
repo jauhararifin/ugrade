@@ -1,7 +1,7 @@
+import { Announcement, AnnouncementService } from 'ugrade/announcement'
+import { Contest } from 'ugrade/contest'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
-import { Contest } from 'ugrade/contest'
-import { Announcement, AnnouncementService } from 'ugrade/announcement'
 
 export type AnnouncementsByContestResolver = AppFieldResolver<Contest, any, Promise<Announcement[]>>
 

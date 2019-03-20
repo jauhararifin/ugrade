@@ -1,8 +1,8 @@
+import { Announcement } from 'ugrade/announcement'
 import { User } from 'ugrade/auth'
 import { Contest, ContestService } from 'ugrade/contest'
 import { AppFieldResolver } from './resolvers'
 import { wrap } from './wrap'
-import { Announcement } from 'ugrade/announcement'
 
 export type ContestByIdResolver = AppFieldResolver<any, { id: string }, Promise<Contest>>
 

@@ -17,7 +17,7 @@ describe('test in memory profile service', () => {
     async (token, uid) => {
       const [service, _] = genService()
       const result = service.getUserProfile(token, uid)
-      expect(result).rejects.toBeInstanceOf(ValidationError)
+      await expect(result).rejects.toBeInstanceOf(ValidationError)
     }
   )
 

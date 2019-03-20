@@ -1,11 +1,19 @@
 import { GraphQLResolveInfo } from 'graphql'
 import { MergeInfo } from 'graphql-tools'
 import { merge } from 'lodash'
+import { AnnouncementService } from 'ugrade/announcement'
 import { AuthService } from 'ugrade/auth'
+import { ClarificationService } from 'ugrade/clarification'
 import { ContestService } from 'ugrade/contest'
 import { AppContext } from 'ugrade/context'
 import { LanguageService } from 'ugrade/language'
 import { ProfileService } from 'ugrade/profile/service'
+import {
+  AnnouncementsByContestResolver,
+  CreateAnnouncementResolver,
+  createAnnouncementResolvers,
+  ReadAnnouncementResolver,
+} from './announcementResolvers'
 import {
   AddUserResolver,
   createAuthResolvers,
@@ -16,21 +24,33 @@ import {
   SetPermissionsResolver,
   SigninResolver,
   SignupResolver,
+  UserByAnnouncementResolver,
   UserByEmailResolver,
   UserByIdResolver,
   UserByTokenResolver,
   UserByUsernameResolver,
-  UserByAnnouncementResolver,
   UsersByContestResolver,
 } from './authResolvers'
 import {
+  ClarificationByEntryResolver,
+  ClarificationsByContestResolver,
+  ContestByClarificationResolver,
+  CreateClarificationResolver,
+  createClarificationResolvers,
+  EntryByClarificationResolver,
+  ReadClarificationEntryResolver,
+  ReplyClarificationResolver,
+  UserByClarificationResolver,
+  UserByEntryResolver,
+} from './clarificationResolvers'
+import {
+  ContestByAnnouncementResolver,
   ContestByIdResolver,
   ContestByShortIdResolver,
+  ContestByUserResolver,
   CreateContestResolver,
   createContestResolvers,
   SetMyContestResolver,
-  ContestByUserResolver,
-  ContestByAnnouncementResolver,
 } from './contestResolvers'
 import {
   AllLanguageResolver,
@@ -40,30 +60,10 @@ import {
 } from './languageResolvers'
 import {
   createProfileResolvers,
+  ProfileByUserResolver,
   SetMyProfileResolver,
   UserProfileResolver,
-  ProfileByUserResolver,
 } from './profileResolvers'
-import {
-  ReadAnnouncementResolver,
-  CreateAnnouncementResolver,
-  AnnouncementsByContestResolver,
-  createAnnouncementResolvers,
-} from './announcementResolvers'
-import { AnnouncementService } from 'ugrade/announcement'
-import {
-  CreateClarificationResolver,
-  ReplyClarificationResolver,
-  ReadClarificationEntryResolver,
-  ClarificationsByContestResolver,
-  UserByClarificationResolver,
-  ContestByClarificationResolver,
-  EntryByClarificationResolver,
-  UserByEntryResolver,
-  ClarificationByEntryResolver,
-  createClarificationResolvers,
-} from './clarificationResolvers'
-import { ClarificationService } from 'ugrade/clarification'
 
 export type AppFieldResolver<TSource = any, TArgs = any, TReturn = any> = (
   source: TSource,
