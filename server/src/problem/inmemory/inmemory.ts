@@ -1,12 +1,12 @@
-import { ProblemService } from '../service'
-import { Problem, ProblemType } from '../problem'
-import { problemServiceValidator } from '../validations'
-import { AuthService, ForbiddenAction, Permission } from 'ugrade/auth'
 import lodash from 'lodash'
+import { AuthService, ForbiddenAction, Permission } from 'ugrade/auth'
 import { ContestService } from 'ugrade/contest'
-import { NoSuchProblem } from '../NoSuchProblem'
 import { genUUID } from 'ugrade/uuid'
 import { AlreadyUsedId } from '../AlreadUsedId'
+import { NoSuchProblem } from '../NoSuchProblem'
+import { Problem, ProblemType } from '../problem'
+import { ProblemService } from '../service'
+import { problemServiceValidator } from '../validations'
 
 export class InMemoryProblemService implements ProblemService {
   private authService: AuthService
@@ -22,14 +22,16 @@ export class InMemoryProblemService implements ProblemService {
     problems: Problem[] = []
   ) {
     this.authService = authService
+    this.contestService = contestService
     this.problems = lodash.cloneDeep(problems)
     this.idProblem = {}
     this.contestProblem = {}
     this.contestShortId = {}
     for (const problem of this.problems) {
       this.idProblem[problem.id] = problem
-      if (!this.contestProblem[problem.contestId])
+      if (!this.contestProblem[problem.contestId]) {
         this.contestProblem[problem.contestId] = []
+      }
       this.contestProblem[problem.contestId].push(problem)
       this.contestShortId[`${problem.contestId}:${problem.shortId}`] = true
     }
@@ -43,8 +45,9 @@ export class InMemoryProblemService implements ProblemService {
 
     // check read permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ProblemsRead))
+    if (!me.permissions.includes(Permission.ProblemsRead)) {
       throw new ForbiddenAction()
+    }
 
     // check contest exists
     await this.contestService.getContestById(contestId)
@@ -56,8 +59,9 @@ export class InMemoryProblemService implements ProblemService {
     let result = this.contestProblem[contestId]
 
     // filter disabled problem
-    if (!me.permissions.includes(Permission.ProblemsReadDisabled))
+    if (!me.permissions.includes(Permission.ProblemsReadDisabled)) {
       result = result.filter(prob => !prob.disabled)
+    }
 
     return lodash.cloneDeep(result)
   }
@@ -75,8 +79,9 @@ export class InMemoryProblemService implements ProblemService {
 
     // check read permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ProblemsRead))
+    if (!me.permissions.includes(Permission.ProblemsRead)) {
       throw new ForbiddenAction()
+    }
 
     // check contest exists
     await this.contestService.getContestById(contestId)
@@ -91,8 +96,9 @@ export class InMemoryProblemService implements ProblemService {
     if (
       !me.permissions.includes(Permission.ProblemsReadDisabled) &&
       problem.disabled
-    )
+    ) {
       throw new NoSuchProblem()
+    }
 
     return lodash.cloneDeep(problem)
   }
@@ -124,16 +130,19 @@ export class InMemoryProblemService implements ProblemService {
 
     // check create permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ProblemsCreate))
+    if (!me.permissions.includes(Permission.ProblemsCreate)) {
       throw new ForbiddenAction()
+    }
 
     // check used short id
-    if (!!this.contestShortId[`${me.contestId}:${shortId}`])
+    if (this.contestShortId[`${me.contestId}:${shortId}`]) {
       throw new AlreadyUsedId()
+    }
 
     // create new problem
-    if (!this.contestProblem[me.contestId])
+    if (!this.contestProblem[me.contestId]) {
       this.contestProblem[me.contestId] = []
+    }
     const newProblem: Problem = {
       id: genUUID(),
       shortId,
@@ -189,8 +198,9 @@ export class InMemoryProblemService implements ProblemService {
 
     // check update permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ProblemsCreate))
+    if (!me.permissions.includes(Permission.ProblemsCreate)) {
       throw new ForbiddenAction()
+    }
 
     // get the problem and check permission
     const problem = await this.getContestProblemById(
@@ -225,11 +235,14 @@ export class InMemoryProblemService implements ProblemService {
       }
     }
     this.idProblem[newProblem.id] = newProblem
-    if (!this.contestProblem[newProblem.contestId])
+    if (!this.contestProblem[newProblem.contestId]) {
       this.contestProblem[newProblem.contestId] = []
-    for (let i = 0; i < this.contestProblem[newProblem.contestId].length; i++)
-      if (this.contestProblem[newProblem.contestId][i].id === newProblem.id)
+    }
+    for (let i = 0; i < this.contestProblem[newProblem.contestId].length; i++) {
+      if (this.contestProblem[newProblem.contestId][i].id === newProblem.id) {
         this.contestProblem[newProblem.contestId][i] = newProblem
+      }
+    }
     this.contestShortId[`${newProblem.contestId}:${newProblem.shortId}`] = true
 
     return lodash.cloneDeep(newProblem)
@@ -240,8 +253,9 @@ export class InMemoryProblemService implements ProblemService {
 
     // check update permission
     const me = await this.authService.getMe(token)
-    if (!me.permissions.includes(Permission.ProblemsDelete))
+    if (!me.permissions.includes(Permission.ProblemsDelete)) {
       throw new ForbiddenAction()
+    }
 
     // get the problem and check permission
     const problem = await this.getContestProblemById(
@@ -253,13 +267,14 @@ export class InMemoryProblemService implements ProblemService {
     // update storage
     this.problems = lodash.remove(this.problems, p => p.id === problemId)
     delete this.idProblem[problem.id]
-    if (this.contestProblem[problem.contestId])
+    if (this.contestProblem[problem.contestId]) {
       this.contestProblem[problem.contestId] = lodash.remove(
         this.contestProblem[problem.contestId],
         p => p.id === problemId
       )
+    }
     this.contestShortId[`${problem.contestId}:${problem.shortId}`] = false
 
-    throw 'not yet implemented'
+    throw new Error('not yet implemented')
   }
 }

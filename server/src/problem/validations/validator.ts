@@ -1,17 +1,17 @@
-import * as yup from 'yup'
-import { tokenSchema, nameSchema } from 'ugrade/auth/validations'
+import { nameSchema, tokenSchema } from 'ugrade/auth/validations'
 import { uuidSchema } from 'ugrade/uuid'
+import * as yup from 'yup'
+import { ProblemType } from '../problem'
 import {
-  statementSchema,
-  typeSchema,
   disabledSchema,
-  timeLimitSchema,
-  toleranceSchema,
   memoryLimitSchema,
   outputLimitSchema,
   shortIdSchema,
+  statementSchema,
+  timeLimitSchema,
+  toleranceSchema,
+  typeSchema,
 } from './schemas'
-import { ProblemType } from '../problem'
 
 export const problemServiceValidator = {
   getContestProblems: (token: string, contestId: string) =>

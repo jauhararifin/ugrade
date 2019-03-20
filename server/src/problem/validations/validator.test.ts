@@ -1,6 +1,6 @@
-import { problemServiceValidator } from './validator'
 import { ValidationError } from 'yup'
 import { ProblemType } from '../problem'
+import { problemServiceValidator } from './validator'
 
 describe('test problem service validator', () => {
   describe('test getContestProblems', () => {
