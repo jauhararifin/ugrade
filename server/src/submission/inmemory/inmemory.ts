@@ -65,9 +65,6 @@ export class InMemorySubmissionService implements SubmissionService {
     // check contest & language
     const contest = await this.contestService.getContestById(me.contestId)
     if (!contest.permittedLanguageIds.includes(languageId)) throw new NoSuchLanguage()
-    if (contest.id !== me.contestId) {
-      throw new ForbiddenAction()
-    }
 
     // check problem
     await this.problemService.getContestProblemById(token, me.contestId, problemId)
