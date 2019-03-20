@@ -1,5 +1,6 @@
 import { compare, hash } from 'bcrypt'
 import lodash from 'lodash'
+import { EmailService } from 'ugrade/email'
 import { genUUID } from 'ugrade/uuid'
 import { AlreadyInvitedUser } from '../AlreadyInvitedUser'
 import { AlreadyRegistered } from '../AlreadyRegistered'
@@ -16,13 +17,15 @@ import { WrongPassword } from '../WrongPassword'
 import { users as usersFixture } from './fixture'
 
 export class InMemoryAuthService implements AuthService {
+  private emailService: EmailService
   private users: User[]
   private userId: { [id: string]: User }
   private userEmail: { [eid: string]: User }
   private userUsername: { [uid: string]: User }
   private userToken: { [token: string]: User }
 
-  constructor(users: User[] = usersFixture) {
+  constructor(emailService: EmailService, users: User[] = usersFixture) {
+    this.emailService = emailService
     this.users = lodash.cloneDeep(users)
     this.userId = {}
     this.userEmail = {}
@@ -123,6 +126,12 @@ export class InMemoryAuthService implements AuthService {
     this.userId[user.id].password = await hash(password, 10)
     this.userId[user.id].resetPasswordCode = undefined
 
+    await this.emailService.basicSend(
+      email,
+      'UGrade Password Reset',
+      `Use this One-Time-Code to reset password: ${this.userId[user.id].resetPasswordCode}`
+    )
+
     return lodash.cloneDeep(this.userId[user.id])
   }
 
@@ -168,6 +177,12 @@ export class InMemoryAuthService implements AuthService {
     this.userUsername[newUser.username] = newUser
     this.userToken[newUser.token] = newUser
 
+    await this.emailService.basicSend(
+      email,
+      'UGrade Registration',
+      `Use this One-Time-Code to sign up: ${newUser.signUpCode}`
+    )
+
     return lodash.cloneDeep(newUser)
   }
 
@@ -197,6 +212,12 @@ export class InMemoryAuthService implements AuthService {
     this.userEmail[newUser.email] = newUser
     this.userUsername[newUser.username] = newUser
     this.userToken[newUser.token] = newUser
+
+    await this.emailService.basicSend(
+      email,
+      'UGrade Contest Creation',
+      `Use this One-Time-Code to enter contest: ${newUser.signUpCode}`
+    )
 
     return lodash.cloneDeep(newUser)
   }

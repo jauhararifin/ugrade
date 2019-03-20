@@ -9,6 +9,7 @@ import { InMemoryAuthService } from './auth/inmemory'
 import { InMemoryClarificationService } from './clarification/inmemory/inmemory'
 import { InMemoryContestService } from './contest/inmemory'
 import { AppContext } from './context'
+import { InMemoryEmailService } from './email/inmemory'
 import { InMemoryLanguageService } from './language/inmemory'
 import { logger } from './logger'
 import { InMemoryProblemService } from './problem/inmemory'
@@ -17,7 +18,8 @@ import { schema } from './schema'
 
 dotenv.config()
 
-const authService = new InMemoryAuthService()
+const emailService = new InMemoryEmailService()
+const authService = new InMemoryAuthService(emailService)
 const languageService = new InMemoryLanguageService()
 const profileService = new InMemoryProfileService(authService)
 const contestService = new InMemoryContestService(authService, languageService)
