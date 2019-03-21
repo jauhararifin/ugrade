@@ -106,5 +106,5 @@ workflows:
             - install-ugrade-web
       - build-ugrade-web:
           requires:
-            - instal-ugrade-web
+            - install-ugrade-web
             - test-ugrade-web
