@@ -20,9 +20,10 @@
   },
   "homepage": "https://github.com/jauhararifin/ugrade#readme",
   "dependencies": {
+    "@types/bcrypt-nodejs": "^0.0.30",
     "apollo-server": "^2.4.8",
     "apollo-server-express": "^2.4.8",
-    "bcrypt": "^3.0.4",
+    "bcrypt-nodejs": "^0.0.3",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "graphql": "^14.1.1",

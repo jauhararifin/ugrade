@@ -1,4 +1,4 @@
-import { compare, hash } from 'bcrypt'
+import { compare, hash } from 'bcrypt-nodejs'
 import lodash from 'lodash'
 import { EmailService } from 'ugrade/email'
 import { genUUID } from 'ugrade/uuid'
@@ -15,6 +15,7 @@ import { allPermissions, Permission, User } from '../user'
 import { authServiceValidator as validator } from '../validations'
 import { WrongPassword } from '../WrongPassword'
 import { users as usersFixture } from './fixture'
+import { checkPassword, hashPassword } from './util'
 
 export class InMemoryAuthService implements AuthService {
   private emailService: EmailService
@@ -46,7 +47,7 @@ export class InMemoryAuthService implements AuthService {
     await validator.signin(contestId, email, password)
 
     // check user exists
-    let user
+    let user: User
     try {
       user = await this.getUserByEmail(contestId, email)
     } catch (error) {
@@ -55,7 +56,7 @@ export class InMemoryAuthService implements AuthService {
     }
 
     // check password
-    const success = await compare(password, user.password)
+    const success = await checkPassword(password, user.password)
     if (success) {
       if (user.token && user.token.length > 0) {
         return user.token
@@ -97,7 +98,7 @@ export class InMemoryAuthService implements AuthService {
     // update user
     this.userId[user.id].token = genUUID()
     this.userId[user.id].username = username
-    this.userId[user.id].password = await hash(password, 10)
+    this.userId[user.id].password = await hashPassword(password)
     this.userId[user.id].name = name
     this.userId[user.id].signUpCode = undefined
     this.userId[user.id].resetPasswordCode = undefined
@@ -123,7 +124,7 @@ export class InMemoryAuthService implements AuthService {
     }
 
     // update user
-    this.userId[user.id].password = await hash(password, 10)
+    this.userId[user.id].password = await hashPassword(password)
     this.userId[user.id].resetPasswordCode = undefined
 
     await this.emailService.basicSend(
@@ -227,13 +228,13 @@ export class InMemoryAuthService implements AuthService {
 
     // check old password
     const user = await this.getMe(token)
-    const success = await compare(oldPassword, user.password)
+    const success = await checkPassword(oldPassword, user.password)
     if (!success) {
       throw new WrongPassword()
     }
 
     // update user
-    this.userId[user.id].password = await hash(newPassword, 10)
+    this.userId[user.id].password = await hashPassword(newPassword)
 
     return lodash.cloneDeep(this.userId[user.id])
   }
