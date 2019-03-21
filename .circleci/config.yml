@@ -1,5 +1,8 @@
 version: 2
 
+orbs:
+  docker-publish: circleci/docker-publish@0.1.6
+
 jobs:
   install-ugrade-server:
     working_directory: ~/ugrade/server
@@ -92,6 +95,22 @@ jobs:
           paths:
             - web/build
 
+  build-ugrade-web-image:
+    working_directory: ~/ugrade/web
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
+      - docker-publish/check
+      - docker-publish/build
+          image: jauhararifin/ugrade-web
+      - docker-deploy
+          image: jauhararifin/ugrade-web
+
+
 workflows:
   version: 2
   ugrade:
@@ -108,3 +127,6 @@ workflows:
           requires:
             - install-ugrade-web
             - test-ugrade-web
+      - build-ugrade-web-image:
+          requires:
+            - build-ugrade-web
