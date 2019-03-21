@@ -96,7 +96,7 @@ workflows:
   version: 2
   ugrade:
     jobs:
-      - intall-ugrade-server
+      - install-ugrade-server
       - test-ugrade-server:
           requires:
             - install-ugrade-server
