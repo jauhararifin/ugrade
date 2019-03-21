@@ -104,7 +104,7 @@ workflows:
       - test-ugrade-web:
           requires:
             - build-ugrade-web
-      - deliver-ugrade-web
+      - deliver-ugrade-web:
           requires:
             - build-ugrade-web
             - test-ugrade-web
