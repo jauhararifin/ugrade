@@ -27,7 +27,7 @@ jobs:
           root: ~/ugrade
           paths:
             - server/node_modules
-  
+
   test-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
@@ -40,6 +40,21 @@ jobs:
       - run:
           name: test
           command: yarn test
+
+  build-ugrade-server-image:
+    executor: docker-publish/docker
+    working_directory: ~/ugrade/server
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          image: jauhararifin/ugrade-server
+      - docker-publish/deploy:
+          image: jauhararifin/ugrade-server
 
   install-ugrade-web:
     working_directory: ~/ugrade/web
@@ -76,7 +91,7 @@ jobs:
           at: ~/ugrade
       - run:
           name: test
-          command: yarn test 
+          command: yarn test
 
   build-ugrade-web:
     working_directory: ~/ugrade/web
@@ -110,7 +125,6 @@ jobs:
       - docker-publish/deploy:
           image: jauhararifin/ugrade-web
 
-
 workflows:
   version: 2
   ugrade:
@@ -119,6 +133,9 @@ workflows:
       - test-ugrade-server:
           requires:
             - install-ugrade-server
+      - build-ugrade-server-image:
+          requires:
+            - test-ugrade-server
       - install-ugrade-web
       - test-ugrade-web:
           requires:
