@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 orbs:
   docker-publish: circleci/docker-publish@0.1.6
@@ -96,9 +96,8 @@ jobs:
             - web/build
 
   build-ugrade-web-image:
+    executor: docker-publish/docker
     working_directory: ~/ugrade/web
-    docker:
-    - image: 'circleci/python:3.6'
     steps:
       - checkout:
           path: ~/ugrade
