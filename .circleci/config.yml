@@ -1,19 +1,5 @@
 version: 2
 
-install-node-dependencies: &install-node-dependencies
-  - restore_cache:
-      name: Restore Yarn Package Cache
-      keys:
-        - yarn-packages-{{ checksum "yarn.lock" }}
-  - run:
-      name: Install Dependencies
-      command: yarn install --frozen-lockfile
-  - save_cache:
-      name: Save Yarn Package Cache
-      key: yarn-packages-{{ checksum "yarn.lock" }}
-      paths:
-        - ~/.cache/yarn
-
 jobs:
   install-ugrade-server:
     working_directory: ~/ugrade/server
@@ -22,7 +8,18 @@ jobs:
     steps:
       - checkout:
           path: ~/ugrade
-      <<: *install-node-dependencies
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - persist_to_workspace:
           root: ~/ugrade
           paths:
@@ -48,7 +45,18 @@ jobs:
     steps:
       - checkout:
           path: ~/ugrade
-      <<: *install-node-dependencies
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - persist_to_workspace:
           root: ~/ugrade
           paths:
