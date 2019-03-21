@@ -33,7 +33,7 @@ jobs:
       - checkout:
           path: ~/ugrade
       - attach_workspace:
-          at: ~/ugrade/server
+          at: ~/ugrade
       - run:
           name: test
           command: yarn test
@@ -70,7 +70,7 @@ jobs:
       - checkout:
           path: ~/ugrade
       - attach_workspace:
-          at: ~/ugrade/web
+          at: ~/ugrade
       - run:
           name: test
           command: yarn test 
@@ -83,7 +83,7 @@ jobs:
       - checkout:
           path: ~/ugrade
       - attach_workspace:
-          at: ~/ugrade/web
+          at: ~/ugrade
       - run:
           name: build
           command: yarn build
