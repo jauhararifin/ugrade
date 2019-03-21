@@ -15,6 +15,7 @@ import { logger } from './logger'
 import { InMemoryProblemService } from './problem/inmemory'
 import { InMemoryProfileService } from './profile/inmemory'
 import { schema } from './schema'
+import { InMemorySubmissionService } from './submission/inmemory'
 
 dotenv.config()
 
@@ -26,6 +27,7 @@ const contestService = new InMemoryContestService(authService, languageService)
 const announcementService = new InMemoryAnnouncementService(authService)
 const clarificationService = new InMemoryClarificationService(authService)
 const problemService = new InMemoryProblemService(authService, contestService)
+const submissionService = new InMemorySubmissionService(authService, contestService, problemService)
 
 const resolvers = createResolvers(
   authService,
@@ -34,7 +36,8 @@ const resolvers = createResolvers(
   contestService,
   announcementService,
   clarificationService,
-  problemService
+  problemService,
+  submissionService
 )
 
 const app = express()

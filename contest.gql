@@ -72,6 +72,40 @@ type Contest {
 
   problems: [Problem!]!
   problemById: (problemId: String!): Problem!
+
+  submissions: [Submission!]!
+  submissionById: Submission!
+}
+
+enum GradingVerdict {
+  Pending
+  Accepted
+  WrongAnswer
+  TimeLimitExceeded
+  MemoryLimitExceeded
+  RuntimeError
+  InternalError
+  CompilationError
+}
+
+type Grading {
+  id: String!
+  issuedTime: Date!
+  verdict: GradingVerdict!
+  message: String!
+  compilationOutput: String!
+}
+
+type Submission {
+  id: String!
+  issuer: User!
+  contest: Contest!
+  problem: Problem!
+  language: Language!
+  issuedTime: Date!
+  verdict: GradingVerdict!
+  sourceCode: String!
+  gradings: [Grading!]!
 }
 
 enum ProblemType {
@@ -238,4 +272,7 @@ type Mutation {
     outputLimit: Int!
   ): Problem!
   deleteProblem(problemId: String!): Problem!
+
+  # submission
+  createSubmission(problemId:String!, languageId:String!, sourceCode:String!): Submission!
 }
