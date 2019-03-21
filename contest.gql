@@ -71,10 +71,10 @@ type Contest {
   clarifications: [Clarification!]!
 
   problems: [Problem!]!
-  problemById: (problemId: String!): Problem!
+  problemById(problemId: String!): Problem!
 
   submissions: [Submission!]!
-  submissionById: Submission!
+  submissionById(submissionId: String!): Submission!
 }
 
 enum GradingVerdict {
@@ -126,6 +126,9 @@ type Problem {
   tolerance: Float!
   memoryLimit: Int!
   outputLimit: Int!
+
+  contest: Contest!
+  issuer: String!
 }
 
 type Announcement {
@@ -192,23 +195,14 @@ type Mutation {
     name: String!
   ): String!
   forgotPassword(contestId: String!, email: String!): User!
-  resetPassword(
-    contestId: String!
-    email: String!
-    oneTimeCode: String!
-    password: String!
-  ): User!
+  resetPassword(contestId: String!, email: String!, oneTimeCode: String!, password: String!): User!
   addUser(email: String!, permission: [Permission!]!): User!
   setMyPassword(oldPassword: String!, newPassword: String!): User!
   setMyName(name: String!): User!
   setPermissions(userId: String!, permissions: [Permission!]!): User!
 
   # profile
-  setMyProfile(
-    gender: GenderType
-    shirtSize: ShirtSizeType
-    address: String
-  ): Profile!
+  setMyProfile(gender: GenderType, shirtSize: ShirtSizeType, address: String): Profile!
 
   # contest
   setMyContest(
@@ -236,43 +230,36 @@ type Mutation {
   readAnnouncement(ids: [String!]!): Announcement!
 
   # clarification
-  createClarification(
-    title: String!
-    subject: String!
-    content: String!
-  ): Clarification!
-  replyClarification(
-    clarificationId: String!
-    content: String!
-  ): ClarificationEntry!
+  createClarification(title: String!, subject: String!, content: String!): Clarification!
+  replyClarification(clarificationId: String!, content: String!): ClarificationEntry!
   readClarificationEntry(clarificationEntryId: String!): ClarificationEntry!
 
   # problem
   createProblem(
-    shortId: String!,
-    name: String!,
-    statement: String!,
-    type: ProblemType!,
-    disabled: Boolean!,
-    timeLimit: Int!,
-    tolerance: Float!,
-    memoryLimit: Int!,
+    shortId: String!
+    name: String!
+    statement: String!
+    type: ProblemType!
+    disabled: Boolean!
+    timeLimit: Int!
+    tolerance: Float!
+    memoryLimit: Int!
     outputLimit: Int!
   ): Problem!
   updateProblem(
-    problemId: String!,
-    name: String!,
-    statement: String!,
-    type: ProblemType!,
-    disabled: Boolean!,
-    order: Int!,
-    timeLimit: Int!,
-    tolerance: Float!,
-    memoryLimit: Int!,
+    problemId: String!
+    name: String!
+    statement: String!
+    type: ProblemType!
+    disabled: Boolean!
+    order: Int!
+    timeLimit: Int!
+    tolerance: Float!
+    memoryLimit: Int!
     outputLimit: Int!
   ): Problem!
   deleteProblem(problemId: String!): Problem!
 
   # submission
-  createSubmission(problemId:String!, languageId:String!, sourceCode:String!): Submission!
+  createSubmission(problemId: String!, languageId: String!, sourceCode: String!): Submission!
 }
