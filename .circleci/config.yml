@@ -107,7 +107,7 @@ jobs:
       - docker-publish/check
       - docker-publish/build:
           image: jauhararifin/ugrade-web
-      - docker-deploy:
+      - docker-publish/deploy:
           image: jauhararifin/ugrade-web
 
 
