@@ -97,7 +97,8 @@ jobs:
 
   build-ugrade-web-image:
     working_directory: ~/ugrade/web
-    executor: docker-publish/docker
+    docker:
+    - image: 'circleci/python:3.6'
     steps:
       - checkout:
           path: ~/ugrade
