@@ -105,9 +105,9 @@ jobs:
       - attach_workspace:
           at: ~/ugrade
       - docker-publish/check
-      - docker-publish/build
+      - docker-publish/build:
           image: jauhararifin/ugrade-web
-      - docker-deploy
+      - docker-deploy:
           image: jauhararifin/ugrade-web
 
 
