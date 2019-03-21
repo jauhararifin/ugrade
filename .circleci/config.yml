@@ -100,11 +100,11 @@ workflows:
       - test-ugrade-server:
           requires:
             - install-ugrade-server
-      - build-ugrade-web
+      - install-ugrade-web
       - test-ugrade-web:
           requires:
-            - build-ugrade-web
-      - deliver-ugrade-web:
+            - install-ugrade-web
+      - build-ugrade-web:
           requires:
-            - build-ugrade-web
+            - instal-ugrade-web
             - test-ugrade-web
