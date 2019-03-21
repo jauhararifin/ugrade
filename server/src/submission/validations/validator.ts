@@ -12,6 +12,15 @@ export const submissionServiceValidator = {
         contestId: uuidSchema.required(),
       })
       .validate({ token, contestId }),
+  getContestSubmissionById: (token: string, contestId: string, submissionId: string) =>
+    yup
+      .object()
+      .shape({
+        token: tokenSchema.required(),
+        contestId: uuidSchema.required(),
+        submissionId: uuidSchema.required(),
+      })
+      .validate({ token, contestId, submissionId }),
   createSubmission: (token: string, problemId: string, languageId: string, sourceCode: string) =>
     yup
       .object()

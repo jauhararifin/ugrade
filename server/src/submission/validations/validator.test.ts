@@ -20,6 +20,37 @@ describe('test submission service validator', () => {
     })
   })
 
+  describe('test getContestSubmissionById', () => {
+    test.each([
+      ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', '', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ'],
+      [
+        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+        '-zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8',
+      ],
+      ['dQRjAQKKvmA3gAeHYzLpfCs84Vjs', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ'],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuS', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'aan7549xlQnLgYaLlWALYmrrpgEGkFDjWQ'],
+      [
+        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6aisjd8',
+        'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6',
+      ],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'zjA2AJP8fuWCCQaQ-2jw1zcZ9xmzAuSn6', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
+    ])('getContestSubmissionById should fail', async (token, contestId, submissionId) => {
+      await expect(validator.getContestSubmissionById(token, contestId, submissionId)).rejects.toBeInstanceOf(
+        ValidationError
+      )
+    })
+
+    test.each([
+      ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6'],
+      ['zjA2AJP8fuWCCQaQ2jw1zcZ9xmzAuSn6', 'mzAdQRjAQKKvmA3gAeHYzLpfCs84mzAV', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ'],
+    ])('getContestSubmissionById should resolved', async (token, contestId, submissionId) => {
+      await expect(validator.getContestSubmissionById(token, contestId, submissionId)).resolves.toBeDefined()
+    })
+  })
+
   describe('test createSubmission', () => {
     test.each([
       ['n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', '', 'n7549xlQnLgYaLlWALYmrrpgEGkFDjWQ', 'https://jauhar.id/'],

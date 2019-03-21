@@ -5,6 +5,7 @@ import { NoSuchLanguage } from 'ugrade/language'
 import { MockedProblemService, mockProblemService } from 'ugrade/problem/mocked'
 import { NoSuchProblem } from 'ugrade/problem/NoSuchProblem'
 import { ValidationError } from 'yup'
+import { NoSuchSubmission } from '../NoSuchSubmission'
 import { GradingVerdict, Submission } from '../Submission'
 import { InMemorySubmissionService } from './inmemory'
 
@@ -23,6 +24,7 @@ describe('test in memory submission service', () => {
   const cid = 'jasd1214jqAHg6J1oo9PkJau1ahzLUW6'
   const pid = 'wasd1214jqAHg6J1oo9PkJau1ahzLUW6'
   const lid = 'lpK15HiqjqAHg6J1oo9PkJau1ahzLUW6'
+  const sid = 'sid1Js1qjqAHg6J1oo9PkJau1ahzLUW6'
   const sourceCode = 'http://example.com/'
   const templateSubmission: Submission = {
     id: '',
@@ -81,6 +83,68 @@ describe('test in memory submission service', () => {
 
       const subs = await service.getContestSubmissions(token, cid)
       expect(subs.map(s => s.id)).toEqual(['s1', 's2', 's3', 's4'])
+    })
+  })
+
+  describe('test getContestSubmissionById', () => {
+    test('getContestSubmissionById validation', async () => {
+      const [service, _] = getService()
+      await expect(service.getContestSubmissionById('ivalidtoken', 'invalidcid', 'invalidsid')).rejects.toBeInstanceOf(
+        ValidationError
+      )
+
+      await service
+        .getContestSubmissionById(token, cid, sid)
+        .catch(err => expect(err).not.toBeInstanceOf(ValidationError))
+    })
+
+    test('getContestSubmissionById should throw ForbiddenAction when trying to access submission in different contest', async () => {
+      const [service, authService] = getService()
+      authService.getMe.mockResolvedValue({ contestId: 'cid727' })
+      await expect(service.getContestSubmissionById(token, cid, sid)).rejects.toBeInstanceOf(ForbiddenAction)
+    })
+
+    test('getContestSubmissionById should throw NoSuchSubmission when no submission is found', async () => {
+      const [service, authService] = getService()
+      authService.getMe.mockResolvedValue({ id: 'uid812', contestId: cid, permissions: [] })
+      await expect(service.getContestSubmissionById(token, cid, pid)).rejects.toBeInstanceOf(NoSuchSubmission)
+    })
+
+    test('getContestSubmissionById should throw NoSuchSubmission when submission belong to another contest', async () => {
+      const [service, authService] = getService([
+        { ...templateSubmission, contestId: 'cid727', id: sid, issuerId: 'uid812' },
+      ])
+      authService.getMe.mockResolvedValue({ contestId: cid })
+      await expect(service.getContestSubmissionById(token, cid, sid)).rejects.toBeInstanceOf(NoSuchSubmission)
+    })
+
+    test('getContestSubmissionById should throw NoSuchSubmission when user doesnt have Permission.SubmissionsRead permission and try accessing others submission', async () => {
+      const [service, authService] = getService([
+        { ...templateSubmission, contestId: cid, id: sid, issuerId: 'uid812' },
+      ])
+      authService.getMe.mockResolvedValue({ id: 'uid888', contestId: cid, permissions: [] })
+      await expect(service.getContestSubmissionById(token, cid, sid)).rejects.toBeInstanceOf(NoSuchSubmission)
+    })
+
+    test('getContestSubmissionById should reolved', async () => {
+      const sid2 = pid
+      const [service, authService] = getService([
+        { ...templateSubmission, contestId: cid, id: sid, issuerId: 'uid812' },
+        { ...templateSubmission, contestId: cid, id: sid2, issuerId: 'uid810' },
+      ])
+      authService.getMe.mockResolvedValue({
+        id: 'uid812',
+        contestId: cid,
+        permissions: [Permission.SubmissionsRead],
+      })
+      await expect(service.getContestSubmissionById(token, cid, sid2)).resolves.toBeDefined()
+
+      authService.getMe.mockResolvedValue({
+        id: 'uid812',
+        contestId: cid,
+        permissions: [],
+      })
+      await expect(service.getContestSubmissionById(token, cid, sid)).resolves.toBeDefined()
     })
   })
 

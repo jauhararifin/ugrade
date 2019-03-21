@@ -4,6 +4,7 @@ import { ContestService } from 'ugrade/contest'
 import { LanguageService, NoSuchLanguage } from 'ugrade/language'
 import { ProblemService } from 'ugrade/problem/service'
 import { genUUID } from 'ugrade/uuid'
+import { NoSuchSubmission } from '../NoSuchSubmission'
 import { SubmissionService } from '../service'
 import { GradingVerdict, Submission } from '../Submission'
 import { submissionServiceValidator as validator } from '../validations'
@@ -13,6 +14,7 @@ export class InMemorySubmissionService implements SubmissionService {
   private contestService: ContestService
   private problemService: ProblemService
   private submissions: Submission[]
+  private idSubmission: { [id: string]: Submission }
   private contestSubmissions: { [contestId: string]: Submission[] }
 
   constructor(
@@ -25,8 +27,10 @@ export class InMemorySubmissionService implements SubmissionService {
     this.contestService = contestService
     this.problemService = problemService
     this.submissions = lodash.cloneDeep(submissions)
+    this.idSubmission = {}
     this.contestSubmissions = {}
     for (const submission of this.submissions) {
+      this.idSubmission[submission.id] = submission
       if (!this.contestSubmissions[submission.contestId]) this.contestSubmissions[submission.contestId] = []
       this.contestSubmissions[submission.contestId].push(submission)
     }
@@ -48,6 +52,25 @@ export class InMemorySubmissionService implements SubmissionService {
     const result = this.contestSubmissions[contest.id].filter(s => s.issuerId === me.id || canReadAll)
 
     return lodash.cloneDeep(result)
+  }
+
+  async getContestSubmissionById(token: string, contestId: string, submissionId: string): Promise<Submission> {
+    await validator.getContestSubmissionById(token, contestId, submissionId)
+
+    // check contest
+    const me = await this.authService.getMe(token)
+    if (contestId !== me.contestId) {
+      throw new ForbiddenAction()
+    }
+
+    // check submission exists
+    if (!this.idSubmission[submissionId]) throw new NoSuchSubmission()
+    const submission = this.idSubmission[submissionId]
+    if (submission.contestId !== me.contestId) throw new NoSuchSubmission()
+    const canReadAll = me.permissions.includes(Permission.SubmissionsRead)
+    if (submission.issuerId !== me.id && !canReadAll) throw new NoSuchSubmission()
+
+    return lodash.cloneDeep(submission)
   }
 
   async createSubmission(
