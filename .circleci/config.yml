@@ -97,13 +97,13 @@ jobs:
 
   build-ugrade-web-image:
     working_directory: ~/ugrade/web
-    docker:
-      - image: circleci/node
+    executor: docker-publish/docker
     steps:
       - checkout:
           path: ~/ugrade
       - attach_workspace:
           at: ~/ugrade
+      - setup_remote_docker
       - docker-publish/check
       - docker-publish/build:
           image: jauhararifin/ugrade-web
