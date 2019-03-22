@@ -227,7 +227,8 @@ export class InMemoryAuthService implements AuthService {
 
     // check old password
     const user = await this.getMe(token)
-    const success = await compare(oldPassword, user.password)
+    const hashedPwd = await hash(oldPassword, 10)
+    const success = await compare(hashedPwd, user.password)
     if (!success) {
       throw new WrongPassword()
     }
