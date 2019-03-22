@@ -118,7 +118,7 @@ export class InMemoryAuthService implements AuthService {
 
     // check otc
     const user = await this.getUserByEmail(contestId, email)
-    if (user.resetPasswordCode && user.resetPasswordCode !== oneTimeCode) {
+    if (!user.resetPasswordCode || user.resetPasswordCode !== oneTimeCode) {
       throw new InvalidCode()
     }
 
