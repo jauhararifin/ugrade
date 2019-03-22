@@ -1,6 +1,10 @@
-version: 2
+version: 2.1
+
+orbs:
+  docker-publish: circleci/docker-publish@0.1.6
+
 jobs:
-  build-ugrade-server:
+  install-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
       - image: circleci/node
@@ -19,11 +23,40 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - persist_to_workspace:
+          root: ~/ugrade
+          paths:
+            - server/node_modules
+
+  test-ugrade-server:
+    working_directory: ~/ugrade/server
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
       - run:
           name: test
           command: yarn test
 
-  build-ugrade-web:
+  build-ugrade-server-image:
+    executor: docker-publish/docker
+    working_directory: ~/ugrade/server
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          image: jauhararifin/ugrade-server
+      - docker-publish/deploy:
+          image: jauhararifin/ugrade-server
+
+  install-ugrade-web:
     working_directory: ~/ugrade/web
     docker:
       - image: circleci/node
@@ -42,10 +75,75 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - persist_to_workspace:
+          root: ~/ugrade
+          paths:
+            - web/node_modules
+
+  test-ugrade-web:
+    working_directory: ~/ugrade/web
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
+      - run:
+          name: test
+          command: yarn test
+
+  build-ugrade-web:
+    working_directory: ~/ugrade/web
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
+      - run:
+          name: build
+          command: yarn build
+      - persist_to_workspace:
+          root: ~/ugrade
+          paths:
+            - web/build
+
+  build-ugrade-web-image:
+    executor: docker-publish/docker
+    working_directory: ~/ugrade/web
+    steps:
+      - checkout:
+          path: ~/ugrade
+      - attach_workspace:
+          at: ~/ugrade
+      - setup_remote_docker
+      - docker-publish/check
+      - docker-publish/build:
+          image: jauhararifin/ugrade-web
+      - docker-publish/deploy:
+          image: jauhararifin/ugrade-web
 
 workflows:
   version: 2
-  ugrade-server:
+  ugrade:
     jobs:
-      - build-ugrade-server
-      - build-ugrade-web
+      - install-ugrade-server
+      - test-ugrade-server:
+          requires:
+            - install-ugrade-server
+      - build-ugrade-server-image:
+          requires:
+            - test-ugrade-server
+      - install-ugrade-web
+      - test-ugrade-web:
+          requires:
+            - install-ugrade-web
+      - build-ugrade-web:
+          requires:
+            - install-ugrade-web
+            - test-ugrade-web
+      - build-ugrade-web-image:
+          requires:
+            - build-ugrade-web

@@ -1,4 +1,4 @@
-import { hashSync } from 'bcrypt'
+import { hashSync } from 'bcrypt-nodejs'
 import { ContestArkav4Final, ContestArkav4Qual, ContestArkav5Final, ContestArkav5Qual } from 'ugrade/contest/inmemory'
 import { Permission, User } from '../user'
 
@@ -33,7 +33,7 @@ export const UserTest1: User = {
   email: 'test@example.com',
   name: 'Test',
   permissions: contestantPermissions,
-  password: hashSync('test', 10),
+  password: hashSync('test'),
   token: '',
 }
 
@@ -44,7 +44,7 @@ export const UserNewTest1: User = {
   email: 'newtest@example.com',
   name: 'New Test',
   permissions: contestantPermissions,
-  password: hashSync('newtest', 10),
+  password: hashSync('newtest'),
   token: '',
 }
 
@@ -55,7 +55,7 @@ export const UserTest2: User = {
   email: 'test@example.com',
   name: 'Test',
   permissions: contestantPermissions,
-  password: hashSync('test', 10),
+  password: hashSync('test'),
   token: '',
 }
 
@@ -66,7 +66,7 @@ export const UserNewTest2: User = {
   email: 'newtest@example.com',
   name: 'New Test',
   permissions: contestantPermissions,
-  password: hashSync('newtest', 10),
+  password: hashSync('newtest'),
   token: '',
 }
 
@@ -77,7 +77,7 @@ export const UserAdmin3: User = {
   email: 'admin@example.com',
   name: 'Administrator',
   permissions: adminPermissions.slice(),
-  password: hashSync('test', 10),
+  password: hashSync('test'),
   token: '',
 }
 
@@ -88,7 +88,7 @@ export const UserTest3: User = {
   email: 'test@example.com',
   name: 'Test',
   permissions: contestantPermissions,
-  password: hashSync('newtest', 10),
+  password: hashSync('newtest'),
   token: '',
 }
 
@@ -99,7 +99,7 @@ export const UserNewTest3: User = {
   email: 'newtest@example.com',
   name: 'New Test',
   permissions: contestantPermissions,
-  password: hashSync('admin', 10),
+  password: hashSync('admin'),
   token: '',
 }
 
@@ -110,7 +110,7 @@ export const UserTest4: User = {
   email: 'test@example.com',
   name: 'Test',
   permissions: contestantPermissions,
-  password: hashSync('test', 10),
+  password: hashSync('test'),
   token: '',
 }
 
@@ -121,7 +121,7 @@ export const UserNewTest4: User = {
   email: 'newtest@example.com',
   name: 'New Test',
   permissions: contestantPermissions,
-  password: hashSync('newtest', 10),
+  password: hashSync('newtest'),
   token: '',
 }
 

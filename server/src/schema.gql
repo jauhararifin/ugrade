@@ -1,1 +1,265 @@
-../../contest.gql
+scalar Date
+
+enum Permission {
+  InfoUpdate
+  AnnouncementCreate
+  AnnouncementRead
+  ProblemsCreate
+  ProblemsRead
+  ProblemsReadDisabled
+  ProblemsUpdate
+  ProblemsDelete
+  UsersInvite
+  UsersPermissionsUpdate
+  UsersDelete
+  ProfilesRead
+}
+
+type User {
+  id: String!
+  contest: Contest!
+  username: String!
+  email: String!
+  name: String!
+
+  permissions: [Permission!]!
+  profile: Profile!
+}
+
+enum GenderType {
+  Male
+  Female
+}
+
+enum ShirtSizeType {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+type Profile {
+  gender: GenderType
+  shirtSize: ShirtSizeType
+  address: String
+}
+
+type Language {
+  id: String!
+  name: String!
+}
+
+type Contest {
+  id: String!
+  shortId: String!
+  name: String!
+  shortDescription: String!
+  description: String!
+  startTime: Date!
+  freezed: Boolean!
+  finishTime: Date!
+  permittedLanguages: [Language!]!
+
+  users: [User!]!
+  userByEmail(contestId: String!, email: String!): User!
+  userByUsername(contestId: String!, username: String!): User!
+
+  announcements: [Announcement!]!
+
+  clarifications: [Clarification!]!
+
+  problems: [Problem!]!
+  problemById(problemId: String!): Problem!
+
+  submissions: [Submission!]!
+  submissionById(submissionId: String!): Submission!
+}
+
+enum GradingVerdict {
+  Pending
+  Accepted
+  WrongAnswer
+  TimeLimitExceeded
+  MemoryLimitExceeded
+  RuntimeError
+  InternalError
+  CompilationError
+}
+
+type Grading {
+  id: String!
+  issuedTime: Date!
+  verdict: GradingVerdict!
+  message: String!
+  compilationOutput: String!
+}
+
+type Submission {
+  id: String!
+  issuer: User!
+  contest: Contest!
+  problem: Problem!
+  language: Language!
+  issuedTime: Date!
+  verdict: GradingVerdict!
+  sourceCode: String!
+  gradings: [Grading!]!
+}
+
+enum ProblemType {
+  Batch
+  Interactive
+}
+
+type Problem {
+  id: String!
+  shortId: String!
+  name: String!
+  statement: String!
+  type: ProblemType!
+  disabled: Boolean!
+  issuedTime: Date!
+  order: Int!
+  timeLimit: Int!
+  tolerance: Float!
+  memoryLimit: Int!
+  outputLimit: Int!
+
+  contest: Contest!
+  issuer: String!
+}
+
+type Announcement {
+  id: String!
+  title: String!
+  content: String!
+  issuedTime: Date!
+
+  issuer: User!
+  contest: Contest!
+
+  # is the specific user has read the announcement, based on their token
+  read: Boolean!
+}
+
+type ClarificationEntry {
+  id: String!
+  content: String!
+  issuedTime: Date!
+
+  sender: User!
+  # is the specific user has read the entry
+  read: Boolean!
+  clarification: Clarification!
+}
+
+type Clarification {
+  id: String!
+  title: String!
+  subject: String!
+  issuedTime: Date!
+
+  issuer: User!
+  contest: Contest!
+  entries: [ClarificationEntry]!
+}
+
+type Query {
+  # auth
+  user: User!
+  userById(id: String!): User!
+
+  # contest
+  contestById(id: String!): Contest!
+  contestByShortId(shortId: String!): Contest!
+
+  # language
+  languages: [Language!]!
+  languageById(id: String!): Language!
+
+  # profile
+  userProfile(userId: String!): Profile!
+}
+
+type Mutation {
+  # auth
+  signin(contestId: String!, email: String!, password: String!): String!
+  signup(
+    contestId: String!
+    username: String!
+    email: String!
+    oneTimeCode: String!
+    password: String!
+    name: String!
+  ): String!
+  forgotPassword(contestId: String!, email: String!): User!
+  resetPassword(contestId: String!, email: String!, oneTimeCode: String!, password: String!): User!
+  addUser(email: String!, permission: [Permission!]!): User!
+  setMyPassword(oldPassword: String!, newPassword: String!): User!
+  setMyName(name: String!): User!
+  setPermissions(userId: String!, permissions: [Permission!]!): User!
+
+  # profile
+  setMyProfile(gender: GenderType, shirtSize: ShirtSizeType, address: String): Profile!
+
+  # contest
+  setMyContest(
+    name: String!
+    shortDescription: String!
+    description: String!
+    startTime: Date!
+    freezed: Boolean!
+    finishTime: Date!
+    permittedLanguageIds: [String!]!
+  ): Contest!
+  createContest(
+    email: String!
+    shortId: String!
+    name: String!
+    shortDescription: String!
+    description: String!
+    startTime: Date!
+    finishTime: Date!
+    permittedLanguageIds: [String!]
+  ): User!
+
+  # announcement
+  createAnnouncement(title: String!, content: String!): Announcement!
+  readAnnouncement(ids: [String!]!): Announcement!
+
+  # clarification
+  createClarification(title: String!, subject: String!, content: String!): Clarification!
+  replyClarification(clarificationId: String!, content: String!): ClarificationEntry!
+  readClarificationEntry(clarificationEntryId: String!): ClarificationEntry!
+
+  # problem
+  createProblem(
+    shortId: String!
+    name: String!
+    statement: String!
+    type: ProblemType!
+    disabled: Boolean!
+    timeLimit: Int!
+    tolerance: Float!
+    memoryLimit: Int!
+    outputLimit: Int!
+  ): Problem!
+  updateProblem(
+    problemId: String!
+    name: String!
+    statement: String!
+    type: ProblemType!
+    disabled: Boolean!
+    order: Int!
+    timeLimit: Int!
+    tolerance: Float!
+    memoryLimit: Int!
+    outputLimit: Int!
+  ): Problem!
+  deleteProblem(problemId: String!): Problem!
+
+  # submission
+  createSubmission(problemId: String!, languageId: String!, sourceCode: String!): Submission!
+}
