@@ -27,7 +27,7 @@ export const createLanguageResolvers = (languageService: LanguageService): Langu
     },
     Contest: {
       permittedLanguages: source => {
-        const promises = source.permittedLanguageIds.map(languageService.getLanguageById)
+        const promises = source.permittedLanguageIds.map(id => languageService.getLanguageById(id))
         return wrap(Promise.all(promises))
       },
     },
