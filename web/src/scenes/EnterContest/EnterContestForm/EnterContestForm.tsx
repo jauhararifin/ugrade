@@ -1,7 +1,8 @@
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import { usePublicOnly } from 'ugrade/auth'
-import { handleCommonError } from 'ugrade/common'
+import { globalErrorCatcher, handleCommonError } from 'ugrade/common'
+import { TopToaster } from 'ugrade/common/ActionToaster'
 import * as yup from 'yup'
 import { useSetContest } from '../actions'
 import { EnterContestFormView } from './EnterContestFormView'
@@ -23,10 +24,7 @@ export const EnterContestForm: FunctionComponent = () => {
       .min(4)
       .max(255)
       .label('Contest ID')
-      .matches(
-        /[a-zA-Z0-9\-]+/,
-        'Contest ID contains alphanumeric and dash character only'
-      )
+      .matches(/^[a-zA-Z0-9\-]+$/, 'Contest ID contains alphanumeric and dash character only')
       .required(),
   })
 
@@ -39,7 +37,10 @@ export const EnterContestForm: FunctionComponent = () => {
     try {
       await setContest(values.contestId)
     } catch (error) {
-      if (!handleCommonError(error)) throw error
+      if (!handleCommonError(error)) {
+        TopToaster.showErrorToast(new Error('Something Went Wrong'))
+        globalErrorCatcher(error)
+      }
     } finally {
       setSubmitting(false)
     }
