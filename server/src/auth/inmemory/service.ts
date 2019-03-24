@@ -8,6 +8,7 @@ import { AlreadyUsedUsername } from '../AlreadyUsedUsername'
 import { ForbiddenAction } from '../ForbiddenAction'
 import { InvalidCode } from '../InvalidCode'
 import { InvalidCredential } from '../InvalidCredential'
+import { InvalidToken } from '../InvalidToken'
 import { NoSuchUser } from '../NoSuchUser'
 import { genOTC } from '../otc'
 import { AuthService } from '../service'
@@ -62,6 +63,7 @@ export class InMemoryAuthService implements AuthService {
         return user.token
       }
       this.userId[user.id].token = genUUID()
+      this.userToken[this.userId[user.id].token] = this.userId[user.id]
       return this.userId[user.id].token
     } else {
       throw new InvalidCredential('Wrong Username Or Password')
@@ -275,7 +277,7 @@ export class InMemoryAuthService implements AuthService {
   async getMe(token: string): Promise<User> {
     await validator.getMe(token)
     if (this.userToken[token]) return lodash.cloneDeep(this.userToken[token])
-    throw new NoSuchUser()
+    throw new InvalidToken()
   }
 
   async getUserById(id: string): Promise<User> {
