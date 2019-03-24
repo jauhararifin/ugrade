@@ -12,6 +12,7 @@ import { InMemoryContestService } from './services/contest/InMemoryContestServic
 import { ProblemService } from './services/problem'
 import { InMemoryProblemService } from './services/problem/InMemoryProblemService'
 import { ScoreboardService } from './services/scoreboard'
+import { GraphqlScoreboardService } from './services/scoreboard/GraphqlScoreboardService'
 import { InMemoryScoreboardService } from './services/scoreboard/InMemoryScoreboardService'
 import { ServerStatusService } from './services/serverStatus'
 import { InMemoryServerStatusService } from './services/serverStatus/InMemoryServerStatusService'
@@ -67,7 +68,7 @@ function initDevConfig(): Config {
   const clarificationService = new InMemoryClarificationService(authService)
   const contestService = new GraphqlContestService(client)
   const submissionService = new InMemorySubmissionService(authService, contestService)
-  const scoreboardService = new InMemoryScoreboardService(authService, problemService)
+  const scoreboardService = new GraphqlScoreboardService()
   return {
     serverStatusService,
     authService,
