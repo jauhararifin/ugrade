@@ -227,7 +227,7 @@ export class GraphqlContestService implements ContestService {
   }
 
   subscribeMyContest(token: string, callback: SubscriptionCallback<Contest>): UnsubscriptionFunction {
-    return simplePublisher(this.getMyContest.bind(this, token), callback)
+    return simplePublisher(this.getMyContest.bind(this, token), callback, undefined, undefined, 5000)
   }
 
   createContest(
