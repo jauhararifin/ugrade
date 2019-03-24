@@ -13,10 +13,7 @@ export interface MemberListViewProps {
   canInvite: boolean
 }
 
-export const MemberListView: FunctionComponent<MemberListViewProps> = ({
-  users,
-  canInvite,
-}) => (
+export const MemberListView: FunctionComponent<MemberListViewProps> = ({ users, canInvite }) => (
   <ContentWithHeader header='Members' className='contest-member-list'>
     <div className='content'>
       <div className='actions'>
@@ -33,7 +30,7 @@ export const MemberListView: FunctionComponent<MemberListViewProps> = ({
           {users.map(user => (
             <tr key={user.id}>
               <td className='col-user'>
-                <UserLink username={user.username} />
+                <UserLink user={user} />
               </td>
               <td className='col-email'>
                 <Link to={`/contest/members/${user.id}`}>{user.email}</Link>

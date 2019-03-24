@@ -1,20 +1,20 @@
 import { Classes, Intent, Tag, Tooltip } from '@blueprintjs/core'
-import React, { FunctionComponent, useMemo } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { useUsers } from '../useUsers'
+import { User } from '../store'
 
 export interface UserLinkProps {
-  username: string
+  user: User
 }
 
-export const UserLink: FunctionComponent<UserLinkProps> = ({ username }) => {
+export const UserLink: FunctionComponent<UserLinkProps> = ({ user: { id, username } }) => {
   if (username === '') {
     return <Tag intent={Intent.DANGER}>Haven't Signed Up Yet</Tag>
   }
-  const arr = useMemo(() => [username], [username])
-  const users = useUsers(arr)
-  const name = users.length > 0 ? users[0].name : undefined
-  const id = users.length > 0 ? users[0].id : undefined
+  // const arr = useMemo(() => [username], [username])
+  // const users = useUsers(arr)
+  // const name = users.length > 0 ? users[0].name : undefined
+  // const id = users.length > 0 ? users[0].id : undefined
   return (
     <Link to={id ? `/contest/members/${id}` : '#'}>
       <Tooltip className={Classes.TOOLTIP_INDICATOR} content={username}>
