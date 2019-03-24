@@ -88,7 +88,7 @@ export const UserTest3: User = {
   email: 'test@example.com',
   name: 'Test',
   permissions: contestantPermissions,
-  password: hashSync('newtesttest'),
+  password: hashSync('testtest'),
   token: '',
 }
 
@@ -99,7 +99,7 @@ export const UserNewTest3: User = {
   email: 'newtest@example.com',
   name: 'New Test',
   permissions: contestantPermissions,
-  password: hashSync('adminadmin'),
+  password: hashSync('newtesttest'),
   token: '',
 }
 

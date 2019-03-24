@@ -11,10 +11,11 @@ export interface AuthService {
 
   /**
    * Get all user information in a contest
+   * @param token User's token
    * @param contestId The contest id
    * @return list of user in the specific contest
    */
-  getUsers(contestId: string): Promise<User[]>
+  getUsers(token: string, contestId: string): Promise<User[]>
 
   /**
    * Get user information in a contest by their email.

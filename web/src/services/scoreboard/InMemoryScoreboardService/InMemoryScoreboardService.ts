@@ -47,7 +47,7 @@ export class InMemoryScoreboardService implements ScoreboardService {
       return result
     }
 
-    const users = await this.authService.getUsers(contestId)
+    const users = await this.authService.getUsers('', contestId)
 
     return {
       contestId,

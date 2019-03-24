@@ -13,9 +13,7 @@ export interface SidebarMenusProps {
   loading: boolean
 }
 
-export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
-  loading,
-}) => {
+export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({ loading }) => {
   const getCurrentMenu = (): Menu => {
     const match = location.pathname.match(/contest\/([a-z]+)/)
     if (match && match[1]) {
@@ -60,12 +58,9 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({
     if (clarifications && me) {
       const clarifs = lodash.values(clarifications)
       const clarifsCount = clarifs.map(
-        clarif =>
-          lodash
-            .values(clarif.entries)
-            .filter(entry => entry.sender !== me.id && !entry.read).length
+        clarif => lodash.values(clarif.entries).filter(entry => entry.sender !== me.id && !entry.read).length
       )
-      return clarifsCount.reduce((a, b) => a + b)
+      return clarifsCount.reduce((a, b) => a + b, 0)
     }
     return 0
   }, [clarifications, me])

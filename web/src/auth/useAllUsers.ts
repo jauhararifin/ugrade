@@ -9,9 +9,10 @@ import { useMe } from './useMe'
 export function getAllUsersAction(): AppThunkAction {
   return async (dispatch, getState, { authService }) => {
     const me = getState().auth.me
+    const token = getState().auth.token
     if (me) {
       const contestId = me.contestId
-      const users = await authService.getUsers(contestId)
+      const users = await authService.getUsers(token, contestId)
       const currentMe = getState().auth.me
       const stillRelevant = currentMe && currentMe.contestId === contestId
       if (stillRelevant) {

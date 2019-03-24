@@ -80,6 +80,38 @@ export class GraphqlAuthService implements AuthService {
     }
   `
 
+  QUERY_GET_ME = gql`
+    {
+      user {
+        id
+        contest {
+          id
+        }
+        username
+        email
+        name
+        permissions
+      }
+    }
+  `
+
+  QUERY_GET_CONTEST_USERS = gql`
+    query ContestById($contestId: String!) {
+      contestById(id: $contestId) {
+        users {
+          id
+          contest {
+            id
+          }
+          username
+          email
+          name
+          permissions
+        }
+      }
+    }
+  `
+
   private client: ApolloClient<{}>
   constructor(client: ApolloClient<{}>) {
     this.client = client
@@ -95,8 +127,20 @@ export class GraphqlAuthService implements AuthService {
       .catch(this.convertError)
   }
 
-  async getUsers(contestId: string): Promise<User[]> {
-    throw new Error('Method not implemented.')
+  getUsers(token: string, contestId: string): Promise<User[]> {
+    console.log('xxx', token, contestId)
+    return this.client
+      .query({
+        query: this.QUERY_GET_CONTEST_USERS,
+        variables: { contestId },
+        context: {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      })
+      .then(r => r.data.contestById.users.map(this.convertUser(r.data.contestById.users)))
+      .catch(this.convertError)
   }
 
   getUserByEmail(contestId: string, email: string): Promise<User> {
@@ -158,8 +202,18 @@ export class GraphqlAuthService implements AuthService {
     throw new Error('Method not implemented.')
   }
 
-  async getMe(token: string): Promise<User> {
-    throw new Error('Method not implemented.')
+  getMe(token: string): Promise<User> {
+    return this.client
+      .query({
+        query: this.QUERY_GET_ME,
+        context: {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      })
+      .then(r => this.convertUser(r.data.user))
+      .catch(this.convertError)
   }
 
   async setMyPassword(token: string, oldPassword: string, newPassword: string): Promise<void> {

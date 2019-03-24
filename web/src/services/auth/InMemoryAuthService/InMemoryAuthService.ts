@@ -36,7 +36,7 @@ export class InMemoryAuthService implements AuthService {
     throw new NoSuchUserError('No Such User')
   }
 
-  async getUsers(contestId: string): Promise<User[]> {
+  async getUsers(_token: string, contestId: string): Promise<User[]> {
     await this.serverStatusService.ping()
     const userMap = this.contestUserMap[contestId]
     if (!userMap) throw new AuthError('No Such Contest')
