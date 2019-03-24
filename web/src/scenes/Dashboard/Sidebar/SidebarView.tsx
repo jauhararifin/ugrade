@@ -20,7 +20,7 @@ export enum Menu {
 
 export interface SidebarViewProps {
   contest: ContestInfo
-  rank: number
+  rank?: number
   canUpdateInfo: boolean
   serverClock: Date
   onUpdateName: (newName: string) => any
@@ -29,11 +29,8 @@ export interface SidebarViewProps {
 
 const durationToStr = (duration: moment.Duration | number): string => {
   const rtime = moment.duration(duration)
-  const pad = (x: number): string =>
-    x < 10 ? `0${x.toString()}` : x.toString()
-  return rtime.asDays() > 1
-    ? rtime.humanize()
-    : `${pad(rtime.hours())}:${pad(rtime.minutes())}:${pad(rtime.seconds())}`
+  const pad = (x: number): string => (x < 10 ? `0${x.toString()}` : x.toString())
+  return rtime.asDays() > 1 ? rtime.humanize() : `${pad(rtime.hours())}:${pad(rtime.minutes())}:${pad(rtime.seconds())}`
 }
 
 export const SidebarView: FunctionComponent<SidebarViewProps> = ({
@@ -49,17 +46,11 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   const running = started && !ended
   const freezed = contest && contest.freezed
   const remainingTime =
-    contest && serverClock
-      ? moment.duration(moment(contest.finishTime).diff(moment(serverClock)))
-      : undefined
-  const remainingTimeStr = remainingTime
-    ? durationToStr(remainingTime)
-    : '--:--:--'
+    contest && serverClock ? moment.duration(moment(contest.finishTime).diff(moment(serverClock))) : undefined
+  const remainingTimeStr = remainingTime ? durationToStr(remainingTime) : '--:--:--'
   const startedIn =
     contest && serverClock
-      ? durationToStr(
-          moment.duration(moment(contest.startTime).diff(moment(serverClock)))
-        )
+      ? durationToStr(moment.duration(moment(contest.startTime).diff(moment(serverClock))))
       : undefined
 
   const [name, setName] = useState('')
@@ -131,7 +122,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
                   })}
                 >
                   <H6>Rank</H6>
-                  <H2>{contest && rank ? rank : '-'}</H2>
+                  <H2>{rank ? rank : '-'}</H2>
                 </SidebarMiniCard>
                 <SidebarMiniCard className={classnames('contest-status-time')}>
                   <H6>Remaining Time</H6>
