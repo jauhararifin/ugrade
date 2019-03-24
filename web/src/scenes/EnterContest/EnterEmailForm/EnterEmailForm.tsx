@@ -1,7 +1,7 @@
 import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import { usePublicOnly } from 'ugrade/auth'
-import { handleCommonError } from 'ugrade/common'
+import { globalErrorCatcher, handleCommonError } from 'ugrade/common'
 import { ContestInfo } from 'ugrade/contest/store'
 import { useReset } from 'ugrade/scenes/EnterContest'
 import { AppThunkDispatch } from 'ugrade/store'
@@ -37,14 +37,11 @@ export const EnterEmailForm: FunctionComponent = () => {
 
   const setEmail = useSetMeByEmail()
 
-  const handleSubmit = async (
-    values: EnterEmailFormValue,
-    { setSubmitting }: FormikActions<EnterEmailFormValue>
-  ) => {
+  const handleSubmit = async (values: EnterEmailFormValue, { setSubmitting }: FormikActions<EnterEmailFormValue>) => {
     try {
       await setEmail(values.email)
     } catch (error) {
-      if (!handleCommonError(error)) throw error
+      if (!handleCommonError(error)) globalErrorCatcher(error)
     } finally {
       setSubmitting(false)
     }
@@ -60,11 +57,7 @@ export const EnterEmailForm: FunctionComponent = () => {
   if (!contestInfo) return <React.Fragment />
 
   const renderView = (props: FormikProps<EnterEmailFormValue>) => (
-    <EnterEmailFormView
-      contest={contestInfo}
-      gotoAnotherContest={resetContest}
-      {...props}
-    />
+    <EnterEmailFormView contest={contestInfo} gotoAnotherContest={resetContest} {...props} />
   )
   return (
     <Formik
