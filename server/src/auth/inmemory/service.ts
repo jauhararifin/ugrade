@@ -51,7 +51,7 @@ export class InMemoryAuthService implements AuthService {
     try {
       user = await this.getUserByEmail(contestId, email)
     } catch (error) {
-      if (error instanceof NoSuchUser) throw new InvalidCredential()
+      if (error instanceof NoSuchUser) throw new InvalidCredential('Wrong Username Or Password')
       throw error
     }
 
@@ -64,7 +64,7 @@ export class InMemoryAuthService implements AuthService {
       this.userId[user.id].token = genUUID()
       return this.userId[user.id].token
     } else {
-      throw new InvalidCredential()
+      throw new InvalidCredential('Wrong Username Or Password')
     }
   }
 
@@ -110,6 +110,11 @@ export class InMemoryAuthService implements AuthService {
     const user = await this.getUserByEmail(contestId, email)
     if (!user.resetPasswordCode) {
       this.userId[user.id].resetPasswordCode = genOTC()
+      await this.emailService.basicSend(
+        email,
+        'UGrade Password Reset',
+        `Use this One-Time-Code to reset password: ${this.userId[user.id].resetPasswordCode}`
+      )
     }
     return lodash.cloneDeep(user)
   }
@@ -126,12 +131,6 @@ export class InMemoryAuthService implements AuthService {
     // update user
     this.userId[user.id].password = await hashPassword(password)
     this.userId[user.id].resetPasswordCode = undefined
-
-    await this.emailService.basicSend(
-      email,
-      'UGrade Password Reset',
-      `Use this One-Time-Code to reset password: ${this.userId[user.id].resetPasswordCode}`
-    )
 
     return lodash.cloneDeep(this.userId[user.id])
   }
