@@ -1,7 +1,9 @@
 import { ApolloClient, ApolloError, gql } from 'apollo-boost'
 import { Language } from 'ugrade/contest/store'
+import { User } from 'ugrade/services/auth'
+import { simplePublisher } from 'ugrade/utils'
 import { Contest } from '../Contest'
-import { ContestService } from '../ContestService'
+import { ContestService, SubscriptionCallback, UnsubscriptionFunction } from '../ContestService'
 import { ContestIdTaken, NoSuchContest } from '../errors'
 
 export class GraphqlContestService implements ContestService {
@@ -54,6 +56,86 @@ export class GraphqlContestService implements ContestService {
     }
   `
 
+  MUTATE_SET_MY_CONTEST = gql`
+    mutation SetMyContest(
+      $name: String!
+      $shortDescription: String!
+      $description: String!
+      $startTime: String!
+      $freezed: String!
+      $finishTime: String!
+      $permittedLanguageIds: [String!]!
+    ) {
+      setMyContest(
+        name: $name
+        shortDescription: $shortDescription
+        description: $description
+        startTime: $startTime
+        freezed: $freezed
+        finishTime: $finishTime
+        permittedLanguageIds: $permittedLanguageIds
+      ) {
+        contest {
+          id
+          shortId
+          name
+          shortDescription
+          description
+          startTime
+          freezed
+          finishTime
+          permittedLanguages {
+            id
+            name
+          }
+        }
+      }
+    }
+  `
+
+  MUTATE_CREATE_CONTEST = gql`
+    mutation CreateContest(
+      $name: String!
+      $shortDescription: String!
+      $description: String!
+      $startTime: String!
+      $freezed: String!
+      $finishTime: String!
+      $permittedLanguageIds: [String!]!
+    ) {
+      createContest(
+        name: $name
+        shortDescription: $shortDescription
+        description: $description
+        startTime: $startTime
+        freezed: $freezed
+        finishTime: $finishTime
+        permittedLanguageIds: $permittedLanguageIds
+      ) {
+        id
+        contest {
+          id
+          shortId
+          name
+          shortDescription
+          description
+          startTime
+          freezed
+          finishTime
+          permittedLanguages {
+            id
+            name
+          }
+        }
+        username
+        email
+        name
+        permissions
+        profile
+      }
+    }
+  `
+
   private client: ApolloClient<{}>
   constructor(client: ApolloClient<{}>) {
     this.client = client
@@ -92,22 +174,38 @@ export class GraphqlContestService implements ContestService {
 
   updateContestInfo(
     token: string,
-    name?: string | undefined,
-    shortDescription?: string | undefined,
-    description?: string | undefined,
-    startTime?: Date | undefined,
-    freezed?: boolean | undefined,
-    finishTime?: Date | undefined,
-    permittedLanguages?: string[] | undefined
+    name: string,
+    shortDescription: string,
+    description: string,
+    startTime: Date,
+    freezed: boolean,
+    finishTime: Date,
+    permittedLanguages: string[]
   ): Promise<Contest> {
-    throw new Error('Method not implemented.')
+    return this.client
+      .mutate({
+        mutation: this.MUTATE_SET_MY_CONTEST,
+        variables: {
+          name,
+          shortDescription,
+          description,
+          startTime,
+          freezed,
+          finishTime,
+          permittedLanguageIds: permittedLanguages,
+        },
+        context: {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      })
+      .then(result => result.data.contest)
+      .catch(this.convertError)
   }
 
-  subscribeMyContest(
-    token: string,
-    callback: import('../ContestService').SubscriptionCallback<Contest>
-  ): import('../ContestService').UnsubscriptionFunction {
-    throw new Error('Method not implemented.')
+  subscribeMyContest(token: string, callback: SubscriptionCallback<Contest>): UnsubscriptionFunction {
+    return simplePublisher(this.getMyContest.bind(this, token), callback)
   }
 
   createContest(
@@ -119,7 +217,7 @@ export class GraphqlContestService implements ContestService {
     startTime: Date,
     finishTime: Date,
     permittedLanguages?: string[] | undefined
-  ): Promise<[Contest, import('../../auth').User]> {
+  ): Promise<[Contest, User]> {
     throw new Error('Method not implemented.')
   }
 

@@ -51,13 +51,13 @@ export interface ContestService {
    */
   updateContestInfo(
     token: string,
-    name?: string,
-    shortDescription?: string,
-    description?: string,
-    startTime?: Date,
-    freezed?: boolean,
-    finishTime?: Date,
-    permittedLanguages?: string[]
+    name: string,
+    shortDescription: string,
+    description: string,
+    startTime: Date,
+    freezed: boolean,
+    finishTime: Date,
+    permittedLanguages: string[]
   ): Promise<Contest>
 
   subscribeMyContest(token: string, callback: SubscriptionCallback<Contest>): UnsubscriptionFunction

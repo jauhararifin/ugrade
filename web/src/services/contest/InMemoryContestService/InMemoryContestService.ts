@@ -49,31 +49,29 @@ export class InMemoryContestService implements ContestService {
 
   async updateContestInfo(
     token: string,
-    name?: string,
-    shortDescription?: string,
-    description?: string,
-    startTime?: Date,
-    freezed?: boolean,
-    finishTime?: Date,
-    permittedLanguages?: string[]
+    name: string,
+    shortDescription: string,
+    description: string,
+    startTime: Date,
+    freezed: boolean,
+    finishTime: Date,
+    permittedLanguages: string[]
   ): Promise<Contest> {
     const contest = await this.getMyContest(token)
-    if (permittedLanguages) {
-      const newVal: Language[] = []
-      for (const langId of permittedLanguages) {
-        if (!this.languages[langId]) {
-          throw new NoSuchLanguage('No Such Language')
-        }
-        newVal.push(this.languages[langId])
+    const newVal: Language[] = []
+    for (const langId of permittedLanguages) {
+      if (!this.languages[langId]) {
+        throw new NoSuchLanguage('No Such Language')
       }
-      contest.permittedLanguages = newVal
+      newVal.push(this.languages[langId])
     }
-    if (name) contest.name = name
-    if (shortDescription) contest.shortDescription = shortDescription
-    if (description) contest.description = description
-    if (startTime) contest.startTime = startTime
-    if (freezed !== undefined) contest.freezed = freezed
-    if (finishTime) contest.finishTime = finishTime
+    contest.permittedLanguages = newVal
+    contest.name = name
+    contest.shortDescription = shortDescription
+    contest.description = description
+    contest.startTime = startTime
+    contest.freezed = freezed
+    contest.finishTime = finishTime
 
     for (const i in this.contests) {
       if (this.contests[i].id === contest.id) {

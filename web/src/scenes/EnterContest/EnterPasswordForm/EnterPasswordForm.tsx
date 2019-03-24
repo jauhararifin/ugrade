@@ -29,7 +29,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
   const validationSchema = yup.object().shape({
     password: yup
       .string()
-      .min(4)
+      .min(8)
       .max(255)
       .label('Password')
       .required(),
@@ -63,9 +63,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
 
   const forgotPassword = useForgotPassword()
 
-  const handleForgotPassword = async (
-    setSubmitting: (val: boolean) => void
-  ) => {
+  const handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
     try {
       await forgotPassword()
     } catch (error) {
