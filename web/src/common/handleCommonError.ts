@@ -27,5 +27,6 @@ export function handleCommonError(error: Error) {
     TopToaster.showErrorToast(new Error('You Are Currently Offline'))
     return true
   }
+  TopToaster.showErrorToast(new Error('Internal Server Error'))
   return false
 }
