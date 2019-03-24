@@ -5,16 +5,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { StoreContext } from 'redux-react-hook'
 import App from 'ugrade/scenes/App'
-import { InMemoryScoreboardService } from 'ugrade/services/scoreboard/InMemoryScoreboardService'
+import { initConfig } from './config'
 import { ErrorBoundary } from './ErrorBoundary'
-import { InMemoryAnnouncementService } from './services/announcement/InMemoryAnnouncementService'
-import { InMemoryAuthService } from './services/auth/InMemoryAuthService'
-import { InMemoryClarificationService } from './services/clarification/InMemoryClarificationService'
-import { InMemoryContestService } from './services/contest/InMemoryContestService'
-import { InMemoryProblemService } from './services/problem/InMemoryProblemService'
-import { InMemoryServerStatusService } from './services/serverStatus/InMemoryServerStatusService'
-import { InMemorySubmissionService } from './services/submission/InMemorySubmissionService'
-import { InMemoryUserService } from './services/user/InMemoryUserService'
 import * as serviceWorker from './serviceWorker'
 import { createStore } from './store'
 
@@ -23,36 +15,9 @@ import '@blueprintjs/datetime/lib/css/blueprint-datetime.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 
 const history = createBrowserHistory()
-const serverStatusService = new InMemoryServerStatusService()
-const authService = new InMemoryAuthService(serverStatusService)
-const userService = new InMemoryUserService(authService)
-const problemService = new InMemoryProblemService(authService)
-const announcementService = new InMemoryAnnouncementService(authService)
-const clarificationService = new InMemoryClarificationService(authService)
-const contestService = new InMemoryContestService(
-  serverStatusService,
-  authService
-)
-const submissionService = new InMemorySubmissionService(
-  authService,
-  contestService
-)
-const scoreboardService = new InMemoryScoreboardService(
-  authService,
-  problemService
-)
+const config = initConfig()
 
-export const store = createStore(history, {
-  authService,
-  userService,
-  serverStatusService,
-  contestService,
-  problemService,
-  announcementService,
-  clarificationService,
-  submissionService,
-  scoreboardService,
-})
+export const store = createStore(history, config)
 
 ReactDOM.render(
   <ErrorBoundary>
