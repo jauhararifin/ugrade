@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloError, ApolloQueryResult, gql } from 'apollo-boost'
+import { ApolloClient, ApolloError, gql } from 'apollo-boost'
 import { AuthService } from '../AuthService'
 import {
   AuthError,
