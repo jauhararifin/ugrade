@@ -23,7 +23,15 @@ export const Sidebar: FunctionComponent = () => {
   const setContestName = async (newName: string) => {
     if (contestInfo && newName !== contestInfo.name) {
       try {
-        await setContestInfo(newName)
+        await setContestInfo(
+          newName,
+          contestInfo.shortDescription,
+          contestInfo.description,
+          contestInfo.startTime,
+          contestInfo.freezed,
+          contestInfo.finishTime,
+          contestInfo.permittedLanguages.map(l => l.id)
+        )
         TopToaster.showSuccessToast('Contest Name Updated')
       } catch (error) {
         if (!handleCommonError(error)) throw error
@@ -34,7 +42,15 @@ export const Sidebar: FunctionComponent = () => {
   const setContestShortDesc = async (newShortDesc: string) => {
     if (contestInfo && newShortDesc !== contestInfo.shortDescription) {
       try {
-        await setContestInfo(undefined, newShortDesc)
+        await setContestInfo(
+          contestInfo.name,
+          newShortDesc,
+          contestInfo.description,
+          contestInfo.startTime,
+          contestInfo.freezed,
+          contestInfo.finishTime,
+          contestInfo.permittedLanguages.map(l => l.id)
+        )
         TopToaster.showSuccessToast('Contest Short Description Updated')
       } catch (error) {
         if (!handleCommonError(error)) throw error
@@ -42,12 +58,7 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
-  if (
-    !contestInfo ||
-    (canReadProblems && !problems) ||
-    rank === undefined ||
-    !serverClock
-  ) {
+  if (!contestInfo || (canReadProblems && !problems) || rank === undefined || !serverClock) {
     return <SidebarLoadingView />
   }
 
