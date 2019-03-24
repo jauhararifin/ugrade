@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql'
+import { GraphQLResolveInfo, GraphQLScalarType, Kind } from 'graphql'
 import { MergeInfo } from 'graphql-tools'
 import { merge } from 'lodash'
 import { AnnouncementService } from 'ugrade/announcement'
@@ -195,6 +195,17 @@ export function createResolvers(
     problemService,
     languageService
   )
+
+  const dateResolver = {
+    Date: new GraphQLScalarType({
+      name: 'Date',
+      description: 'Date custom scalar type',
+      parseValue: value => new Date(value),
+      serialize: value => value.getTime(),
+      parseLiteral: ast => (ast.kind === Kind.INT ? new Date(ast.value) : null),
+    }),
+  }
+
   return merge(
     languageResolvers,
     authResolvers,
@@ -203,6 +214,7 @@ export function createResolvers(
     announcementResolvers,
     clarificationResolvers,
     problemResolvers,
-    submissionResolvers
+    submissionResolvers,
+    dateResolver
   )
 }

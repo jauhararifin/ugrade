@@ -15,7 +15,7 @@ export enum Permission {
   UsersDelete = 'UsersDelete',
   ProfilesRead = 'ProfilesRead',
   SubmissionsRead = 'SubmissionsRead', // can read all submission
-  SubmissionsCreate = 'SUbmissionsCreate', // can submit
+  SubmissionsCreate = 'SubmissionsCreate', // can submit
 }
 
 export const allPermissions = [

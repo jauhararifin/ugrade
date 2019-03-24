@@ -63,8 +63,8 @@ type Contest {
   permittedLanguages: [Language!]!
 
   users: [User!]!
-  userByEmail(contestId: String!, email: String!): User!
-  userByUsername(contestId: String!, username: String!): User!
+  userByEmail(email: String!): User!
+  userByUsername(username: String!): User!
 
   announcements: [Announcement!]!
 

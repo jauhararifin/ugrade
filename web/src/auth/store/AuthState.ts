@@ -2,27 +2,32 @@ export const AUTH_IS_SIGNED_IN_KEY = 'auth.isSignedIn'
 export const AUTH_TOKEN_KEY = 'auth.token'
 
 export enum UserPermission {
-  InfoUpdate = 'info:update',
-  AnnouncementCreate = 'announcement:create',
-  AnnouncementRead = 'announcement:read',
-
-  ProblemsCreate = 'problems:create',
-  ProblemsRead = 'problems:read',
-  ProblemsReadDisabled = 'problems:read-disabled',
-  ProblemsUpdate = 'problems:update',
-  ProblemsDelete = 'problems:delete',
-
-  UsersInvite = 'users:invite',
-  UsersPermissionsUpdate = 'users:permissions:update',
-  UsersDelete = 'users:delete',
-
-  ProfilesRead = 'profiles:read',
+  InfoUpdate = 'InfoUpdate',
+  AnnouncementCreate = 'AnnouncementCreate',
+  AnnouncementRead = 'AnnouncementRead',
+  ClarificationsRead = 'ClarificationsRead', // can read all clarification
+  ClarificationsCreate = 'ClarificationsCreate', // can create and read own clarification
+  ClarificationReply = 'ClarificationReply', // can reply all clarification
+  ProblemsCreate = 'ProblemsCreate',
+  ProblemsRead = 'ProblemsRead',
+  ProblemsReadDisabled = 'ProblemsReadDisabled',
+  ProblemsUpdate = 'ProblemsUpdate',
+  ProblemsDelete = 'ProblemsDelete',
+  UsersInvite = 'UsersInvite',
+  UsersPermissionsUpdate = 'UsersPermissionsUpdate',
+  UsersDelete = 'UsersDelete',
+  ProfilesRead = 'ProfilesRead',
+  SubmissionsRead = 'SubmissionsRead', // can read all submission
+  SubmissionsCreate = 'SubmissionsCreate', // can submit
 }
 
 export const allPermissions = [
   UserPermission.InfoUpdate,
   UserPermission.AnnouncementCreate,
   UserPermission.AnnouncementRead,
+  UserPermission.ClarificationsRead,
+  UserPermission.ClarificationsCreate,
+  UserPermission.ClarificationReply,
   UserPermission.ProblemsCreate,
   UserPermission.ProblemsRead,
   UserPermission.ProblemsReadDisabled,
@@ -32,6 +37,8 @@ export const allPermissions = [
   UserPermission.UsersPermissionsUpdate,
   UserPermission.UsersDelete,
   UserPermission.ProfilesRead,
+  UserPermission.SubmissionsRead,
+  UserPermission.SubmissionsCreate,
 ]
 
 export const adminPermissions = allPermissions
