@@ -1,0 +1,15 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
+.ugrade-markdown-edit {
+  border: solid 1px $pt-dark-text-color-muted;
+  .actions {
+    padding: 10px 20px;
+    border-bottom: solid 1px $pt-dark-text-color-muted;
+  }
+  .editor {
+    width: 100%;
+  }
+  .preview {
+    padding: 5px 20px;
+  }
+}
