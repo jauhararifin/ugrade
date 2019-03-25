@@ -20,6 +20,10 @@ import { SubmissionService } from './services/submission'
 import { InMemorySubmissionService } from './services/submission/InMemorySubmissionService'
 import { UserService } from './services/user'
 import { InMemoryUserService } from './services/user/InMemoryUserService'
+import { config } from 'dotenv'
+
+config()
+console.log(process.env)
 
 export interface Config {
   serverStatusService: ServerStatusService
@@ -57,6 +61,7 @@ function initLocalConfig(): Config {
 }
 
 function initDevConfig(): Config {
+  return initLocalConfig()
   const client = new ApolloClient({
     uri: process.env.REACT_APP_GRAPHQL_API || 'http://localhost:5000/',
   })

@@ -1,5 +1,2 @@
-node_modules
+db.sqlite3
 .vscode
-*.env
-dist
-coverage/

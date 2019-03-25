@@ -111,13 +111,13 @@ export const contestUserMap: {
 }
 
 export const userPasswordMap: { [userId: string]: string } = {
-  [UserTest1.id]: 'test',
-  [UserNewTest1.id]: 'newtest',
-  [UserTest2.id]: 'test',
-  [UserNewTest2.id]: 'newtest',
-  [UserTest3.id]: 'test',
-  [UserNewTest3.id]: 'newtest',
-  [UserAdmin3.id]: 'admin',
-  [UserTest4.id]: 'test',
-  [UserNewTest4.id]: 'newtest',
+  [UserTest1.id]: 'testtest',
+  [UserNewTest1.id]: 'newtesttest',
+  [UserTest2.id]: 'testtest',
+  [UserNewTest2.id]: 'newtesttest',
+  [UserTest3.id]: 'testtest',
+  [UserNewTest3.id]: 'newtesttest',
+  [UserAdmin3.id]: 'admintest',
+  [UserTest4.id]: 'testtest',
+  [UserNewTest4.id]: 'newtesttest',
 }
