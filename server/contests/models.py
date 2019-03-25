@@ -11,6 +11,9 @@ class Language(models.Model):
     def extension_list(self):
         return self.extensions.split(',')
 
+    def __str__(self):
+        return self.name
+
 
 class Contest(models.Model):
     name = models.CharField(max_length=255, validators=[
@@ -30,10 +33,16 @@ class Contest(models.Model):
     finishTime = models.DateTimeField()
     permittedLanguages = models.ManyToManyField(Language)
 
+    def __str__(self):
+        return self.name
+
 
 class Permission(models.Model):
     code = models.CharField(max_length=32, unique=True)
     description = models.TextField(validators=[MaxLengthValidator(1024)])
+
+    def __str__(self):
+        return self.code
 
 
 class User(models.Model):
