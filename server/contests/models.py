@@ -54,5 +54,8 @@ class User(models.Model):
     signup_otc = models.CharField(max_length=32)
     reset_password_otc = models.CharField(max_length=32)
 
+    class Meta:
+        unique_together = [('username', 'contest',), ('email', 'contest',)]
+
     def __str__(self):
         return self.name
