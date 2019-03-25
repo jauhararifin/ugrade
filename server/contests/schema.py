@@ -1,4 +1,8 @@
-from graphene import Field, String, List
+from random import choice
+from datetime import datetime, timedelta
+from django.db import transaction
+from graphene import Field, String, List, Mutation, ObjectType, InputObjectType
+from graphene.types.datetime import DateTime
 from graphene_django.types import DjangoObjectType
 from contests.models import User, Contest, Language
 
@@ -38,8 +42,43 @@ class ContestType(DjangoObjectType):
 
     class Meta:
         model = Contest
-        only_fields = ('id', 'name', 'shortId', 'shortDescription', 'description',
-                       'startTime', 'freezed', 'finishTime', 'permittedLanguages')
+        only_fields = ('id', 'name', 'short_id', 'short_description', 'description',
+                       'start_time', 'freezed', 'finish_time', 'permitted_languages')
+
+
+class ContestInput(InputObjectType):
+    name = String(required=True)
+    short_id = String(required=True)
+    short_description = String(required=True)
+
+
+class CreateContest(Mutation):
+    class Arguments:
+        email = String(required=True)
+        contest = ContestInput(required=True)
+
+    contest = Field(ContestType)
+    admin = Field(UserType)
+
+    @staticmethod
+    @transaction.atomic
+    def mutate(root, info, contest, email):
+        start_time = datetime.now() + timedelta(days=10)
+        finish_time = datetime.now() + timedelta(days=10, hours=5)
+        description = 'Just another competitive programming competition'
+
+        new_contest = Contest(**contest, start_time=start_time, description=description,
+                              finish_time=finish_time, freezed=False)
+        new_contest.full_clean()
+        new_contest.save()
+
+        signup_otc = "".join([choice("0123456789") for _ in range(8)])
+        new_user = User(email=email, contest=new_contest,
+                        signup_otc=signup_otc)
+        new_user.full_clean()
+        new_user.save()
+
+        return CreateContest(contest=new_contest, admin=new_user)
 
 
 class LanguageType(DjangoObjectType):
@@ -54,7 +93,7 @@ class LanguageType(DjangoObjectType):
         only_fields = ('id', 'name', 'username', 'email', 'contest')
 
 
-class Query(object):
+class Query(ObjectType):
     user = Field(UserType, id=String())
 
     contest = Field(ContestType, id=String())
@@ -89,3 +128,7 @@ class Query(object):
 
     def resolve_languages(self):
         return Language.objects.all()
+
+
+class Mutation(ObjectType):
+    create_contest = CreateContest.Field()
