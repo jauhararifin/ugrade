@@ -68,3 +68,23 @@ class User(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Problem(models.Model):
+    shortId = models.CharField(max_length=255, unique=True, validators=[
+        validate_slug, MinLengthValidator(4), MaxLengthValidator(255)
+    ])
+    name = models.CharField(max_length=255, validators=[
+        MinLengthValidator(4), MaxLengthValidator(255)
+    ])
+    statement = models.TextField(validators=[
+        MaxLengthValidator(4 * 1024 * 1024)
+    ])
+    contest = models.ForeignKey(
+        Contest, related_name='problems', on_delete=models.CASCADE)
+    disabled = models.BooleanField()
+    order = models.IntegerField()
+    timeLimit = models.IntegerField()
+    tolerance = models.FloatField()
+    memoryLimit = models.IntegerField()
+    outputLimit = models.IntegerField()
