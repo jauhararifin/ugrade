@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import { observer } from 'mobx-react-lite'
 import React, { Fragment, FunctionComponent, ReactElement } from 'react'
-import { useServer } from '../../server'
+import { useServer } from '../../app'
 
 import './styles.css'
 

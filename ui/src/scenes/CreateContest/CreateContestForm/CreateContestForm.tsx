@@ -2,8 +2,8 @@ import { Formik, FormikActions } from 'formik'
 import { useObservable } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
+import { useContest } from '../../../app'
 import { showErrorToast, showSuccessToast } from '../../../common/toaster'
-import { contestStore } from '../../../contest'
 import { CreateContestFormView } from './CreateContestFormView'
 
 export interface CreateContestFormValue {
@@ -47,7 +47,7 @@ export const CreateContestForm: FunctionComponent = () => {
       .label('Short Description'),
   })
 
-  const contest = useObservable(contestStore)
+  const contest = useContest()
   const handleSubmit = async (
     values: CreateContestFormValue,
     { setSubmitting }: FormikActions<CreateContestFormValue>

@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx'
-import { AuthStore, authStore } from '../auth'
+import { AuthStore } from './auth'
 
 export interface Language {
   id: string
@@ -41,5 +41,3 @@ export class ContestStore {
     }
   }
 }
-
-export const contestStore = new ContestStore(authStore)

@@ -1,23 +1,22 @@
-import { observer, useObservable } from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import DocumentTitle from 'react-document-title'
 import { Route, Router, Switch } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useTitle } from '../common'
 import { NetworkStatus } from '../components/NetworkStatus'
-import { history, routingStore } from '../router'
 import { CreateContest } from './CreateContest'
 import { Home } from './Home'
 
+import { useRouting, useWindow } from '../app'
 import './styles.css'
 
 export const App: FunctionComponent = observer(() => {
-  const routing = useObservable(routingStore)
-  const titleStore = useTitle()
+  const routing = useRouting()
+  const windowStore = useWindow()
   const locationKey = routing.location.pathname.split('/', 2).join('/')
   return (
-    <Router history={history}>
-      <DocumentTitle title={titleStore.title || 'UGrade'}>
+    <Router history={routing.history}>
+      <DocumentTitle title={windowStore.title || 'UGrade'}>
         <NetworkStatus>
           <TransitionGroup className='eat-them-all'>
             <CSSTransition timeout={300} classNames='fade' key={locationKey}>
