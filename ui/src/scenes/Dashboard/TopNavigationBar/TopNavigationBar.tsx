@@ -14,7 +14,8 @@ import {
   Position,
 } from '@blueprintjs/core'
 import classNames from 'classnames'
-import React, { FunctionComponent } from 'react'
+import { useObserver } from 'mobx-react-lite'
+import React, { FunctionComponent, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth, useContest, useProblem, useRouting } from '../../../app'
 import { showSuccessToast, useContestOnly } from '../../../common'
@@ -31,6 +32,10 @@ export const TopNavigationBar: FunctionComponent = () => {
   const routingStore = useRouting()
   const breadcrumbs = getBreadcrumb(routingStore.location, contestStore.current, problemStore.problems)
 
+  useEffect(() => {
+    authStore.loadMe()
+  }, [])
+
   const breadcrumbWithRouter = breadcrumbs.map(breadcrumbItem => ({
     ...breadcrumbItem,
     onClick: () => {
@@ -44,7 +49,7 @@ export const TopNavigationBar: FunctionComponent = () => {
     showSuccessToast('Signed Out')
   }
 
-  return (
+  return useObserver(() => (
     <Navbar>
       <NavbarGroup align={Alignment.LEFT}>
         <Link to='/contest'>
@@ -75,5 +80,5 @@ export const TopNavigationBar: FunctionComponent = () => {
         </Popover>
       </NavbarGroup>
     </Navbar>
-  )
+  ))
 }

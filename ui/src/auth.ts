@@ -42,6 +42,8 @@ export class AuthStore {
   constructor(client: ApolloClient<{}>) {
     this.client = client
     this.token = sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY) || ''
+
+    setInterval(this.synchronize, 5000)
   }
 
   can = (permission: Permission): boolean => {
@@ -244,5 +246,44 @@ export class AuthStore {
     localStorage.removeItem(AUTH_TOKEN_KEY)
     this.token = ''
     this.me = undefined
+  }
+
+  @action loadMe = async () => {
+    try {
+      const response = await this.client.query({
+        query: gql`
+          {
+            me {
+              id
+              name
+              username
+              email
+              permissions
+              contest {
+                id
+              }
+            }
+          }
+        `,
+        context: {
+          headers: {
+            authorization: `Bearer ${this.token}`,
+          },
+        },
+      })
+      const user = { ...response.data.me, contestId: response.data.me.contest.id }
+      runInAction(() => {
+        this.me = user
+      })
+      return user
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
+  }
+
+  private synchronize = () => {
+    if (this.token.length > 0 && !this.me) {
+      this.loadMe()
+    }
   }
 }

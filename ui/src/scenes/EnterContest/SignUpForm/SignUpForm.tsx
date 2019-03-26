@@ -69,7 +69,7 @@ export const SignUpForm: FunctionComponent = () => {
   ) => {
     try {
       await authStore.signUp(values.username, values.oneTimeCode, values.password, values.name, values.rememberMe)
-      showSuccessToast('Signed In')
+      showSuccessToast('Signed Up')
       routingStore.push('/contest')
     } catch (error) {
       if (error instanceof yup.ValidationError) {

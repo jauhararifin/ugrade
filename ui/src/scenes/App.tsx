@@ -9,6 +9,7 @@ import { CreateContest } from './CreateContest'
 import { EnterContest } from './EnterContest'
 import { Home } from './Home'
 
+import { Dashboard } from './Dashboard'
 import './styles.css'
 
 export const App: FunctionComponent = observer(() => {
@@ -25,6 +26,7 @@ export const App: FunctionComponent = observer(() => {
                 <Route path='/' exact={true} component={Home} />
                 <Route path='/create-contest' component={CreateContest} />
                 <Route path='/enter-contest' component={EnterContest} />
+                <Route path='/contest' component={Dashboard} />
               </Switch>
             </CSSTransition>
           </TransitionGroup>

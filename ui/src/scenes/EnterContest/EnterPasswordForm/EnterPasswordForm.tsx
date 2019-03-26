@@ -2,7 +2,7 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import * as yup from 'yup'
 import { useAuth, useContest, useRouting } from '../../../app'
-import { showErrorToast, usePublicOnly } from '../../../common'
+import { showErrorToast, showSuccessToast, usePublicOnly } from '../../../common'
 import { useReset, useResetAccount } from '../reset'
 import { EnterPasswordFormView } from './EnterPasswordFormView'
 
@@ -37,6 +37,8 @@ export const EnterPasswordForm: FunctionComponent = () => {
   ) => {
     try {
       await authStore.signIn(values.password, values.rememberMe)
+      showSuccessToast('Signed In')
+      routingStore.push('/contest')
     } catch (error) {
       showErrorToast(error)
     } finally {
