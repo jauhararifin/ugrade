@@ -2,7 +2,7 @@ import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
 import { useContest, useRouting } from '../../../app'
-import { showErrorToast } from '../../../common'
+import { showErrorToast, usePublicOnly } from '../../../common'
 import { EnterContestFormView } from './EnterContestFormView'
 
 export interface EnterContestFormValue {
@@ -10,6 +10,8 @@ export interface EnterContestFormValue {
 }
 
 export const EnterContestForm: FunctionComponent = () => {
+  usePublicOnly()
+
   const initialValue: EnterContestFormValue = {
     contestId: '',
   }

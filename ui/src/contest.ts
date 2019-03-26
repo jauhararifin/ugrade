@@ -33,7 +33,12 @@ export class ContestStore {
     this.client = apolloClient
   }
 
-  @action create = async (email: string, shortId: string, name: string, shortDescription: string) => {
+  @action create = async (
+    email: string,
+    shortId: string,
+    name: string,
+    shortDescription: string
+  ): Promise<ContestInfo> => {
     try {
       const response = await this.client.mutate({
         mutation: gql`
@@ -69,10 +74,13 @@ export class ContestStore {
         `,
         variables: { email, shortId, name, shortDescription },
       })
+      const contest = response.data.createContest.contest
+      const me = { ...response.data.createContest.admin, contestId: contest.id }
       runInAction(() => {
-        this.current = response.data.createContest.contest
-        this.authStore.me = response.data.createContest.admin
+        this.current = contest
+        this.authStore.me = me
       })
+      return contest
     } catch (error) {
       throw convertGraphqlError(error)
     }

@@ -10,3 +10,12 @@ export function useReset() {
     authStore.me = undefined
   }
 }
+
+export function useResetAccount() {
+  const routingStore = useRouting()
+  const authStore = useAuth()
+  return () => {
+    routingStore.push('/enter-contest/enter-email')
+    authStore.me = undefined
+  }
+}

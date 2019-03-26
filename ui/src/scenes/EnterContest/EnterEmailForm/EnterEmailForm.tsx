@@ -2,7 +2,7 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import * as yup from 'yup'
 import { useAuth, useContest, useRouting } from '../../../app'
-import { showAlertToast, showErrorToast } from '../../../common'
+import { showAlertToast, showErrorToast, usePublicOnly } from '../../../common'
 import { useReset } from '../reset'
 import { EnterEmailFormView } from './EnterEmailFormView'
 
@@ -11,6 +11,8 @@ export interface EnterEmailFormValue {
 }
 
 export const EnterEmailForm: FunctionComponent = () => {
+  usePublicOnly()
+
   const initialValue: EnterEmailFormValue = {
     email: '',
   }
@@ -31,15 +33,12 @@ export const EnterEmailForm: FunctionComponent = () => {
 
   const handleSubmit = async (values: EnterEmailFormValue, { setSubmitting }: FormikActions<EnterEmailFormValue>) => {
     try {
-      if (!contestStore.current) {
-        showAlertToast('Please Set The Contest First')
+      if (!contestStore.current) throw new Error('Please Set The Contest First')
+      const user = await authStore.setMeByEmail(contestStore.current.id, values.email)
+      if (user.username) {
+        routingStore.push('/enter-contest/enter-password')
       } else {
-        const user = await authStore.setMeByEmail(contestStore.current.id, values.email)
-        if (user.username) {
-          routingStore.push('/enter-contest/enter-password')
-        } else {
-          routingStore.push('/enter-contest/signup')
-        }
+        routingStore.push('/enter-contest/signup')
       }
     } catch (error) {
       showErrorToast(error)

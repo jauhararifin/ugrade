@@ -6,6 +6,7 @@ import logo from '../../assets/images/logo.svg'
 import { BottomLink } from '../../components/BottomLink'
 import { EnterContestForm } from './EnterContestForm'
 import { EnterEmailForm } from './EnterEmailForm'
+import { EnterPasswordForm } from './EnterPasswordForm'
 
 import './styles.css'
 
@@ -25,8 +26,8 @@ export const EnterContestView: FunctionComponent<EnterContestViewProps> = ({ loc
           <Switch location={location}>
             <Route path='/enter-contest/' exact={true} component={EnterContestForm} />
             <Route path='/enter-contest/enter-email' component={EnterEmailForm} />
-            {/* <Route path='/enter-contest/enter-password' component={EnterPasswordForm} />
-            <Route path='/enter-contest/reset-password' component={ResetPasswordForm} />
+            <Route path='/enter-contest/enter-password' component={EnterPasswordForm} />
+            {/* <Route path='/enter-contest/reset-password' component={ResetPasswordForm} />
             <Route path='/enter-contest/signup' component={SignUpForm} /> */}
           </Switch>
         </CSSTransition>
