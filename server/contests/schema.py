@@ -147,6 +147,46 @@ class ForgotPassword(graphene.Mutation):
         return user
 
 
+class ResetPassword(graphene.Mutation):
+    class Arguments:
+        contest_id = graphene.String(required=True)
+        email = graphene.String(required=True)
+        reset_password_otc = graphene.String(required=True)
+        new_password = graphene.String(required=True)
+
+    Output = UserType
+
+    @staticmethod
+    def mutate(_self, _info, contest_id, email, reset_password_otc, new_password):
+        try:
+            contest = Contest.objects.get(short_id=contest_id)
+        except Contest.DoesNotExist:
+            raise Exception("No Such Contest")
+
+        try:
+            user = User.objects.filter(
+                contest__id=contest.id, email=email).first()
+            if user is None:
+                raise User.DoesNotExist()
+        except User.DoesNotExist:
+            raise Exception("No Such User")
+
+        if user.username is None:
+            raise Exception("You haven't signed up yet, please sign up first.")
+
+        if reset_password_otc != user.reset_password_otc:
+            raise Exception("Wrong Token")
+
+        try:
+            user.password = bcrypt.hashpw(
+                bytes(new_password, "utf-8"), bcrypt.gensalt()).decode("utf-8")
+        except Exception:
+            raise Exception("Internal Server Error")
+        user.save()
+
+        return user
+
+
 class ContestType(DjangoObjectType):
     user_by_email = graphene.Field(UserType, email=graphene.String())
     user_by_username = graphene.Field(UserType, username=graphene.String())
@@ -270,3 +310,4 @@ class Mutation(graphene.ObjectType):
     sign_in = SignIn.Field()
     sign_up = SignUp.Field()
     forgot_password = ForgotPassword.Field()
+    reset_password = ResetPassword.Field()
