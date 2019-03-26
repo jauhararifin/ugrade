@@ -292,6 +292,12 @@ class Query(graphene.ObjectType):
     language = graphene.Field(LanguageType, id=graphene.String(required=True))
     languages = graphene.List(LanguageType)
 
+    clock = DateTime()
+
+    @staticmethod
+    def resolve_clock(_root, _info):
+        return datetime.datetime.now()
+
     def resolve_user(self, _, **kwargs):
         try:
             return User.objects.get(pk=kwargs.get('id'))
