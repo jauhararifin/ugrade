@@ -53,10 +53,12 @@ class SignIn(graphene.Mutation):
             raise Exception("You haven't sign up yet, please sign up first")
 
         try:
-            if not bcrypt.checkpw(bytes(password, "utf-8"), bytes(user.password, "utf-8")):
-                raise Exception("Wrong Email Or Password")
+            password_matched = bcrypt.checkpw(
+                bytes(password, "utf-8"), bytes(user.password, "utf-8"))
         except Exception:
             raise Exception("Internal Server Error")
+        if not password_matched:
+            raise Exception("Wrong Email Or Password")
 
         token = jwt.encode({'id': user.id},
                            settings.SECRET_KEY, algorithm='HS256').decode("utf-8")
@@ -183,6 +185,7 @@ class ResetPassword(graphene.Mutation):
         try:
             user.password = bcrypt.hashpw(
                 bytes(new_password, "utf-8"), bcrypt.gensalt()).decode("utf-8")
+            user.reset_password_otc = None
         except Exception:
             raise Exception("Internal Server Error")
         user.save()
