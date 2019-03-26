@@ -109,7 +109,46 @@ export class AuthStore {
         `,
         variables: { contestId: me.contestId, email: me.email },
       })
-      const user = { ...response.data.signIn.user, contestId: me.contestId }
+      const user = { ...response.data.forgotPassword, contestId: me.contestId }
+      runInAction(() => {
+        this.me = user
+      })
+      return user
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
+  }
+
+  @action resetPassword = async (newPassword: string, resetPasswordOtc: string): Promise<User> => {
+    console.log('x', this)
+    try {
+      const me = this.me
+      if (!me) throw new Error('Please Set The Contest And Your Email First')
+      const response = await this.client.mutate({
+        mutation: gql`
+          mutation ResetPassword(
+            $contestId: String!
+            $email: String!
+            $newPassword: String!
+            $resetPasswordOtc: String!
+          ) {
+            resetPassword(
+              contestId: $contestId
+              email: $email
+              newPassword: $newPassword
+              resetPasswordOtc: $resetPasswordOtc
+            ) {
+              id
+              name
+              username
+              email
+              permissions
+            }
+          }
+        `,
+        variables: { contestId: me.contestId, email: me.email, newPassword, resetPasswordOtc },
+      })
+      const user = { ...response.data.resetPassword, contestId: me.contestId }
       runInAction(() => {
         this.me = user
       })

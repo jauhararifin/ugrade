@@ -2,7 +2,7 @@ import { Formik, FormikActions, FormikProps } from 'formik'
 import React, { FunctionComponent, useEffect } from 'react'
 import * as yup from 'yup'
 import { useAuth, useContest, useRouting } from '../../../app'
-import { showAlertToast, showErrorToast, usePublicOnly } from '../../../common'
+import { showErrorToast, usePublicOnly } from '../../../common'
 import { useReset } from '../reset'
 import { EnterEmailFormView } from './EnterEmailFormView'
 
