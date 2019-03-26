@@ -4,7 +4,7 @@ import { useAuth, useRouting } from '../app'
 export function usePublicOnly(to: string = '/contest') {
   const routing = useRouting()
   const auth = useAuth()
-  const isSignedIn = auth.me && auth.token.length > 0
+  const isSignedIn = auth.token.length > 0
   useEffect(() => {
     if (isSignedIn) routing.push(to)
   }, [isSignedIn])
@@ -13,7 +13,7 @@ export function usePublicOnly(to: string = '/contest') {
 export function useContestOnly(to: string = '/enter-contest') {
   const routing = useRouting()
   const auth = useAuth()
-  const isSignedIn = auth.me && auth.token
+  const isSignedIn = auth.token.length > 0
   useEffect(() => {
     if (!isSignedIn) routing.push(to)
   }, [isSignedIn])
