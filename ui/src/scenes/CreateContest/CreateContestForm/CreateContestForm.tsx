@@ -1,5 +1,4 @@
 import { Formik, FormikActions } from 'formik'
-import { useObservable } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
 import { useContest } from '../../../app'
