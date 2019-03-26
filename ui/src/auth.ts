@@ -157,4 +157,61 @@ export class AuthStore {
       throw convertGraphqlError(error)
     }
   }
+
+  @action signUp = async (
+    username: string,
+    signupCode: string,
+    password: string,
+    name: string,
+    rememberMe: boolean
+  ): Promise<User> => {
+    try {
+      const me = this.me
+      if (!me) throw new Error('Please Set The Contest And Your Email First')
+      const response = await this.client.mutate({
+        mutation: gql`
+          mutation SignUp(
+            $contestId: String!
+            $email: String!
+            $signupCode: String!
+            $username: String!
+            $name: String!
+            $password: String!
+          ) {
+            signUp(
+              contestId: $contestId
+              email: $email
+              signupCode: $signupCode
+              user: { name: $name, password: $password, username: $username }
+            ) {
+              user {
+                id
+                name
+                username
+                email
+                permissions
+              }
+              token
+            }
+          }
+        `,
+        variables: { contestId: me.contestId, email: me.email, username, signupCode, password, name, rememberMe },
+      })
+      const user = { ...response.data.signUp.user, contestId: me.contestId }
+      const token = response.data.signUp.token
+      sessionStorage.setItem(AUTH_TOKEN_KEY, token)
+      if (rememberMe) {
+        localStorage.setItem(AUTH_TOKEN_KEY, token)
+      }
+
+      runInAction(() => {
+        this.me = user
+        this.token = token
+      })
+
+      return user
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
+  }
 }

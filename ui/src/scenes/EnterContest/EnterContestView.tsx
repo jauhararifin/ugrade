@@ -8,6 +8,7 @@ import { EnterContestForm } from './EnterContestForm'
 import { EnterEmailForm } from './EnterEmailForm'
 import { EnterPasswordForm } from './EnterPasswordForm'
 import { ResetPasswordForm } from './ResetPasswordForm'
+import { SignUpForm } from './SignUpForm'
 
 import './styles.css'
 
@@ -29,7 +30,7 @@ export const EnterContestView: FunctionComponent<EnterContestViewProps> = ({ loc
             <Route path='/enter-contest/enter-email' component={EnterEmailForm} />
             <Route path='/enter-contest/enter-password' component={EnterPasswordForm} />
             <Route path='/enter-contest/reset-password' component={ResetPasswordForm} />
-            {/* <Route path='/enter-contest/signup' component={SignUpForm} /> */}
+            <Route path='/enter-contest/signup' component={SignUpForm} />
           </Switch>
         </CSSTransition>
       </TransitionGroup>

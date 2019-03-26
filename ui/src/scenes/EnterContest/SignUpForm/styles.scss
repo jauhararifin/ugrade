@@ -1,0 +1,13 @@
+.signup-panel {
+  min-width: 400px;
+  max-width: 400px;
+  .remember-me {
+    display: flex;
+    justify-content: space-between;
+  }
+  .bottom-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
