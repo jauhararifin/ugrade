@@ -60,6 +60,60 @@ class SignIn(graphene.Mutation):
         return SignIn(user=user, token=token)
 
 
+class UserInput(graphene.InputObjectType):
+    username = graphene.String(required=True)
+    name = graphene.String(required=True)
+    password = graphene.String(required=True)
+
+
+class SignUp(graphene.Mutation):
+    class Arguments:
+        contest_id = graphene.String(required=True)
+        email = graphene.String(required=True)
+        user = UserInput(required=True)
+        signup_code = graphene.String(required=True)
+
+    user = graphene.Field(UserType)
+    token = graphene.Field(graphene.String)
+
+    @staticmethod
+    def mutate(_self, _info, contest_id, email, user, signup_code):
+        try:
+            contest = Contest.objects.get(short_id=contest_id)
+        except Contest.DoesNotExist:
+            raise Exception("No Such Contest")
+
+        try:
+            new_user = User.objects.filter(
+                contest__id=contest.id, email=email).first()
+            if new_user is None:
+                raise User.DoesNotExist()
+        except User.DoesNotExist:
+            raise Exception("No Such User")
+
+        if new_user.username is not None:
+            raise Exception("User Already Signed Up")
+
+        if new_user.signup_otc != signup_code:
+            raise Exception("Wrong Token")
+
+        new_user.name = user.name
+        new_user.username = user.username
+        try:
+            new_user.password = bcrypt.hashpw(
+                bytes(user.password, "utf-8"), bcrypt.gensalt()).decode("utf-8")
+        except Exception:
+            raise Exception("Internal Server Error")
+        new_user.signup_otc = None
+        new_user.reset_password_otc = None
+        new_user.full_clean()
+        new_user.save()
+
+        token = jwt.encode({'id': new_user.id},
+                           settings.SECRET_KEY, algorithm='HS256').decode("utf-8")
+        return SignUp(user=new_user, token=token)
+
+
 class ContestType(DjangoObjectType):
     user_by_email = graphene.Field(UserType, email=graphene.String())
     user_by_username = graphene.Field(UserType, username=graphene.String())
@@ -181,3 +235,4 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     create_contest = CreateContest.Field()
     sign_in = SignIn.Field()
+    sign_up = SignUp.Field()

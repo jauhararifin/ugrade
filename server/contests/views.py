@@ -5,7 +5,7 @@ from graphene_django.views import GraphQLView
 class ContestView(GraphQLView):
     @staticmethod
     def format_error(error):
-        if isinstance(error.original_error, ValidationError):
+        if hasattr(error, 'original_error') and isinstance(error.original_error, ValidationError):
             err_dict = error.original_error.message_dict
 
             def to_camel(strs):
