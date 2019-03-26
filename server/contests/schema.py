@@ -211,7 +211,7 @@ class ContestType(DjangoObjectType):
     class Meta:
         model = Contest
         only_fields = ('id', 'name', 'short_id', 'short_description', 'description',
-                       'start_time', 'freezed', 'finish_time', 'permitted_languages')
+                       'start_time', 'freezed', 'finish_time', 'permitted_languages', 'members')
 
 
 class ContestInput(graphene.InputObjectType):
@@ -272,7 +272,7 @@ class Query(graphene.ObjectType):
 
     contest = graphene.Field(ContestType, id=graphene.String())
     contest_by_short_id = graphene.Field(
-        ContestType, shortId=graphene.String())
+        ContestType, short_id=graphene.String())
 
     language = graphene.Field(LanguageType, id=graphene.String(required=True))
     languages = graphene.List(LanguageType)
@@ -291,7 +291,7 @@ class Query(graphene.ObjectType):
 
     def resolve_contest_by_short_id(self, _, **kwargs):
         try:
-            return Contest.objects.get(shortId=kwargs.get('shortId'))
+            return Contest.objects.get(short_id=kwargs.get('short_id'))
         except Contest.DoesNotExist:
             raise ValueError("No Such Contest")
 
