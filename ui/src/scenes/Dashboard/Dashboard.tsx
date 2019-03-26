@@ -1,17 +1,24 @@
 import React, { FunctionComponent, useEffect } from 'react'
 import { Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useContest, useRouting } from '../../app'
-import { title, useContestOnly } from '../../common'
+import { useContest, useRouting, useServer, useWindow } from '../../app'
+import { useContestOnly } from '../../common'
 import { DashboardView } from './DashboardView'
 
 export const Dashboard: FunctionComponent = () => {
   useContestOnly()
   const routingStore = useRouting()
   const contestStore = useContest()
+  const windowStore = useWindow()
+
   useEffect(() => {
-    if (contestStore.current && contestStore.current.name) title(`UGrade | ${contestStore.current.name}`)
+    if (contestStore.current && contestStore.current.name) windowStore.title = `UGrade | ${contestStore.current.name}`
   }, [contestStore.current && contestStore.current.name])
+
+  const serverStore = useServer()
+  useEffect(() => {
+    serverStore.loadClock()
+  }, [])
 
   return (
     <DashboardView>

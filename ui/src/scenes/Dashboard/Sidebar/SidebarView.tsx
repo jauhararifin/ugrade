@@ -39,17 +39,12 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   onUpdateName,
   onUpdateShortDesc,
 }) => {
-  const started = serverClock && contest && serverClock >= contest.startTime
-  const ended = serverClock && contest && serverClock >= contest.finishTime
+  const started = serverClock >= contest.startTime
+  const ended = serverClock >= contest.finishTime
   const running = started && !ended
-  const freezed = contest && contest.freezed
-  const remainingTime =
-    contest && serverClock ? moment.duration(moment(contest.finishTime).diff(moment(serverClock))) : undefined
+  const remainingTime = moment.duration(moment(contest.finishTime).diff(moment(serverClock)))
   const remainingTimeStr = remainingTime ? durationToStr(remainingTime) : '--:--:--'
-  const startedIn =
-    contest && serverClock
-      ? durationToStr(moment.duration(moment(contest.startTime).diff(moment(serverClock))))
-      : undefined
+  const startedIn = durationToStr(moment.duration(moment(serverClock).diff(moment(contest.startTime))))
 
   const [name, setName] = useState('')
   const [shortDesc, setShortDesc] = useState('')

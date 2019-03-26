@@ -1,5 +1,6 @@
 import lodash from 'lodash'
-import React, { FunctionComponent } from 'react'
+import { useObserver } from 'mobx-react-lite'
+import React, { FunctionComponent, useEffect } from 'react'
 import { useAuth, useContest, useProblem, useServer } from '../../../app'
 import { Permission } from '../../../auth'
 import { showErrorToast, showSuccessToast, useContestOnly } from '../../../common'
@@ -13,7 +14,6 @@ export const Sidebar: FunctionComponent = () => {
   const problemStore = useProblem()
   const problems = lodash.values(problemStore.problems)
   const serverStore = useServer()
-  const serverClock = serverStore.serverClock
   const authStore = useAuth()
   const canUpdateInfo = authStore.can(Permission.UpdateInfo)
   const canReadProblems = authStore.can(Permission.ReadProblems)
@@ -56,17 +56,23 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
-  if (!contestInfo || (canReadProblems && !problems) || !serverClock) {
-    return <SidebarLoadingView />
-  }
-
-  return (
-    <SidebarView
-      contest={contestInfo}
-      canUpdateInfo={canUpdateInfo}
-      serverClock={serverClock}
-      onUpdateName={setContestName}
-      onUpdateShortDesc={setContestShortDesc}
-    />
-  )
+  return useObserver(() => {
+    const loadingInfo = !contestInfo
+    const loadingProbs = !problems && canReadProblems
+    const loadingClock = !serverStore.serverClock
+    if (loadingInfo || loadingProbs || loadingClock) {
+      return <SidebarLoadingView />
+    }
+    if (!contestInfo) return null
+    if (!serverStore.serverClock) return null
+    return (
+      <SidebarView
+        contest={contestInfo}
+        canUpdateInfo={canUpdateInfo}
+        serverClock={serverStore.serverClock}
+        onUpdateName={setContestName}
+        onUpdateShortDesc={setContestShortDesc}
+      />
+    )
+  })
 }
