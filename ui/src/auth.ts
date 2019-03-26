@@ -214,4 +214,11 @@ export class AuthStore {
       throw convertGraphqlError(error)
     }
   }
+
+  @action signOut = () => {
+    sessionStorage.removeItem(AUTH_TOKEN_KEY)
+    localStorage.removeItem(AUTH_TOKEN_KEY)
+    this.token = ''
+    this.me = undefined
+  }
 }
