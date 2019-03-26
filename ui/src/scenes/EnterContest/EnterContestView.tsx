@@ -34,7 +34,6 @@ export const EnterContestView: FunctionComponent<EnterContestViewProps> = ({ loc
     </div>
     <BottomLink>
       <Link to='/create-contest'>Create Contest</Link>
-      <Link to='/setting'>Setting</Link>
     </BottomLink>
   </div>
 )
