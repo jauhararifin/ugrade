@@ -224,6 +224,7 @@ class ContestInput(graphene.InputObjectType):
     description = graphene.String(
         default_value='Just another competitive programming competition')
     start_time = DateTime()
+    freezed = graphene.Boolean(default_value=False)
     finish_time = DateTime()
 
 
@@ -238,14 +239,19 @@ class CreateContest(graphene.Mutation):
     @staticmethod
     @transaction.atomic
     def mutate(_self, _info, contest, email):
-        if 'start_time' not in contest:
+        if ('start_time' not in contest) and ('finish_time' not in contest):
             contest['start_time'] = datetime.datetime.now() + \
                 datetime.timedelta(days=10)
+            contest['finish_time'] = contest['start_time'] + \
+                datetime.timedelta(hours=5)
+        if 'start_time' not in contest:
+            contest['start_time'] = contest['finish_time'] - \
+                datetime.timedelta(hours=5)
         if 'finish_time' not in contest:
-            contest['finish_time'] = datetime.datetime.now() + \
-                datetime.timedelta(days=10, hours=5)
+            contest['start_time'] = contest['start_time'] + \
+                datetime.timedelta(hours=5)
 
-        new_contest = Contest(**contest, freezed=False)
+        new_contest = Contest(**contest)
         new_contest.full_clean()
         new_contest.save()
         new_contest.permitted_languages.add(*Language.objects.all())
