@@ -1,6 +1,5 @@
-import { ApolloClient, ApolloError, gql } from 'apollo-boost'
-import { action, observable, runInAction } from 'mobx'
-import { ValidationError } from 'yup'
+import { ApolloClient, gql } from 'apollo-boost'
+import { action, observable, reaction, runInAction } from 'mobx'
 import { AuthStore } from './auth'
 import { convertGraphqlError } from './graphqlError'
 
@@ -31,6 +30,8 @@ export class ContestStore {
   constructor(auth: AuthStore, apolloClient: ApolloClient<{}>) {
     this.authStore = auth
     this.client = apolloClient
+
+    reaction(() => this.authStore.me && this.authStore.me.contestId, this.loadUserContest)
   }
 
   @action create = async (
@@ -128,5 +129,36 @@ export class ContestStore {
     permittedLanguages: string[]
   ) => {
     return null
+  }
+
+  private loadUserContest = async () => {
+    if (!this.authStore.me) return
+    try {
+      const response = await this.client.query({
+        query: gql`
+          query Contest($id: String!) {
+            contest(id: $id) {
+              id
+              name
+              shortId
+              shortDescription
+              description
+              startTime
+              freezed
+              finishTime
+              permittedLanguages {
+                id
+                name
+                extensions
+              }
+            }
+          }
+        `,
+        variables: { id: this.authStore.me.contestId },
+      })
+      this.current = response.data.contest
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
   }
 }

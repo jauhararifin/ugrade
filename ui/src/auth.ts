@@ -1,5 +1,5 @@
 import { ApolloClient, gql } from 'apollo-boost'
-import { action, observable, runInAction } from 'mobx'
+import { action, observable, reaction, runInAction } from 'mobx'
 import { convertGraphqlError } from './graphqlError'
 
 const AUTH_TOKEN_KEY = 'AUTH_TOKEN'
@@ -41,9 +41,14 @@ export class AuthStore {
 
   constructor(client: ApolloClient<{}>) {
     this.client = client
-    this.token = sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY) || ''
+    this.token = ''
 
     setInterval(this.synchronize, 5000)
+
+    // fetch me when token updated
+    reaction(() => this.token, this.loadMe)
+
+    this.token = sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY) || ''
   }
 
   can = (permission: Permission): boolean => {
@@ -146,7 +151,6 @@ export class AuthStore {
   }
 
   @action resetPassword = async (newPassword: string, resetPasswordOtc: string): Promise<User> => {
-    console.log('x', this)
     try {
       const me = this.me
       if (!me) throw new Error('Please Set The Contest And Your Email First')
