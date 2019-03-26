@@ -1,3 +1,6 @@
+import bcrypt
+import jwt
+from django.conf import settings
 from random import choice
 from datetime import datetime, timedelta
 from django.db import transaction
@@ -17,6 +20,44 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
         only_fields = ('id', 'name', 'username', 'email', 'contest')
+
+
+class SignIn(graphene.Mutation):
+    class Arguments:
+        contest_id = graphene.String(required=True)
+        email = graphene.String(required=True)
+        password = graphene.String(required=True)
+
+    user = graphene.Field(UserType)
+    token = graphene.Field(graphene.String)
+
+    @staticmethod
+    def mutate(_self, _info, contest_id, email, password):
+        try:
+            contest = Contest.objects.get(short_id=contest_id)
+        except Contest.DoesNotExist:
+            raise Exception("No Such Contest")
+
+        try:
+            user = User.objects.filter(
+                contest__id=contest.id, email=email).first()
+            if user is None:
+                raise User.DoesNotExist()
+        except User.DoesNotExist:
+            raise Exception("Wrong Email Or Password")
+
+        if user.username is None:
+            raise Exception("You haven't sign up yet, please sign up first")
+
+        try:
+            if not bcrypt.checkpw(bytes(password, "utf-8"), bytes(user.password, "utf-8")):
+                raise Exception("Wrong Email Or Password")
+        except Exception:
+            raise Exception("Internal Server Error")
+
+        token = jwt.encode({'id': user.id},
+                           settings.SECRET_KEY, algorithm='HS256').decode("utf-8")
+        return SignIn(user=user, token=token)
 
 
 class ContestType(DjangoObjectType):
@@ -139,3 +180,4 @@ class Query(graphene.ObjectType):
 
 class Mutation(graphene.ObjectType):
     create_contest = CreateContest.Field()
+    sign_in = SignIn.Field()
