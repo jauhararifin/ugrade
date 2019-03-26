@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.validators import validate_email, validate_slug, MinLengthValidator, \
     MaxLengthValidator
 
@@ -32,6 +33,12 @@ class Contest(models.Model):
     freezed = models.BooleanField()
     finish_time = models.DateTimeField()
     permitted_languages = models.ManyToManyField(Language)
+
+    def clean(self):
+        if self.finish_time <= self.start_time:
+            raise ValidationError({
+                "finish_time": "Contest's finish time should be greater than start time."
+            })
 
     def __str__(self):
         return self.name

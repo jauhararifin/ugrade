@@ -1,14 +1,14 @@
 from random import choice
 from datetime import datetime, timedelta
 from django.db import transaction
-from graphene import Field, String, List, Mutation, ObjectType, InputObjectType
+import graphene
 from graphene.types.datetime import DateTime
 from graphene_django.types import DjangoObjectType
 from contests.models import User, Contest, Language
 
 
 class UserType(DjangoObjectType):
-    permissions = List(String)
+    permissions = graphene.List(graphene.String)
 
     @staticmethod
     def resolve_permissions(root, _):
@@ -20,8 +20,8 @@ class UserType(DjangoObjectType):
 
 
 class ContestType(DjangoObjectType):
-    user_by_email = Field(UserType, email=String())
-    user_by_username = Field(UserType, username=String())
+    user_by_email = graphene.Field(UserType, email=graphene.String())
+    user_by_username = graphene.Field(UserType, username=graphene.String())
 
     @staticmethod
     def resolve_user_by_email(root, _, **kwargs):
@@ -46,31 +46,37 @@ class ContestType(DjangoObjectType):
                        'start_time', 'freezed', 'finish_time', 'permitted_languages')
 
 
-class ContestInput(InputObjectType):
-    name = String(required=True)
-    short_id = String(required=True)
-    short_description = String(required=True)
+class ContestInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    short_id = graphene.String(required=True)
+    short_description = graphene.String(required=True)
+    description = graphene.String(
+        default_value='Just another competitive programming competition')
+    start_time = DateTime()
+    finish_time = DateTime()
 
 
-class CreateContest(Mutation):
+class CreateContest(graphene.Mutation):
     class Arguments:
-        email = String(required=True)
+        email = graphene.String(required=True)
         contest = ContestInput(required=True)
 
-    contest = Field(ContestType)
-    admin = Field(UserType)
+    contest = graphene.Field(ContestType)
+    admin = graphene.Field(UserType)
 
     @staticmethod
     @transaction.atomic
-    def mutate(root, info, contest, email):
-        start_time = datetime.now() + timedelta(days=10)
-        finish_time = datetime.now() + timedelta(days=10, hours=5)
-        description = 'Just another competitive programming competition'
+    def mutate(_self, _info, contest, email):
+        if 'start_time' not in contest:
+            contest['start_time'] = datetime.now() + timedelta(days=10)
+        if 'finish_time' not in contest:
+            contest['finish_time'] = datetime.now() + \
+                timedelta(days=10, hours=5)
 
-        new_contest = Contest(**contest, start_time=start_time, description=description,
-                              finish_time=finish_time, freezed=False)
+        new_contest = Contest(**contest, freezed=False)
         new_contest.full_clean()
         new_contest.save()
+        new_contest.permitted_languages.add(*Language.objects.all())
 
         signup_otc = "".join([choice("0123456789") for _ in range(8)])
         new_user = User(email=email, contest=new_contest,
@@ -82,7 +88,7 @@ class CreateContest(Mutation):
 
 
 class LanguageType(DjangoObjectType):
-    extensions = List(String)
+    extensions = graphene.List(graphene.String)
 
     @staticmethod
     def resolve_extensions(root, _):
@@ -93,14 +99,15 @@ class LanguageType(DjangoObjectType):
         only_fields = ('id', 'name', 'username', 'email', 'contest')
 
 
-class Query(ObjectType):
-    user = Field(UserType, id=String())
+class Query(graphene.ObjectType):
+    user = graphene.Field(UserType, id=graphene.String())
 
-    contest = Field(ContestType, id=String())
-    contest_by_short_id = Field(ContestType, shortId=String())
+    contest = graphene.Field(ContestType, id=graphene.String())
+    contest_by_short_id = graphene.Field(
+        ContestType, shortId=graphene.String())
 
-    language = Field(LanguageType, id=String(required=True))
-    languages = List(LanguageType)
+    language = graphene.Field(LanguageType, id=graphene.String(required=True))
+    languages = graphene.List(LanguageType)
 
     def resolve_user(self, _, **kwargs):
         try:
@@ -130,5 +137,5 @@ class Query(ObjectType):
         return Language.objects.all()
 
 
-class Mutation(ObjectType):
+class Mutation(graphene.ObjectType):
     create_contest = CreateContest.Field()
