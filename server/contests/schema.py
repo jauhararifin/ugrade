@@ -1,13 +1,16 @@
+import random
+import datetime
 import bcrypt
 import jwt
-from django.conf import settings
-from random import choice
-from datetime import datetime, timedelta
-from django.db import transaction
+
 import graphene
 from graphene.types.datetime import DateTime
 from graphene_django.types import DjangoObjectType
-from contests.models import User, Contest, Language
+
+from django.conf import settings
+from django.db import transaction
+
+from contests.models import Contest, Language, User
 
 
 class UserType(DjangoObjectType):
@@ -141,7 +144,7 @@ class ForgotPassword(graphene.Mutation):
 
         if user.reset_password_otc is None:
             user.reset_password_otc = "".join(
-                choice("0987654321") for _ in range(8))
+                random.choice("0987654321") for _ in range(8))
             user.save()
 
         return user
@@ -236,17 +239,18 @@ class CreateContest(graphene.Mutation):
     @transaction.atomic
     def mutate(_self, _info, contest, email):
         if 'start_time' not in contest:
-            contest['start_time'] = datetime.now() + timedelta(days=10)
+            contest['start_time'] = datetime.datetime.now() + \
+                datetime.timedelta(days=10)
         if 'finish_time' not in contest:
-            contest['finish_time'] = datetime.now() + \
-                timedelta(days=10, hours=5)
+            contest['finish_time'] = datetime.datetime.now() + \
+                datetime.timedelta(days=10, hours=5)
 
         new_contest = Contest(**contest, freezed=False)
         new_contest.full_clean()
         new_contest.save()
         new_contest.permitted_languages.add(*Language.objects.all())
 
-        signup_otc = "".join([choice("0123456789") for _ in range(8)])
+        signup_otc = "".join([random.choice("0123456789") for _ in range(8)])
         new_user = User(email=email, contest=new_contest,
                         signup_otc=signup_otc)
         new_user.full_clean()
