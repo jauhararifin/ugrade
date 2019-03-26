@@ -10,7 +10,7 @@ from graphene_django.types import DjangoObjectType
 from django.conf import settings
 from django.db import transaction
 
-from contests.models import Contest, Language, User
+from contests.models import Contest, Language, User, Permission
 
 
 class UserType(DjangoObjectType):
@@ -261,6 +261,7 @@ class CreateContest(graphene.Mutation):
                         signup_otc=signup_otc)
         new_user.full_clean()
         new_user.save()
+        new_user.permissions.add(*Permission.objects.all())
 
         return CreateContest(contest=new_contest, admin=new_user)
 

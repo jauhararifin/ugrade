@@ -39,47 +39,47 @@ export const CreateContestFormView: React.FunctionComponent<CreateContestFormVie
       </FormGroup>
       <FormGroup
         helperText={
-          (submitCount > 0 && errors && errors.contestShortId) || `Contest identifier, should unique for every contest`
+          (submitCount > 0 && errors && errors.shortId) || `Contest identifier, should unique for every contest`
         }
         labelFor='create-contest-input-short-id'
-        intent={submitCount && errors && errors.contestShortId ? Intent.DANGER : Intent.NONE}
+        intent={submitCount && errors && errors.shortId ? Intent.DANGER : Intent.NONE}
       >
         <InputGroup
-          name='contestShortId'
+          name='shortId'
           large={true}
           id='create-contest-input-short-id'
           placeholder='Contest ID'
-          value={values.contestShortId}
+          value={values.shortId}
           onChange={handleChange}
           onBlur={handleBlur}
         />
       </FormGroup>
       <FormGroup
-        helperText={submitCount > 0 && errors && errors.contestName}
+        helperText={submitCount > 0 && errors && errors.name}
         labelFor='create-contest-input-contest-name'
-        intent={submitCount && errors && errors.contestName ? Intent.DANGER : Intent.NONE}
+        intent={submitCount && errors && errors.name ? Intent.DANGER : Intent.NONE}
       >
         <InputGroup
-          name='contestName'
+          name='name'
           large={true}
           id='create-contest-input-contest-name'
           placeholder='Contest Name'
-          value={values.contestName}
+          value={values.name}
           onChange={handleChange}
           onBlur={handleBlur}
         />
       </FormGroup>
       <FormGroup
-        helperText={submitCount > 0 && errors && errors.contestShortDescription}
+        helperText={submitCount > 0 && errors && errors.shortDescription}
         labelFor='create-contest-input-contest-short-desc'
-        intent={submitCount && errors && errors.contestShortDescription ? Intent.DANGER : Intent.NONE}
+        intent={submitCount && errors && errors.shortDescription ? Intent.DANGER : Intent.NONE}
       >
         <InputGroup
-          name='contestShortDescription'
+          name='shortDescription'
           large={true}
           id='create-contest-input-contest-short-desc'
           placeholder='Short Description'
-          value={values.contestShortDescription}
+          value={values.shortDescription}
           onChange={handleChange}
           onBlur={handleBlur}
         />

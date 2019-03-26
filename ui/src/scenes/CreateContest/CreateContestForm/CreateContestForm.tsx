@@ -1,23 +1,23 @@
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
-import { useContest } from '../../../app'
+import { useContest, useRouting } from '../../../app'
 import { showErrorToast, showSuccessToast } from '../../../common/toaster'
 import { CreateContestFormView } from './CreateContestFormView'
 
 export interface CreateContestFormValue {
   email: string
-  contestShortId: string
-  contestName: string
-  contestShortDescription: string
+  shortId: string
+  name: string
+  shortDescription: string
 }
 
 export const CreateContestForm: FunctionComponent = () => {
   const initialValue: CreateContestFormValue = {
     email: '',
-    contestShortId: '',
-    contestName: '',
-    contestShortDescription: '',
+    shortId: '',
+    name: '',
+    shortDescription: '',
   }
 
   const validationSchema = yup.object().shape({
@@ -28,34 +28,40 @@ export const CreateContestForm: FunctionComponent = () => {
       .max(255)
       .email()
       .required(),
-    contestShortId: yup
+    shortId: yup
       .string()
       .min(4)
       .max(255)
       .label('Contest ID')
       .matches(/[a-zA-Z0-9\-]+/, 'Contest ID contains alphanumeric and dash character only')
       .required(),
-    contestName: yup
+    name: yup
       .string()
       .max(255)
       .label('Contest Name')
       .required(),
-    contestShortDescription: yup
+    shortDescription: yup
       .string()
       .max(255)
       .label('Short Description'),
   })
 
+  const routing = useRouting()
   const contest = useContest()
   const handleSubmit = async (
     values: CreateContestFormValue,
-    { setSubmitting }: FormikActions<CreateContestFormValue>
+    { setSubmitting, setErrors }: FormikActions<CreateContestFormValue>
   ) => {
     try {
-      await contest.create(values.email, values.contestShortId, values.contestName, values.contestShortDescription)
+      await contest.create(values.email, values.shortId, values.name, values.shortDescription)
       showSuccessToast('Contest Created')
+      routing.push('/enter-contest')
     } catch (error) {
-      showErrorToast(error)
+      if (error instanceof yup.ValidationError) {
+        setErrors(error.value)
+      } else {
+        showErrorToast(error)
+      }
     } finally {
       setSubmitting(false)
     }

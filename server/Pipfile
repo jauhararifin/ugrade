@@ -19,6 +19,7 @@ dj-database-url = "*"
 psycopg2-binary = "*"
 bcrypt = "*"
 pyjwt = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.6"
