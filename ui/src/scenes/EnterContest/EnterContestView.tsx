@@ -4,8 +4,9 @@ import { Link, Route, Switch } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import logo from '../../assets/images/logo.svg'
 import { BottomLink } from '../../components/BottomLink'
-
 import { EnterContestForm } from './EnterContestForm'
+import { EnterEmailForm } from './EnterEmailForm'
+
 import './styles.css'
 
 export interface EnterContestViewProps {
@@ -23,8 +24,8 @@ export const EnterContestView: FunctionComponent<EnterContestViewProps> = ({ loc
         <CSSTransition timeout={300} classNames='overlay' key={location.pathname}>
           <Switch location={location}>
             <Route path='/enter-contest/' exact={true} component={EnterContestForm} />
-            {/* <Route path='/enter-contest/enter-email' component={EnterEmailForm} />
-            <Route path='/enter-contest/enter-password' component={EnterPasswordForm} />
+            <Route path='/enter-contest/enter-email' component={EnterEmailForm} />
+            {/* <Route path='/enter-contest/enter-password' component={EnterPasswordForm} />
             <Route path='/enter-contest/reset-password' component={ResetPasswordForm} />
             <Route path='/enter-contest/signup' component={SignUpForm} /> */}
           </Switch>

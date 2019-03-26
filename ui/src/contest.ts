@@ -2,6 +2,7 @@ import { ApolloClient, ApolloError, gql } from 'apollo-boost'
 import { action, observable, runInAction } from 'mobx'
 import { ValidationError } from 'yup'
 import { AuthStore } from './auth'
+import { convertGraphqlError } from './graphqlError'
 
 export interface Language {
   id: string
@@ -73,20 +74,7 @@ export class ContestStore {
         this.authStore.me = response.data.createContest.admin
       })
     } catch (error) {
-      if (error instanceof ApolloError) {
-        for (const err of error.graphQLErrors) {
-          if (err && err.code === 'InvalidInput') {
-            let messages: string[] = []
-            for (const key in err.validations) {
-              if (err.validations.hasOwnProperty(key)) {
-                messages = messages.concat(err.validations[key])
-              }
-            }
-            throw new ValidationError(messages, err.validations, '')
-          }
-        }
-      }
-      throw error
+      throw convertGraphqlError(error)
     }
   }
 
@@ -118,12 +106,7 @@ export class ContestStore {
         this.current = response.data.contestByShortId
       })
     } catch (error) {
-      if (error instanceof ApolloError) {
-        for (const err of error.graphQLErrors) {
-          throw new Error(err.message)
-        }
-      }
-      throw error
+      throw convertGraphqlError(error)
     }
   }
 }
