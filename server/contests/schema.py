@@ -114,6 +114,39 @@ class SignUp(graphene.Mutation):
         return SignUp(user=new_user, token=token)
 
 
+class ForgotPassword(graphene.Mutation):
+    class Arguments:
+        contest_id = graphene.String(required=True)
+        email = graphene.String(required=True)
+
+    Output = UserType
+
+    @staticmethod
+    def mutate(_self, _info, contest_id, email):
+        try:
+            contest = Contest.objects.get(short_id=contest_id)
+        except Contest.DoesNotExist:
+            raise Exception("No Such Contest")
+
+        try:
+            user = User.objects.filter(
+                contest__id=contest.id, email=email).first()
+            if user is None:
+                raise User.DoesNotExist()
+        except User.DoesNotExist:
+            raise Exception("No Such User")
+
+        if user.username is None:
+            raise Exception("You haven't signed up yet, please sign up first.")
+
+        if user.reset_password_otc is None:
+            user.reset_password_otc = "".join(
+                choice("0987654321") for _ in range(8))
+            user.save()
+
+        return user
+
+
 class ContestType(DjangoObjectType):
     user_by_email = graphene.Field(UserType, email=graphene.String())
     user_by_username = graphene.Field(UserType, username=graphene.String())
@@ -236,3 +269,4 @@ class Mutation(graphene.ObjectType):
     create_contest = CreateContest.Field()
     sign_in = SignIn.Field()
     sign_up = SignUp.Field()
+    forgot_password = ForgotPassword.Field()
