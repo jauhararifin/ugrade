@@ -6,6 +6,7 @@ import { AuthStore } from './auth'
 import { ContestStore } from './contest'
 import { ProblemStore } from './problem'
 import { ServerStore } from './server'
+import { SubmissionStore } from './submission'
 import { WindowStore } from './window'
 
 export const browserHistory = createBrowserHistory()
@@ -19,6 +20,7 @@ export const apolloClient = new ApolloClient({
 export const authStore = new AuthStore(apolloClient)
 export const contestStore = new ContestStore(authStore, apolloClient)
 export const problemStore = new ProblemStore(authStore, contestStore, apolloClient)
+export const submissionStore = new SubmissionStore()
 export const serverStore = new ServerStore()
 export const windowStore = new WindowStore()
 
@@ -28,6 +30,7 @@ export const appContext = createContext({
   authStore,
   contestStore,
   problemStore,
+  submissionStore,
   serverStore,
   windowStore,
 })
@@ -36,6 +39,7 @@ export const useWindow = () => useContext(appContext).windowStore
 export const useServer = () => useContext(appContext).serverStore
 export const useProblem = () => useContext(appContext).problemStore
 export const useContest = () => useContext(appContext).contestStore
+export const useSubmission = () => useContext(appContext).submissionStore
 export const useAuth = () => useContext(appContext).authStore
 export const useApollo = () => useContext(appContext).apolloClient
 export const useRouting = () => useContext(appContext).routingStore

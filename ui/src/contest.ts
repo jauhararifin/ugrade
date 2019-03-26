@@ -117,4 +117,16 @@ export class ContestStore {
       throw convertGraphqlError(error)
     }
   }
+
+  @action updateContest = async (
+    name: string,
+    shortDescription: string,
+    description: string,
+    startTime: Date,
+    freezed: boolean,
+    finishTime: Date,
+    permittedLanguages: string[]
+  ) => {
+    return null
+  }
 }

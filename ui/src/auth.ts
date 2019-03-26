@@ -4,13 +4,33 @@ import { convertGraphqlError } from './graphqlError'
 
 const AUTH_TOKEN_KEY = 'AUTH_TOKEN'
 
+export enum Permission {
+  CreateSubmissions = 'create:submissions',
+  ReadSubmissions = 'read:submissions',
+  ReadProfiles = 'read:profiles',
+  DeleteUsers = 'delete:users',
+  UpdateUsersPermissions = 'update:usersPermissions',
+  InviteUsers = 'invite:users',
+  DeleteProblems = 'delete:problems',
+  UpdateProblems = 'update:problems',
+  ReadDisabledProblems = 'read:disabledProblems',
+  ReadProblems = 'read:problems',
+  CreateProblems = 'create:problems',
+  ReplyClarification = 'reply:clarification',
+  CreateClarifications = 'create:clarifications',
+  ReadClarifications = 'read:clarifications',
+  ReadAnnouncement = 'read:announcement',
+  CreateAnnouncement = 'create:announcement',
+  UpdateInfo = 'update:info',
+}
+
 export interface User {
   id: string
   name?: string
   username?: string
   contestId: string
   email: string
-  permissions: string[]
+  permissions: Permission[]
 }
 
 export class AuthStore {
@@ -22,6 +42,10 @@ export class AuthStore {
   constructor(client: ApolloClient<{}>) {
     this.client = client
     this.token = sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY) || ''
+  }
+
+  can = (permission: Permission): boolean => {
+    return this.me && this.me.permissions.includes(permission) ? true : false
   }
 
   @action setMeByEmail = async (contestId: string, email: string): Promise<User> => {
