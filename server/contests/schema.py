@@ -283,6 +283,7 @@ class LanguageType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     user = graphene.Field(UserType, id=graphene.String())
+    me = graphene.Field(UserType)
 
     contest = graphene.Field(ContestType, id=graphene.String())
     contest_by_short_id = graphene.Field(
@@ -296,6 +297,30 @@ class Query(graphene.ObjectType):
             return User.objects.get(pk=kwargs.get('id'))
         except User.DoesNotExist:
             raise ValueError("No Such User")
+
+    def resolve_me(self, info):
+        auth_header = info.context.META.get('HTTP_AUTHORIZATION')
+        if auth_header is None:
+            raise ValueError("Missing Token")
+
+        partition = auth_header.split()
+        if len(partition) != 2 or partition[0].lower() != 'bearer':
+            raise ValueError('Invalid Token')
+
+        token = partition[1]
+        try:
+            data = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
+            user_id = data['id']
+            try:
+                info.context.user = User.objects.get(pk=user_id)
+                if info.context.user is None:
+                    raise ValueError("Invalid Token")
+            except User.DoesNotExist:
+                raise ValueError("Invalid Token")
+        except Exception:
+            raise ValueError("Invalid Token")
+
+        return info.context.user
 
     def resolve_contest(self, _, **kwargs):
         try:
