@@ -60,6 +60,7 @@
   ],
   "devDependencies": {
     "@types/classnames": "^2.2.7",
+    "@types/lodash": "^4.14.123",
     "@types/react-document-title": "^2.0.3",
     "@types/react-router-dom": "^4.3.1",
     "@types/react-transition-group": "^2.0.16",
