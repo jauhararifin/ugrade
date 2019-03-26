@@ -37,7 +37,7 @@ class SignIn(graphene.Mutation):
     @staticmethod
     def mutate(_self, _info, contest_id, email, password):
         try:
-            contest = Contest.objects.get(short_id=contest_id)
+            contest = Contest.objects.get(pk=contest_id)
         except Contest.DoesNotExist:
             raise Exception("No Such Contest")
 
@@ -82,7 +82,7 @@ class SignUp(graphene.Mutation):
     @staticmethod
     def mutate(_self, _info, contest_id, email, user, signup_code):
         try:
-            contest = Contest.objects.get(short_id=contest_id)
+            contest = Contest.objects.get(pk=contest_id)
         except Contest.DoesNotExist:
             raise Exception("No Such Contest")
 
@@ -127,7 +127,7 @@ class ForgotPassword(graphene.Mutation):
     @staticmethod
     def mutate(_self, _info, contest_id, email):
         try:
-            contest = Contest.objects.get(short_id=contest_id)
+            contest = Contest.objects.get(pk=contest_id)
         except Contest.DoesNotExist:
             raise Exception("No Such Contest")
 
@@ -162,7 +162,7 @@ class ResetPassword(graphene.Mutation):
     @staticmethod
     def mutate(_self, _info, contest_id, email, reset_password_otc, new_password):
         try:
-            contest = Contest.objects.get(short_id=contest_id)
+            contest = Contest.objects.get(pk=contest_id)
         except Contest.DoesNotExist:
             raise Exception("No Such Contest")
 
