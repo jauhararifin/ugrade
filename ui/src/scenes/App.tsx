@@ -3,11 +3,12 @@ import React, { FunctionComponent } from 'react'
 import DocumentTitle from 'react-document-title'
 import { Route, Router, Switch } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { useRouting, useWindow } from '../app'
 import { NetworkStatus } from '../components/NetworkStatus'
 import { CreateContest } from './CreateContest'
+import { EnterContest } from './EnterContest'
 import { Home } from './Home'
 
-import { useRouting, useWindow } from '../app'
 import './styles.css'
 
 export const App: FunctionComponent = observer(() => {
@@ -23,6 +24,7 @@ export const App: FunctionComponent = observer(() => {
               <Switch location={routing.location}>
                 <Route path='/' exact={true} component={Home} />
                 <Route path='/create-contest' component={CreateContest} />
+                <Route path='/enter-contest' component={EnterContest} />
               </Switch>
             </CSSTransition>
           </TransitionGroup>

@@ -69,8 +69,8 @@ export class ContestStore {
         variables: { email, shortId, name, shortDescription },
       })
       runInAction(() => {
-        this.current = response.data.contest
-        this.authStore.me = response.data.admin
+        this.current = response.data.createContest.contest
+        this.authStore.me = response.data.createContest.admin
       })
     } catch (error) {
       if (error instanceof ApolloError) {
@@ -84,6 +84,43 @@ export class ContestStore {
             }
             throw new ValidationError(messages, err.validations, '')
           }
+        }
+      }
+      throw error
+    }
+  }
+
+  @action setByShortId = async (shortId: string) => {
+    try {
+      const response = await this.client.query({
+        query: gql`
+          query ContestByShortId($shortId: String!) {
+            contestByShortId(shortId: $shortId) {
+              id
+              name
+              shortId
+              shortDescription
+              description
+              startTime
+              freezed
+              finishTime
+              permittedLanguages {
+                id
+                name
+                extensions
+              }
+            }
+          }
+        `,
+        variables: { shortId },
+      })
+      runInAction(() => {
+        this.current = response.data.contestByShortId
+      })
+    } catch (error) {
+      if (error instanceof ApolloError) {
+        for (const err of error.graphQLErrors) {
+          throw new Error(err.message)
         }
       }
       throw error
