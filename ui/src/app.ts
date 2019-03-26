@@ -4,6 +4,7 @@ import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import { createContext, useContext } from 'react'
 import { AuthStore } from './auth'
 import { ContestStore } from './contest'
+import { ProblemStore } from './problem'
 import { ServerStore } from './server'
 import { WindowStore } from './window'
 
@@ -17,6 +18,7 @@ export const apolloClient = new ApolloClient({
 })
 export const authStore = new AuthStore(apolloClient)
 export const contestStore = new ContestStore(authStore, apolloClient)
+export const problemStore = new ProblemStore(authStore, contestStore, apolloClient)
 export const serverStore = new ServerStore()
 export const windowStore = new WindowStore()
 
@@ -25,12 +27,14 @@ export const appContext = createContext({
   apolloClient,
   authStore,
   contestStore,
+  problemStore,
   serverStore,
   windowStore,
 })
 
 export const useWindow = () => useContext(appContext).windowStore
 export const useServer = () => useContext(appContext).serverStore
+export const useProblem = () => useContext(appContext).problemStore
 export const useContest = () => useContext(appContext).contestStore
 export const useAuth = () => useContext(appContext).authStore
 export const useApollo = () => useContext(appContext).apolloClient
