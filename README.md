@@ -1,5 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CircleCI](https://circleci.com/gh/jauhararifin/ugrade.svg?style=svg)](https://circleci.com/gh/jauhararifin/ugrade)
+[![Under Development](https://img.shields.io/badge/Under-Development-yellow.svg)]
 
 # UGrade 
 Simple competitive programming contest platform using contestant PC as grader
