@@ -1,9 +1,10 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import { Switch } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useContest, useRouting, useServer, useWindow } from '../../app'
 import { useContestOnly } from '../../common'
 import { DashboardView } from './DashboardView'
+import { Overview } from './Overview'
 
 export const Dashboard: FunctionComponent = () => {
   useContestOnly()
@@ -25,7 +26,7 @@ export const Dashboard: FunctionComponent = () => {
       <TransitionGroup className='eat-them-all'>
         <CSSTransition timeout={300} classNames='fade' key={location.pathname}>
           <Switch location={routingStore.location}>
-            {/* <Route path='/contest/' exact={true} component={Overview} /> */}
+            <Route path='/contest/' exact={true} component={Overview} />
             {/* <Route path='/contest/overview' exact={true} component={Overview} /> */}
             {/* <Route path='/contest/announcements' exact={true} component={Announcements} /> */}
             {/* <Route path='/contest/problems' component={Problems} /> */}
