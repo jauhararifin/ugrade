@@ -8,6 +8,7 @@ import { Members } from './Members'
 import { Overview } from './Overview'
 import { Problems } from './Problems'
 import { Settings } from './Settings'
+import { Submissions } from './Submissions'
 
 export const Dashboard: FunctionComponent = () => {
   useContestOnly()
@@ -34,7 +35,7 @@ export const Dashboard: FunctionComponent = () => {
             {/* <Route path='/contest/announcements' exact={true} component={Announcements} /> */}
             <Route path='/contest/problems' component={Problems} />
             {/* <Route path='/contest/clarifications' exact={true} component={Clarifications} /> */}
-            {/* <Route path='/contest/submissions' exact={true} component={Submissions} /> */}
+            <Route path='/contest/submissions' exact={true} component={Submissions} />
             {/* <Route path='/contest/scoreboard' exact={true} component={Scoreboard} /> */}
             <Route path='/contest/settings' exact={true} component={Settings} />
             <Route path='/contest/members' component={Members} />

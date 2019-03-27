@@ -25,7 +25,7 @@ export const apolloClient = new ApolloClient({
 export const authStore = new AuthStore(apolloClient)
 export const contestStore = new ContestStore(authStore, apolloClient)
 export const problemStore = new ProblemStore(authStore, contestStore, apolloClient)
-export const submissionStore = new SubmissionStore()
+export const submissionStore = new SubmissionStore(apolloClient, authStore, contestStore)
 export const serverStore = new ServerStore(apolloClient)
 export const windowStore = new WindowStore()
 
