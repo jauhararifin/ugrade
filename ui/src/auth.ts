@@ -24,6 +24,26 @@ export enum Permission {
   UpdateInfo = 'update:info',
 }
 
+export const allPermissions = [
+  Permission.CreateSubmissions,
+  Permission.ReadSubmissions,
+  Permission.ReadProfiles,
+  Permission.DeleteUsers,
+  Permission.UpdateUsersPermissions,
+  Permission.InviteUsers,
+  Permission.DeleteProblems,
+  Permission.UpdateProblems,
+  Permission.ReadDisabledProblems,
+  Permission.ReadProblems,
+  Permission.CreateProblems,
+  Permission.ReplyClarification,
+  Permission.CreateClarifications,
+  Permission.ReadClarifications,
+  Permission.ReadAnnouncement,
+  Permission.CreateAnnouncement,
+  Permission.UpdateInfo,
+]
+
 export interface User {
   id: string
   name?: string
@@ -265,6 +285,10 @@ export class AuthStore {
     localStorage.removeItem(AUTH_TOKEN_KEY)
     this.token = ''
     this.me = undefined
+  }
+
+  @action updateUserPermission = (userId: string, permission: Permission[]) => {
+    return permission
   }
 
   @action loadMe = async () => {
