@@ -1,19 +1,21 @@
 import React, { FunctionComponent } from 'react'
-import { useProblem } from '../../../../app'
+import { useProblem, useRouting } from '../../../../app'
 import { showErrorToast, showSuccessToast } from '../../../../common'
 import { ProblemFormValue } from '../ProblemEditor'
 import { CreateProblemView } from './CreateProblemView'
 
 export const CreateProblem: FunctionComponent = () => {
   const problemStore = useProblem()
+  const routingStore = useRouting()
 
   const handleSubmit = async (value: ProblemFormValue) => {
     try {
-      await problemStore.create({
+      const newProb = await problemStore.create({
         id: '',
         ...value,
       })
       showSuccessToast('New Problem Created')
+      routingStore.push(`/contest/problems/${newProb.id}`)
     } catch (error) {
       showErrorToast(error)
     }

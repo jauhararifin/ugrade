@@ -4,6 +4,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useRouting } from '../../../app'
 import { CreateProblem } from './CreateProblem'
 import { ProblemList } from './ProblemList'
+import { UpdateProblem } from './UpdateProblem'
 
 export const Problems: FunctionComponent = () => {
   const routingStore = useRouting()
@@ -13,7 +14,7 @@ export const Problems: FunctionComponent = () => {
         <Switch>
           <Route path='/contest/problems' exact={true} component={ProblemList} />
           <Route path='/contest/problems/create' exact={true} component={CreateProblem} />
-          {/* <Route path='/contest/problems/:problemId/edit' component={UpdateProblem} /> */}
+          <Route path='/contest/problems/:problemId/edit' component={UpdateProblem} />
           {/* <Route path='/contest/problems/:problemId' component={ProblemDetail} /> */}
         </Switch>
       </CSSTransition>
