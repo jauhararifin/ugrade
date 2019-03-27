@@ -1,5 +1,5 @@
 import { ApolloClient, gql } from 'apollo-boost'
-import { action, observable, reaction, runInAction } from 'mobx'
+import { action, autorun, observable, reaction, runInAction, toJS } from 'mobx'
 import { convertGraphqlError } from './graphqlError'
 
 const AUTH_TOKEN_KEY = 'AUTH_TOKEN'
@@ -67,13 +67,16 @@ export class AuthStore {
                 username
                 email
                 permissions
+                contest {
+                  id
+                }
               }
             }
           }
         `,
         variables: { contestId, email },
       })
-      const newMe = { ...response.data.contest.userByEmail, contestId }
+      const newMe = { ...response.data.contest.userByEmail, contestId: response.data.contest.userByEmail.contest.id }
       runInAction(() => {
         this.me = newMe
       })
@@ -97,6 +100,9 @@ export class AuthStore {
                 username
                 email
                 permissions
+                contest {
+                  id
+                }
               }
               token
             }
@@ -104,7 +110,7 @@ export class AuthStore {
         `,
         variables: { contestId: me.contestId, email: me.email, password },
       })
-      const user = { ...response.data.signIn.user, contestId: me.contestId }
+      const user = { ...response.data.signIn.user, contestId: response.data.signIn.user.contest.id }
       const token = response.data.signIn.token
       sessionStorage.setItem(AUTH_TOKEN_KEY, token)
       if (rememberMe) {
@@ -135,12 +141,15 @@ export class AuthStore {
               username
               email
               permissions
+              contest {
+                id
+              }
             }
           }
         `,
         variables: { contestId: me.contestId, email: me.email },
       })
-      const user = { ...response.data.forgotPassword, contestId: me.contestId }
+      const user = { ...response.data.forgotPassword, contestId: response.data.forgotPassword.contest.id }
       runInAction(() => {
         this.me = user
       })
@@ -173,12 +182,15 @@ export class AuthStore {
               username
               email
               permissions
+              contest {
+                id
+              }
             }
           }
         `,
         variables: { contestId: me.contestId, email: me.email, newPassword, resetPasswordOtc },
       })
-      const user = { ...response.data.resetPassword, contestId: me.contestId }
+      const user = { ...response.data.resetPassword, contestId: response.data.resetPassword.contest.id }
       runInAction(() => {
         this.me = user
       })
@@ -220,6 +232,9 @@ export class AuthStore {
                 username
                 email
                 permissions
+                contest {
+                  id
+                }
               }
               token
             }
@@ -227,7 +242,7 @@ export class AuthStore {
         `,
         variables: { contestId: me.contestId, email: me.email, username, signupCode, password, name, rememberMe },
       })
-      const user = { ...response.data.signUp.user, contestId: me.contestId }
+      const user = { ...response.data.signUp.user, contestId: response.data.signUp.user.contest.id }
       const token = response.data.signUp.token
       sessionStorage.setItem(AUTH_TOKEN_KEY, token)
       if (rememberMe) {
@@ -253,6 +268,7 @@ export class AuthStore {
   }
 
   @action loadMe = async () => {
+    if (this.me || this.token.length === 0) return
     try {
       const response = await this.client.query({
         query: gql`
@@ -274,6 +290,7 @@ export class AuthStore {
             authorization: `Bearer ${this.token}`,
           },
         },
+        fetchPolicy: 'no-cache',
       })
       const user = { ...response.data.me, contestId: response.data.me.contest.id }
       runInAction(() => {

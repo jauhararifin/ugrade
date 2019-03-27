@@ -16,6 +16,11 @@ export const history = syncHistoryWithStore(browserHistory, routingStore)
 export const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: 'http://localhost:8000/graphql', credentials: 'same-origin' }),
   cache: new InMemoryCache(),
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'no-cache',
+    },
+  },
 })
 export const authStore = new AuthStore(apolloClient)
 export const contestStore = new ContestStore(authStore, apolloClient)

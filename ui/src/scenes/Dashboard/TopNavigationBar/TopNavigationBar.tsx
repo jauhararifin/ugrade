@@ -30,10 +30,6 @@ export const TopNavigationBar: FunctionComponent = () => {
   const problemStore = useProblem()
   const routingStore = useRouting()
 
-  useEffect(() => {
-    authStore.loadMe()
-  }, [])
-
   const handleSignOut = async () => {
     authStore.signOut()
     showSuccessToast('Signed Out')
@@ -74,7 +70,7 @@ export const TopNavigationBar: FunctionComponent = () => {
               className={classNames(Classes.MINIMAL, {
                 [Classes.SKELETON]: !authStore.me,
               })}
-              text={(authStore.me && authStore.me.name) || 'Test'}
+              text={authStore.me && authStore.me.name}
             />
           </Popover>
         </NavbarGroup>
