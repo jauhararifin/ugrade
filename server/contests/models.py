@@ -109,7 +109,7 @@ class Problem(models.Model):
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    source_code = models.CharField(max_length=1024)
+    issued_time = models.DateTimeField(auto_now_add=True)
 
 
 VERDICT = (

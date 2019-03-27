@@ -1,8 +1,9 @@
 from django.core.exceptions import ValidationError
 from graphene_django.views import GraphQLView
+from graphene_file_upload.django import FileUploadGraphQLView
 
 
-class ContestView(GraphQLView):
+class ContestView(FileUploadGraphQLView):
     @staticmethod
     def format_error(error):
         if hasattr(error, 'original_error') and isinstance(error.original_error, ValidationError):

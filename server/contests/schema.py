@@ -7,11 +7,14 @@ import graphene
 from graphene.types.datetime import DateTime
 from graphene_django.types import DjangoObjectType
 
+from graphene_file_upload.scalars import Upload
+
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Max
+from django.core.files.storage import default_storage
 
-from contests.models import Contest, Language, User, Permission, Problem
+from contests.models import Contest, Language, User, Permission, Problem, Submission
 
 
 def with_me(method):
@@ -517,6 +520,57 @@ class InviteUsers(graphene.Mutation):
         return new_users
 
 
+class SubmissionType(DjangoObjectType):
+    class Meta:
+        model = Submission
+        only_fields = ('id', 'problem', 'language', 'issued_time')
+
+
+class SubmitSolution(graphene.Mutation):
+    class Arguments:
+        problem_id = graphene.String(required=True)
+        language_id = graphene.String(required=True)
+        source_code = Upload(required=True)
+
+    Output = SubmissionType
+
+    @staticmethod
+    @transaction.atomic
+    @with_me
+    def mutate(root, info, problem_id, language_id, source_code):
+        user = info.context.user
+
+        my_permissions = list(
+            map(lambda perm: perm.code, user.permissions.all()))
+        if 'create:submissions' not in my_permissions:
+            raise ValueError("You Don't Have Permission To Submit Problem")
+
+        try:
+            problem = Problem.objects.filter(
+                contest__id=user.contest.id, id=problem_id).get()
+        except Problem.DoesNotExist:
+            raise ValueError("No Such Problem")
+
+        try:
+            language = Language.objects.get(pk=language_id)
+        except Language.DoesNotExist:
+            raise ValueError("No Such Language")
+
+        contest = user.contest
+        permitted_langs = list(
+            map(lambda lang: lang.id, contest.permitted_languages.all()))
+        if language.id not in permitted_langs:
+            raise ValueError("Language Is Not Permitted")
+
+        sub = Submission(problem=problem, language=language)
+        sub.save()
+
+        filename = "submissions/submission-{}".format(sub.id)
+        default_storage.save(filename, source_code)
+
+        return sub
+
+
 class LanguageType(DjangoObjectType):
     extensions = graphene.List(graphene.String)
 
@@ -590,3 +644,4 @@ class Mutation(graphene.ObjectType):
     delete_problem = DeleteProblem.Field()
     update_contest = UpdateContest.Field()
     invite_users = InviteUsers.Field()
+    submit_solution = SubmitSolution.Field()

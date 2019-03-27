@@ -20,6 +20,7 @@ psycopg2-binary = "*"
 bcrypt = "*"
 pyjwt = "*"
 django-cors-headers = "*"
+graphene-file-upload = "*"
 
 [requires]
 python_version = "3.6"
