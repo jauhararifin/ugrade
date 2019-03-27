@@ -23,6 +23,7 @@ export interface ContestInfo {
 
 export class ContestStore {
   @observable current?: ContestInfo
+  @observable languages: Language[] = []
 
   private authStore: AuthStore
   private client: ApolloClient<{}>
@@ -75,7 +76,7 @@ export class ContestStore {
         `,
         variables: { email, shortId, name, shortDescription },
       })
-      const contest = response.data.createContest.contest
+      const contest = this.toContest(response.data.createContest.contest)
       const me = { ...response.data.createContest.admin, contestId: contest.id }
       runInAction(() => {
         this.current = contest
@@ -112,14 +113,14 @@ export class ContestStore {
         variables: { shortId },
       })
       runInAction(() => {
-        this.current = response.data.contestByShortId
+        this.current = this.toContest(response.data.contestByShortId)
       })
     } catch (error) {
       throw convertGraphqlError(error)
     }
   }
 
-  @action updateContest = async (
+  @action update = async (
     name: string,
     shortDescription: string,
     description: string,
@@ -128,10 +129,91 @@ export class ContestStore {
     finishTime: Date,
     permittedLanguages: string[]
   ) => {
-    return null
+    try {
+      const response = await this.client.mutate({
+        mutation: gql`
+          mutation UpdateContest(
+            $name: String!
+            $shortDescription: String!
+            $description: String!
+            $startTime: DateTime!
+            $freezed: Boolean!
+            $finishTime: DateTime!
+            $permittedLanguages: [String]!
+          ) {
+            updateContest(
+              contest: {
+                name: $name
+                shortDescription: $shortDescription
+                description: $description
+                startTime: $startTime
+                freezed: $freezed
+                finishTime: $finishTime
+                permittedLanguages: $permittedLanguages
+              }
+            ) {
+              id
+              name
+              shortId
+              shortDescription
+              description
+              startTime
+              freezed
+              finishTime
+              permittedLanguages {
+                id
+                name
+                extensions
+              }
+            }
+          }
+        `,
+        variables: { name, shortDescription, description, startTime, freezed, finishTime, permittedLanguages },
+        context: {
+          headers: {
+            authorization: `Bearer ${this.authStore.token}`,
+          },
+        },
+      })
+      runInAction(() => {
+        this.current = this.toContest(response.data.updateContest)
+      })
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
   }
 
-  private loadUserContest = async () => {
+  @action loadLanguages = async (): Promise<Language[]> => {
+    try {
+      const response = await this.client.query({
+        query: gql`
+          {
+            languages {
+              id
+              name
+              extensions
+            }
+          }
+        `,
+      })
+      runInAction(() => {
+        this.languages = response.data.languages
+      })
+      return response.data.languages
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
+  }
+
+  private toContest(value: any): ContestInfo {
+    return {
+      ...value,
+      startTime: new Date(value.startTime),
+      finishTime: new Date(value.finishTime),
+    }
+  }
+
+  @action private loadUserContest = async () => {
     if (!this.authStore.me) return
     try {
       const response = await this.client.query({
@@ -156,7 +238,9 @@ export class ContestStore {
         `,
         variables: { id: this.authStore.me.contestId },
       })
-      this.current = response.data.contest
+      runInAction(() => {
+        this.current = this.toContest(response.data.contest)
+      })
     } catch (error) {
       throw convertGraphqlError(error)
     }

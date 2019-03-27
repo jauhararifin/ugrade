@@ -21,7 +21,7 @@ export const Sidebar: FunctionComponent = () => {
   const setContestName = async (newName: string) => {
     if (contestInfo && newName !== contestInfo.name) {
       try {
-        await contestStore.updateContest(
+        await contestStore.update(
           newName,
           contestInfo.shortDescription,
           contestInfo.description,
@@ -40,7 +40,7 @@ export const Sidebar: FunctionComponent = () => {
   const setContestShortDesc = async (newShortDesc: string) => {
     if (contestInfo && newShortDesc !== contestInfo.shortDescription) {
       try {
-        await contestStore.updateContest(
+        await contestStore.update(
           contestInfo.name,
           newShortDesc,
           contestInfo.description,

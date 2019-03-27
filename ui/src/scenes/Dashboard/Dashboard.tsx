@@ -6,6 +6,7 @@ import { useContestOnly } from '../../common'
 import { DashboardView } from './DashboardView'
 import { Overview } from './Overview'
 import { Problems } from './Problems'
+import { Settings } from './Settings'
 
 export const Dashboard: FunctionComponent = () => {
   useContestOnly()
@@ -34,7 +35,7 @@ export const Dashboard: FunctionComponent = () => {
             {/* <Route path='/contest/clarifications' exact={true} component={Clarifications} /> */}
             {/* <Route path='/contest/submissions' exact={true} component={Submissions} /> */}
             {/* <Route path='/contest/scoreboard' exact={true} component={Scoreboard} /> */}
-            {/* <Route path='/contest/settings' exact={true} component={Settings} /> */}
+            <Route path='/contest/settings' exact={true} component={Settings} />
             {/* <Route path='/contest/members' component={Members} /> */}
           </Switch>
         </CSSTransition>
