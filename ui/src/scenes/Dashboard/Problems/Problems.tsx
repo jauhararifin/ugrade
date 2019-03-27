@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useRouting } from '../../../app'
+import { CreateProblem } from './CreateProblem'
 import { ProblemList } from './ProblemList'
 
 export const Problems: FunctionComponent = () => {
@@ -11,9 +12,9 @@ export const Problems: FunctionComponent = () => {
       <CSSTransition timeout={300} classNames='fade' key={routingStore.location.pathname}>
         <Switch>
           <Route path='/contest/problems' exact={true} component={ProblemList} />
-          {/* <Route path='/contest/problems/create' exact={true} component={CreateProblem} />
-          <Route path='/contest/problems/:problemId/edit' component={UpdateProblem} />
-          <Route path='/contest/problems/:problemId' component={ProblemDetail} /> */}
+          <Route path='/contest/problems/create' exact={true} component={CreateProblem} />
+          {/* <Route path='/contest/problems/:problemId/edit' component={UpdateProblem} /> */}
+          {/* <Route path='/contest/problems/:problemId' component={ProblemDetail} /> */}
         </Switch>
       </CSSTransition>
     </TransitionGroup>

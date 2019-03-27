@@ -122,8 +122,8 @@ export class ProblemStore {
 
   @action create = async (problem: Problem) => {
     try {
-      const response = await this.client.query({
-        query: gql`
+      const response = await this.client.mutate({
+        mutation: gql`
           mutation CreateProblem(
             $shortId: String!
             $name: String!

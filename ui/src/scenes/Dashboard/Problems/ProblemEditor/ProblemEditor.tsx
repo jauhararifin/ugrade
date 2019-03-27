@@ -29,7 +29,7 @@ export const ProblemEditor: FunctionComponent<ProblemEditorProps> = ({ problem, 
     disabled: problem ? problem.disabled : false,
     timeLimit: problem ? problem.timeLimit : 1000,
     tolerance: problem ? problem.tolerance : 1.5,
-    memoryLimit: problem ? problem.memoryLimit : 32 * 1024,
+    memoryLimit: problem ? problem.memoryLimit : 16 * 1024 * 1024,
     outputLimit: problem ? problem.outputLimit : 32 * 1024,
   }
 
