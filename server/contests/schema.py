@@ -444,6 +444,7 @@ class UpdateContestInput(graphene.InputObjectType):
     start_time = DateTime()
     freezed = graphene.Boolean()
     finish_time = DateTime()
+    permitted_languages = graphene.List(graphene.String)
 
 
 class UpdateContest(graphene.Mutation):
@@ -461,10 +462,16 @@ class UpdateContest(graphene.Mutation):
         if 'update:info' not in permissions:
             raise ValueError("You Don't Have Permission To Update Contest")
         updating_contest = user.contest
-        for k in contest:
+        for k in ['name', 'short_description', 'description', 'start_time', 'freezed', 'finish_time']:
             if contest[k] is not None:
                 setattr(updating_contest, k, getattr(contest, k))
         updating_contest.save()
+        if contest['permitted_languages']:
+            langs = Language.objects.filter(
+                id__in=contest['permitted_languages'])
+            updating_contest.permitted_languages.set(langs)
+            updating_contest.save()
+
         return updating_contest
 
 
@@ -526,7 +533,7 @@ class Query(graphene.ObjectType):
         except Language.DoesNotExist:
             raise ValueError("No Such Language")
 
-    def resolve_languages(self):
+    def resolve_languages(self, info):
         return Language.objects.all()
 
 
