@@ -437,6 +437,37 @@ class CreateContest(graphene.Mutation):
         return CreateContest(contest=new_contest, admin=new_user)
 
 
+class UpdateContestInput(graphene.InputObjectType):
+    name = graphene.String()
+    short_description = graphene.String()
+    description = graphene.String()
+    start_time = DateTime()
+    freezed = graphene.Boolean()
+    finish_time = DateTime()
+
+
+class UpdateContest(graphene.Mutation):
+    class Arguments:
+        contest = UpdateContestInput(required=True)
+
+    Output = ContestType
+
+    @staticmethod
+    @transaction.atomic
+    @with_me
+    def mutate(root, info, contest):
+        user = info.context.user
+        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
+        if 'update:info' not in permissions:
+            raise ValueError("You Don't Have Permission To Update Contest")
+        updating_contest = user.contest
+        for k in contest:
+            if contest[k] is not None:
+                setattr(updating_contest, k, getattr(contest, k))
+        updating_contest.save()
+        return updating_contest
+
+
 class LanguageType(DjangoObjectType):
     extensions = graphene.List(graphene.String)
 
@@ -508,3 +539,4 @@ class Mutation(graphene.ObjectType):
     create_problem = CreateProblem.Field()
     update_problem = UpdateProblem.Field()
     delete_problem = DeleteProblem.Field()
+    update_contest = UpdateContest.Field()
