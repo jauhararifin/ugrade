@@ -1,6 +1,7 @@
 import { ApolloClient, gql } from 'apollo-boost'
 import { action, observable, reaction, runInAction } from 'mobx'
-import { AuthStore } from './auth'
+import { async } from 'q'
+import { AuthStore, User } from './auth'
 import { convertGraphqlError } from './graphqlError'
 
 export interface Language {
@@ -24,6 +25,7 @@ export interface ContestInfo {
 export class ContestStore {
   @observable current?: ContestInfo
   @observable languages: Language[] = []
+  @observable members?: User[]
 
   private authStore: AuthStore
   private client: ApolloClient<{}>
@@ -33,6 +35,11 @@ export class ContestStore {
     this.client = apolloClient
 
     reaction(() => this.authStore.me && this.authStore.me.contestId, this.loadUserContest)
+    reaction(() => {
+      const me = this.authStore.me
+      const curr = this.current
+      return me && curr
+    }, this.loadMembers)
   }
 
   @action create = async (
@@ -200,6 +207,41 @@ export class ContestStore {
         this.languages = response.data.languages
       })
       return response.data.languages
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
+  }
+
+  @action private loadMembers = async () => {
+    try {
+      if (!this.current) return []
+      const response = await this.client.query({
+        query: gql`
+          query GetMembers($contestId: String!) {
+            contest(id: $contestId) {
+              members {
+                id
+                name
+                username
+                email
+                permissions
+                contest {
+                  id
+                }
+              }
+            }
+          }
+        `,
+        variables: { contestId: this.current.id },
+      })
+      const members = response.data.contest.members.map((user: any) => ({
+        ...user,
+        contestId: user.contest.id,
+      }))
+      runInAction(() => {
+        this.members = members
+      })
+      return members
     } catch (error) {
       throw convertGraphqlError(error)
     }
