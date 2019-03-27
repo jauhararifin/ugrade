@@ -1,5 +1,5 @@
 from django.contrib import admin
-from contests.models import User, Contest, Permission, Language, Problem
+from contests.models import User, Contest, Permission, Language, Problem, Submission
 
 
 @admin.register(Contest)
@@ -28,3 +28,9 @@ class ProblemAdmin(admin.ModelAdmin):
     list_display = ('id', 'contest', 'short_id', 'name', 'disabled',
                     'time_limit', 'tolerance', 'memory_limit', 'output_limit')
     list_display_links = ('id', 'name')
+
+
+@admin.register(Submission)
+class SubmissionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'problem', 'language', 'issued_time')
+    list_display_links = ('id', 'problem', 'language')

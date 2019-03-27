@@ -111,6 +111,9 @@ class Submission(models.Model):
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "Submission #{}".format(self.id)
+
 
 VERDICT = (
     ('IE', 'Internal Error'),
