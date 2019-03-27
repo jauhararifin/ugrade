@@ -44,6 +44,14 @@ export const allPermissions = [
   Permission.UpdateInfo,
 ]
 
+export const adminPermissions = allPermissions
+
+export const contestantPermissions = [
+  Permission.ReadAnnouncement,
+  Permission.ReadProblems,
+  Permission.CreateClarifications,
+]
+
 export interface User {
   id: string
   name?: string

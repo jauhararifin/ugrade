@@ -1,7 +1,7 @@
 import { ApolloClient, gql } from 'apollo-boost'
 import { action, observable, reaction, runInAction } from 'mobx'
 import { async } from 'q'
-import { AuthStore, User } from './auth'
+import { AuthStore, Permission, User } from './auth'
 import { convertGraphqlError } from './graphqlError'
 
 export interface Language {
@@ -185,6 +185,41 @@ export class ContestStore {
       runInAction(() => {
         this.current = this.toContest(response.data.updateContest)
       })
+    } catch (error) {
+      throw convertGraphqlError(error)
+    }
+  }
+
+  @action invite = async (emails: string[], permissions: Permission[]): Promise<User> => {
+    try {
+      const response = await this.client.mutate({
+        mutation: gql`
+          mutation Invite($emails: [String!]!, $permissions: [String!]!) {
+            inviteUsers(emails: $emails, permissions: $permissions) {
+              id
+              name
+              username
+              email
+              permissions
+              contest {
+                id
+              }
+            }
+          }
+        `,
+        variables: { emails, permissions },
+        context: {
+          headers: {
+            authorization: `Bearer ${this.authStore.token}`,
+          },
+        },
+      })
+      const results = response.data.inviteUsers
+      const users = results.map((u: any) => ({ ...u, contestId: u.contest.id }))
+      runInAction(() => {
+        this.members = this.members ? this.members.concat(users) : users
+      })
+      return users
     } catch (error) {
       throw convertGraphqlError(error)
     }

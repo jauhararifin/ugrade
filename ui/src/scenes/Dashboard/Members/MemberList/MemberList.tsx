@@ -11,7 +11,6 @@ export const MemberList: FunctionComponent = () => {
   const authStore = useAuth()
   return useObserver(() => {
     const users = contestStore.members
-    console.log(toJS(users))
     const canInvite = authStore.can(Permission.InviteUsers)
     if (users) return <MemberListView users={users} canInvite={canInvite} />
     return <SimpleLoading />
