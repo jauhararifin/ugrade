@@ -11,7 +11,7 @@ import { ContestSubmitFormView } from './ContestSubmitFormView'
 export interface ContestSubmitFormValue {
   language: string
   problem: string
-  sourceCode: string
+  sourceCode: File
 }
 
 export const ContestSubmitForm: FunctionComponent = () => {
@@ -29,11 +29,7 @@ export const ContestSubmitForm: FunctionComponent = () => {
       .string()
       .label('Problem')
       .required(),
-    sourceCode: yup
-      .string()
-      .label('Source Code')
-      .url()
-      .required(),
+    sourceCode: yup.mixed(),
   })
 
   const handleSubmit = async (
@@ -56,11 +52,11 @@ export const ContestSubmitForm: FunctionComponent = () => {
     const problems = lodash.values(problemStore.problems)
     const languages = contestInfo ? contestInfo.permittedLanguages : undefined
 
-    const getInitialValue = () => {
+    const getInitialValue = (): ContestSubmitFormValue => {
       return {
         language: languages && languages.length > 0 ? languages[0].id : '',
         problem: problems && problems.length > 0 ? problems[0].id : '',
-        sourceCode: 'https://raw.githubusercontent.com/jauhararifin/cp/master/uva/820.cpp',
+        sourceCode: new File([], ''),
       }
     }
 

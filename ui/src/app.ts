@@ -1,4 +1,5 @@
-import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost'
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from 'apollo-boost'
+import { createUploadLink } from 'apollo-upload-client'
 import { createBrowserHistory } from 'history'
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 import { createContext, useContext } from 'react'
@@ -14,7 +15,10 @@ export const routingStore = new RouterStore()
 export const history = syncHistoryWithStore(browserHistory, routingStore)
 
 export const apolloClient = new ApolloClient({
-  link: new HttpLink({ uri: 'http://localhost:8000/graphql', credentials: 'same-origin' }),
+  link: ApolloLink.from([
+    createUploadLink({ uri: 'http://localhost:8000/graphql', credentials: 'same-origin' }),
+    new HttpLink({ uri: 'http://localhost:8000/graphql', credentials: 'same-origin' }),
+  ]),
   cache: new InMemoryCache(),
   defaultOptions: {
     query: {

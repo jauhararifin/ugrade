@@ -18,9 +18,17 @@ export const ContestSubmitFormView: FunctionComponent<ContestSubmitFormViewProps
   avaiableProblems,
   avaiableLanguages,
   isSubmitting,
+  setFieldValue,
 }) => {
+  const handleFileChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.target as any
+    const file = target.files[0] as File
+    setFieldValue('sourceCode', file)
+    target.value = ''
+  }
+  const filename = values.sourceCode.name.length > 0 ? values.sourceCode.name : 'Source Code'
   return (
-    <form onSubmit={handleSubmit}>
+    <form encType='multipart/form-data' onSubmit={handleSubmit}>
       <H5>Submit Solution</H5>
       <FormGroup>
         <ControlGroup fill={true}>
@@ -32,12 +40,7 @@ export const ContestSubmitFormView: FunctionComponent<ContestSubmitFormViewProps
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <FileInput placeholder='Source Code' />
-          <input
-            type='hidden'
-            name='sourceCode'
-            value='https://raw.githubusercontent.com/jauhararifin/cp/master/uva/820.cpp'
-          />
+          <FileInput placeholder='Source Code' text={filename} inputProps={{ onChange: handleFileChange }} />
         </ControlGroup>
       </FormGroup>
       <FormGroup>
