@@ -104,3 +104,28 @@ class Problem(models.Model):
 
     class Meta:
         unique_together = [('short_id', 'contest')]
+
+
+class Submission(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL)
+    language = models.ForeignKey(Language, on_delete=models.SET_NULL)
+    source_code = models.CharField(max_length=1024)
+
+
+VERDICT = (
+    ('IE', 'Internal Error'),
+    ('CE', 'Compilation Error'),
+    ('RTE', 'Run Time Error'),
+    ('MLE', 'Memory Limit Exceeded'),
+    ('TLE', 'Time Limit Exceeded'),
+    ('WA', 'Wrong Answer'),
+    ('AC', 'Accepted'),
+    ('PENDING', 'Pending'),
+)
+
+
+class Grading(models.Model):
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    issued_time = models.DateTimeField(auto_now=True, auto_now_add=True)
+    verdict = models.CharField(
+        max_length=32, choices=VERDICT, default='PENDING')
