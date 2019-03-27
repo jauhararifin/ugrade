@@ -475,6 +475,48 @@ class UpdateContest(graphene.Mutation):
         return updating_contest
 
 
+class InviteUsers(graphene.Mutation):
+    class Arguments:
+        emails = graphene.List(graphene.String)
+        permissions = graphene.List(graphene.String)
+
+    Output = graphene.List(UserType)
+
+    @staticmethod
+    @transaction.atomic
+    @with_me
+    def mutate(root, info, emails, permissions):
+        user = info.context.user
+
+        my_permissions = list(
+            map(lambda perm: perm.code, user.permissions.all()))
+        if 'invite:users' not in my_permissions:
+            raise ValueError("You Don't Have Permission To Invite Users")
+
+        for perm in permissions:
+            if perm not in my_permissions:
+                raise ValueError(
+                    "You Don't Have Permission To Give Other User Permission \"{}\"".format(perm))
+
+        current_users = User.objects.filter(
+            contest__id=user.contest.id, email__in=emails).count()
+        if current_users > 0:
+            raise ValueError("Some User Already Invited")
+
+        permissions = Permission.objects.filter(code__in=permissions)
+        new_users = []
+        for email in emails:
+            signup_otc = "".join([random.choice("0123456789")
+                                  for _ in range(8)])
+            new_user = User(email=email, contest=user.contest,
+                            signup_otc=signup_otc)
+            new_user.full_clean()
+            new_user.save()
+            new_user.permissions.add(*permissions)
+            new_users += [new_user]
+        return new_users
+
+
 class LanguageType(DjangoObjectType):
     extensions = graphene.List(graphene.String)
 
@@ -547,3 +589,4 @@ class Mutation(graphene.ObjectType):
     update_problem = UpdateProblem.Field()
     delete_problem = DeleteProblem.Field()
     update_contest = UpdateContest.Field()
+    invite_users = InviteUsers.Field()
