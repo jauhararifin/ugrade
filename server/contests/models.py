@@ -107,8 +107,8 @@ class Problem(models.Model):
 
 
 class Submission(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL)
-    language = models.ForeignKey(Language, on_delete=models.SET_NULL)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
     source_code = models.CharField(max_length=1024)
 
 
@@ -126,6 +126,6 @@ VERDICT = (
 
 class Grading(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
-    issued_time = models.DateTimeField(auto_now=True, auto_now_add=True)
+    issued_time = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(
         max_length=32, choices=VERDICT, default='PENDING')
