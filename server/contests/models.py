@@ -109,6 +109,7 @@ class Problem(models.Model):
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    issuer = models.ForeignKey(User, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

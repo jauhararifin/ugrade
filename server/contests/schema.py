@@ -312,12 +312,19 @@ class DeleteProblem(graphene.Mutation):
         return problem_id
 
 
+class SubmissionType(DjangoObjectType):
+    class Meta:
+        model = Submission
+        only_fields = ('id', 'problem', 'language', 'issued_time', 'issuer')
+
+
 class ContestType(DjangoObjectType):
     user = graphene.Field(UserType, id=graphene.String())
     user_by_email = graphene.Field(UserType, email=graphene.String())
     user_by_username = graphene.Field(UserType, username=graphene.String())
     problem = graphene.Field(ProblemType, id=graphene.String())
     problems = graphene.List(ProblemType, required=True)
+    submissions = graphene.List(SubmissionType)
 
     @staticmethod
     def resolve_user(root, _, id):
@@ -383,6 +390,22 @@ class ContestType(DjangoObjectType):
             contest__id=user.contest.id).order_by('order')
         if 'read:disabledProblems' not in permissions:
             query_set = query_set.filter(disabled=False)
+        return query_set
+
+    @staticmethod
+    @with_me
+    def resolve_submissions(root, info):
+        user = info.context.user
+        if user.contest.id != root.id:
+            raise ValueError("You Don't Have Permission To Read Submissions")
+        my_permissions = list(
+            map(lambda perm: perm.code, user.permissions.all()))
+
+        query_set = Submission.objects.filter(
+            problem__contest__id=user.contest.id)
+        if 'read:submissions' not in my_permissions:
+            query_set = query_set.filter(issuer_id=user.id)
+
         return query_set
 
     class Meta:
@@ -520,12 +543,6 @@ class InviteUsers(graphene.Mutation):
         return new_users
 
 
-class SubmissionType(DjangoObjectType):
-    class Meta:
-        model = Submission
-        only_fields = ('id', 'problem', 'language', 'issued_time')
-
-
 class SubmitSolution(graphene.Mutation):
     class Arguments:
         problem_id = graphene.String(required=True)
@@ -562,7 +579,7 @@ class SubmitSolution(graphene.Mutation):
         if language.id not in permitted_langs:
             raise ValueError("Language Is Not Permitted")
 
-        sub = Submission(problem=problem, language=language)
+        sub = Submission(problem=problem, language=language, issuer=user)
         sub.save()
 
         filename = "submissions/submission-{}".format(sub.id)
