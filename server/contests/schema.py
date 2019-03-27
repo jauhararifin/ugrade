@@ -9,6 +9,7 @@ from graphene_django.types import DjangoObjectType
 
 from django.conf import settings
 from django.db import transaction
+from django.db.models import Max
 
 from contests.models import Contest, Language, User, Permission, Problem
 
@@ -226,10 +227,104 @@ class ProblemType(DjangoObjectType):
                        'order', 'time_limit', 'tolerance', 'memory_limit', 'output_limit')
 
 
+class ProblemInput(graphene.InputObjectType):
+    short_id = graphene.String(required=True)
+    name = graphene.String(required=True)
+    statement = graphene.String(required=True)
+    disabled = graphene.Boolean(required=True)
+    time_limit = graphene.Int(required=True)
+    tolerance = graphene.Float(required=True)
+    memory_limit = graphene.Int(required=True)
+    output_limit = graphene.Int(required=True)
+
+
+class CreateProblem(graphene.Mutation):
+    class Arguments:
+        problem = ProblemInput(required=True)
+
+    Output = ProblemType
+
+    @staticmethod
+    @transaction.atomic
+    @with_me
+    def mutate(_root, info, problem):
+        user = info.context.user
+        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
+        if 'create:problems' not in permissions:
+            raise ValueError("You Don't Have Permission To Create Problem")
+        last_order = Problem.objects.filter(
+            contest__id=user.contest.id).aggregate(Max('order'))
+        new_prob = Problem(
+            **problem, order=last_order['order__max'] + 1, contest=user.contest)
+        new_prob.save()
+        return new_prob
+
+
+class UpdateProblem(graphene.Mutation):
+    class Arguments:
+        problem_id = graphene.String(required=True)
+        problem = ProblemInput(required=True)
+
+    Output = ProblemType
+
+    @staticmethod
+    @with_me
+    def mutate(_root, info, problem_id, problem):
+        user = info.context.user
+        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
+        if 'update:problems' not in permissions:
+            raise ValueError("You Don't Have Permission To Update Problem")
+        try:
+            prob = Problem.objects.get(pk=problem_id)
+        except Problem.DoesNotExist:
+            raise ValueError("No Such Problem")
+        if prob.disabled and 'read:disabledProblems' not in permissions:
+            raise ValueError("No Such Problem")
+        for k in problem:
+            setattr(prob, k, problem[k])
+        prob.save()
+        return prob
+
+
+class DeleteProblem(graphene.Mutation):
+    class Arguments:
+        problem_id = graphene.String(required=True)
+
+    Output = graphene.String
+
+    @staticmethod
+    @with_me
+    def mutate(_root, info, problem_id):
+        user = info.context.user
+        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
+        if 'delete:problems' not in permissions:
+            raise ValueError("You Don't Have Permission To Delete Problem")
+        try:
+            prob = Problem.objects.get(pk=problem_id)
+        except Problem.DoesNotExist:
+            raise ValueError("No Such Problem")
+        if prob.disabled and 'read:disabledProblems' not in permissions:
+            raise ValueError("No Such Problem")
+        prob.delete()
+        return problem_id
+
+
 class ContestType(DjangoObjectType):
+    user = graphene.Field(UserType, id=graphene.String())
     user_by_email = graphene.Field(UserType, email=graphene.String())
     user_by_username = graphene.Field(UserType, username=graphene.String())
+    problem = graphene.Field(ProblemType, id=graphene.String())
     problems = graphene.List(ProblemType, required=True)
+
+    @staticmethod
+    def resolve_user(root, _, id):
+        try:
+            user = User.objects.get(pk=id)
+            if user.contest.id != root.id:
+                raise ValueError("No Such User")
+            return user
+        except User.DoesNotExist:
+            raise ValueError("No Such User")
 
     @staticmethod
     def resolve_user_by_email(root, _, **kwargs):
@@ -250,14 +345,39 @@ class ContestType(DjangoObjectType):
 
     @staticmethod
     @with_me
-    def resolve_problems(_root, info):
+    def resolve_problem(root, info, id):
         user = info.context.user
         permissions = user.permissions.filter(
             code__in=['read:problems', 'read:disabledProblems'])
         permissions = map(lambda perm: perm.code, permissions)
+        permissions = list(permissions)
         if 'read:problems' not in permissions:
             raise ValueError("You Don't Have Permission To Read Problems")
-        query_set = Problem.objects.filter(contest__id=user.contest.id)
+        try:
+            problem = Problem.objects.get(pk=id)
+            if problem.contest.id != root.id:
+                raise ValueError("No Such Problem")
+            if problem.disabled and 'read:disabledProblems' not in permissions:
+                raise ValueError("No Such Problem")
+            return problem
+        except Problem.DoesNotExist:
+            raise ValueError("No Such Problem")
+        raise ValueError("Internal Server Error")
+
+    @staticmethod
+    @with_me
+    def resolve_problems(root, info):
+        user = info.context.user
+        if user.contest.id != root.id:
+            raise ValueError("You Don't Have Permission To Read Problems")
+        permissions = user.permissions.filter(
+            code__in=['read:problems', 'read:disabledProblems'])
+        permissions = map(lambda perm: perm.code, permissions)
+        permissions = list(permissions)
+        if 'read:problems' not in permissions:
+            raise ValueError("You Don't Have Permission To Read Problems")
+        query_set = Problem.objects.filter(
+            contest__id=user.contest.id).order_by('order')
         if 'read:disabledProblems' not in permissions:
             query_set = query_set.filter(disabled=False)
         return query_set
@@ -385,3 +505,6 @@ class Mutation(graphene.ObjectType):
     sign_up = SignUp.Field()
     forgot_password = ForgotPassword.Field()
     reset_password = ResetPassword.Field()
+    create_problem = CreateProblem.Field()
+    update_problem = UpdateProblem.Field()
+    delete_problem = DeleteProblem.Field()
