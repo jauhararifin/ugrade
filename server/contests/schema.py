@@ -10,7 +10,33 @@ from graphene_django.types import DjangoObjectType
 from django.conf import settings
 from django.db import transaction
 
-from contests.models import Contest, Language, User, Permission
+from contests.models import Contest, Language, User, Permission, Problem
+
+
+def with_me(method):
+    def resolve(root, info, *args, **kwargs):
+        auth_header = info.context.META.get('HTTP_AUTHORIZATION')
+        if auth_header is None:
+            raise ValueError("Missing Token")
+
+        partition = auth_header.split()
+        if len(partition) != 2 or partition[0].lower() != 'bearer':
+            raise ValueError('Invalid Token')
+
+        token = partition[1]
+        try:
+            data = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
+            user_id = data['id']
+            try:
+                info.context.user = User.objects.get(pk=user_id)
+                if info.context.user is None:
+                    raise ValueError("Invalid Token")
+            except User.DoesNotExist:
+                raise ValueError("Invalid Token")
+        except Exception:
+            raise ValueError("Invalid Token")
+        return method(root, info, *args, **kwargs)
+    return resolve
 
 
 class UserType(DjangoObjectType):
@@ -193,9 +219,17 @@ class ResetPassword(graphene.Mutation):
         return user
 
 
+class ProblemType(DjangoObjectType):
+    class Meta:
+        model = Problem
+        only_fields = ('id', 'short_id', 'name', 'statement', 'contest', 'disabled',
+                       'order', 'time_limit', 'tolerance', 'memory_limit', 'output_limit')
+
+
 class ContestType(DjangoObjectType):
     user_by_email = graphene.Field(UserType, email=graphene.String())
     user_by_username = graphene.Field(UserType, username=graphene.String())
+    problems = graphene.List(ProblemType, required=True)
 
     @staticmethod
     def resolve_user_by_email(root, _, **kwargs):
@@ -214,10 +248,24 @@ class ContestType(DjangoObjectType):
         except User.DoesNotExist:
             raise ValueError("No Such User")
 
+    @staticmethod
+    @with_me
+    def resolve_problems(_root, info):
+        user = info.context.user
+        permissions = user.permissions.filter(
+            code__in=['read:problems', 'read:disabledProblems'])
+        permissions = map(lambda perm: perm.code, permissions)
+        if 'read:problems' not in permissions:
+            raise ValueError("You Don't Have Permission To Read Problems")
+        query_set = Problem.objects.filter(contest__id=user.contest.id)
+        if 'read:disabledProblems' not in permissions:
+            query_set = query_set.filter(disabled=False)
+        return query_set
+
     class Meta:
         model = Contest
-        only_fields = ('id', 'name', 'short_id', 'short_description', 'description',
-                       'start_time', 'freezed', 'finish_time', 'permitted_languages', 'members')
+        only_fields = ('id', 'name', 'short_id', 'short_description', 'description', 'start_time',
+                       'freezed', 'finish_time', 'permitted_languages', 'members')
 
 
 class ContestInput(graphene.InputObjectType):
@@ -304,28 +352,9 @@ class Query(graphene.ObjectType):
         except User.DoesNotExist:
             raise ValueError("No Such User")
 
-    def resolve_me(self, info):
-        auth_header = info.context.META.get('HTTP_AUTHORIZATION')
-        if auth_header is None:
-            raise ValueError("Missing Token")
-
-        partition = auth_header.split()
-        if len(partition) != 2 or partition[0].lower() != 'bearer':
-            raise ValueError('Invalid Token')
-
-        token = partition[1]
-        try:
-            data = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
-            user_id = data['id']
-            try:
-                info.context.user = User.objects.get(pk=user_id)
-                if info.context.user is None:
-                    raise ValueError("Invalid Token")
-            except User.DoesNotExist:
-                raise ValueError("Invalid Token")
-        except Exception:
-            raise ValueError("Invalid Token")
-
+    @staticmethod
+    @with_me
+    def resolve_me(_, info):
         return info.context.user
 
     def resolve_contest(self, _, **kwargs):
