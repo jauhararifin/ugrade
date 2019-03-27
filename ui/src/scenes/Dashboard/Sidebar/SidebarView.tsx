@@ -44,7 +44,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   const running = started && !ended
   const remainingTime = moment.duration(moment(contest.finishTime).diff(moment(serverClock)))
   const remainingTimeStr = remainingTime ? durationToStr(remainingTime) : '--:--:--'
-  const startedIn = durationToStr(moment.duration(moment(serverClock).diff(moment(contest.startTime))))
+  const startedIn = durationToStr(moment.duration(moment(contest.startTime).diff(moment(serverClock))))
 
   const [name, setName] = useState('')
   const [shortDesc, setShortDesc] = useState('')
