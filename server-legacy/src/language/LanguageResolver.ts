@@ -1,6 +1,6 @@
 import { Arg, Query, Resolver } from 'type-graphql'
 import { Language } from './Language'
-import { LanguageEntity } from '../entity/LanguageEntity'
+import { LanguageEntity } from '@/entity/LanguageEntity'
 import { ApolloError } from 'apollo-server-core'
 
 @Resolver(of => Language)

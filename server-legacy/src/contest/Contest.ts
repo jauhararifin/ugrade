@@ -1,5 +1,5 @@
 import { Field, ObjectType, Int } from 'type-graphql'
-import { Language } from '../languages/Language'
+import { Language } from '@/language/Language'
 
 @ObjectType()
 export class Contest {

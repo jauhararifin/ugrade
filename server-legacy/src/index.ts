@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm'
 import { LanguageEntity } from './entity/LanguageEntity'
 import { GraphQLServer } from 'graphql-yoga'
 import { buildSchema } from 'type-graphql'
-import { LanguageResolver } from './languages/LanguageResolver'
+import { LanguageResolver } from './language/LanguageResolver'
 
 async function bootstrap() {
   const connection = await createConnection()
