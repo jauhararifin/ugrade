@@ -8,17 +8,17 @@ export class User {
   @Field(type => Int!)
   id: number
 
-  @Field(type => String!)
-  name: string
+  @Field(type => String)
+  name?: string
 
-  @Field(type => String!)
-  username: string
+  @Field(type => String)
+  username?: string
 
   @Field(type => String!)
   email: string
 
   @Field(type => [Permission!]!)
-  permissions: Permission | Promise<Permission>
+  permissions: Permission[] | Promise<Permission[]>
 
   @Field(type => Contest!)
   contest: Contest | Promise<Contest>

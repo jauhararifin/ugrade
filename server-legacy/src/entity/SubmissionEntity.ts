@@ -9,18 +9,18 @@ export class SubmissionEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(type => ProblemEntity)
-  problem: ProblemEntity | Promise<ProblemEntity>
+  @ManyToOne(type => ProblemEntity, { nullable: false })
+  problem: Promise<ProblemEntity>
 
-  @ManyToOne(type => LanguageEntity)
-  language: LanguageEntity | Promise<LanguageEntity>
+  @ManyToOne(type => LanguageEntity, { nullable: false })
+  language: Promise<LanguageEntity>
 
-  @ManyToOne(type => UserEntity, user => user.submissions)
-  issuer: UserEntity | Promise<UserEntity>
+  @ManyToOne(type => UserEntity, user => user.submissions, { nullable: false })
+  issuer: Promise<UserEntity>
 
   @Column()
   issuedAt: Date
 
   @OneToMany(type => GradingEntity, grading => grading.submission)
-  gradings: GradingEntity | Promise<GradingEntity>
+  gradings: Promise<GradingEntity>
 }

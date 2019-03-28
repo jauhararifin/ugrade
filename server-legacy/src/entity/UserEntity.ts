@@ -20,31 +20,31 @@ export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
-  name: string
+  @Column({ nullable: true })
+  name?: string
 
-  @Column()
-  username: string
+  @Column({ nullable: true })
+  username?: string
 
   @Column()
   email: string
 
   @ManyToMany(type => PermissionEntity)
   @JoinTable()
-  permissions: PermissionEntity[] | Promise<PermissionEntity[]>
+  permissions: Promise<PermissionEntity[]>
 
-  @ManyToOne(type => ContestEntity, contest => contest.members)
-  contest: ContestEntity | Promise<ContestEntity>
+  @ManyToOne(type => ContestEntity, contest => contest.members, { nullable: false })
+  contest: Promise<ContestEntity>
 
-  @Column()
-  password: string
+  @Column({ nullable: true })
+  password?: string
 
-  @Column()
-  signupOtc: string
+  @Column({ nullable: true })
+  signupOtc?: string
 
-  @Column()
-  resetPasswordOtc: string
+  @Column({ nullable: true })
+  resetPasswordOtc?: string
 
   @OneToMany(type => SubmissionEntity, submission => submission.issuer)
-  submissions: SubmissionEntity[]
+  submissions: Promise<SubmissionEntity[]>
 }

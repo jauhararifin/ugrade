@@ -16,4 +16,9 @@ export class ContestResolver {
   async contests(): Promise<Contest[]> {
     return ContestEntity.getRepository().find()
   }
+
+  // @FieldResolver(type => [User!]!)
+  // async members(@Root() contest: ContestEntity): Promise<User[]> {
+  //   return contest.members
+  // }
 }

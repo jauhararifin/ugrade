@@ -2,6 +2,7 @@ import { LanguageEntity } from './LanguageEntity'
 import { PermissionEntity } from './PermissionEntity'
 import { ContestEntity } from './ContestEntity'
 import { UserEntity } from './UserEntity'
+import { getConnection } from 'typeorm'
 
 export const languages = [
   {
@@ -315,18 +316,30 @@ export const loadFixture = async () => {
       const permittedLanguages = LanguageEntity.findByIds(contest.permittedLanguages)
       const inserted = await ContestEntity.create({ ...contest, permittedLanguages }).save()
       inserted.permittedLanguages = permittedLanguages
-      inserted.save()
+      await inserted.save()
     })
   )
 
-  await Promise.all(
-    users.map(async user => {
-      const permissions = PermissionEntity.findByIds(user.permissions)
-      const contest = ContestEntity.findOne(user.contest)
-      const inserted = await UserEntity.create({ ...user, permissions, contest }).save()
-      inserted.permissions = permissions
-      inserted.contest = contest
-      inserted.save()
-    })
-  )
+  await getConnection()
+    .createQueryBuilder()
+    .insert()
+    .into(UserEntity)
+    .values(
+      users.map(user => ({
+        ...user,
+        contest: ContestEntity.findOne(user.contest),
+        permissions: PermissionEntity.findByIds(user.permissions),
+      }))
+    )
+    .execute()
+
+  // await Promise.all(
+  //   users.map(async user => {
+  //     const permissions = PermissionEntity.findByIds(user.permissions)
+  //     const contest = await ContestEntity.findOne(user.contest)
+  //     const inserted = await UserEntity.create({ ...user, permissions, contest }).save()
+  //     inserted.permissions = permissions
+  //     await inserted.save()
+  //   })
+  // )
 }

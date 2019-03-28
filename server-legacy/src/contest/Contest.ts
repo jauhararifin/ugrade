@@ -29,4 +29,7 @@ export class Contest {
 
   @Field(_ => [Language!]!)
   permittedLanguages: Language[] | Promise<Language[]>
+
+  // @Field(_ => [User!]!)
+  // members: User[] | Promise<User[]>
 }

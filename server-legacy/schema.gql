@@ -26,9 +26,31 @@ type Language {
   extensions: [String!]!
 }
 
+type Permission {
+  id: Int!
+  code: String!
+  description: String!
+}
+
 type Query {
   language(id: Float!): Language!
   languages: [Language!]!
   contest(id: Float!): Contest!
   contests: [Contest!]!
+  user(id: Float!): User!
+  users: [User!]!
+}
+
+type Submission {
+  id: Int!
+}
+
+type User {
+  id: Int!
+  name: String!
+  username: String!
+  email: String!
+  permissions: [Permission!]!
+  contest: Contest!
+  submissions: [Submission!]!
 }

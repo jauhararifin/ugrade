@@ -17,8 +17,8 @@ export class GradingEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(type => SubmissionEntity, submission => submission.gradings)
-  submission: SubmissionEntity | Promise<SubmissionEntity>
+  @ManyToOne(type => SubmissionEntity, submission => submission.gradings, { nullable: false })
+  submission: Promise<SubmissionEntity>
 
   @Column()
   issuedAt: string

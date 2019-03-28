@@ -5,15 +5,22 @@ import { buildSchema } from 'type-graphql'
 import { LanguageResolver } from './language/LanguageResolver'
 import { loadFixture } from '@/entity/fixtures'
 import { ContestResolver } from './contest/ContestResolver'
+import { debug } from 'util'
+import { UserResolver } from './users/UserResolver'
 
 export let connection = undefined
 
 async function bootstrap() {
+  debug('create connection')
   connection = await createConnection()
+  debug('connection established')
+
+  debug('loading fixture')
   await loadFixture()
+  debug('fixture loaded')
 
   const schema = await buildSchema({
-    resolvers: [LanguageResolver, ContestResolver],
+    resolvers: [LanguageResolver, ContestResolver, UserResolver],
     emitSchemaFile: true,
   })
 
