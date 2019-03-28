@@ -10,17 +10,17 @@ export class SubmissionEntity extends BaseEntity {
   id: number
 
   @ManyToOne(type => ProblemEntity, { nullable: false })
-  problem: Promise<ProblemEntity>
+  problem: ProblemEntity
 
   @ManyToOne(type => LanguageEntity, { nullable: false })
-  language: Promise<LanguageEntity>
+  language: LanguageEntity
 
   @ManyToOne(type => UserEntity, user => user.submissions, { nullable: false })
-  issuer: Promise<UserEntity>
+  issuer: UserEntity
 
   @Column()
   issuedAt: Date
 
   @OneToMany(type => GradingEntity, grading => grading.submission)
-  gradings: Promise<GradingEntity>
+  gradings: GradingEntity
 }

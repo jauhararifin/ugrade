@@ -31,10 +31,10 @@ export class UserEntity extends BaseEntity {
 
   @ManyToMany(type => PermissionEntity)
   @JoinTable()
-  permissions: Promise<PermissionEntity[]>
+  permissions: PermissionEntity[]
 
   @ManyToOne(type => ContestEntity, contest => contest.members, { nullable: false })
-  contest: Promise<ContestEntity>
+  contest: ContestEntity
 
   @Column({ nullable: true })
   password?: string
@@ -46,5 +46,5 @@ export class UserEntity extends BaseEntity {
   resetPasswordOtc?: string
 
   @OneToMany(type => SubmissionEntity, submission => submission.issuer)
-  submissions: Promise<SubmissionEntity[]>
+  submissions: SubmissionEntity[]
 }

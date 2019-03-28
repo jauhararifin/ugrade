@@ -17,7 +17,7 @@ export class ProblemEntity extends BaseEntity {
   statement: string
 
   @ManyToOne(type => ContestEntity, contest => contest.problems, { nullable: false })
-  contest: Promise<ContestEntity>
+  contest: ContestEntity
 
   @Column({ default: true })
   disabled: boolean

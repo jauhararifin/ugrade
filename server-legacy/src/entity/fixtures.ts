@@ -320,17 +320,16 @@ export const loadFixture = async () => {
     })
   )
 
+  const insertingUser = users.map(async user => ({
+    ...user,
+    contest: await ContestEntity.findOne(user.contest),
+    permissions: await PermissionEntity.findByIds(user.permissions),
+  }))
   await getConnection()
     .createQueryBuilder()
     .insert()
     .into(UserEntity)
-    .values(
-      users.map(user => ({
-        ...user,
-        contest: ContestEntity.findOne(user.contest),
-        permissions: PermissionEntity.findByIds(user.permissions),
-      }))
-    )
+    .values(await Promise.all(insertingUser))
     .execute()
 
   // await Promise.all(
