@@ -1,10 +1,10 @@
-import { Field, ObjectType } from 'type-graphql'
+import { Field, ObjectType, Int } from 'type-graphql'
 import { Language } from './Language'
 
 @ObjectType()
 export class Contest {
-  @Field(_ => String!)
-  id: string
+  @Field(_ => Int!)
+  id: number
 
   @Field(_ => String!)
   name: string

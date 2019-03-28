@@ -1,9 +1,9 @@
-import { Entity, Column, BaseEntity, PrimaryColumn } from 'typeorm'
+import { Entity, Column, BaseEntity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export class LanguageEntity extends BaseEntity {
-  @PrimaryColumn()
-  id: string
+  @PrimaryGeneratedColumn()
+  id: number
 
   @Column()
   name: string

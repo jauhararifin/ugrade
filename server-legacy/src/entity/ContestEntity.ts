@@ -1,11 +1,11 @@
-import { Entity, Column, ManyToMany, JoinTable, Unique, PrimaryColumn } from 'typeorm'
+import { Entity, Column, ManyToMany, JoinTable, Unique, PrimaryGeneratedColumn } from 'typeorm'
 import { LanguageEntity } from './LanguageEntity'
 
 @Entity()
 @Unique(['shortId'])
 export class ContestEntity {
-  @PrimaryColumn()
-  id: string
+  @PrimaryGeneratedColumn()
+  id: number
 
   @Column()
   name: string

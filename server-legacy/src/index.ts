@@ -9,7 +9,6 @@ async function bootstrap() {
   const connection = await createConnection()
 
   const language = new LanguageEntity()
-  language.id = 'wow'
   language.name = 'C++11'
   language.extensions = ['cpp', 'cxx', 'c++', 'cc']
   await connection.manager.save(language)
