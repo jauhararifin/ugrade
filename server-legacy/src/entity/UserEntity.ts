@@ -1,4 +1,14 @@
-import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
+import {
+  BaseEntity,
+  Entity,
+  Unique,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm'
 import { PermissionEntity } from './PermissionEntity'
 import { ContestEntity } from './ContestEntity'
 import { SubmissionEntity } from './SubmissionEntity'
@@ -19,7 +29,8 @@ export class UserEntity extends BaseEntity {
   @Column()
   email: string
 
-  @Column()
+  @ManyToMany(type => PermissionEntity)
+  @JoinTable()
   permission: PermissionEntity
 
   @ManyToOne(type => ContestEntity, contest => contest.members)

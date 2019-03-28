@@ -1,17 +1,13 @@
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
-import { LanguageEntity } from './entity/LanguageEntity'
 import { GraphQLServer } from 'graphql-yoga'
 import { buildSchema } from 'type-graphql'
 import { LanguageResolver } from './language/LanguageResolver'
+import { loadFixture } from '@/entity/fixtures'
 
 async function bootstrap() {
-  const connection = await createConnection()
-
-  const language = new LanguageEntity()
-  language.name = 'C++11'
-  language.extensions = ['cpp', 'cxx', 'c++', 'cc']
-  await connection.manager.save(language)
+  await createConnection()
+  await loadFixture()
 
   const schema = await buildSchema({
     resolvers: [LanguageResolver],
