@@ -3,6 +3,23 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Contest {
+  id: Int!
+  name: String!
+  shortId: String!
+  shortDescription: String!
+  description: String!
+  startTime: DateTime!
+  freezed: Boolean!
+  finishTime: DateTime!
+  permittedLanguages: [Language!]!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 type Language {
   id: Int!
   name: String!
@@ -12,4 +29,6 @@ type Language {
 type Query {
   language(id: Float!): Language!
   languages: [Language!]!
+  contest(id: Float!): Contest!
+  contests: [Contest!]!
 }

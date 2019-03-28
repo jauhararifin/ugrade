@@ -28,5 +28,5 @@ export class Contest {
   finishTime: Date
 
   @Field(_ => [Language!]!)
-  permittedLanguages: Language[]
+  permittedLanguages: Language[] | Promise<Language[]>
 }

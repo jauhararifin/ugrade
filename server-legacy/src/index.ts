@@ -4,13 +4,16 @@ import { GraphQLServer } from 'graphql-yoga'
 import { buildSchema } from 'type-graphql'
 import { LanguageResolver } from './language/LanguageResolver'
 import { loadFixture } from '@/entity/fixtures'
+import { ContestResolver } from './contest/ContestResolver'
+
+export let connection = undefined
 
 async function bootstrap() {
-  await createConnection()
+  connection = await createConnection()
   await loadFixture()
 
   const schema = await buildSchema({
-    resolvers: [LanguageResolver],
+    resolvers: [LanguageResolver, ContestResolver],
     emitSchemaFile: true,
   })
 
