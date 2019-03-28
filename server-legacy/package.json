@@ -1,6 +1,7 @@
 {
   "name": "new-typeorm-project",
   "version": "0.0.1",
+  "license": "MIT",
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
     "@types/node": "^8.0.29",
@@ -8,6 +9,7 @@
     "typescript": "2.5.2"
   },
   "dependencies": {
+    "apollo-server-core": "^2.4.8",
     "graphql-yoga": "^1.17.4",
     "reflect-metadata": "^0.1.10",
     "sqlite3": "^4.0.3",

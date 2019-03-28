@@ -4,12 +4,12 @@
 # -----------------------------------------------
 
 type Language {
-  id: String!
+  id: Int!
   name: String!
   extensions: [String!]!
 }
 
 type Query {
-  language(id: String!): Language!
+  language(id: Float!): Language!
   languages: [Language!]!
 }

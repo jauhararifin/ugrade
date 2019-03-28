@@ -5,3 +5,4 @@ build/
 tmp/
 temp/
 db.sqlite3
+schema.gql
