@@ -8,10 +8,10 @@ export class User {
   @Field(type => Int!)
   id: number
 
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   name?: string
 
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   username?: string
 
   @Field(type => String!)

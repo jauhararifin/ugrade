@@ -13,6 +13,7 @@ type Contest {
   freezed: Boolean!
   finishTime: DateTime!
   permittedLanguages: [Language!]!
+  members: [User!]!
 }
 
 """
@@ -47,8 +48,8 @@ type Submission {
 
 type User {
   id: Int!
-  name: String!
-  username: String!
+  name: String
+  username: String
   email: String!
   permissions: [Permission!]!
   contest: Contest!

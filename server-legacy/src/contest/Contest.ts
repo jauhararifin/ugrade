@@ -1,5 +1,6 @@
 import { Field, ObjectType, Int } from 'type-graphql'
 import { Language } from '@/language/Language'
+import { User } from '../users/User'
 
 @ObjectType()
 export class Contest {
@@ -30,6 +31,6 @@ export class Contest {
   @Field(_ => [Language!]!)
   permittedLanguages: Language[] | Promise<Language[]>
 
-  // @Field(_ => [User!]!)
-  // members: User[] | Promise<User[]>
+  @Field(_ => [User!]!)
+  members: Promise<User[]>
 }
