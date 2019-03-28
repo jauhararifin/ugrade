@@ -17,7 +17,7 @@ export class ProblemEntity extends BaseEntity {
   statement: string
 
   @ManyToOne(type => ContestEntity, contest => contest.problems, { nullable: false })
-  contest?: ContestEntity
+  contest: ContestEntity
 
   @RelationId((problem: ProblemEntity) => problem.contest)
   contestId: number

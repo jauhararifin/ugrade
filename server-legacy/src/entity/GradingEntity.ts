@@ -18,14 +18,14 @@ export class GradingEntity extends BaseEntity {
   id: number
 
   @ManyToOne(type => SubmissionEntity, submission => submission.gradings, { nullable: false })
-  submission?: SubmissionEntity
+  submission: SubmissionEntity
 
   @RelationId((grading: GradingEntity) => grading.submission)
   submissionId: number
 
   @Column()
-  issuedAt: string
+  issuedAt: Date
 
   @Column({ enum: Verdict, default: Verdict.PENDING })
-  verdict: string
+  verdict: Verdict
 }

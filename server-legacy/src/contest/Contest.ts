@@ -1,6 +1,6 @@
 import { Field, ObjectType, Int } from 'type-graphql'
 import { Language } from '@/language/Language'
-import { User } from '../users/User'
+import { User } from '@/user/User'
 
 @ObjectType()
 export class Contest {

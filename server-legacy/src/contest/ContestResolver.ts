@@ -3,7 +3,7 @@ import { ApolloError } from 'apollo-server-core'
 import { ContestEntity } from '@/entity/ContestEntity'
 import { Contest } from './Contest'
 import { Language } from '@/language/Language'
-import { User } from '../users/User'
+import { User } from '@/user/User'
 
 @Resolver(of => Contest)
 export class ContestResolver implements ResolverInterface<Contest> {

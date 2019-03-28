@@ -5,7 +5,7 @@ import { buildSchema } from 'type-graphql'
 import { LanguageResolver } from './language/LanguageResolver'
 import { loadFixture } from '@/entity/fixtures'
 import { debug } from 'util'
-import { UserResolver } from './users/UserResolver'
+import { UserResolver } from './user/UserResolver'
 import { ContestResolver } from '@/contest/ContestResolver'
 
 export let connection = undefined
