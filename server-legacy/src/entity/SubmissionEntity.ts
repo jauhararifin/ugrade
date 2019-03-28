@@ -1,4 +1,4 @@
-import { BaseEntity, PrimaryGeneratedColumn, Entity, ManyToOne, Column, OneToMany } from 'typeorm'
+import { BaseEntity, PrimaryGeneratedColumn, Entity, ManyToOne, Column, OneToMany, RelationId } from 'typeorm'
 import { ProblemEntity } from './ProblemEntity'
 import { LanguageEntity } from './LanguageEntity'
 import { UserEntity } from './UserEntity'
@@ -12,11 +12,20 @@ export class SubmissionEntity extends BaseEntity {
   @ManyToOne(type => ProblemEntity, { nullable: false })
   problem: ProblemEntity
 
+  @RelationId((submission: SubmissionEntity) => submission.problem)
+  problemId: number
+
   @ManyToOne(type => LanguageEntity, { nullable: false })
   language: LanguageEntity
 
+  @RelationId((submission: SubmissionEntity) => submission.language)
+  languageId: number
+
   @ManyToOne(type => UserEntity, user => user.submissions, { nullable: false })
   issuer: UserEntity
+
+  @RelationId((submission: SubmissionEntity) => submission.issuer)
+  issuerId: number
 
   @Column()
   issuedAt: Date

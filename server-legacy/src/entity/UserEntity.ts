@@ -8,6 +8,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  RelationId,
 } from 'typeorm'
 import { PermissionEntity } from './PermissionEntity'
 import { ContestEntity } from './ContestEntity'
@@ -35,6 +36,9 @@ export class UserEntity extends BaseEntity {
 
   @ManyToOne(type => ContestEntity, contest => contest.members, { nullable: false })
   contest: ContestEntity
+
+  @RelationId((user: UserEntity) => user.contest)
+  contestId: number
 
   @Column({ nullable: true })
   password?: string

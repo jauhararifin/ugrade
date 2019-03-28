@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, RelationId } from 'typeorm'
 import { SubmissionEntity } from './SubmissionEntity'
 
 export enum Verdict {
@@ -19,6 +19,9 @@ export class GradingEntity extends BaseEntity {
 
   @ManyToOne(type => SubmissionEntity, submission => submission.gradings, { nullable: false })
   submission: SubmissionEntity
+
+  @RelationId((grading: GradingEntity) => grading.submission)
+  submissionId: number
 
   @Column()
   issuedAt: string

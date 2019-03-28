@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column, ManyToOne, RelationId } from 'typeorm'
 import { ContestEntity } from './ContestEntity'
 
 @Entity()
@@ -18,6 +18,9 @@ export class ProblemEntity extends BaseEntity {
 
   @ManyToOne(type => ContestEntity, contest => contest.problems, { nullable: false })
   contest: ContestEntity
+
+  @RelationId((problem: ProblemEntity) => problem.contest)
+  contestId: number
 
   @Column({ default: true })
   disabled: boolean

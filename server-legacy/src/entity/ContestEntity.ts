@@ -32,11 +32,11 @@ export class ContestEntity extends BaseEntity {
 
   @ManyToMany(type => LanguageEntity)
   @JoinTable()
-  permittedLanguages: Promise<LanguageEntity[]>
+  permittedLanguages: LanguageEntity[]
 
   @OneToMany(type => UserEntity, user => user.contest)
-  members: Promise<UserEntity[]>
+  members: UserEntity[]
 
   @OneToMany(type => ProblemEntity, problem => problem.contest)
-  problems: Promise<ProblemEntity[]>
+  problems: ProblemEntity[]
 }

@@ -313,7 +313,7 @@ export const loadFixture = async () => {
 
   await Promise.all(
     contests.map(async contest => {
-      const permittedLanguages = LanguageEntity.findByIds(contest.permittedLanguages)
+      const permittedLanguages = await LanguageEntity.findByIds(contest.permittedLanguages)
       const inserted = await ContestEntity.create({ ...contest, permittedLanguages }).save()
       inserted.permittedLanguages = permittedLanguages
       await inserted.save()
