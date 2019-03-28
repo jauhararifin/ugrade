@@ -21,6 +21,13 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
+type Grading {
+  id: Int!
+  submission: Submission!
+  issuedAt: DateTime!
+  verdict: Verdict!
+}
+
 type Language {
   id: Int!
   name: String!
@@ -31,6 +38,20 @@ type Permission {
   id: Int!
   code: String!
   description: String!
+}
+
+type Problem {
+  id: Int!
+  shortId: String!
+  name: String!
+  statement: String!
+  contest: Contest!
+  disabled: Boolean!
+  order: Int!
+  timeLimit: Int!
+  tolerance: Float!
+  memoryLimit: Int!
+  outputLimit: Int!
 }
 
 type Query {
@@ -44,6 +65,11 @@ type Query {
 
 type Submission {
   id: Int!
+  problem: Problem!
+  language: Language!
+  issuer: User!
+  issuedAt: DateTime!
+  gradings: [Grading!]!
 }
 
 type User {
@@ -54,4 +80,15 @@ type User {
   permissions: [Permission!]!
   contest: Contest!
   submissions: [Submission!]!
+}
+
+enum Verdict {
+  IE
+  CE
+  RTE
+  MLE
+  TLE
+  WA
+  AC
+  PENDING
 }

@@ -1,4 +1,4 @@
-import { Arg, Query, Resolver, ResolverInterface, Root, FieldResolver } from 'type-graphql'
+import { Arg, Query, Resolver, ResolverInterface, Root, FieldResolver, Int } from 'type-graphql'
 import { ApolloError } from 'apollo-server-core'
 import { ContestEntity } from '@/entity/ContestEntity'
 import { Contest } from './Contest'
@@ -9,7 +9,7 @@ import { User } from '@/user/User'
 export class ContestResolver implements ResolverInterface<Contest> {
   @Query(returns => Contest!)
   async contest(
-    @Arg('id', { nullable: false })
+    @Arg('id', type => Int, { nullable: false })
     id: number
   ) {
     const contest = await ContestEntity.findOne(id)
