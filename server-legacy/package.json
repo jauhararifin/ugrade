@@ -17,6 +17,8 @@
     "typeorm": "0.2.16"
   },
   "scripts": {
+    "preinstall": "rm -f node_modules/@",
+    "postinstall": "ln -s `pwd`/src node_modules/@",
     "start": "ts-node src/index.ts"
   }
 }
