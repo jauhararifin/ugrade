@@ -1,26 +1,45 @@
-import { Arg, Query, Resolver, FieldResolver, Root, ResolverInterface } from 'type-graphql'
+import { Arg, Query, Resolver, ResolverInterface, Root, FieldResolver } from 'type-graphql'
 import { ApolloError } from 'apollo-server-core'
-import { Contest } from './Contest'
 import { ContestEntity } from '@/entity/ContestEntity'
+import { Contest } from './Contest'
+import { Language } from '@/language/Language'
 import { User } from '../users/User'
-import { UserEntity } from '@/entity/UserEntity'
 
-@Resolver(of => ContestEntity)
-export class ContestResolver implements ResolverInterface<ContestEntity> {
-  @Query(returns => ContestEntity!)
-  async contest(@Arg('id', { nullable: false }) id: number): Promise<ContestEntity> {
-    const contest = await ContestEntity.getRepository().findOne(id)
-    if (contest) return contest
+@Resolver(of => Contest)
+export class ContestResolver implements ResolverInterface<Contest> {
+  @Query(returns => Contest!)
+  async contest(
+    @Arg('id', { nullable: false })
+    id: number
+  ) {
+    const contest = await ContestEntity.findOne(id)
+    if (contest) return { ...contest }
     throw new ApolloError('NoSuchContest', 'No Such Contest')
   }
 
-  @Query(returns => [ContestEntity!]!)
-  async contests(): Promise<ContestEntity[]> {
-    return ContestEntity.getRepository().find()
+  @Query(returns => [Contest!]!)
+  async contests() {
+    const contests = await ContestEntity.find()
+    return contests.map(contest => ({
+      ...contest,
+    }))
   }
 
-  @FieldResolver()
-  members(@Root() contest: ContestEntity): Promise<UserEntity[]> {
-    return UserEntity.find({ contestId: contest.id })
+  @FieldResolver(returns => [Language])
+  async permittedLanguages(@Root() contest: Contest) {
+    const item = await ContestEntity.findOne({
+      relations: ['permittedLanguages'],
+      where: { id: contest.id },
+    })
+    return item.permittedLanguages
+  }
+
+  @FieldResolver(returns => [User])
+  async members(@Root() contest: Contest) {
+    const item = await ContestEntity.findOne({
+      relations: ['members'],
+      where: { id: contest.id },
+    })
+    return item.members
   }
 }

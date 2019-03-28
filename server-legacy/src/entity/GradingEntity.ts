@@ -18,7 +18,7 @@ export class GradingEntity extends BaseEntity {
   id: number
 
   @ManyToOne(type => SubmissionEntity, submission => submission.gradings, { nullable: false })
-  submission: SubmissionEntity
+  submission?: SubmissionEntity
 
   @RelationId((grading: GradingEntity) => grading.submission)
   submissionId: number

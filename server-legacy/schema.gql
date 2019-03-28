@@ -36,10 +36,10 @@ type Permission {
 type Query {
   language(id: Float!): Language!
   languages: [Language!]!
-  contest(id: Float!): Contest!
-  contests: [Contest!]!
   user(id: Float!): User!
   users: [User!]!
+  contest(id: Float!): Contest!
+  contests: [Contest!]!
 }
 
 type Submission {

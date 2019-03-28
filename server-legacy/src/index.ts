@@ -4,9 +4,9 @@ import { GraphQLServer } from 'graphql-yoga'
 import { buildSchema } from 'type-graphql'
 import { LanguageResolver } from './language/LanguageResolver'
 import { loadFixture } from '@/entity/fixtures'
-import { ContestResolver } from './contest/ContestResolver'
 import { debug } from 'util'
 import { UserResolver } from './users/UserResolver'
+import { ContestResolver } from '@/contest/ContestResolver'
 
 export let connection = undefined
 

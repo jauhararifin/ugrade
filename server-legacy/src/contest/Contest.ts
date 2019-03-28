@@ -4,33 +4,33 @@ import { User } from '../users/User'
 
 @ObjectType()
 export class Contest {
-  @Field(_ => Int!)
+  @Field(type => Int, { nullable: false })
   id: number
 
-  @Field(_ => String!)
+  @Field(type => String, { nullable: false })
   name: string
 
-  @Field(_ => String!)
+  @Field(type => String, { nullable: false })
   shortId: string
 
-  @Field(_ => String!)
+  @Field(type => String, { nullable: false })
   shortDescription: string
 
-  @Field(_ => String!)
+  @Field(type => String, { nullable: false })
   description: string
 
-  @Field(_ => Date!)
+  @Field(type => Date, { nullable: false })
   startTime: Date
 
-  @Field(_ => Boolean!)
+  @Field(type => Boolean, { nullable: false })
   freezed: boolean
 
-  @Field(_ => Date!)
+  @Field(type => Date, { nullable: false })
   finishTime: Date
 
-  @Field(_ => [Language!]!)
-  permittedLanguages: Language[] | Promise<Language[]>
+  @Field(type => [Language], { nullable: false })
+  permittedLanguages: Language[]
 
-  @Field(_ => [User!]!)
-  members: Promise<User[]>
+  @Field(type => [User], { nullable: false })
+  members: User[]
 }

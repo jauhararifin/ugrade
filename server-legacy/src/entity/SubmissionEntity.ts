@@ -10,19 +10,19 @@ export class SubmissionEntity extends BaseEntity {
   id: number
 
   @ManyToOne(type => ProblemEntity, { nullable: false })
-  problem: ProblemEntity
+  problem?: ProblemEntity
 
   @RelationId((submission: SubmissionEntity) => submission.problem)
   problemId: number
 
   @ManyToOne(type => LanguageEntity, { nullable: false })
-  language: LanguageEntity
+  language?: LanguageEntity
 
   @RelationId((submission: SubmissionEntity) => submission.language)
   languageId: number
 
   @ManyToOne(type => UserEntity, user => user.submissions, { nullable: false })
-  issuer: UserEntity
+  issuer?: UserEntity
 
   @RelationId((submission: SubmissionEntity) => submission.issuer)
   issuerId: number
@@ -31,5 +31,5 @@ export class SubmissionEntity extends BaseEntity {
   issuedAt: Date
 
   @OneToMany(type => GradingEntity, grading => grading.submission)
-  gradings: GradingEntity
+  gradings?: GradingEntity
 }

@@ -5,7 +5,7 @@ import { Submission } from '@/submission/Submission'
 
 @ObjectType()
 export class User {
-  @Field(type => Int!)
+  @Field(type => Int, { nullable: false })
   id: number
 
   @Field(type => String, { nullable: true })
@@ -14,15 +14,15 @@ export class User {
   @Field(type => String, { nullable: true })
   username?: string
 
-  @Field(type => String!)
+  @Field(type => String, { nullable: false })
   email: string
 
-  @Field(type => [Permission!]!)
-  permissions: Permission[] | Promise<Permission[]>
+  @Field(type => [Permission], { nullable: false })
+  permissions: Permission[]
 
-  @Field(type => Contest!)
-  contest: Contest | Promise<Contest>
+  @Field(type => Contest, { nullable: false })
+  contest: Contest
 
-  @Field(type => [Submission!]!)
-  submissions: Submission[] | Promise<Submission[]>
+  @Field(type => [Submission], { nullable: false })
+  submissions: Submission[]
 }
