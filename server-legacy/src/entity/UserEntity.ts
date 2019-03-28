@@ -31,10 +31,10 @@ export class UserEntity extends BaseEntity {
 
   @ManyToMany(type => PermissionEntity)
   @JoinTable()
-  permission: PermissionEntity
+  permissions: PermissionEntity[] | Promise<PermissionEntity[]>
 
   @ManyToOne(type => ContestEntity, contest => contest.members)
-  contest: ContestEntity
+  contest: ContestEntity | Promise<ContestEntity>
 
   @Column()
   password: string

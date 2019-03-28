@@ -1,8 +1,7 @@
 import { LanguageEntity } from './LanguageEntity'
 import { PermissionEntity } from './PermissionEntity'
 import { ContestEntity } from './ContestEntity'
-import { Contest } from '../contest/Contest'
-import { of } from 'zen-observable'
+import { UserEntity } from './UserEntity'
 
 export const languages = [
   {
@@ -172,6 +171,141 @@ export const contests = [
   },
 ]
 
+const users = [
+  {
+    id: 1,
+    name: 'Administrator',
+    username: 'admin',
+    email: 'admin@example.com',
+    contest: 1,
+    password: '$2b$12$wz5VfEkMY4.Zd77EcN64pu34HkuWp17w8JKCFZRPGm4.tdetdbOnS',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+  },
+  {
+    id: 2,
+    name: 'Test',
+    username: 'test',
+    email: 'test@example.com',
+    contest: 1,
+    password: '$2b$12$CCPjDhFrDu3Tyw.V1HiYJ.WlPpRRouk82tcc0u8VyosNo7vMkIKJO',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 3,
+    name: null,
+    username: null,
+    email: 'newtest@example.com',
+    contest: 1,
+    password: null,
+    signupOtc: '00000000',
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 4,
+    name: 'Administrator',
+    username: 'admin',
+    email: 'admin@example.com',
+    contest: 2,
+    password: '$2b$12$rFtSGGhcivkEAU0XIuPC0exJ6Mq0hfR9aQZKX5eAYL8OJ429CYJOu',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+  },
+  {
+    id: 5,
+    name: 'Test',
+    username: 'test',
+    email: 'test@example.com',
+    contest: 2,
+    password: '$2b$12$4cISLQKPnrawoMFBvx5z7.gQzkcChu5bp2ekPqWU63TeiitEVSbyK',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 6,
+    name: null,
+    username: null,
+    email: 'newtest@example.com',
+    contest: 2,
+    password: null,
+    signupOtc: '00000000',
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 7,
+    name: 'Administrator',
+    username: 'admin',
+    email: 'admin@example.com',
+    contest: 3,
+    password: '$2b$12$oviP7K3vzJtPa6DSyLkUaO9S6uFdwH3d62mVDtmXjenIhm5YBTmbC',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+  },
+  {
+    id: 8,
+    name: 'Test',
+    username: 'test',
+    email: 'test@example.com',
+    contest: 3,
+    password: '$2b$12$gDNQeUaYnc3TQVP2przNIeFESN9P5e1KVdtMIU1yltfsjL/pXaezu',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 9,
+    name: null,
+    username: null,
+    email: 'newtest@example.com',
+    contest: 3,
+    password: null,
+    signupOtc: '00000000',
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 10,
+    name: 'Administrator',
+    username: 'admin',
+    email: 'admin@example.com',
+    contest: 4,
+    password: '$2b$12$81/3nQFv1cHz.92s7Z49fewFNiLMvWPkOxMC7A5NCDiNZlY/dM3iO',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+  },
+  {
+    id: 11,
+    name: 'Test',
+    username: 'test',
+    email: 'test@example.com',
+    contest: 4,
+    password: '$2b$12$DV9kDBzmt8DTxYZjwjPV8uLC/.emRoevvtAr4BPGC.zRnoBNHvosa',
+    signupOtc: null,
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+  {
+    id: 12,
+    name: null,
+    username: null,
+    email: 'newtest@example.com',
+    contest: 4,
+    password: null,
+    signupOtc: '00000000',
+    resetPasswordOtc: null,
+    permissions: [5, 8, 17],
+  },
+]
+
 export const loadFixture = async () => {
   await Promise.all(languages.map(lang => LanguageEntity.create(lang).save()))
   await Promise.all(permissions.map(perm => PermissionEntity.create(perm).save()))
@@ -181,6 +315,17 @@ export const loadFixture = async () => {
       const permittedLanguages = LanguageEntity.findByIds(contest.permittedLanguages)
       const inserted = await ContestEntity.create({ ...contest, permittedLanguages }).save()
       inserted.permittedLanguages = permittedLanguages
+      inserted.save()
+    })
+  )
+
+  await Promise.all(
+    users.map(async user => {
+      const permissions = PermissionEntity.findByIds(user.permissions)
+      const contest = ContestEntity.findOne(user.contest)
+      const inserted = await UserEntity.create({ ...user, permissions, contest }).save()
+      inserted.permissions = permissions
+      inserted.contest = contest
       inserted.save()
     })
   )
