@@ -1,8 +1,8 @@
+import { showErrorToast } from '@/common'
+import { Problem } from '@/problem'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
-import { showErrorToast } from '../../../../common'
-import { Problem } from '../../../../problem'
 import { ProblemEditorView } from './ProblemEditorView'
 
 export interface ProblemFormValue {

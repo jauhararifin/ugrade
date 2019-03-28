@@ -1,9 +1,9 @@
+import { MarkdownEdit } from '@/components/MarkdownEdit'
+import { Language } from '@/contest'
 import { Button, Checkbox, FormGroup, InputGroup, Intent, Switch } from '@blueprintjs/core'
 import { DatePicker, TimePrecision } from '@blueprintjs/datetime'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
-import { MarkdownEdit } from '../../../../components/MarkdownEdit'
-import { Language } from '../../../../contest'
 import { ContestInfoFormValue } from './ContestInfoForm'
 
 import './styles.css'

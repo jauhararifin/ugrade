@@ -1,5 +1,5 @@
 import { ApolloClient, gql } from 'apollo-boost'
-import { action, autorun, observable, reaction, runInAction, toJS } from 'mobx'
+import { action, observable, reaction, runInAction } from 'mobx'
 import { convertGraphqlError } from './graphqlError'
 
 const AUTH_TOKEN_KEY = 'AUTH_TOKEN'

@@ -1,8 +1,8 @@
+import { useContest, useRouting } from '@/app'
+import { showErrorToast, showSuccessToast } from '@/common/toaster'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
-import { useContest, useRouting } from '../../../app'
-import { showErrorToast, showSuccessToast } from '../../../common/toaster'
 import { CreateContestFormView } from './CreateContestFormView'
 
 export interface CreateContestFormValue {

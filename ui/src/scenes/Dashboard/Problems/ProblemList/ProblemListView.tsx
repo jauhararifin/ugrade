@@ -1,8 +1,8 @@
+import { Problem } from '@/problem'
 import { Alert, Button, Card, Divider, H3, H4, Intent } from '@blueprintjs/core'
 import classnames from 'classnames'
 import React, { Fragment, FunctionComponent, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Problem } from '../../../../problem'
 import { ContentWithHeader } from '../../components/ContentWithHeader'
 
 import './styles.css'

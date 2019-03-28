@@ -1,10 +1,10 @@
+import { useContest, useProblem, useSubmission } from '@/app'
+import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import lodash from 'lodash'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
-import { useContest, useProblem, useSubmission } from '../../../../app'
-import { showErrorToast, showSuccessToast, useContestOnly } from '../../../../common'
 import { ContestSubmitFormLoadingView } from './ContestSubmitFormLoadingView'
 import { ContestSubmitFormView } from './ContestSubmitFormView'
 

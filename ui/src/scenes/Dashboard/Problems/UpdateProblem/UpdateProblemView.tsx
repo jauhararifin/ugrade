@@ -1,5 +1,5 @@
+import { Problem } from '@/problem'
 import React, { FunctionComponent } from 'react'
-import { Problem } from '../../../../problem'
 import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { ProblemEditor, ProblemFormValue } from '../ProblemEditor'
 

@@ -1,7 +1,7 @@
+import { ContestInfo } from '@/contest'
 import { Button, Card, Divider, FormGroup, InputGroup, Intent, Switch } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
-import { ContestInfo } from '../../../contest'
 import { SignUpFormValue } from './SignUpForm'
 
 import './styles.css'

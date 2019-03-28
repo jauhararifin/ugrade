@@ -1,8 +1,8 @@
+import { useProblem } from '@/app'
+import { useContestOnly } from '@/common'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import { RouteComponentProps } from 'react-router'
-import { useProblem } from '../../../../app'
-import { useContestOnly } from '../../../../common'
 import { SimpleLoading } from '../../components/SimpleLoading'
 import { ProblemDetailView } from './ProblemDetailView'
 

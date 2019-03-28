@@ -1,9 +1,9 @@
+import { useAuth, useContest, useProblem, useServer } from '@/app'
+import { Permission } from '@/auth'
+import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
 import lodash from 'lodash'
 import { useObserver } from 'mobx-react-lite'
-import React, { FunctionComponent, useEffect } from 'react'
-import { useAuth, useContest, useProblem, useServer } from '../../../app'
-import { Permission } from '../../../auth'
-import { showErrorToast, showSuccessToast, useContestOnly } from '../../../common'
+import React, { FunctionComponent } from 'react'
 import { SidebarLoadingView } from './SidebarLoadingView'
 import { SidebarView } from './SidebarView'
 

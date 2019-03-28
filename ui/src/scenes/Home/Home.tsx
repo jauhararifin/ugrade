@@ -1,6 +1,6 @@
+import { useAuth } from '@/app'
+import { title, usePublicOnly } from '@/common'
 import React, { FunctionComponent } from 'react'
-import { useAuth } from '../../app'
-import { title, usePublicOnly } from '../../common'
 import { HomeView } from './HomeView'
 
 export const Home: FunctionComponent = () => {

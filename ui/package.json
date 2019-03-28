@@ -40,6 +40,8 @@
     "yup": "^0.27.0"
   },
   "scripts": {
+    "preinstall": "rm -f node_modules/@",
+    "postinstall": "ln -s `pwd`/src node_modules/@",
     "start": "npm-run-all build:css --parallel watch:css start:ts",
     "start:ts": "react-scripts start",
     "build": "npm-run-all build:css build:ts",

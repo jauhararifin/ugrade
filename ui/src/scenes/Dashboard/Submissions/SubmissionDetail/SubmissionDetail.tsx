@@ -1,7 +1,7 @@
+import { useServer } from '@/app'
+import { useContestOnly } from '@/common'
 import { useObserver } from 'mobx-react-lite'
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import { useServer } from '../../../../app'
-import { useContestOnly } from '../../../../common'
+import React, { FunctionComponent } from 'react'
 import { ISubmission } from '../SubmissionsView'
 import { SubmissionDetailView } from './SubmissionDetailView'
 

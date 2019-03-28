@@ -1,8 +1,8 @@
+import { Permission } from '@/auth'
 import { Button, Checkbox, HTMLTable, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import lodash from 'lodash'
 import React, { FunctionComponent } from 'react'
-import { Permission } from '../../../../auth'
 import { PermissionFormValue } from './PermissionForm'
 
 import './styles.css'

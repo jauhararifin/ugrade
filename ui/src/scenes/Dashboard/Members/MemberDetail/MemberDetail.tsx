@@ -1,8 +1,8 @@
+import { useAuth, useContest } from '@/app'
+import { Permission } from '@/auth'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import { RouteComponentProps } from 'react-router'
-import { useAuth, useContest } from '../../../../app'
-import { Permission } from '../../../../auth'
 import { SimpleLoading } from '../../components/SimpleLoading'
 import { MemberDetailView } from './MemberDetailView'
 

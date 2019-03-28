@@ -1,6 +1,5 @@
 import { ApolloClient, gql } from 'apollo-boost'
 import { action, observable, reaction, runInAction } from 'mobx'
-import { async } from 'q'
 import { AuthStore, Permission, User } from './auth'
 import { convertGraphqlError } from './graphqlError'
 

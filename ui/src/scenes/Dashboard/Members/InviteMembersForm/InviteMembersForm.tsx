@@ -1,10 +1,10 @@
+import { useAuth, useContest, useRouting } from '@/app'
+import { adminPermissions, allPermissions, contestantPermissions, Permission } from '@/auth'
+import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
-import { useAuth, useContest, useRouting } from '../../../../app'
-import { adminPermissions, allPermissions, contestantPermissions, Permission } from '../../../../auth'
-import { showErrorToast, showSuccessToast, useContestOnly } from '../../../../common'
 import { InviteMembersFormView } from './InviteMembersFormView'
 
 export interface InviteMembersFormValue {

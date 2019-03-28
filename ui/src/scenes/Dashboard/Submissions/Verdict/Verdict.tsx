@@ -1,6 +1,6 @@
+import { GradingVerdict } from '@/submission'
 import { Intent, Tag } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
-import { GradingVerdict } from '../../../../submission'
 
 export interface VerdictProps {
   verdict: GradingVerdict

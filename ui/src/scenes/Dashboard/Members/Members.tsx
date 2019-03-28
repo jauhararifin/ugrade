@@ -1,7 +1,7 @@
+import { useRouting } from '@/app'
 import React, { FunctionComponent } from 'react'
 import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useRouting } from '../../../app'
 import { InviteMembersForm } from './InviteMembersForm'
 import { MemberDetail } from './MemberDetail'
 import { MemberList } from './MemberList'

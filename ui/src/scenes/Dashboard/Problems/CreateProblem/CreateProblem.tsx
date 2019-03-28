@@ -1,6 +1,6 @@
+import { useProblem, useRouting } from '@/app'
+import { showErrorToast, showSuccessToast } from '@/common'
 import React, { FunctionComponent } from 'react'
-import { useProblem, useRouting } from '../../../../app'
-import { showErrorToast, showSuccessToast } from '../../../../common'
 import { ProblemFormValue } from '../ProblemEditor'
 import { CreateProblemView } from './CreateProblemView'
 

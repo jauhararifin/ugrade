@@ -1,9 +1,9 @@
+import { useContest } from '@/app'
+import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent, useEffect } from 'react'
 import * as yup from 'yup'
-import { useContest } from '../../../../app'
-import { showErrorToast, showSuccessToast, useContestOnly } from '../../../../common'
 import { SimpleLoading } from '../../components/SimpleLoading'
 import { ContestInfoFormView } from './ContestInfoFormView'
 

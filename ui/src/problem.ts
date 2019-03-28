@@ -1,8 +1,7 @@
 import { ApolloClient, gql } from 'apollo-boost'
 import { action, observable, runInAction, when } from 'mobx'
-import { authStore } from './app'
 import { AuthStore, Permission } from './auth'
-import { ContestInfo, ContestStore } from './contest'
+import { ContestStore } from './contest'
 import { convertGraphqlError } from './graphqlError'
 
 export interface Problem {

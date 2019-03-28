@@ -1,6 +1,6 @@
+import { Markdown } from '@/components/Markdown'
+import { Problem } from '@/problem'
 import React, { FunctionComponent } from 'react'
-import { Markdown } from '../../../../components/Markdown'
-import { Problem } from '../../../../problem'
 import { ContentWithHeader } from '../../components/ContentWithHeader'
 
 import './styles.css'

@@ -1,7 +1,7 @@
+import { User } from '@/auth'
 import { Button, HTMLTable, Intent } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { User } from '../../../../auth'
 import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { UserLink } from '../../components/UserLink'
 

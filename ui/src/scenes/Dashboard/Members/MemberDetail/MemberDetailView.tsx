@@ -1,6 +1,6 @@
+import { User } from '@/auth'
 import { H4, HTMLTable, Intent, Tag } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
-import { User } from '../../../../auth'
 import { ContentWithHeader } from '../../components/ContentWithHeader'
 import { PermissionForm } from '../PermissionForm'
 

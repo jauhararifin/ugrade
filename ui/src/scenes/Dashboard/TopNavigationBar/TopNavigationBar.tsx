@@ -1,3 +1,5 @@
+import { useAuth, useContest, useProblem, useRouting } from '@/app'
+import { showSuccessToast, useContestOnly } from '@/common'
 import {
   Alignment,
   Breadcrumbs,
@@ -15,10 +17,8 @@ import {
 } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { useObserver } from 'mobx-react-lite'
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth, useContest, useProblem, useRouting } from '../../../app'
-import { showSuccessToast, useContestOnly } from '../../../common'
 import { getBreadcrumb } from './breadcrumb'
 
 export type TopNavigationBarBreadcrumb = IBreadcrumbProps

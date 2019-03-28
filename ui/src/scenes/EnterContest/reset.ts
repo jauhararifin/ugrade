@@ -1,4 +1,4 @@
-import { useAuth, useContest, useRouting } from '../../app'
+import { useAuth, useContest, useRouting } from '@/app'
 
 export function useReset() {
   const routingStore = useRouting()

@@ -1,11 +1,11 @@
+import { useAuth } from '@/app'
+import { allPermissions, Permission, User } from '@/auth'
+import { showErrorToast, showSuccessToast } from '@/common'
+import { TwoRowLoading } from '@/components/TwoRowLoading'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent, useState } from 'react'
 import * as yup from 'yup'
-import { useAuth } from '../../../../app'
-import { allPermissions, Permission, User } from '../../../../auth'
-import { showErrorToast, showSuccessToast } from '../../../../common'
-import { TwoRowLoading } from '../../../../components/TwoRowLoading'
 import { PermissionFormView } from './PermissionFormView'
 
 export interface PermissionFormValue {

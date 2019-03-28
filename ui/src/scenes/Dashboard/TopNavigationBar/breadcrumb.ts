@@ -1,7 +1,7 @@
+import { ContestInfo } from '@/contest'
+import { Problem } from '@/problem'
 import { IBreadcrumbProps } from '@blueprintjs/core'
 import { Location } from 'history'
-import { ContestInfo } from '../../../contest'
-import { Problem } from '../../../problem'
 
 export const getBreadcrumb = (
   loc: Location,

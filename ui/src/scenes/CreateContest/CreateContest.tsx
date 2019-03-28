@@ -1,5 +1,5 @@
+import { title } from '@/common'
 import React, { FunctionComponent } from 'react'
-import { title } from '../../common'
 import { CreateContestView } from './CreateContestView'
 
 export const CreateContest: FunctionComponent = () => {

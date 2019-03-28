@@ -1,14 +1,13 @@
-import { Classes, HTMLTable, Intent, Tag, Tooltip } from '@blueprintjs/core'
+import { Language } from '@/contest'
+import { Problem } from '@/problem'
+import { Submission } from '@/submission'
+import { Classes, HTMLTable, Tooltip } from '@blueprintjs/core'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Language } from '../../../contest'
-import { Problem } from '../../../problem'
-import { GradingVerdict, Submission } from '../../../submission'
 import { ContentWithHeader } from '../components/ContentWithHeader'
 import { SubmissionDetail } from './SubmissionDetail'
-import { Verdict } from './Verdict'
 
 import './styles.css'
 

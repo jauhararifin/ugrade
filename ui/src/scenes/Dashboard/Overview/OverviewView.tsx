@@ -1,6 +1,6 @@
+import { Markdown } from '@/components/Markdown'
+import { ContestInfo } from '@/contest'
 import React, { FunctionComponent } from 'react'
-import { Markdown } from '../../../components/Markdown'
-import { ContestInfo } from '../../../contest'
 import { Content } from '../components/Content'
 
 export interface OverviewViewProps {

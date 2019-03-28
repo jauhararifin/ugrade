@@ -1,7 +1,7 @@
+import { User } from '@/auth'
 import { Classes, Intent, Tag, Tooltip } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { User } from '../../../../auth'
 
 export interface UserLinkProps {
   user: User

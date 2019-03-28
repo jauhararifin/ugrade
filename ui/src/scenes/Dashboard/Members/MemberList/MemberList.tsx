@@ -1,8 +1,7 @@
-import { toJS } from 'mobx'
+import { useAuth, useContest } from '@/app'
+import { Permission } from '@/auth'
 import { useObserver } from 'mobx-react-lite'
-import React, { FunctionComponent, useEffect } from 'react'
-import { useAuth, useContest } from '../../../../app'
-import { Permission } from '../../../../auth'
+import React, { FunctionComponent } from 'react'
 import { SimpleLoading } from '../../components/SimpleLoading'
 import { MemberListView } from './MemberListView'
 

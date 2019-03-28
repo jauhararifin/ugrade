@@ -1,7 +1,7 @@
+import { MarkdownEdit } from '@/components/MarkdownEdit'
 import { Button, FormGroup, InputGroup, Intent, Switch } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'
-import { MarkdownEdit } from '../../../../components/MarkdownEdit'
 import { ProblemFormValue } from './ProblemEditor'
 
 import './styles.css'

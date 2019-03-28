@@ -1,7 +1,6 @@
-import { Callout, Card, Classes, Divider, Drawer, H2, H5, Intent, Tag, Tooltip } from '@blueprintjs/core'
+import { Card, Classes, Drawer, H5, Tooltip } from '@blueprintjs/core'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { GradingVerdict } from '../../../../submission'
 import { ISubmission } from '../SubmissionsView'
 
 import './styles.scss'

@@ -1,5 +1,5 @@
+import { useAuth, useRouting } from '@/app'
 import { useEffect } from 'react'
-import { useAuth, useRouting } from '../app'
 
 export function usePublicOnly(to: string = '/contest') {
   const routing = useRouting()
