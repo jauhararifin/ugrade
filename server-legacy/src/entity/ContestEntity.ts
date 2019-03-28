@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, Unique } from 'typeorm'
-import { Language } from './Language'
+import { Entity, Column, ManyToMany, JoinTable, Unique, PrimaryColumn } from 'typeorm'
+import { LanguageEntity } from './LanguageEntity'
 
 @Entity()
 @Unique(['shortId'])
-export class Contest {
-  @PrimaryGeneratedColumn()
-  id: number
+export class ContestEntity {
+  @PrimaryColumn()
+  id: string
 
   @Column()
   name: string
@@ -28,7 +28,7 @@ export class Contest {
   @Column()
   finishTime: Date
 
-  @ManyToMany(type => Language)
+  @ManyToMany(to => LanguageEntity)
   @JoinTable()
   permittedLanguages: string[]
 }

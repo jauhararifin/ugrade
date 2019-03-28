@@ -1,20 +1,29 @@
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
-import { Language } from './entity/Language'
+import { LanguageEntity } from './entity/LanguageEntity'
+import { GraphQLServer } from 'graphql-yoga'
+import { buildSchema } from 'type-graphql'
+import { LanguageResolver } from './resolvers/LanguageResolver'
 
-createConnection()
-  .then(async connection => {
-    console.log('Inserting a new language into the database...')
-    const language = new Language()
-    language.name = 'C++11'
-    language.extensions = 'cpp,cxx,c++,cc'
-    await connection.manager.save(language)
-    console.log('Saved a new language with id: ' + language.id)
+async function bootstrap() {
+  const connection = await createConnection()
 
-    console.log('Loading languages from the database...')
-    const languages = await connection.manager.find(Language)
-    console.log('Loaded languages: ', languages)
+  const language = new LanguageEntity()
+  language.id = 'wow'
+  language.name = 'C++11'
+  language.extensions = ['cpp', 'cxx', 'c++', 'cc']
+  await connection.manager.save(language)
 
-    console.log('Here you can setup and run express/koa/any other framework.')
+  const schema = await buildSchema({
+    resolvers: [LanguageResolver],
+    emitSchemaFile: true,
   })
-  .catch(error => console.log(error))
+
+  const server = new GraphQLServer({
+    schema,
+  })
+
+  server.start(() => console.log('Server is running on http://localhost:4000'))
+}
+
+bootstrap()

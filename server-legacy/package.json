@@ -3,14 +3,16 @@
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
-    "ts-node": "3.3.0",
     "@types/node": "^8.0.29",
+    "ts-node": "3.3.0",
     "typescript": "2.5.2"
   },
   "dependencies": {
-    "typeorm": "0.2.16",
+    "graphql-yoga": "^1.17.4",
     "reflect-metadata": "^0.1.10",
-    "sqlite3": "^4.0.3"
+    "sqlite3": "^4.0.3",
+    "type-graphql": "^0.17.0",
+    "typeorm": "0.2.16"
   },
   "scripts": {
     "start": "ts-node src/index.ts"
