@@ -3,7 +3,7 @@ import { UserModel } from './models'
 
 const users = [
   {
-    id: '5c9e07be81465f26487daa07',
+    _id: '5c9e07be81465f26487daa07',
     name: 'Administrator',
     username: 'admin',
     email: 'admin@example.com',
@@ -14,7 +14,7 @@ const users = [
     permissions: allPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa08',
+    _id: '5c9e07be81465f26487daa08',
     name: 'Test',
     username: 'test',
     email: 'test@example.com',
@@ -25,7 +25,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa09',
+    _id: '5c9e07be81465f26487daa09',
     name: null,
     username: null,
     email: 'newtest@example.com',
@@ -36,7 +36,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa0a',
+    _id: '5c9e07be81465f26487daa0a',
     name: 'Administrator',
     username: 'admin',
     email: 'admin@example.com',
@@ -47,7 +47,7 @@ const users = [
     permissions: allPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa0b',
+    _id: '5c9e07be81465f26487daa0b',
     name: 'Test',
     username: 'test',
     email: 'test@example.com',
@@ -58,7 +58,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa0c',
+    _id: '5c9e07be81465f26487daa0c',
     name: null,
     username: null,
     email: 'newtest@example.com',
@@ -69,7 +69,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa0d',
+    _id: '5c9e07be81465f26487daa0d',
     name: 'Administrator',
     username: 'admin',
     email: 'admin@example.com',
@@ -80,7 +80,7 @@ const users = [
     permissions: allPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa0e',
+    _id: '5c9e07be81465f26487daa0e',
     name: 'Test',
     username: 'test',
     email: 'test@example.com',
@@ -91,7 +91,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa0f',
+    _id: '5c9e07be81465f26487daa0f',
     name: null,
     username: null,
     email: 'newtest@example.com',
@@ -102,7 +102,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa10',
+    _id: '5c9e07be81465f26487daa10',
     name: 'Administrator',
     username: 'admin',
     email: 'admin@example.com',
@@ -113,7 +113,7 @@ const users = [
     permissions: allPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa11',
+    _id: '5c9e07be81465f26487daa11',
     name: 'Test',
     username: 'test',
     email: 'test@example.com',
@@ -124,7 +124,7 @@ const users = [
     permissions: contestantPermissions,
   },
   {
-    id: '5c9e07be81465f26487daa12',
+    _id: '5c9e07be81465f26487daa12',
     name: null,
     username: null,
     email: 'newtest@example.com',

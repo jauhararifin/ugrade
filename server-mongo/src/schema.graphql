@@ -9,6 +9,57 @@ type Language {
   extensions: [String!]!
 }
 
+type Problem {
+  id: String!
+  shortId: String!
+  name: String!
+  statement: String!
+  contest: Contest!
+  disabled: Boolean!
+  order: Int!
+  timeLimit: Int!
+  tolerance: Float!
+  memoryLimit: Int!
+  outputLimit: Int!
+}
+
+enum Verdict {
+  IE
+  CE
+  RTE
+  MLE
+  TLE
+  WA
+  AC
+  PENDING
+}
+
+type Grading {
+  id: String!
+  submission: Submission!
+  issuedAt: DateTime!
+  verdict: Verdict!
+}
+
+type Submission {
+  id: String!
+  problem: Problem!
+  language: Language!
+  issuer: User!
+  issuedAt: DateTime!
+  gradings: [Grading!]!
+}
+
+type User {
+  id: String!
+  name: String
+  username: String
+  email: String!
+  permissions: [String!]!
+  contest: Contest!
+  submissions: [Submission!]!
+}
+
 type Contest {
   id: String!
   name: String!
@@ -19,6 +70,7 @@ type Contest {
   freezed: Boolean!
   finishTime: DateTime!
   permittedLanguages: [Language!]!
+  members: [User!]!
 }
 
 type Query {
@@ -26,5 +78,7 @@ type Query {
   languages: [Language!]!
   contest(id: String!): Contest!
   contests: [Contest!]!
+  user(id: String!): User!
+  users: [User!]!
   ping: String!
 }
