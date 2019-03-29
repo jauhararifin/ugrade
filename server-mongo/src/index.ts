@@ -22,8 +22,6 @@ async function bootstrap() {
     context: authMiddleware(SECRET),
   })
 
-  server.express.use()
-
   server.start(() => console.log('Server is running on http://localhost:4000'))
 }
 
