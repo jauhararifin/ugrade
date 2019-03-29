@@ -12,7 +12,7 @@ from django.db.models import Max
 from django.core.files.storage import default_storage
 
 from contests.models import Contest, Language, User, Permission, Problem, Submission
-from .auth.decorators import with_me
+from .auth.decorators import with_me, with_permission
 from .auth.resolvers import UserType, SignIn, SignUp, ForgotPassword, ResetPassword
 
 
@@ -42,12 +42,9 @@ class CreateProblem(graphene.Mutation):
 
     @staticmethod
     @transaction.atomic
-    @with_me
+    @with_permission('create:problems', "You Don't Have Permission To Create Problem")
     def mutate(_root, info, problem):
         user = info.context.user
-        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
-        if 'create:problems' not in permissions:
-            raise ValueError("You Don't Have Permission To Create Problem")
         last_order = Problem.objects.filter(
             contest__id=user.contest.id).aggregate(Max('order'))
         new_prob = Problem(
@@ -64,16 +61,15 @@ class UpdateProblem(graphene.Mutation):
     Output = ProblemType
 
     @staticmethod
-    @with_me
+    @with_permission('update:problems', "You Don't Have Permission To Update Problem")
     def mutate(_root, info, problem_id, problem):
         user = info.context.user
-        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
-        if 'update:problems' not in permissions:
-            raise ValueError("You Don't Have Permission To Update Problem")
         try:
             prob = Problem.objects.get(pk=problem_id)
         except Problem.DoesNotExist:
             raise ValueError("No Such Problem")
+
+        permissions = map(lambda user: user.code, user.permissions.all())
         if prob.disabled and 'read:disabledProblems' not in permissions:
             raise ValueError("No Such Problem")
         for k in problem:
@@ -89,16 +85,14 @@ class DeleteProblem(graphene.Mutation):
     Output = graphene.String
 
     @staticmethod
-    @with_me
+    @with_permission('delete:problems', "You Don't Have Permission To Delete Problem")
     def mutate(_root, info, problem_id):
         user = info.context.user
-        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
-        if 'delete:problems' not in permissions:
-            raise ValueError("You Don't Have Permission To Delete Problem")
         try:
             prob = Problem.objects.get(pk=problem_id)
         except Problem.DoesNotExist:
             raise ValueError("No Such Problem")
+        permissions = map(lambda user: user.code, user.permissions.all())
         if prob.disabled and 'read:disabledProblems' not in permissions:
             raise ValueError("No Such Problem")
         prob.delete()
@@ -147,15 +141,13 @@ class ContestType(DjangoObjectType):
             raise ValueError("No Such User")
 
     @staticmethod
-    @with_me
+    @with_permission('read:problems', "You Don't Have Permission To Read Problems")
     def resolve_problem(root, info, id):
         user = info.context.user
         permissions = user.permissions.filter(
             code__in=['read:problems', 'read:disabledProblems'])
         permissions = map(lambda perm: perm.code, permissions)
         permissions = list(permissions)
-        if 'read:problems' not in permissions:
-            raise ValueError("You Don't Have Permission To Read Problems")
         try:
             problem = Problem.objects.get(pk=id)
             if problem.contest.id != root.id:
@@ -168,7 +160,7 @@ class ContestType(DjangoObjectType):
         raise ValueError("Internal Server Error")
 
     @staticmethod
-    @with_me
+    @with_permission('read:problems', "You Don't Have Permission To Read Problems")
     def resolve_problems(root, info):
         user = info.context.user
         if user.contest.id != root.id:
@@ -274,12 +266,9 @@ class UpdateContest(graphene.Mutation):
 
     @staticmethod
     @transaction.atomic
-    @with_me
-    def mutate(root, info, contest):
+    @with_permission('update:info', "You Don't Have Permission To Update Contest")
+    def mutate(_root, info, contest):
         user = info.context.user
-        permissions = list(map(lambda perm: perm.code, user.permissions.all()))
-        if 'update:info' not in permissions:
-            raise ValueError("You Don't Have Permission To Update Contest")
         updating_contest = user.contest
         for k in ['name', 'short_description', 'description', 'start_time', 'freezed', 'finish_time']:
             if contest[k] is not None:
@@ -303,14 +292,12 @@ class InviteUsers(graphene.Mutation):
 
     @staticmethod
     @transaction.atomic
-    @with_me
-    def mutate(root, info, emails, permissions):
+    @with_permission('invite:users', "You Don't Have Permission To Invite Users")
+    def mutate(_root, info, emails, permissions):
         user = info.context.user
 
         my_permissions = list(
             map(lambda perm: perm.code, user.permissions.all()))
-        if 'invite:users' not in my_permissions:
-            raise ValueError("You Don't Have Permission To Invite Users")
 
         for perm in permissions:
             if perm not in my_permissions:
@@ -346,14 +333,9 @@ class SubmitSolution(graphene.Mutation):
 
     @staticmethod
     @transaction.atomic
-    @with_me
-    def mutate(root, info, problem_id, language_id, source_code):
+    @with_permission('create:submissions', "You Don't Have Permission To Submit Problem")
+    def mutate(_root, info, problem_id, language_id, source_code):
         user = info.context.user
-
-        my_permissions = list(
-            map(lambda perm: perm.code, user.permissions.all()))
-        if 'create:submissions' not in my_permissions:
-            raise ValueError("You Don't Have Permission To Submit Problem")
 
         try:
             problem = Problem.objects.filter(
@@ -439,7 +421,7 @@ class Query(graphene.ObjectType):
         except Language.DoesNotExist:
             raise ValueError("No Such Language")
 
-    def resolve_languages(self, info):
+    def resolve_languages(self, _info):
         return Language.objects.all()
 
 
