@@ -31,5 +31,5 @@ export class SubmissionEntity extends BaseEntity {
   issuedAt: Date
 
   @OneToMany(type => GradingEntity, grading => grading.submission)
-  gradings: GradingEntity
+  gradings: GradingEntity[]
 }

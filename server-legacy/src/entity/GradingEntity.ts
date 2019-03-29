@@ -24,8 +24,8 @@ export class GradingEntity extends BaseEntity {
   submissionId: number
 
   @Column()
-  issuedAt: string
+  issuedAt: Date
 
   @Column({ enum: Verdict, default: Verdict.PENDING })
-  verdict: string
+  verdict: Verdict
 }
