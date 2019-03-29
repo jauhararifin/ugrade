@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "graphql-yoga": "^1.17.4",
+    "mongoose": "^5.4.20"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.22",
+    "@types/mongoose": "^5.3.24",
+    "@types/node": "^11.12.1",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.4000"
+  },
+  "name": "server-mongo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "rm -f node_modules/@",
+    "postinstall": "ln -s `pwd`/src node_modules/@",
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
