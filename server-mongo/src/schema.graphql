@@ -1,0 +1,30 @@
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Language {
+  id: String!
+  name: String!
+  extensions: [String!]!
+}
+
+type Contest {
+  id: String!
+  name: String!
+  shortId: String!
+  shortDescription: String!
+  description: String!
+  startTime: DateTime!
+  freezed: Boolean!
+  finishTime: DateTime!
+  permittedLanguages: [Language!]!
+}
+
+type Query {
+  language(id: String!): Language!
+  languages: [Language!]!
+  contest(id: String!): Contest!
+  contests: [Contest!]!
+  ping: String!
+}
