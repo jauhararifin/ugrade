@@ -6,9 +6,11 @@ import { resetContests } from './contest/fixtures'
 import { contestResolvers } from './contest/resolvers'
 import { resetUsers } from './auth/fixtures'
 import { userResolvers } from './user/resolvers'
+import { MONGO_CONNECTION, SECRET } from './config'
+import { authMiddleware } from './auth/middleware'
 
 async function bootstrap() {
-  await mongoose.connect('mongodb://localhost:27017/ugrade', { useNewUrlParser: true })
+  await mongoose.connect(MONGO_CONNECTION, { useNewUrlParser: true })
 
   await resetLanguages()
   await resetContests()
@@ -17,7 +19,11 @@ async function bootstrap() {
   const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers: [languageResolvers, contestResolvers, userResolvers],
+    context: authMiddleware(SECRET),
   })
+
+  server.express.use()
+
   server.start(() => console.log('Server is running on http://localhost:4000'))
 }
 

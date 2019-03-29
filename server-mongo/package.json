@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "apollo-server-core": "^2.4.8",
     "graphql-yoga": "^1.17.4",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.20",
     "reflect-metadata": "^0.1.13",
     "typegoose": "^5.6.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
     "@types/mongodb": "^3.1.22",
     "@types/mongoose": "^5.3.24",
     "@types/node": "^11.12.1",
