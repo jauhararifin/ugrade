@@ -1,7 +1,5 @@
 import random
 import datetime
-import bcrypt
-import jwt
 
 import graphene
 from graphene.types.datetime import DateTime
@@ -9,38 +7,13 @@ from graphene_django.types import DjangoObjectType
 
 from graphene_file_upload.scalars import Upload
 
-from django.conf import settings
 from django.db import transaction
 from django.db.models import Max
 from django.core.files.storage import default_storage
 
 from contests.models import Contest, Language, User, Permission, Problem, Submission
 
-
-def with_me(method):
-    def resolve(root, info, *args, **kwargs):
-        auth_header = info.context.META.get('HTTP_AUTHORIZATION')
-        if auth_header is None:
-            raise ValueError("Missing Token")
-
-        partition = auth_header.split()
-        if len(partition) != 2 or partition[0].lower() != 'bearer':
-            raise ValueError('Invalid Token')
-
-        token = partition[1]
-        try:
-            data = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
-            user_id = data['id']
-            try:
-                info.context.user = User.objects.get(pk=user_id)
-                if info.context.user is None:
-                    raise ValueError("Invalid Token")
-            except User.DoesNotExist:
-                raise ValueError("Invalid Token")
-        except Exception:
-            raise ValueError("Invalid Token")
-        return method(root, info, *args, **kwargs)
-    return resolve
+from .auth import with_me, sign_in, sign_up, forgot_password, reset_password
 
 
 class UserType(DjangoObjectType):
@@ -66,32 +39,7 @@ class SignIn(graphene.Mutation):
 
     @staticmethod
     def mutate(_self, _info, contest_id, email, password):
-        try:
-            contest = Contest.objects.get(pk=contest_id)
-        except Contest.DoesNotExist:
-            raise Exception("No Such Contest")
-
-        try:
-            user = User.objects.filter(
-                contest__id=contest.id, email=email).first()
-            if user is None:
-                raise User.DoesNotExist()
-        except User.DoesNotExist:
-            raise Exception("Wrong Email Or Password")
-
-        if user.username is None:
-            raise Exception("You haven't sign up yet, please sign up first")
-
-        try:
-            password_matched = bcrypt.checkpw(
-                bytes(password, "utf-8"), bytes(user.password, "utf-8"))
-        except Exception:
-            raise Exception("Internal Server Error")
-        if not password_matched:
-            raise Exception("Wrong Email Or Password")
-
-        token = jwt.encode({'id': user.id},
-                           settings.SECRET_KEY, algorithm='HS256').decode("utf-8")
+        user, token = sign_in(contest_id, email, password)
         return SignIn(user=user, token=token)
 
 
@@ -113,39 +61,8 @@ class SignUp(graphene.Mutation):
 
     @staticmethod
     def mutate(_self, _info, contest_id, email, user, signup_code):
-        try:
-            contest = Contest.objects.get(pk=contest_id)
-        except Contest.DoesNotExist:
-            raise Exception("No Such Contest")
-
-        try:
-            new_user = User.objects.filter(
-                contest__id=contest.id, email=email).first()
-            if new_user is None:
-                raise User.DoesNotExist()
-        except User.DoesNotExist:
-            raise Exception("No Such User")
-
-        if new_user.username is not None:
-            raise Exception("User Already Signed Up")
-
-        if new_user.signup_otc != signup_code:
-            raise Exception("Wrong Token")
-
-        new_user.name = user.name
-        new_user.username = user.username
-        try:
-            new_user.password = bcrypt.hashpw(
-                bytes(user.password, "utf-8"), bcrypt.gensalt()).decode("utf-8")
-        except Exception:
-            raise Exception("Internal Server Error")
-        new_user.signup_otc = None
-        new_user.reset_password_otc = None
-        new_user.full_clean()
-        new_user.save()
-
-        token = jwt.encode({'id': new_user.id},
-                           settings.SECRET_KEY, algorithm='HS256').decode("utf-8")
+        new_user, token = sign_up(
+            contest_id, email, user.username, user.name, user.password, signup_code)
         return SignUp(user=new_user, token=token)
 
 
@@ -158,28 +75,7 @@ class ForgotPassword(graphene.Mutation):
 
     @staticmethod
     def mutate(_self, _info, contest_id, email):
-        try:
-            contest = Contest.objects.get(pk=contest_id)
-        except Contest.DoesNotExist:
-            raise Exception("No Such Contest")
-
-        try:
-            user = User.objects.filter(
-                contest__id=contest.id, email=email).first()
-            if user is None:
-                raise User.DoesNotExist()
-        except User.DoesNotExist:
-            raise Exception("No Such User")
-
-        if user.username is None:
-            raise Exception("You haven't signed up yet, please sign up first.")
-
-        if user.reset_password_otc is None:
-            user.reset_password_otc = "".join(
-                random.choice("0987654321") for _ in range(8))
-            user.save()
-
-        return user
+        return forgot_password(contest_id, email)
 
 
 class ResetPassword(graphene.Mutation):
@@ -193,34 +89,7 @@ class ResetPassword(graphene.Mutation):
 
     @staticmethod
     def mutate(_self, _info, contest_id, email, reset_password_otc, new_password):
-        try:
-            contest = Contest.objects.get(pk=contest_id)
-        except Contest.DoesNotExist:
-            raise Exception("No Such Contest")
-
-        try:
-            user = User.objects.filter(
-                contest__id=contest.id, email=email).first()
-            if user is None:
-                raise User.DoesNotExist()
-        except User.DoesNotExist:
-            raise Exception("No Such User")
-
-        if user.username is None:
-            raise Exception("You haven't signed up yet, please sign up first.")
-
-        if reset_password_otc != user.reset_password_otc:
-            raise Exception("Wrong Token")
-
-        try:
-            user.password = bcrypt.hashpw(
-                bytes(new_password, "utf-8"), bcrypt.gensalt()).decode("utf-8")
-            user.reset_password_otc = None
-        except Exception:
-            raise Exception("Internal Server Error")
-        user.save()
-
-        return user
+        return reset_password(contest_id, email, reset_password_otc, new_password)
 
 
 class ProblemType(DjangoObjectType):
