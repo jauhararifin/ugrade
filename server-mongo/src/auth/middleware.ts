@@ -1,10 +1,11 @@
-import { ContextCallback, ContextParameters } from 'graphql-yoga/dist/types'
+import { Context, ContextParameters } from 'graphql-yoga/dist/types'
 import { verify } from 'jsonwebtoken'
 import { AuthenticationError } from 'apollo-server-core'
 import { UserModel } from './models'
+import { IMiddleware } from 'graphql-middleware'
 
-export function authMiddleware(secret: string): ContextCallback {
-  return async (context: ContextParameters) => {
+export function authMiddleware(secret: string): IMiddleware {
+  return async (resolve, root, args, context: ContextParameters, info) => {
     const authHeader = context.request.header('authorization')
     if (authHeader && authHeader.length > 0) {
       const parts = authHeader.split(/\s+/)
@@ -16,7 +17,7 @@ export function authMiddleware(secret: string): ContextCallback {
             const value = verify(token, secret) as { userId: string }
             try {
               const user = await UserModel.findOne({ _id: value.userId }).exec()
-              return { ...context, user }
+              resolve(root, args, { ...context, user }, info)
             } catch (err) {
               throw new AuthenticationError('Invalid Token')
             }
@@ -26,8 +27,6 @@ export function authMiddleware(secret: string): ContextCallback {
         }
       }
     }
-    return {
-      ...context,
-    }
+    resolve(root, args, context, info)
   }
 }

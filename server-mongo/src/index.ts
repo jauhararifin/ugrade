@@ -8,6 +8,7 @@ import { resetUsers } from './auth/fixtures'
 import { userResolvers } from './user/resolvers'
 import { MONGO_CONNECTION, SECRET } from './config'
 import { authMiddleware } from './auth/middleware'
+import { errorMaskerMiddleware } from './error/middleware'
 
 async function bootstrap() {
   await mongoose.connect(MONGO_CONNECTION, { useNewUrlParser: true })
@@ -19,7 +20,8 @@ async function bootstrap() {
   const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers: [languageResolvers, contestResolvers, userResolvers],
-    context: authMiddleware(SECRET),
+    context: req => req,
+    middlewares: [errorMaskerMiddleware(), authMiddleware(SECRET)],
   })
 
   server.start(() => console.log('Server is running on http://localhost:4000'))
