@@ -1,0 +1,45 @@
+export enum Permission {
+  updateInfo = 'update:info',
+  createAnnouncement = 'create:announcement',
+  readAnnouncement = 'read:announcement',
+  readClarifications = 'read:clarifications',
+  createClarifications = 'create:clarifications',
+  replyClarification = 'reply:clarification',
+  createProblems = 'create:problems',
+  readProblems = 'read:problems',
+  readDisabledProblems = 'read:disabledProblems',
+  updateProblems = 'update:problems',
+  deleteProblems = 'delete:problems',
+  inviteUsers = 'invite:users',
+  updateUsersPermissions = 'update:usersPermissions',
+  deleteUsers = 'delete:users',
+  readProfiles = 'read:profiles',
+  readSubmissions = 'read:submissions',
+  createSubmissions = 'create:submissions',
+}
+
+export const allPermissions = [
+  Permission.updateInfo,
+  Permission.createAnnouncement,
+  Permission.readAnnouncement,
+  Permission.readClarifications,
+  Permission.createClarifications,
+  Permission.replyClarification,
+  Permission.createProblems,
+  Permission.readProblems,
+  Permission.readDisabledProblems,
+  Permission.updateProblems,
+  Permission.deleteProblems,
+  Permission.inviteUsers,
+  Permission.updateUsersPermissions,
+  Permission.deleteUsers,
+  Permission.readProfiles,
+  Permission.readSubmissions,
+  Permission.createSubmissions,
+]
+
+export const contestantPermissions = [
+  Permission.createClarifications,
+  Permission.readProblems,
+  Permission.createSubmissions,
+]

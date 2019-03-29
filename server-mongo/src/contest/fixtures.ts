@@ -1,9 +1,8 @@
 import { ContestModel } from './model'
-import { LanguageModel } from '../language/model'
 
 export const contests = [
   {
-    id: 1,
+    id: '5c9df1fd9c6a07119bbf5b13',
     name: 'Penyisihan Competitive Programming Arkavidia 4.0',
     shortId: 'arkavidia-40-qualification',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
@@ -21,7 +20,7 @@ export const contests = [
     ],
   },
   {
-    id: 2,
+    id: '5c9df1fd9c6a07119bbf5b14',
     name: 'Final Competitive Programming Arkavidia 4.0',
     shortId: 'arkavidia-40-final',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
@@ -39,7 +38,7 @@ export const contests = [
     ],
   },
   {
-    id: 3,
+    id: '5c9df1fd9c6a07119bbf5b15',
     name: 'Penyisihan Competitive Programming Arkavidia 5.0',
     shortId: 'arkavidia-50-qualification',
     shortDescription:
@@ -58,7 +57,7 @@ export const contests = [
     ],
   },
   {
-    id: 4,
+    id: '5c9df1fd9c6a07119bbf5b16',
     name: 'Final Competitive Programming Arkavidia 5.0',
     shortId: 'arkavidia-50-final',
     shortDescription: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
