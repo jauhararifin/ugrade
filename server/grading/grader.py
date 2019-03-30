@@ -1,17 +1,15 @@
 import datetime
-import jwt
 import os
 import tarfile
 import tempfile
-import zlib
+
+import jwt
 
 from django.conf import settings
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Q
 from django_rq import job
 
-from contests.models import User
 from .models import GradingGroup, Grading
 
 
@@ -71,10 +69,13 @@ def grade_submission(submission_model):
                               verdict='Pending', grader_group=i)
             grading.save()
 
-    except:
+    except Exception:
         ggroup.verdict = 'IE'
         ggroup.save()
 
+
+def hash_id(user_id):
+    return ((((user_id + 29) * 31) + 91) * 929)
 
 # return job token and field file containing spec
 @transaction.atomic
@@ -82,22 +83,23 @@ def get_grading_job(user):
     # compute grader group
     contest = user.contest
     grading_size = contest.grading_size
-    hashed_id = zlib.crc32(user.id)
+    hashed_id = hash_id(user.id)
     grader_group = hashed_id % grading_size
 
-    # find open job in current contest
-    job = Grading.objects.filter(contest=contest, claimed_by=None).first()
-    if job is None:
-        return None
-    spec = job.grading_group.spec
+    # find open job in current contest, using grader_group
+    grading_job = Grading.objects.filter(
+        contest=contest, grader_group=grader_group, claimed_by=None).first()
+    if grading_job is None:
+        return None, None
+    spec = grading_job.grading_group.spec
 
     # generate job token
-    job_token = jwt.encode({'grading_id': job.id},
+    job_token = jwt.encode({'gradingId': grading_job.id, 'userId': user.id, },
                            settings.SECRET_KEY, algorithm='HS256').decode("utf-8")
 
     # mark job as claimed
-    job.claimed_by = user
-    job.claimed_at = datetime.datetime.now()
-    job.save()
+    grading_job.claimed_by = user
+    grading_job.claimed_at = datetime.datetime.now()
+    grading_job.save()
 
     return job_token, spec
