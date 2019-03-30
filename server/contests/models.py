@@ -124,22 +124,3 @@ class Submission(models.Model):
 
     def __str__(self):
         return "Submission #{}".format(self.id)
-
-
-VERDICT = (
-    ('IE', 'Internal Error'),
-    ('CE', 'Compilation Error'),
-    ('RTE', 'Run Time Error'),
-    ('MLE', 'Memory Limit Exceeded'),
-    ('TLE', 'Time Limit Exceeded'),
-    ('WA', 'Wrong Answer'),
-    ('AC', 'Accepted'),
-    ('PENDING', 'Pending'),
-)
-
-
-class Grading(models.Model):
-    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
-    issued_time = models.DateTimeField(auto_now_add=True)
-    verdict = models.CharField(
-        max_length=32, choices=VERDICT, default='PENDING')
