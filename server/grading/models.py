@@ -1,7 +1,9 @@
+import os
+import random
+
 from django.db import models
 
-from contests.models import Submission
-from contests.models import User
+from contests.models import Submission, User
 
 VERDICT = (
     ('IE', 'Internal Error'),
@@ -15,6 +17,12 @@ VERDICT = (
 )
 
 
+def spec_upload_path(instance, filename):
+    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    random_str = ''.join(random.choice(alphanum) for _ in range(64))
+    return os.path.join("{}-{}-{}".format('gradingspec', instance.id, random_str), filename)
+
+
 class GradingGroup(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
@@ -22,19 +30,30 @@ class GradingGroup(models.Model):
         max_length=32, choices=VERDICT, default='PENDING')
     finish_time = models.DateTimeField(blank=True, null=True)
 
+    # contain tcgen solution checker submission
+    spec = models.FileField(upload_to=spec_upload_path)
+    grading_size = models.IntegerField()
+
     def __str__(self):
         return "{} - Grading Group #{}".format(self.submission, self.id)
 
 
 class Grading(models.Model):
+    # filled when inserted
     grading_group = models.ForeignKey(
         GradingGroup, on_delete=models.CASCADE, related_name='gradings')
-    issued_time = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(
         max_length=32, choices=VERDICT, default='PENDING')
-    finish_time = models.DateTimeField(blank=True, null=True)
-    issuer = models.ForeignKey(
+    grader_group = models.IntegerField()
+
+    # filled when claimed
+    claimed_at = models.DateTimeField(blank=True, null=True)
+    claimed_by = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL)
+
+    # filled when finished
+    finish_at = models.DateTimeField(blank=True, null=True)
+    output = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return "{} - Grading #{}".format(self.grading_group, self.id)

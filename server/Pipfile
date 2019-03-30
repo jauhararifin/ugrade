@@ -22,6 +22,7 @@ pyjwt = "*"
 django-cors-headers = "*"
 graphene-file-upload = "*"
 django-rq = "*"
+tarfile = "*"
 
 [requires]
 python_version = "3.6"

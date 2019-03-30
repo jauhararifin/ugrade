@@ -18,8 +18,7 @@ class GradingGroupAdmin(admin.ModelAdmin):
 @admin.register(Grading)
 class GradingAdmin(admin.ModelAdmin):
     list_display = ('id',
-                    'issued_time',
+                    'grading_group',
                     'verdict',
-                    'finish_time',
-                    'issuer',)
-    list_display_links = ('id',)
+                    'finish_at')
+    list_display_links = ('id', 'grading_group')
