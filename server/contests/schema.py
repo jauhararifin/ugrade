@@ -271,11 +271,9 @@ class SubmitSolution(graphene.Mutation):
         if language.id not in permitted_langs:
             raise ValueError("Language Is Not Permitted")
 
-        sub = Submission(problem=problem, language=language, issuer=user)
+        sub = Submission(problem=problem, language=language,
+                         source_code=source_code, issuer=user)
         sub.save()
-
-        filename = "submissions/submission-{}".format(sub.id)
-        default_storage.save(filename, source_code)
 
         return sub
 

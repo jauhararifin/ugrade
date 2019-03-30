@@ -1,3 +1,6 @@
+import os
+import random
+
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email, validate_slug, MinLengthValidator, \
@@ -106,9 +109,16 @@ class Problem(models.Model):
         unique_together = [('short_id', 'contest')]
 
 
+def upload_path(submission, filename):
+    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    random_str = ''.join(random.choice(alphanum) for _ in range(64))
+    return os.path.join("submission-{}-{}".format(submission.id, random_str), filename)
+
+
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    source_code = models.FileField(upload_to=upload_path)
     issuer = models.ForeignKey(User, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
 
