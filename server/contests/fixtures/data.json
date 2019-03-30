@@ -565,7 +565,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -581,7 +587,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -590,14 +602,20 @@
     "fields": {
         "short_id": "B",
         "name": "XOR",
-        "statement": "# Deskripsi\n\nTurfa baru belajar tentang operasi bitwise XOR (Exclusive-OR). Operasi bitwise XOR ditandai dengan simbol $\u2295$. Turfa juga mempunyai 2 buah bilangan $l$ dan $r$. Turfa ingin mengetahui nilai dari $l \u2295 (l + 1) \u2295 (l + 2) \u2295 \\dots  \u2295 (r - 1) \u2295 r$. Bantulah Turfa!\n\n# Format Masukan\nBaris pertama berisi sebuah bilangan bulat $T$, yaitu banyaknya kasus uji.\nSetiap kasus uji terdiri atas sebuah baris yang berisi 2 bilangan bulat $l$ dan $r$ yang dipisahkan oleh spasi.\n\n# Format Keluaran\nUntuk setiap kasus uji, keluarkan sebuah baris yang berisi jawaban sesuai deskripsi diatas. \n\n# Contoh Masukan\n\n```\n4\n1 1\n1 2\n7 10\n100 101\n```\n\n# Contoh Keluaran\n\n```\n1\n3\n12\n1\n```\n\n# Batasan\n- $1 \u2264 T \u2264 200.000$\n- $1 \u2264 l \u2264 r \u2264 10^{18}$\n",
+        "statement": "# Deskripsi\r\n\r\nTurfa baru belajar tentang operasi bitwise XOR (Exclusive-OR). Operasi bitwise XOR ditandai dengan simbol $\u2295$. Turfa juga mempunyai 2 buah bilangan $l$ dan $r$. Turfa ingin mengetahui nilai dari $l \u2295 (l + 1) \u2295 (l + 2) \u2295 \\dots  \u2295 (r - 1) \u2295 r$. Bantulah Turfa!\r\n\r\n# Format Masukan\r\nBaris pertama berisi sebuah bilangan bulat $T$, yaitu banyaknya kasus uji.\r\nSetiap kasus uji terdiri atas sebuah baris yang berisi 2 bilangan bulat $l$ dan $r$ yang dipisahkan oleh spasi.\r\n\r\n# Format Keluaran\r\nUntuk setiap kasus uji, keluarkan sebuah baris yang berisi jawaban sesuai deskripsi diatas. \r\n\r\n# Contoh Masukan\r\n\r\n```\r\n4\r\n1 1\r\n1 2\r\n7 10\r\n100 101\r\n```\r\n\r\n# Contoh Keluaran\r\n\r\n```\r\n1\r\n3\r\n12\r\n1\r\n```\r\n\r\n# Batasan\r\n- $1 \u2264 T \u2264 200.000$\r\n- $1 \u2264 l \u2264 r \u2264 10^{18}$",
         "contest": 1,
         "disabled": true,
         "order": 2,
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "checker-3-eT8kNMD93LcMhxlX9gbEK2NV8dUlj91f7UPOQPgbgsRHc11XndIqzpDhgyrmAgJe/checker.c",
+        "checker_language": 1,
+        "solution_source": "solution-3-oNnWIoQq6hLWEtWRfvCzOJQdWMWORP8bDPCfrH5PdfLNT24B51UiRn1C9TjWCPXG/solution.cpp",
+        "solution_language": 2,
+        "tcgen_source": "tcgen-3-40oAMjs1OiU9uVpJsJ4uIUVdDcJYCfw2GtaE1EC2vk9A0QEgYKDp8XTH4dxJAQT5/tcgen.cpp",
+        "tcgen_language": 2
     }
 },
 {
@@ -606,14 +624,20 @@
     "fields": {
         "short_id": "B",
         "name": "XOR",
-        "statement": "# Deskripsi\n\nTurfa baru belajar tentang operasi bitwise XOR (Exclusive-OR). Operasi bitwise XOR ditandai dengan simbol $\u2295$. Turfa juga mempunyai 2 buah bilangan $l$ dan $r$. Turfa ingin mengetahui nilai dari $l \u2295 (l + 1) \u2295 (l + 2) \u2295 \\dots  \u2295 (r - 1) \u2295 r$. Bantulah Turfa!\n\n# Format Masukan\nBaris pertama berisi sebuah bilangan bulat $T$, yaitu banyaknya kasus uji.\nSetiap kasus uji terdiri atas sebuah baris yang berisi 2 bilangan bulat $l$ dan $r$ yang dipisahkan oleh spasi.\n\n# Format Keluaran\nUntuk setiap kasus uji, keluarkan sebuah baris yang berisi jawaban sesuai deskripsi diatas. \n\n# Contoh Masukan\n\n```\n4\n1 1\n1 2\n7 10\n100 101\n```\n\n# Contoh Keluaran\n\n```\n1\n3\n12\n1\n```\n\n# Batasan\n- $1 \u2264 T \u2264 200.000$\n- $1 \u2264 l \u2264 r \u2264 10^{18}$\n",
+        "statement": "# Deskripsi\r\n\r\nTurfa baru belajar tentang operasi bitwise XOR (Exclusive-OR). Operasi bitwise XOR ditandai dengan simbol $\u2295$. Turfa juga mempunyai 2 buah bilangan $l$ dan $r$. Turfa ingin mengetahui nilai dari $l \u2295 (l + 1) \u2295 (l + 2) \u2295 \\dots  \u2295 (r - 1) \u2295 r$. Bantulah Turfa!\r\n\r\n# Format Masukan\r\nBaris pertama berisi sebuah bilangan bulat $T$, yaitu banyaknya kasus uji.\r\nSetiap kasus uji terdiri atas sebuah baris yang berisi 2 bilangan bulat $l$ dan $r$ yang dipisahkan oleh spasi.\r\n\r\n# Format Keluaran\r\nUntuk setiap kasus uji, keluarkan sebuah baris yang berisi jawaban sesuai deskripsi diatas. \r\n\r\n# Contoh Masukan\r\n\r\n```\r\n4\r\n1 1\r\n1 2\r\n7 10\r\n100 101\r\n```\r\n\r\n# Contoh Keluaran\r\n\r\n```\r\n1\r\n3\r\n12\r\n1\r\n```\r\n\r\n# Batasan\r\n- $1 \u2264 T \u2264 200.000$\r\n- $1 \u2264 l \u2264 r \u2264 10^{18}$",
         "contest": 2,
         "disabled": true,
         "order": 2,
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "checker-4-zwRCAyI42tnNpNLTiOP4EoIT7oGW7OaTfI5sRThzOtNyDVLNvCBGdIChGNEud9U0/checker.c",
+        "checker_language": 1,
+        "solution_source": "solution-4-RdGwAL4gTp5SowcwlZwSv9ajB5rAUPFcuWV5UUM4pGTPh6q7ppEk54eOAuwDAqs7/solution.cpp",
+        "solution_language": 2,
+        "tcgen_source": "tcgen-4-1hr5ZFto0Il3SAnWO3UcRLwIauZIzEd0IvKEzZSFW0mFk4DGzTLQGLIX9FQCpVbH/tcgen.cpp",
+        "tcgen_language": 2
     }
 },
 {
@@ -629,7 +653,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -645,7 +675,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -661,7 +697,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -677,7 +719,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -693,7 +741,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -709,7 +763,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -725,7 +785,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -741,7 +807,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -757,7 +829,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -773,7 +851,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -789,7 +873,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -805,7 +895,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -821,7 +917,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -837,7 +939,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -853,7 +961,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -869,7 +983,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -885,7 +1005,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -901,7 +1027,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -917,7 +1049,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -933,7 +1071,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -949,7 +1093,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -965,7 +1115,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -981,7 +1137,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -997,7 +1159,13 @@
         "time_limit": 10000,
         "tolerance": 0.75,
         "memory_limit": 536870912,
-        "output_limit": 536870912
+        "output_limit": 536870912,
+        "checker_source": "",
+        "checker_language": null,
+        "solution_source": "",
+        "solution_language": null,
+        "tcgen_source": "",
+        "tcgen_language": null
     }
 },
 {
@@ -1070,6 +1238,42 @@
         "object_repr": "Final Competitive Programming Arkavidia 5.0",
         "action_flag": 2,
         "change_message": "[{\"changed\": {\"fields\": [\"description\", \"permitted_languages\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2019-03-30T03:39:16.550Z",
+        "user": [
+            "jauhararifin"
+        ],
+        "content_type": [
+            "contests",
+            "problem"
+        ],
+        "object_id": "4",
+        "object_repr": "XOR",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"statement\", \"checker_source\", \"checker_language\", \"solution_source\", \"solution_language\", \"tcgen_source\", \"tcgen_language\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2019-03-30T03:40:14.821Z",
+        "user": [
+            "jauhararifin"
+        ],
+        "content_type": [
+            "contests",
+            "problem"
+        ],
+        "object_id": "3",
+        "object_repr": "XOR",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"statement\", \"checker_source\", \"checker_language\", \"solution_source\", \"solution_language\", \"tcgen_source\", \"tcgen_language\"]}}]"
     }
 }
 ]
