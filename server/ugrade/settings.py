@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'graphene_django',
+    'django_rq',
     'contests',
     'grading',
 ]
@@ -78,6 +79,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ugrade.wsgi.application'
+
+# Django RQ
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
 
 
 # Database

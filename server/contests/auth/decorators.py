@@ -7,9 +7,6 @@ from contests.models import User
 
 def with_me(method):
     def resolve(root, info, *args, **kwargs):
-        if info.context.user is not None:
-            return method(root, info, *args, **kwargs)
-
         auth_header = info.context.META.get('HTTP_AUTHORIZATION')
         if auth_header is None:
             raise ValueError("Missing Token")

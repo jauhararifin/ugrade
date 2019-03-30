@@ -13,9 +13,33 @@ from contests.models import Contest, Language, User, Permission, Problem, Submis
 from .auth.decorators import with_me, with_permission
 from .auth.schemas import UserType, SignIn, SignUp, ForgotPassword, ResetPassword
 from .problem.schemas import ProblemType, CreateProblem, UpdateProblem, DeleteProblem
+from grading.grader import grade_submission
+
+
+class LanguageType(DjangoObjectType):
+    extensions = graphene.List(graphene.String)
+
+    @staticmethod
+    def resolve_extensions(root, _info):
+        return root.extension_list
+
+    class Meta:
+        model = Language
+        only_fields = ('id', 'name', 'extensions')
 
 
 class SubmissionType(DjangoObjectType):
+    language = graphene.Field(LanguageType)
+    source_code = graphene.Field(graphene.String)
+
+    @staticmethod
+    def resolve_language(root, _info):
+        return root.solution_language
+
+    @staticmethod
+    def resolve_source_code(root, _info):
+        return root.source_code.url
+
     class Meta:
         model = Submission
         only_fields = ('id', 'problem', 'language', 'issued_time', 'issuer')
@@ -274,19 +298,9 @@ class SubmitSolution(graphene.Mutation):
                          solution_language=language, issuer=user)
         sub.save()
 
+        grade_submission.delay(sub)
+
         return sub
-
-
-class LanguageType(DjangoObjectType):
-    extensions = graphene.List(graphene.String)
-
-    @staticmethod
-    def resolve_extensions(root, _):
-        return root.extension_list
-
-    class Meta:
-        model = Language
-        only_fields = ('id', 'name', 'username', 'email', 'contest')
 
 
 class Query(graphene.ObjectType):

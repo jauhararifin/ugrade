@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.urls import path
 from django.views.static import serve
 
@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^graphql', ContestView.as_view(graphiql=True, schema=schema)),
     url(r'^storages/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT
-    })
+    }),
+    path('django-rq/', include('django_rq.urls')),
 ]
