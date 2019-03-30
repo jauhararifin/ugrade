@@ -9,8 +9,9 @@ from django_rq import job
 from .models import GradingGroup
 
 
-def pack_spec(submission_model):
-    problem = submission_model.problem
+def insert_spec(grading_group):
+    submission = grading_group.submission
+    problem = submission.problem
 
     # create tar file temporarily
     fd, tar_path = tempfile.mkstemp()
@@ -21,7 +22,7 @@ def pack_spec(submission_model):
         (problem.tcgen_source, 'tcgen'),
         (problem.solution_source, 'solution'),
         (problem.checker_source, 'checker'),
-        (submission_model.solution_source, 'submission'),
+        (submission.solution_source, 'submission'),
     ]
 
     # add files to tar
@@ -38,7 +39,9 @@ def pack_spec(submission_model):
             os.remove(filename)
     spec.close()
 
-    return tar_path
+    with open(tar_path, 'r') as tar_file:
+        grading_group.spec.save('spec.tar', File(tar_file))
+    os.remove(tar_path)
 
 
 @job
@@ -47,14 +50,13 @@ def grade_submission(submission_model):
     problem = submission_model.problem
     contest = problem.contest
 
-    # create grading group
     ggroup = GradingGroup(submission=submission_model,
                           verdict='PENDING',
                           grading_size=contest.grading_size)
     ggroup.save()
 
-    # add spec file
-    tar_path = pack_spec(submission_model)
-    with open(tar_path, 'r') as tar_file:
-        ggroup.spec.save('spec', File(tar_file))
-    os.remove(tar_path)
+    try:
+        insert_spec(ggroup)
+    except:
+        ggroup.verdict = 'IE'
+        ggroup.save()
