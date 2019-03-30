@@ -83,6 +83,18 @@ class User(models.Model):
         return str(self.name)
 
 
+def upload_path(instance, filename):
+    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    random_str = ''.join(random.choice(alphanum) for _ in range(64))
+    return os.path.join("{}-{}-{}".format('program', instance.id, random_str), filename)
+
+
+class Program(models.Model):
+    source_code = models.FileField(
+        upload_to=upload_path)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+
+
 class Problem(models.Model):
     short_id = models.CharField(max_length=255, validators=[
         validate_slug, MinLengthValidator(1), MaxLengthValidator(255)
@@ -102,6 +114,13 @@ class Problem(models.Model):
     memory_limit = models.IntegerField()
     output_limit = models.IntegerField()
 
+    checker = models.ForeignKey(
+        Program, null=True, blank=True, on_delete=models.SET_NULL, related_name='r1')
+    solution = models.ForeignKey(
+        Program, null=True, blank=True, on_delete=models.SET_NULL, related_name='r2')
+    tcgen = models.ForeignKey(
+        Program, null=True, blank=True, on_delete=models.SET_NULL, related_name='r3')
+
     def __str__(self):
         return self.name
 
@@ -109,16 +128,9 @@ class Problem(models.Model):
         unique_together = [('short_id', 'contest')]
 
 
-def upload_path(submission, filename):
-    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
-    random_str = ''.join(random.choice(alphanum) for _ in range(64))
-    return os.path.join("submission-{}-{}".format(submission.id, random_str), filename)
-
-
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    source_code = models.FileField(upload_to=upload_path)
+    solution = models.ForeignKey(Program, on_delete=models.CASCADE)
     issuer = models.ForeignKey(User, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
 

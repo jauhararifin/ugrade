@@ -32,5 +32,5 @@ class ProblemAdmin(admin.ModelAdmin):
 
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'problem', 'language', 'source_code', 'issued_time')
-    list_display_links = ('id', 'problem', 'language')
+    list_display = ('id', 'problem', 'solution', 'issued_time')
+    list_display_links = ('id', 'problem', 'solution')
