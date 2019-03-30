@@ -9,7 +9,7 @@ from graphene_file_upload.scalars import Upload
 
 from django.db import transaction
 
-from contests.models import Contest, Language, User, Permission, Problem, Submission, Program
+from contests.models import Contest, Language, User, Permission, Problem, Submission
 from .auth.decorators import with_me, with_permission
 from .auth.schemas import UserType, SignIn, SignUp, ForgotPassword, ResetPassword
 from .problem.schemas import ProblemType, CreateProblem, UpdateProblem, DeleteProblem
@@ -270,10 +270,8 @@ class SubmitSolution(graphene.Mutation):
         if language.id not in permitted_langs:
             raise ValueError("Language Is Not Permitted")
 
-        program = Program(language=language, source_code=source_code)
-        program.save()
-
-        sub = Submission(problem=problem, solution=program, issuer=user)
+        sub = Submission(problem=problem, solution_source=source_code,
+                         solution_language=language, issuer=user)
         sub.save()
 
         return sub

@@ -83,16 +83,22 @@ class User(models.Model):
         return str(self.name)
 
 
-def upload_path(instance, filename):
+def checker_upload_path(instance, filename):
     alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
     random_str = ''.join(random.choice(alphanum) for _ in range(64))
-    return os.path.join("{}-{}-{}".format('program', instance.id, random_str), filename)
+    return os.path.join("{}-{}-{}".format('checker', instance.id, random_str), filename)
 
 
-class Program(models.Model):
-    source_code = models.FileField(
-        upload_to=upload_path)
-    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+def solution_upload_path(instance, filename):
+    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    random_str = ''.join(random.choice(alphanum) for _ in range(64))
+    return os.path.join("{}-{}-{}".format('solution', instance.id, random_str), filename)
+
+
+def tcgen_upload_path(instance, filename):
+    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    random_str = ''.join(random.choice(alphanum) for _ in range(64))
+    return os.path.join("{}-{}-{}".format('tcgen', instance.id, random_str), filename)
 
 
 class Problem(models.Model):
@@ -114,12 +120,20 @@ class Problem(models.Model):
     memory_limit = models.IntegerField()
     output_limit = models.IntegerField()
 
-    checker = models.ForeignKey(
-        Program, null=True, blank=True, on_delete=models.SET_NULL, related_name='r1')
-    solution = models.ForeignKey(
-        Program, null=True, blank=True, on_delete=models.SET_NULL, related_name='r2')
-    tcgen = models.ForeignKey(
-        Program, null=True, blank=True, on_delete=models.SET_NULL, related_name='r3')
+    checker_source = models.FileField(
+        null=True, blank=True, upload_to=checker_upload_path)
+    checker_language = models.ForeignKey(
+        Language, on_delete=models.SET_NULL, null=True, related_name='checkers')
+
+    solution_source = models.FileField(
+        null=True, blank=True, upload_to=solution_upload_path)
+    solution_language = models.ForeignKey(
+        Language, on_delete=models.SET_NULL, null=True, related_name='solutions')
+
+    tcgen_source = models.FileField(
+        null=True, blank=True, upload_to=tcgen_upload_path)
+    tcgen_language = models.ForeignKey(
+        Language, on_delete=models.SET_NULL, null=True, related_name='tcgen')
 
     def __str__(self):
         return self.name
@@ -128,9 +142,20 @@ class Problem(models.Model):
         unique_together = [('short_id', 'contest')]
 
 
+def submission_upload_path(instance, filename):
+    alphanum = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+    random_str = ''.join(random.choice(alphanum) for _ in range(64))
+    return os.path.join("{}-{}-{}".format('submission', instance.id, random_str), filename)
+
+
 class Submission(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    solution = models.ForeignKey(Program, on_delete=models.CASCADE)
+
+    solution_source = models.FileField(
+        null=True, blank=True, upload_to=submission_upload_path)
+    solution_language = models.ForeignKey(
+        Language, on_delete=models.SET_NULL, null=True, related_name='submissions')
+
     issuer = models.ForeignKey(User, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
 
