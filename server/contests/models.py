@@ -37,6 +37,8 @@ class Contest(models.Model):
     finish_time = models.DateTimeField()
     permitted_languages = models.ManyToManyField(Language)
 
+    grading_size = models.IntegerField(default=1)
+
     def clean(self):
         if self.finish_time <= self.start_time:
             raise ValidationError({
