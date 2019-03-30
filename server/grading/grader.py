@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import tarfile
 import tempfile
@@ -41,6 +42,19 @@ def insert_spec(grading_group):
                     dest.write(chunk)
             spec.add(filename, arcname + ext)
             os.remove(filename)
+
+    fd, lang_info_path = tempfile.mkstemp()
+    os.close(fd)
+    language_info = {
+        'tcgen': problem.tcgen_language.id,
+        'solution': problem.solution_language.id,
+        'checker': problem.checker_language.id,
+        'submission': submission.solution_language.id,
+    }
+    json.dump(language_info, lang_info_path)
+    spec.add(lang_info_path, 'lang.json')
+    os.remove(lang_info_path)
+
     spec.close()
 
     with open(tar_path, 'r') as tar_file:
@@ -74,12 +88,13 @@ def grade_submission(submission_model):
         ggroup.save()
 
 
-def hash_id(user_id):
-    return ((((user_id + 29) * 31) + 91) * 929)
-
 # return job token and field file containing spec
 @transaction.atomic
 def get_grading_job(user):
+    # hash function for hashing user_id
+    def hash_id(user_id):
+        return (((user_id + 29) * 31) + 91) * 929
+
     # compute grader group
     contest = user.contest
     grading_size = contest.grading_size
@@ -103,3 +118,55 @@ def get_grading_job(user):
     grading_job.save()
 
     return job_token, spec
+
+
+@transaction.atomic
+def submit_grading_job(token, verdict, output):
+    try:
+        data = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
+        user_id = data['userId']
+        job_id = data['gradingId']
+        if user_id is None or job_id is None:
+            raise ValueError('Invalid Token')
+    except Exception:
+        raise ValueError('Invalid Token')
+
+    grading = Grading.object.get(pk=job_id)
+    if grading.claimed_by.id != user_id:
+        raise ValueError('Invalid Token')
+
+    grading.finish_at = datetime.datetime.now()
+    grading.verdict = verdict
+    grading.output = output
+    grading.save()
+
+    # calculate verdict found in gradings.
+    grading_group = grading.grading_group
+    grading_size = grading_group.grading_size
+    gradings = Grading.object.filter(grading_group=grading_group).all()
+    accepted_count = 0
+    job_finished = 0
+    verdict_set = set()
+    for grad in gradings:
+        if grad.finished_at is not None:
+            job_finished += 1
+        if grad.verdict == 'AC':
+            accepted_count += 1
+        verdict_set.add(grad.verdict)
+
+    # check whether grading group is finished
+    if job_finished == grading_size:
+        grading_group.finish_time = datetime.datetime.now()
+        if accepted_count >= (grading_size + 1) // 2:
+            grading_group.verdict = 'AC'
+        else:
+            verdict_order = ['RTE', 'MLE', 'TLE', 'WA', 'CE']
+            found = False
+            for verd in verdict_order:
+                if verd in verdict_set:
+                    grading_group.verdict = verd
+                    found = True
+                    break
+            if not found:
+                grading_group.verdict = 'IE'
+        grading_group.save()
