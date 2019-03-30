@@ -10,8 +10,8 @@ pipenv run python manage.py migrate
 
 echo "Loading fixtures..."
 pipenv run python manage.py loaddata contests/fixtures/*
-rm -rf storage
-cp -r storage-fixtures storage
+rm -rf storages
+cp -r storages-fixtures storages
 
 echo "Starting server..."
 pipenv run python manage.py runserver
