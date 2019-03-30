@@ -14,4 +14,5 @@ urlpatterns = [
         'document_root': settings.MEDIA_ROOT
     }),
     path('django-rq/', include('django_rq.urls')),
+    path('gradings/', include('grading.urls')),
 ]

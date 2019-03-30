@@ -3,7 +3,7 @@ import random
 
 from django.db import models
 
-from contests.models import Submission, User
+from contests.models import Submission, User, Contest
 
 VERDICT = (
     ('IE', 'Internal Error'),
@@ -42,6 +42,9 @@ class Grading(models.Model):
     # filled when inserted
     grading_group = models.ForeignKey(
         GradingGroup, on_delete=models.CASCADE, related_name='gradings')
+    # for optimization
+    contest = models.ForeignKey(
+        Contest, on_delete=models.CASCADE, related_name='gradings')
     verdict = models.CharField(
         max_length=32, choices=VERDICT, default='PENDING')
     grader_group = models.IntegerField()
