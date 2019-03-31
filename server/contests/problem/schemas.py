@@ -6,6 +6,7 @@ from django.db.models import Max
 
 from contests.models import Problem
 from contests.auth.decorators import with_permission
+from .core import create_problem
 
 
 class ProblemType(DjangoObjectType):
@@ -34,15 +35,10 @@ class CreateProblem(graphene.Mutation):
 
     @staticmethod
     @transaction.atomic
-    @with_permission('create:problems', "You Don't Have Permission To Create Problem")
-    def mutate(_root, info, problem):
-        user = info.context.user
-        last_order = Problem.objects.filter(
-            contest__id=user.contest.id).aggregate(Max('order'))
-        new_prob = Problem(
-            **problem, order=last_order['order__max'] + 1, contest=user.contest)
-        new_prob.save()
-        return new_prob
+    def mutate(_root, info, problem: ProblemInput) -> Problem:
+        token = info.context.META.get('HTTP_AUTHORIZATION')
+        return create_problem(token, problem.short_id, problem.name, problem.statement, problem.disabled,
+                              problem.time_limit, problem.tolerance, problem.memory_limit, problem.output_limit)
 
 
 class UpdateProblem(graphene.Mutation):

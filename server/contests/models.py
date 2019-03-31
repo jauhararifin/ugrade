@@ -1,5 +1,6 @@
 import os
 import random
+from typing import List
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -80,6 +81,13 @@ class User(models.Model):
 
     class Meta:
         unique_together = [('username', 'contest'), ('email', 'contest')]
+
+    @property
+    def permission_codes(self) -> List[str]:
+        return list(map(lambda perm: perm.code, self.permissions.all()))
+
+    def has_permission(self, perm: str) -> bool:
+        return perm in self.permission_codes
 
     def __str__(self):
         return str(self.name)
