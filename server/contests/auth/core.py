@@ -1,5 +1,5 @@
 import random
-from typing import Tuple
+from typing import Tuple, Iterable
 
 import bcrypt
 import jwt
@@ -12,6 +12,10 @@ from contests.exceptions import NoSuchContestError, \
     UserAlreadySignedUpError, \
     UserHaventSignedUpError
 from contests.models import User, Contest
+
+
+def get_all_users() -> Iterable[User]:
+    return User.objects.all()
 
 
 def get_user_by_id(user_id: str) -> User:

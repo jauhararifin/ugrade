@@ -4,7 +4,13 @@ import graphene
 from graphene_django.types import DjangoObjectType
 
 from contests.models import User
-from .core import sign_in, sign_up, forgot_password, reset_password, get_me, get_user_by_id
+from .core import sign_in, \
+    sign_up, \
+    forgot_password, \
+    reset_password, \
+    get_me, \
+    get_user_by_id, \
+    get_all_users
 
 
 class UserType(DjangoObjectType):
@@ -95,14 +101,20 @@ def me_resolver(_root, info) -> User:
     return get_me(info.context)
 
 
-def user_resolver(_root, info, user_id: str) -> User:
+def user_resolver(_root, _info, user_id: str) -> User:
     return get_user_by_id(user_id)
+
+
+def users_resolver(_root, _info) -> Iterable[User]:
+    return get_all_users()
 
 
 class AuthQuery(graphene.ObjectType):
     me = graphene.NonNull(UserType, resolver=me_resolver)
     user = graphene.NonNull(UserType, user_id=graphene.String(
         required=True), resolver=user_resolver)
+    users = graphene.NonNull(graphene.List(
+        UserType, required=True), resolver=users_resolver)
 
 
 class AuthMutation(graphene.ObjectType):
