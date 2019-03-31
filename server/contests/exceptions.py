@@ -46,3 +46,13 @@ class ForbiddenActionError(ContestError):
 class NoSuchProblemError(ContestError):
     def __init__(self, message: str = 'No Such Problem') -> None:
         super(NoSuchProblemError, self).__init__(message)
+
+
+class NoSuchSubmissionError(ContestError):
+    def __init__(self, message: str = 'No Such Submission') -> None:
+        super(NoSuchSubmissionError, self).__init__(message)
+
+
+class ForbiddenLanguageError(ContestError):
+    def __init__(self, message: str = 'Language Is Not Permitted') -> None:
+        super(ForbiddenLanguageError, self).__init__(message)
