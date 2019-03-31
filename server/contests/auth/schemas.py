@@ -1,11 +1,10 @@
-from typing import Iterable, Tuple
+from typing import Iterable
 
 import graphene
 from graphene_django.types import DjangoObjectType
 
 from contests.models import User
-
-from .core import sign_in, sign_up, forgot_password, reset_password
+from .core import sign_in, sign_up, forgot_password, reset_password, get_me, get_user_by_id
 
 
 class UserType(DjangoObjectType):
@@ -52,7 +51,11 @@ class SignUp(graphene.Mutation):
     token = graphene.Field(graphene.String)
 
     @staticmethod
-    def mutate(_self, _info, contest_id: str, email: str, user: UserInput, signup_code: str) -> 'SignUp':
+    def mutate(_self, _info,
+               contest_id: str,
+               email: str,
+               user: UserInput,
+               signup_code: str) -> 'SignUp':
         new_user, token = sign_up(
             contest_id, email, user.username, user.name, user.password, signup_code)
         return SignUp(user=new_user, token=token)
@@ -80,5 +83,30 @@ class ResetPassword(graphene.Mutation):
     Output = UserType
 
     @staticmethod
-    def mutate(_self, _info, contest_id: str, email: str, reset_password_otc: str, new_password: str) -> User:
+    def mutate(_self, _info,
+               contest_id: str,
+               email: str,
+               reset_password_otc: str,
+               new_password: str) -> User:
         return reset_password(contest_id, email, reset_password_otc, new_password)
+
+
+def me_resolver(_root, info) -> User:
+    return get_me(info.context)
+
+
+def user_resolver(_root, info, user_id: str) -> User:
+    return get_user_by_id(user_id)
+
+
+class AuthQuery(graphene.ObjectType):
+    me = graphene.NonNull(UserType, resolver=me_resolver)
+    user = graphene.NonNull(UserType, user_id=graphene.String(
+        required=True), resolver=user_resolver)
+
+
+class AuthMutation(graphene.ObjectType):
+    sign_in = SignIn.Field()
+    sign_up = SignUp.Field()
+    forgot_password = ForgotPassword.Field()
+    reset_password = ResetPassword.Field()

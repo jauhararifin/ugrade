@@ -14,6 +14,13 @@ from contests.exceptions import NoSuchContestError, \
 from contests.models import User, Contest
 
 
+def get_user_by_id(user_id: str) -> User:
+    try:
+        return User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        raise NoSuchUserError()
+
+
 def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
     try:
         contest = Contest.objects.get(pk=contest_id)

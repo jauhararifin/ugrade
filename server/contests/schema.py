@@ -12,7 +12,7 @@ from django.db import transaction
 from contests.models import Contest, Language, User, Permission, Problem, Submission
 from grading.grader import grade_submission
 from .auth.decorators import with_me, with_permission
-from .auth.schemas import UserType, SignIn, SignUp, ForgotPassword, ResetPassword
+from .auth.schemas import UserType, AuthQuery, AuthMutation
 from .problem.schemas import ProblemType, ProblemQuery, ProblemMutation
 
 
@@ -303,10 +303,7 @@ class SubmitSolution(graphene.Mutation):
         return sub
 
 
-class Query(ProblemQuery, graphene.ObjectType):
-    user = graphene.Field(UserType, id=graphene.String())
-    me = graphene.Field(UserType)
-
+class Query(AuthQuery, ProblemQuery, graphene.ObjectType):
     contest = graphene.Field(ContestType, id=graphene.String())
     contest_by_short_id = graphene.Field(
         ContestType, short_id=graphene.String())
@@ -319,17 +316,6 @@ class Query(ProblemQuery, graphene.ObjectType):
     @staticmethod
     def resolve_clock(_root, _info):
         return datetime.datetime.now()
-
-    def resolve_user(self, _, **kwargs):
-        try:
-            return User.objects.get(pk=kwargs.get('id'))
-        except User.DoesNotExist:
-            raise ValueError("No Such User")
-
-    @staticmethod
-    @with_me
-    def resolve_me(_, info):
-        return info.context.user
 
     def resolve_contest(self, _, **kwargs):
         try:
@@ -353,12 +339,8 @@ class Query(ProblemQuery, graphene.ObjectType):
         return Language.objects.all()
 
 
-class Mutation(ProblemMutation, graphene.ObjectType):
+class Mutation(AuthMutation, ProblemMutation, graphene.ObjectType):
     create_contest = CreateContest.Field()
-    sign_in = SignIn.Field()
-    sign_up = SignUp.Field()
-    forgot_password = ForgotPassword.Field()
-    reset_password = ResetPassword.Field()
     update_contest = UpdateContest.Field()
     invite_users = InviteUsers.Field()
     submit_solution = SubmitSolution.Field()
