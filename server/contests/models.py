@@ -5,7 +5,7 @@ from typing import List
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email, validate_slug, MinLengthValidator, \
-    MaxLengthValidator
+    MaxLengthValidator, MinValueValidator
 
 
 class Language(models.Model):
@@ -38,7 +38,9 @@ class Contest(models.Model):
     finish_time = models.DateTimeField()
     permitted_languages = models.ManyToManyField(Language)
 
-    grading_size = models.IntegerField(default=1)
+    grading_size = models.IntegerField(default=1, validators=[
+        MinValueValidator(1)
+    ])
 
     def clean(self):
         if self.finish_time <= self.start_time:

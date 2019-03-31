@@ -3,6 +3,11 @@ class ContestError(Exception):
         super(ContestError, self).__init__(message, *args)
 
 
+class NoSuchLanguageError(ContestError):
+    def __init__(self, message: str = 'No Such Language') -> None:
+        super(NoSuchLanguageError, self).__init__(message)
+
+
 class NoSuchContestError(ContestError):
     def __init__(self, message: str = 'No Such Contest') -> None:
         super(NoSuchContestError, self).__init__(message)
@@ -16,6 +21,11 @@ class NoSuchUserError(ContestError):
 class UserAlreadySignedUpError(ContestError):
     def __init__(self, message: str = 'User Already Signed Up') -> None:
         super(UserAlreadySignedUpError, self).__init__(message)
+
+
+class UserAlreadyInvitedError(ContestError):
+    def __init__(self, message: str = 'User Already Invited') -> None:
+        super(UserAlreadyInvitedError, self).__init__(message)
 
 
 class UserHaventSignedUpError(ContestError):

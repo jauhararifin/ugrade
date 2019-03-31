@@ -11,7 +11,11 @@ from contests.exceptions import NoSuchContestError, \
     AuthenticationError, \
     UserAlreadySignedUpError, \
     UserHaventSignedUpError
-from contests.models import User, Contest
+from contests.models import Permission, User, Contest
+
+
+def get_all_permissions() -> Iterable[Permission]:
+    return Permission.objects.all()
 
 
 def get_all_users() -> Iterable[User]:
@@ -26,17 +30,22 @@ def get_user_by_id(user_id: str) -> User:
 
 
 def get_user_by_email(contest_id: str, email: str) -> User:
-    user = User.objects.filter(contest__id=contest_id, email=email)
+    user = User.objects.filter(contest__id=contest_id, email=email).first()
     if user is None:
         raise NoSuchUserError()
     return user
 
 
 def get_user_by_username(contest_id: str, username: str) -> User:
-    user = User.objects.filter(contest__id=contest_id, username=username)
+    user = User.objects.filter(
+        contest__id=contest_id, username=username).first()
     if user is None:
         raise NoSuchUserError()
     return user
+
+
+def get_contest_users(contest_id: str) -> Iterable[User]:
+    return User.objects.filter(contest__id=contest_id).all()
 
 
 def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
