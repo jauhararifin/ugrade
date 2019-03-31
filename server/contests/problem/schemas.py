@@ -97,21 +97,22 @@ class DeleteProblem(graphene.Mutation):
         return delete_problem(user, problem_id)
 
 
-class ProblemQuery:
+def resolve_problem(_root, info, problem_id: str) -> Problem:
+    user = get_me(info.context)
+    return get_problem_by_id(user, problem_id)
+
+
+def resolve_problems(_root, info) -> Iterable[Problem]:
+    user = get_me(info.context)
+    return get_contest_problems(user, user.contest.id)
+
+
+class ProblemQuery(graphene.ObjectType):
     problem = graphene.NonNull(
-        ProblemType, problem_id=graphene.String(required=True))
+        ProblemType, problem_id=graphene.String(required=True), resolver=resolve_problem)
 
-    problems = graphene.NonNull(graphene.List(ProblemType, required=True))
-
-    @staticmethod
-    def resolve_problem(_root, info, problem_id: str) -> Problem:
-        user = get_me(info.context)
-        return get_problem_by_id(user, problem_id)
-
-    @staticmethod
-    def resolve_problems(_root, info) -> Iterable[Problem]:
-        user = get_me(info.context)
-        return get_contest_problems(user, user.contest.id)
+    problems = graphene.NonNull(graphene.List(
+        ProblemType, required=True), resolver=resolve_problems)
 
 
 class ProblemMutation(graphene.ObjectType):
