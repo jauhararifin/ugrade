@@ -7,7 +7,9 @@ from contests.auth.schemas import UserType
 from contests.auth.core import get_contest_users, get_me
 from contests.problem.core import get_contest_problems
 from contests.problem.schemas import ProblemType
-from contests.models import Language, Contest, User, Problem
+from contests.models import Language, Contest, User, Problem, Submission
+from contests.submission.schemas import SubmissionType
+from contests.submission.core import get_contest_submissions
 from .core import get_language_by_id, \
     get_all_languages, \
     get_all_contests, \
@@ -33,32 +35,22 @@ class LanguageType(DjangoObjectType):
 class ContestType(DjangoObjectType):
     members = graphene.NonNull(graphene.List(UserType, required=True))
     problems = graphene.NonNull(graphene.List(ProblemType, required=True))
-    # submissions = graphene.List(SubmissionType)
+    submissions = graphene.NonNull(
+        graphene.List(SubmissionType, required=True))
 
     @staticmethod
     def resolve_members(root: Contest, _info) -> Iterable[User]:
         return get_contest_users(root.id)
 
     @staticmethod
-    def resolve_problems(root: Problem, info) -> Iterable[Problem]:
+    def resolve_problems(root: Contest, info) -> Iterable[Problem]:
         user = get_me(info.context)
         return get_contest_problems(user, root.id)
 
-    # @staticmethod
-    # @with_me
-    # def resolve_submissions(root, info):
-    #     user = info.context.user
-    #     if user.contest.id != root.id:
-    #         raise ValueError("You Don't Have Permission To Read Submissions")
-    #     my_permissions = list(
-    #         map(lambda perm: perm.code, user.permissions.all()))
-
-    #     query_set = Submission.objects.filter(
-    #         problem__contest__id=user.contest.id)
-    #     if 'read:submissions' not in my_permissions:
-    #         query_set = query_set.filter(issuer_id=user.id)
-
-    #     return query_set
+    @staticmethod
+    def resolve_submissions(root: Contest, info) -> Iterable[Submission]:
+        user = get_me(info.context)
+        return get_contest_submissions(user, root.id)
 
     class Meta:
         model = Contest
