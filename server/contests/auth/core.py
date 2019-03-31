@@ -25,6 +25,20 @@ def get_user_by_id(user_id: str) -> User:
         raise NoSuchUserError()
 
 
+def get_user_by_email(contest_id: str, email: str) -> User:
+    user = User.objects.filter(contest__id=contest_id, email=email)
+    if user is None:
+        raise NoSuchUserError()
+    return user
+
+
+def get_user_by_username(contest_id: str, username: str) -> User:
+    user = User.objects.filter(contest__id=contest_id, username=username)
+    if user is None:
+        raise NoSuchUserError()
+    return user
+
+
 def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
     try:
         contest = Contest.objects.get(pk=contest_id)

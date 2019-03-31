@@ -9,6 +9,8 @@ from .core import sign_in, \
     forgot_password, \
     reset_password, \
     get_me, \
+    get_user_by_username, \
+    get_user_by_email, \
     get_user_by_id, \
     get_all_users
 
@@ -109,12 +111,24 @@ def users_resolver(_root, _info) -> Iterable[User]:
     return get_all_users()
 
 
+def user_by_username(_root, _info, contest_id: str, username: str) -> User:
+    return get_user_by_username(contest_id, username)
+
+
+def user_by_email(_root, _info, contest_id: str, email: str) -> User:
+    return get_user_by_email(contest_id, email)
+
+
 class AuthQuery(graphene.ObjectType):
     me = graphene.NonNull(UserType, resolver=me_resolver)
     user = graphene.NonNull(UserType, user_id=graphene.String(
         required=True), resolver=user_resolver)
     users = graphene.NonNull(graphene.List(
         UserType, required=True), resolver=users_resolver)
+    user_by_username = graphene.NonNull(UserType, contest_id=graphene.String(
+        required=True), username=graphene.String(required=True), resolver=user_by_username)
+    user_by_email = graphene.NonNull(UserType, contest_id=graphene.String(
+        required=True), email=graphene.String(required=True), resolver=user_by_email)
 
 
 class AuthMutation(graphene.ObjectType):
