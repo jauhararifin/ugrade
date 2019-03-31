@@ -1,14 +1,8 @@
-from logging import getLogger
 from django.core.exceptions import ValidationError
 from graphene_django.views import GraphQLView
 from graphene_file_upload.django import FileUploadGraphQLView
 
-from graphql import GraphQLError
-from graphql.error import format_error as format_graphql_error
-
 from .exceptions import ContestError
-
-logger = getLogger(__name__)
 
 
 class ContestView(FileUploadGraphQLView):
@@ -40,7 +34,6 @@ class ContestView(FileUploadGraphQLView):
                     returned_err['extensions'] = original_error.args[1:]
                 return returned_err
 
-            logger.error(error)
             return {
                 'code': 'Internal Server Error',
                 'message': 'Internal Server Error',
