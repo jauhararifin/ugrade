@@ -6,12 +6,12 @@ from django.db import models
 from contests.models import Submission, User, Contest
 
 VERDICT = (
-    ('IE', 'Internal Error'),
-    ('CE', 'Compilation Error'),
     ('RTE', 'Run Time Error'),
     ('MLE', 'Memory Limit Exceeded'),
     ('TLE', 'Time Limit Exceeded'),
     ('WA', 'Wrong Answer'),
+    ('CE', 'Compilation Error'),
+    ('IE', 'Internal Error'),
     ('AC', 'Accepted'),
     ('PENDING', 'Pending'),
 )
