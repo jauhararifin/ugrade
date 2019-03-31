@@ -269,6 +269,7 @@ class ContestInput(graphene.InputObjectType):
     start_time = graphene.DateTime()
     freezed = graphene.Boolean(default_value=False)
     finish_time = graphene.DateTime()
+    grading_size = graphene.Int(default_value=1)
 
 
 class CreateContest(graphene.Mutation):
@@ -288,6 +289,7 @@ class UpdateContestInput(graphene.InputObjectType):
     freezed = graphene.Boolean()
     finish_time = graphene.DateTime()
     permitted_languages = graphene.List(graphene.String)
+    grading_size = graphene.Int()
 
 
 class UpdateContest(graphene.Mutation):

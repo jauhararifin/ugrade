@@ -1,8 +1,7 @@
-from typing import Iterable
+from typing import Iterable, NamedTuple, Optional
 
 from django.db import transaction
 
-from contests.schema import ProblemInput, ProblemModificationInput
 from contests.models import Problem
 from contests.auth.core import get_me
 from .core import create_problem, \
@@ -10,6 +9,28 @@ from .core import create_problem, \
     delete_problem, \
     get_problem_by_id, \
     get_contest_problems
+
+
+class ProblemInput(NamedTuple):
+    short_id: str
+    name: str
+    statement: str
+    disabled: bool
+    time_limit: int
+    tolerance: float
+    memory_limit: int
+    output_limit: int
+
+
+class ProblemModificationInput(NamedTuple):
+    short_id: Optional[str]
+    name: Optional[str]
+    statement: Optional[str]
+    disabled: Optional[bool]
+    time_limit: Optional[int]
+    tolerance: Optional[float]
+    memory_limit: Optional[int]
+    output_limit: Optional[int]
 
 
 @transaction.atomic

@@ -1,6 +1,6 @@
-from typing import Iterable, List
+import datetime
+from typing import Iterable, List, NamedTuple, Optional
 
-from contests.schema import ContestInput, CreateContest, UpdateContestInput
 from contests.auth.core import get_contest_users, get_me
 from contests.problem.core import get_contest_problems
 from contests.models import Language, Contest, User, Problem, Submission
@@ -13,6 +13,33 @@ from .core import get_language_by_id, \
     create_contest, \
     update_contest, \
     invite_users
+
+
+class ContestInput(NamedTuple):
+    name: str
+    short_id: str
+    short_description: str
+    description: Optional[str]
+    start_time: Optional[datetime.datetime]
+    freezed: Optional[bool]
+    finish_time: Optional[datetime.datetime]
+    grading_size: Optional[int]
+
+
+class CreateContestResult(NamedTuple):
+    contest: Contest
+    admin: User
+
+
+class UpdateContestInput(NamedTuple):
+    name: Optional[str]
+    short_description: Optional[str]
+    description: Optional[str]
+    start_time: Optional[datetime.datetime]
+    freezed: Optional[bool]
+    finish_time: Optional[datetime.datetime]
+    permitted_languages: Optional[str]
+    grading_size: Optional[int]
 
 
 def language_extensions_resolver(root: Language, _info) -> List[str]:
@@ -53,17 +80,17 @@ def contests_resolver(_root, _info) -> Iterable[Contest]:
     return get_all_contests()
 
 
-def create_contest_mutate(_self, _info, email: str, contest: ContestInput) -> CreateContest:
-    contest, user = create_contest(email,
-                                   contest.name,
-                                   contest.short_id,
-                                   contest.short_description,
-                                   contest.description,
-                                   contest.start_time,
-                                   contest.finish_time,
-                                   contest.freezed,
-                                   contest.grading_size)
-    return CreateContest(contest=contest, admin=user)
+def create_contest_mutate(_self, _info, email: str, contest: ContestInput) -> CreateContestResult:
+    new_contest, user = create_contest(email,
+                                       contest.name,
+                                       contest.short_id,
+                                       contest.short_description,
+                                       contest.description,
+                                       contest.start_time,
+                                       contest.finish_time,
+                                       contest.freezed,
+                                       contest.grading_size)
+    return CreateContestResult(contest=new_contest, admin=user)
 
 
 def update_contest_mutate(_root, info, contest: UpdateContestInput) -> Contest:

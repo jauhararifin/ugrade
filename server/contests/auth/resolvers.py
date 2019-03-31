@@ -1,7 +1,6 @@
-from typing import Iterable
+from typing import Iterable, NamedTuple
 
 from contests.models import User
-from contests.schema import SignIn, UserInput, SignUp
 from .core import sign_in, \
     sign_up, \
     forgot_password, \
@@ -13,23 +12,39 @@ from .core import sign_in, \
     get_all_users
 
 
+class SignInResult(NamedTuple):
+    user: User
+    token: str
+
+
+class UserInput(NamedTuple):
+    username: str
+    name: str
+    password: str
+
+
+class SignUpResult(NamedTuple):
+    user: User
+    token: str
+
+
 def user_permissions_resolver(root: User, _info) -> Iterable[str]:
     return map(lambda perm: perm.code, root.permissions.all())
 
 
-def sign_in_mutate(_self, _info, contest_id: str, email: str, password: str) -> SignIn:
+def sign_in_mutate(_self, _info, contest_id: str, email: str, password: str) -> SignInResult:
     user, token = sign_in(contest_id, email, password)
-    return SignIn(user=user, token=token)
+    return SignInResult(user=user, token=token)
 
 
 def sign_up_mutate(_self, _info,
                    contest_id: str,
                    email: str,
                    user: UserInput,
-                   signup_code: str) -> SignUp:
+                   signup_code: str) -> SignUpResult:
     new_user, token = sign_up(
         contest_id, email, user.username, user.name, user.password, signup_code)
-    return SignUp(user=new_user, token=token)
+    return SignUpResult(user=new_user, token=token)
 
 
 def forgot_password_mutate(_self, _info, contest_id: str, email: str) -> User:
