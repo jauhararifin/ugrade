@@ -4,6 +4,7 @@ from django.conf import settings
 
 from contests.models import User
 from contests.auth.core import get_me
+from contests.exceptions import ForbiddenActionError
 
 
 def with_me(method):
@@ -19,7 +20,7 @@ def with_permission(permission, message='Forbidden Action'):
         def resolve(root, info, *args, **kwargs):
             my_user = info.context.user
             if my_user.permissions.filter(code=permission).first() is None:
-                raise ValueError(message)
+                raise ForbiddenActionError(message)
             return method(root, info, *args, **kwargs)
         return resolve
     return decorator

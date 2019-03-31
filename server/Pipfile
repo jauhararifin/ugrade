@@ -22,6 +22,11 @@ pyjwt = "*"
 django-cors-headers = "*"
 graphene-file-upload = "*"
 django-rq = "*"
+mypy = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-cov = "*"
+mixer = "*"
 
 [requires]
 python_version = "3.6"

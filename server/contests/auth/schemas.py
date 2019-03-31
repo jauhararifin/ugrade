@@ -1,16 +1,18 @@
+from typing import Iterable, Tuple
+
 import graphene
 from graphene_django.types import DjangoObjectType
 
 from contests.models import User
 
-from .auth import sign_in, sign_up, forgot_password, reset_password
+from .core import sign_in, sign_up, forgot_password, reset_password
 
 
 class UserType(DjangoObjectType):
     permissions = graphene.List(graphene.String)
 
     @staticmethod
-    def resolve_permissions(root, _):
+    def resolve_permissions(root: User, _) -> Iterable[str]:
         return map(lambda perm: perm.code, root.permissions.all())
 
     class Meta:
@@ -28,7 +30,7 @@ class SignIn(graphene.Mutation):
     token = graphene.Field(graphene.String)
 
     @staticmethod
-    def mutate(_self, _info, contest_id, email, password):
+    def mutate(_self, _info, contest_id: str, email: str, password: str) -> 'SignIn':
         user, token = sign_in(contest_id, email, password)
         return SignIn(user=user, token=token)
 
@@ -50,7 +52,7 @@ class SignUp(graphene.Mutation):
     token = graphene.Field(graphene.String)
 
     @staticmethod
-    def mutate(_self, _info, contest_id, email, user, signup_code):
+    def mutate(_self, _info, contest_id: str, email: str, user: UserInput, signup_code: str) -> 'SignUp':
         new_user, token = sign_up(
             contest_id, email, user.username, user.name, user.password, signup_code)
         return SignUp(user=new_user, token=token)
@@ -64,7 +66,7 @@ class ForgotPassword(graphene.Mutation):
     Output = UserType
 
     @staticmethod
-    def mutate(_self, _info, contest_id, email):
+    def mutate(_self, _info, contest_id: str, email: str) -> User:
         return forgot_password(contest_id, email)
 
 
@@ -78,5 +80,5 @@ class ResetPassword(graphene.Mutation):
     Output = UserType
 
     @staticmethod
-    def mutate(_self, _info, contest_id, email, reset_password_otc, new_password):
+    def mutate(_self, _info, contest_id: str, email: str, reset_password_otc: str, new_password: str) -> User:
         return reset_password(contest_id, email, reset_password_otc, new_password)
