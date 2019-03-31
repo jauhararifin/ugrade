@@ -29,8 +29,9 @@ class JobView(View):
     def post(self, request):
         try:
             output_file = request.FILES['output']
-            job_token = request.META.get('X-JOB-TOKEN')
+            job_token = request.META.get('HTTP_X_JOB_TOKEN')
             verdict = request.POST['verdict']
             submit_grading_job(job_token, verdict, output_file)
+            return HttpResponse('OK', status=200)
         except ValueError as err:
             return HttpResponse(err, status=500)

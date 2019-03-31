@@ -51,7 +51,8 @@ def insert_spec(grading_group):
         'checker': problem.checker_language.id,
         'submission': submission.solution_language.id,
     }
-    json.dump(language_info, lang_info_path)
+    with open(lang_info_path, 'w') as lang_info_file:
+        json.dump(language_info, lang_info_file)
     spec.add(lang_info_path, 'lang.json')
     os.remove(lang_info_path)
 
@@ -83,9 +84,10 @@ def grade_submission(submission_model):
                               verdict='Pending', grader_group=i)
             grading.save()
 
-    except Exception:
+    except Exception as err:
         ggroup.verdict = 'IE'
         ggroup.save()
+        raise err
 
 
 # return job token and field file containing spec
@@ -131,9 +133,12 @@ def submit_grading_job(token, verdict, output):
     except Exception:
         raise ValueError('Invalid Token')
 
-    grading = Grading.object.get(pk=job_id)
+    grading = Grading.objects.get(pk=job_id)
     if grading.claimed_by.id != user_id:
         raise ValueError('Invalid Token')
+
+    if grading.finish_at is not None:
+        raise ValueError('You Have Submitted This Job')
 
     grading.finish_at = datetime.datetime.now()
     grading.verdict = verdict
@@ -143,12 +148,12 @@ def submit_grading_job(token, verdict, output):
     # calculate verdict found in gradings.
     grading_group = grading.grading_group
     grading_size = grading_group.grading_size
-    gradings = Grading.object.filter(grading_group=grading_group).all()
+    gradings = Grading.objects.filter(grading_group=grading_group).all()
     accepted_count = 0
     job_finished = 0
     verdict_set = set()
     for grad in gradings:
-        if grad.finished_at is not None:
+        if grad.finish_at is not None:
             job_finished += 1
         if grad.verdict == 'AC':
             accepted_count += 1
