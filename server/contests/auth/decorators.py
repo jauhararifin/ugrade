@@ -1,8 +1,3 @@
-import jwt
-
-from django.conf import settings
-
-from contests.models import User
 from contests.auth.core import get_me
 from contests.exceptions import ForbiddenActionError
 

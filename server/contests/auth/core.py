@@ -6,7 +6,11 @@ import jwt
 from django.conf import settings
 from django.http import HttpRequest
 
-from contests.exceptions import NoSuchContestError, NoSuchUserError, AuthenticationError, UserAlreadySignedUpError, UserHaventSignedUpError
+from contests.exceptions import NoSuchContestError, \
+    NoSuchUserError, \
+    AuthenticationError, \
+    UserAlreadySignedUpError, \
+    UserHaventSignedUpError
 from contests.models import User, Contest
 
 
@@ -39,7 +43,12 @@ def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
     return user, token
 
 
-def sign_up(contest_id: str, email: str, username: str, name: str, password: str, signup_code: str) -> Tuple[User, str]:
+def sign_up(contest_id: str,
+            email: str,
+            username: str,
+            name: str,
+            password: str,
+            signup_code: str) -> Tuple[User, str]:
     try:
         contest = Contest.objects.get(pk=contest_id)
     except Contest.DoesNotExist:

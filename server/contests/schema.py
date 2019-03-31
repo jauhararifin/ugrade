@@ -10,10 +10,10 @@ from graphene_file_upload.scalars import Upload
 from django.db import transaction
 
 from contests.models import Contest, Language, User, Permission, Problem, Submission
+from grading.grader import grade_submission
 from .auth.decorators import with_me, with_permission
 from .auth.schemas import UserType, SignIn, SignUp, ForgotPassword, ResetPassword
-from .problem.schemas import ProblemType, CreateProblem, UpdateProblem, DeleteProblem
-from grading.grader import grade_submission
+from .problem.schemas import ProblemType, ProblemQuery, ProblemMutation
 
 
 class LanguageType(DjangoObjectType):
@@ -303,7 +303,7 @@ class SubmitSolution(graphene.Mutation):
         return sub
 
 
-class Query(graphene.ObjectType):
+class Query(ProblemQuery, graphene.ObjectType):
     user = graphene.Field(UserType, id=graphene.String())
     me = graphene.Field(UserType)
 
@@ -353,15 +353,12 @@ class Query(graphene.ObjectType):
         return Language.objects.all()
 
 
-class Mutation(graphene.ObjectType):
+class Mutation(ProblemMutation, graphene.ObjectType):
     create_contest = CreateContest.Field()
     sign_in = SignIn.Field()
     sign_up = SignUp.Field()
     forgot_password = ForgotPassword.Field()
     reset_password = ResetPassword.Field()
-    create_problem = CreateProblem.Field()
-    update_problem = UpdateProblem.Field()
-    delete_problem = DeleteProblem.Field()
     update_contest = UpdateContest.Field()
     invite_users = InviteUsers.Field()
     submit_solution = SubmitSolution.Field()

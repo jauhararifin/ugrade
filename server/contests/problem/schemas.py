@@ -1,12 +1,16 @@
+from typing import Iterable
+
 import graphene
 from graphene_django.types import DjangoObjectType
-
 from django.db import transaction
-from django.db.models import Max
 
 from contests.models import Problem
-from contests.auth.decorators import with_permission
-from .core import create_problem
+from contests.auth.core import get_me
+from .core import create_problem, \
+    update_problem, \
+    delete_problem, \
+    get_problem_by_id, \
+    get_contest_problems
 
 
 class ProblemType(DjangoObjectType):
@@ -36,34 +40,49 @@ class CreateProblem(graphene.Mutation):
     @staticmethod
     @transaction.atomic
     def mutate(_root, info, problem: ProblemInput) -> Problem:
-        token = info.context.META.get('HTTP_AUTHORIZATION')
-        return create_problem(token, problem.short_id, problem.name, problem.statement, problem.disabled,
-                              problem.time_limit, problem.tolerance, problem.memory_limit, problem.output_limit)
+        user = get_me(info.context)
+        return create_problem(user,
+                              problem.short_id,
+                              problem.name,
+                              problem.statement,
+                              problem.disabled,
+                              problem.time_limit,
+                              problem.tolerance,
+                              problem.memory_limit,
+                              problem.output_limit)
+
+
+class ProblemModificationInput(graphene.InputObjectType):
+    short_id = graphene.String()
+    name = graphene.String()
+    statement = graphene.String()
+    disabled = graphene.Boolean()
+    time_limit = graphene.Int()
+    tolerance = graphene.Float()
+    memory_limit = graphene.Int()
+    output_limit = graphene.Int()
 
 
 class UpdateProblem(graphene.Mutation):
     class Arguments:
         problem_id = graphene.String(required=True)
-        problem = ProblemInput(required=True)
+        problem = ProblemModificationInput(required=True)
 
     Output = ProblemType
 
     @staticmethod
-    @with_permission('update:problems', "You Don't Have Permission To Update Problem")
-    def mutate(_root, info, problem_id, problem):
-        user = info.context.user
-        try:
-            prob = Problem.objects.get(pk=problem_id)
-        except Problem.DoesNotExist:
-            raise ValueError("No Such Problem")
-
-        permissions = map(lambda user: user.code, user.permissions.all())
-        if prob.disabled and 'read:disabledProblems' not in permissions:
-            raise ValueError("No Such Problem")
-        for k in problem:
-            setattr(prob, k, problem[k])
-        prob.save()
-        return prob
+    def mutate(_root, info, problem_id: str, problem: ProblemModificationInput) -> Problem:
+        user = get_me(info.context)
+        return update_problem(user,
+                              problem_id,
+                              problem.short_id,
+                              problem.name,
+                              problem.statement,
+                              problem.disabled,
+                              problem.time_limit,
+                              problem.tolerance,
+                              problem.memory_limit,
+                              problem.output_limit)
 
 
 class DeleteProblem(graphene.Mutation):
@@ -73,15 +92,29 @@ class DeleteProblem(graphene.Mutation):
     Output = graphene.String
 
     @staticmethod
-    @with_permission('delete:problems', "You Don't Have Permission To Delete Problem")
-    def mutate(_root, info, problem_id):
-        user = info.context.user
-        try:
-            prob = Problem.objects.get(pk=problem_id)
-        except Problem.DoesNotExist:
-            raise ValueError("No Such Problem")
-        permissions = map(lambda user: user.code, user.permissions.all())
-        if prob.disabled and 'read:disabledProblems' not in permissions:
-            raise ValueError("No Such Problem")
-        prob.delete()
-        return problem_id
+    def mutate(_root, info, problem_id: str) -> str:
+        user = get_me(info.context)
+        return delete_problem(user, problem_id)
+
+
+class ProblemQuery:
+    problem = graphene.NonNull(
+        ProblemType, problem_id=graphene.String(required=True))
+
+    problems = graphene.NonNull(graphene.List(ProblemType, required=True))
+
+    @staticmethod
+    def resolve_problem(_root, info, problem_id: str) -> Problem:
+        user = get_me(info.context)
+        return get_problem_by_id(user, problem_id)
+
+    @staticmethod
+    def resolve_problems(_root, info) -> Iterable[Problem]:
+        user = get_me(info.context)
+        return get_contest_problems(user, user.contest.id)
+
+
+class ProblemMutation(graphene.ObjectType):
+    create_problem = CreateProblem.Field()
+    update_problem = UpdateProblem.Field()
+    delete_problem = DeleteProblem.Field()
