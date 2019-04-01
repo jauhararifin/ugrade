@@ -20,7 +20,8 @@ from .core import get_all_permissions, \
     get_user_by_email, \
     get_contest_users, \
     sign_in, \
-    sign_up
+    sign_up, \
+    forgot_password
 
 
 @pytest.mark.django_db
@@ -216,3 +217,40 @@ class SignUpTest(TestCase):
 
         user = User.objects.get(pk=2)
         assert user.signup_otc is None
+
+
+@pytest.mark.django_db
+class ForgotPasswordTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        contest1 = mixer.blend('contests.Contest', id=1)
+        mixer.blend('contests.User',
+                    name='Some Name 1',
+                    email='email1@example.com',
+                    username='username1',
+                    password=bcrypt.hashpw(
+                        b'userpass1', bcrypt.gensalt()).decode('utf-8'),
+                    contest=contest1)
+        mixer.blend('contests.User',
+                    email='email2@example.com',
+                    contest=contest1,
+                    signup_otc='12345678')
+
+    def test_wrong_contest_id(self):
+        with pytest.raises(NoSuchContestError):
+            forgot_password(3, 'email1@example.com')
+        with pytest.raises(NoSuchContestError):
+            forgot_password(0, 'email2@example.com')
+
+    def test_wrong_email(self):
+        with pytest.raises(NoSuchUserError):
+            forgot_password(1, 'nonexistent@example.com')
+
+    def test_havent_signed_up(self):
+        with pytest.raises(UserHaventSignedUpError):
+            forgot_password(1, 'email2@example.com')
+
+    def test_success(self):
+        forgot_password(1, 'email1@example.com')
+        user = User.objects.get(pk=1)
+        assert user.reset_password_otc is not None

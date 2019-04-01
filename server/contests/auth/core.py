@@ -136,7 +136,7 @@ def forgot_password(contest_id: int, email: str) -> User:
     user = User.objects.filter(
         contest__id=contest.id, email=email).first()
     if user is None:
-        raise User.DoesNotExist()
+        raise NoSuchUserError()
 
     if user.username is None:
         raise UserHaventSignedUpError()
