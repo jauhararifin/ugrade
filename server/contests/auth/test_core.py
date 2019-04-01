@@ -1,6 +1,9 @@
 import pytest
 import jwt
+import bcrypt
 from mixer.backend.django import mixer
+from django.test import TestCase
+
 from contests.exceptions import NoSuchUserError, \
     NoSuchContestError, \
     AuthenticationError, \
@@ -96,40 +99,44 @@ def test_get_contest_users():
 
 
 @pytest.mark.django_db
-def test_sign_in():
-    # raise no such contest
-    with pytest.raises(NoSuchContestError):
-        sign_in('1', 'someemail', 'somepass')
+class SignInTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        contest1 = mixer.blend('contests.Contest', id=1)
+        mixer.cycle(5).blend('contests.User',
+                             name=("User %d" % n for n in range(1, 6)),
+                             email=("user%d@example.com" %
+                                    n for n in range(1, 6)),
+                             username=("user%d" % n for n in range(1, 6)),
+                             password=bcrypt.hashpw(
+                                 b'testtest', bcrypt.gensalt()).decode('utf-8'),
+                             contest=contest1)
+        mixer.blend('contests.User', name='User 6',
+                    contest=contest1, email='user6@example.com')
 
-    # generate fixtures
-    contest1 = mixer.blend('contests.Contest', id=1)
-    mixer.cycle(5).blend('contests.User',
-                         name=("User %d" % n for n in range(1, 6)),
-                         email=("user%d@example.com" % n for n in range(1, 6)),
-                         username=("user%d" % n for n in range(1, 6)),
-                         # hash of 'testtest'
-                         password='$2b$12$CCPjDhFrDu3Tyw.V1HiYJ.WlPpRRouk82tcc0u8VyosNo7vMkIKJO',
-                         contest=contest1)
-    with pytest.raises(NoSuchContestError):
-        sign_in('2', 'user1@example.com', 'pass')
+    def test_wrong_contest_id(self):
+        with pytest.raises(NoSuchContestError):
+            sign_in('3', 'someemail', 'somepass')
+        with pytest.raises(NoSuchContestError):
+            sign_in('0', 'user1@example.com', 'pass')
+        with pytest.raises(NoSuchContestError):
+            sign_in('1.0', 'user1@example.com', 'pass')
 
-    # raise auth error when user not found in contest
-    with pytest.raises(AuthenticationError):
-        sign_in('1', 'nonexistent@example.com', 'pass')
+    def test_wrong_email(self):
+        with pytest.raises(AuthenticationError):
+            sign_in('1', 'nonexistent@example.com', 'pass')
 
-    # raise user havent signed up when user havent signed up but tring to sign in
-    mixer.blend('contests.User', name='User 6',
-                contest=contest1, email='user6@example.com')
-    with pytest.raises(UserHaventSignedUpError):
-        sign_in('1', 'user6@example.com', 'pass')
+    def test_havent_signed_up(self):
+        with pytest.raises(UserHaventSignedUpError):
+            sign_in('1', 'user6@example.com', 'pass')
 
-    # raise auth error when password is wrong
-    with pytest.raises(AuthenticationError):
-        sign_in('1', 'user1@example.com', 'wrongpass')
+    def test_wrong_password(self):
+        with pytest.raises(AuthenticationError):
+            sign_in('1', 'user1@example.com', 'wrongpass')
 
-    # sign in should success
-    user, token = sign_in('1', 'user2@example.com', 'testtest')
-    assert user.id == 2
-    assert token is not None and token != ''
-    token_data = jwt.decode(token, verify=False)
-    assert token_data['id'] == 2
+    def test_success(self):
+        user, token = sign_in('1', 'user2@example.com', 'testtest')
+        assert user.id == 2
+        assert token is not None and token != ''
+        token_data = jwt.decode(token, verify=False)
+        assert token_data['id'] == 2
