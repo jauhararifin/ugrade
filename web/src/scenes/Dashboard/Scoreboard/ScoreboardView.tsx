@@ -12,20 +12,12 @@ export interface ScoreboardViewProps {
   scoreboard: Scoreboard
 }
 
-export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
-  problems,
-  scoreboard,
-}) => {
+export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({ problems, scoreboard }) => {
   scoreboard.entries = scoreboard.entries.sort((a, b) => a.rank - b.rank)
 
   return (
     <ContentWithHeader className='contest-scoreboard' header='Scoreboard'>
-      <HTMLTable
-        bordered={true}
-        striped={true}
-        interactive={true}
-        className='scoreboard-table'
-      >
+      <HTMLTable bordered={true} striped={true} interactive={true} className='scoreboard-table'>
         <thead>
           <tr>
             <th className='rank'>#</th>
@@ -33,10 +25,7 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
             <th className='score'>Score</th>
             {problems.map(problem => (
               <th key={problem.id} className='problem-column'>
-                <Tooltip
-                  className={Classes.TOOLTIP_INDICATOR}
-                  content={problem.name}
-                >
+                <Tooltip className={Classes.TOOLTIP_INDICATOR} content={problem.name}>
                   <a>{problem.shortId}</a>
                 </Tooltip>
               </th>
@@ -61,13 +50,7 @@ export const ScoreboardView: FunctionComponent<ScoreboardViewProps> = ({
                 {problems.map(problem => {
                   const problemId = problem.id
                   const problemScore = entry.problemScores[problemId]
-                  const {
-                    attempt,
-                    penalty,
-                    freezed,
-                    first,
-                    passed,
-                  } = problemScore || {
+                  const { attempt, penalty, freezed, first, passed } = problemScore || {
                     attempt: 0,
                     penalty: 0,
                     freezed: false,

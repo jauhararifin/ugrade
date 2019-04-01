@@ -231,14 +231,14 @@ export class GraphqlContestService implements ContestService {
   }
 
   createContest(
-    email: string,
-    shortId: string,
-    name: string,
-    shortDescription: string,
-    description: string,
-    startTime: Date,
-    finishTime: Date,
-    permittedLanguages?: string[] | undefined
+    _email: string,
+    _shortId: string,
+    _name: string,
+    _shortDescription: string,
+    _description: string,
+    _startTime: Date,
+    _finishTime: Date,
+    _permittedLanguages?: string[] | undefined
   ): Promise<[Contest, User]> {
     throw new Error('Method not implemented.')
   }

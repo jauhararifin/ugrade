@@ -30,7 +30,7 @@ export const MemberListView: FunctionComponent<MemberListViewProps> = ({ users, 
           {users.map(user => (
             <tr key={user.id}>
               <td className='col-user'>
-                <UserLink user={user} />
+                <UserLink username={user.username} />
               </td>
               <td className='col-email'>
                 <Link to={`/contest/members/${user.id}`}>{user.email}</Link>

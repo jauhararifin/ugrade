@@ -1,4 +1,5 @@
 import ApolloClient from 'apollo-boost'
+import { config } from 'dotenv'
 import { AnnouncementService } from './services/announcement'
 import { InMemoryAnnouncementService } from './services/announcement/InMemoryAnnouncementService'
 import { AuthService } from './services/auth'
@@ -20,7 +21,6 @@ import { SubmissionService } from './services/submission'
 import { InMemorySubmissionService } from './services/submission/InMemorySubmissionService'
 import { UserService } from './services/user'
 import { InMemoryUserService } from './services/user/InMemoryUserService'
-import { config } from 'dotenv'
 
 config()
 console.log(process.env)

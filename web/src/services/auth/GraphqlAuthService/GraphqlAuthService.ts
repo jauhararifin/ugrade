@@ -224,7 +224,7 @@ export class GraphqlAuthService implements AuthService {
       .catch(this.convertError)
   }
 
-  async addUser(token: string, users: Array<{ email: string; permissions: UserPermission[] }>): Promise<string[]> {
+  async addUser(_token: string, _users: Array<{ email: string; permissions: UserPermission[] }>): Promise<string[]> {
     throw new Error('Method not implemented.')
   }
 
