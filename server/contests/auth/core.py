@@ -68,10 +68,10 @@ def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
         if user is None:
             raise User.DoesNotExist()
     except User.DoesNotExist:
-        raise NoSuchUserError('Wrong Email Or Password')
+        raise AuthenticationError('Wrong Email Or Password')
 
     if user.username is None:
-        raise AuthenticationError(
+        raise UserHaventSignedUpError(
             "You haven't sign up yet, please sign up first")
 
     password_matched = bcrypt.checkpw(
