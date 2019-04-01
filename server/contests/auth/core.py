@@ -10,7 +10,8 @@ from contests.exceptions import NoSuchContestError, \
     NoSuchUserError, \
     AuthenticationError, \
     UserAlreadySignedUpError, \
-    UserHaventSignedUpError
+    UserHaventSignedUpError, \
+    UsernameAlreadyUsedError
 from contests.models import Permission, User, Contest
 
 
@@ -96,12 +97,9 @@ def sign_up(contest_id: int,
     except Contest.DoesNotExist:
         raise NoSuchContestError()
 
-    try:
-        new_user = User.objects.filter(
-            contest__id=contest.id, email=email).first()
-        if new_user is None:
-            raise User.DoesNotExist()
-    except User.DoesNotExist:
+    new_user = User.objects.filter(
+        contest__id=contest.id, email=email).first()
+    if new_user is None:
         raise NoSuchUserError()
 
     if new_user.username is not None:
@@ -109,6 +107,9 @@ def sign_up(contest_id: int,
 
     if new_user.signup_otc != signup_code:
         raise AuthenticationError('Wrong Token')
+
+    if User.objects.filter(contest__id=contest.id, username=username).count() > 0:
+        raise UsernameAlreadyUsedError()
 
     new_user.name = name
     new_user.username = username

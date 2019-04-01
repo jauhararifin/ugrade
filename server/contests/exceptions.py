@@ -23,6 +23,11 @@ class UserAlreadySignedUpError(ContestError):
         super(UserAlreadySignedUpError, self).__init__(message)
 
 
+class UsernameAlreadyUsedError(ContestError):
+    def __init__(self, message: str = 'Username Already Used') -> None:
+        super(UsernameAlreadyUsedError, self).__init__(message)
+
+
 class UserAlreadyInvitedError(ContestError):
     def __init__(self, message: str = 'User Already Invited') -> None:
         super(UserAlreadyInvitedError, self).__init__(message)

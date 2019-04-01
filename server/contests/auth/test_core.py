@@ -2,19 +2,25 @@ import pytest
 import jwt
 import bcrypt
 from mixer.backend.django import mixer
-from django.test import TestCase
 
+from django.test import TestCase
+from django.core.exceptions import ValidationError
+
+from contests.models import User
 from contests.exceptions import NoSuchUserError, \
     NoSuchContestError, \
     AuthenticationError, \
-    UserHaventSignedUpError
+    UserHaventSignedUpError, \
+    UserAlreadySignedUpError, \
+    UsernameAlreadyUsedError
 from .core import get_all_permissions, \
     get_all_users, \
     get_user_by_id, \
     get_user_by_username, \
     get_user_by_email, \
     get_contest_users, \
-    sign_in
+    sign_in, \
+    sign_up
 
 
 @pytest.mark.django_db
@@ -138,3 +144,75 @@ class SignInTest(TestCase):
         assert token is not None and token != ''
         token_data = jwt.decode(token, verify=False)
         assert token_data['id'] == 2
+
+
+@pytest.mark.django_db
+class SignUpTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        contest1 = mixer.blend('contests.Contest', id=1)
+        contest2 = mixer.blend('contests.Contest', id=2)
+        mixer.blend('contests.User',
+                    name='Some Name',
+                    email='email@example.com',
+                    username='username',
+                    password=bcrypt.hashpw(
+                        b'userpass', bcrypt.gensalt()).decode('utf-8'),
+                    contest=contest1)
+        mixer.blend('contests.User',
+                    email='email@example.com',
+                    contest=contest2,
+                    signup_otc='12345678')
+        mixer.blend('contests.User',
+                    name='Jauhar Arifin',
+                    email='jauhararifin@example.com',
+                    username='jauhararifin',
+                    password=bcrypt.hashpw(
+                        b'userpass', bcrypt.gensalt()).decode('utf-8'),
+                    contest=contest2)
+
+    def test_wrong_contest_id(self):
+        with pytest.raises(NoSuchContestError):
+            sign_up(3, 'someemail', 'username', 'name', 'somepass', '00000000')
+        with pytest.raises(NoSuchContestError):
+            sign_up(0, 'emailexample.com', 'username',
+                    'name', 'somepass', '92847118')
+
+    def test_wrong_email(self):
+        with pytest.raises(NoSuchUserError):
+            sign_up(1, 'someemail', 'username', 'name', 'somepass', '00000000')
+        with pytest.raises(NoSuchUserError):
+            sign_up(2, 'someemail', 'username', 'name', 'somepass', '92847118')
+
+    def test_already_signed_up(self):
+        with pytest.raises(UserAlreadySignedUpError):
+            sign_up(1, 'email@example.com', 'username',
+                    'name', 'somepass', '00000000')
+
+    def test_wrong_otc(self):
+        with pytest.raises(AuthenticationError):
+            sign_up(2, 'email@example.com', 'username',
+                    'name', 'somepass', '00000000')
+
+    def test_already_used_username(self):
+        with pytest.raises(UsernameAlreadyUsedError):
+            sign_up(2, 'email@example.com', 'jauhararifin',
+                    'name', 'somepass', '12345678')
+
+    def test_invalid_input(self):
+        with pytest.raises(ValidationError) as error:
+            sign_up(2, 'email@example.com', 'u',
+                    'name', 'password', '12345678')
+        assert error.value.message_dict['username'] is not None
+
+    def test_success(self):
+        user, token = sign_up(2, 'email@example.com',
+                              'username', 'My Name', 'mypassword', '12345678')
+
+        assert user.id == 2
+        assert token is not None and token != ''
+        token_data = jwt.decode(token, verify=False)
+        assert token_data['id'] == 2
+
+        user = User.objects.get(pk=2)
+        assert user.signup_otc is None
