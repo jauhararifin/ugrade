@@ -68,7 +68,7 @@ class User(models.Model):
         validate_slug, MinLengthValidator(4), MaxLengthValidator(64)
     ], null=True, default=None, blank=True)
     email = models.EmailField('email', max_length=255, validators=[
-        validate_email, MinLengthValidator(4), MaxLengthValidator(255)
+        validate_email, MinLengthValidator(5), MaxLengthValidator(255)
     ])
     permissions = models.ManyToManyField(Permission)
     contest = models.ForeignKey(
