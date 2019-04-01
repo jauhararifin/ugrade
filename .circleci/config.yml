@@ -31,7 +31,7 @@ jobs:
             - "/usr/local/lib/python3.6/site-packages"
       - run:
           name: test
-          command: pipenv run python py.test
+          command: pipenv run py.test
       - store_test_results:
           path: htmlcov
 
