@@ -4,3 +4,5 @@ db.sqlite3.backup
 submissions
 storages
 .mypy_cache
+.coverage
+htmlcov

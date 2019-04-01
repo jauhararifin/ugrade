@@ -4,7 +4,7 @@ orbs:
   docker-publish: circleci/docker-publish@0.1.6
 
 jobs:
-  install-ugrade-server:
+  build-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
       - image: circleci/python:3.6.4
@@ -29,25 +29,11 @@ jobs:
             - ".venv"
             - "/usr/local/bin"
             - "/usr/local/lib/python3.6/site-packages"
-      - persist_to_workspace:
-          root: ~/ugrade
-          paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.6/site-packages"
-
-  test-ugrade-server:
-    working_directory: ~/ugrade/server
-    docker:
-      - image: circleci/python:3.6.4
-    steps:
-      - checkout:
-          path: ~/ugrade
-      - attach_workspace:
-          at: ~/ugrade
       - run:
           name: test
-          command: py.test
+          command: pipenv run python py.test
+      - store_test_results:
+          path: htmlcov
 
   install-ugrade-web:
     working_directory: ~/ugrade/web
@@ -122,10 +108,7 @@ workflows:
   version: 2
   ugrade:
     jobs:
-      - install-ugrade-server
-      - test-ugrade-server:
-          requires:
-            - install-ugrade-server
+      - build-ugrade-server
       - install-ugrade-web
       - test-ugrade-web:
           requires:
