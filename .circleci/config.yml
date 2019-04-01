@@ -7,31 +7,39 @@ jobs:
   install-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
-      - image: circleci/node
+      - image: circleci/python:3.6.4
     steps:
       - checkout:
           path: ~/ugrade
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
       - restore_cache:
-          name: Restore Yarn Package Cache
+          name: Restore Python Packages
           keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
+            - pip-packages-{{ checksum "Pipfile.lock" }}
       - run:
-          name: Install Dependencies
-          command: yarn install --frozen-lockfile
+          name: "Install Dependencies"
+          command: |
+            sudo pip install pipenv
+            pipenv install
       - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          name: Save Python Package Cache
+          key: pip-packages-{{ checksum "Pipfile.lock" }}
           paths:
-            - ~/.cache/yarn
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
       - persist_to_workspace:
           root: ~/ugrade
           paths:
-            - server/node_modules
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
 
   test-ugrade-server:
     working_directory: ~/ugrade/server
     docker:
-      - image: circleci/node
+      - image: circleci/python:3.6.4
     steps:
       - checkout:
           path: ~/ugrade
@@ -39,22 +47,7 @@ jobs:
           at: ~/ugrade
       - run:
           name: test
-          command: yarn test
-
-  build-ugrade-server-image:
-    executor: docker-publish/docker
-    working_directory: ~/ugrade/server
-    steps:
-      - checkout:
-          path: ~/ugrade
-      - attach_workspace:
-          at: ~/ugrade
-      - setup_remote_docker
-      - docker-publish/check
-      - docker-publish/build:
-          image: jauhararifin/ugrade-server
-      - docker-publish/deploy:
-          image: jauhararifin/ugrade-server
+          command: py.test
 
   install-ugrade-web:
     working_directory: ~/ugrade/web
@@ -133,9 +126,6 @@ workflows:
       - test-ugrade-server:
           requires:
             - install-ugrade-server
-      - build-ugrade-server-image:
-          requires:
-            - test-ugrade-server
       - install-ugrade-web
       - test-ugrade-web:
           requires:
