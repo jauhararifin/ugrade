@@ -116,26 +116,24 @@ class SignInTest(TestCase):
 
     def test_wrong_contest_id(self):
         with pytest.raises(NoSuchContestError):
-            sign_in('3', 'someemail', 'somepass')
+            sign_in(3, 'someemail', 'somepass')
         with pytest.raises(NoSuchContestError):
-            sign_in('0', 'user1@example.com', 'pass')
-        with pytest.raises(NoSuchContestError):
-            sign_in('1.0', 'user1@example.com', 'pass')
+            sign_in(0, 'user1@example.com', 'pass')
 
     def test_wrong_email(self):
         with pytest.raises(AuthenticationError):
-            sign_in('1', 'nonexistent@example.com', 'pass')
+            sign_in(1, 'nonexistent@example.com', 'pass')
 
     def test_havent_signed_up(self):
         with pytest.raises(UserHaventSignedUpError):
-            sign_in('1', 'user6@example.com', 'pass')
+            sign_in(1, 'user6@example.com', 'pass')
 
     def test_wrong_password(self):
         with pytest.raises(AuthenticationError):
-            sign_in('1', 'user1@example.com', 'wrongpass')
+            sign_in(1, 'user1@example.com', 'wrongpass')
 
     def test_success(self):
-        user, token = sign_in('1', 'user2@example.com', 'testtest')
+        user, token = sign_in(1, 'user2@example.com', 'testtest')
         assert user.id == 2
         assert token is not None and token != ''
         token_data = jwt.decode(token, verify=False)

@@ -54,7 +54,7 @@ class SignInResult(graphene.ObjectType):
 
 class SignIn(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.String(required=True)
+        contest_id = graphene.Int(required=True)
         email = graphene.String(required=True)
         password = graphene.String(required=True)
     Output = SignInResult
@@ -84,7 +84,7 @@ class SignUp(graphene.Mutation):
 
 class ForgotPassword(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.String(required=True)
+        contest_id = graphene.Int(required=True)
         email = graphene.String(required=True)
     Output = UserType
     mutate = forgot_password_mutate
@@ -92,7 +92,7 @@ class ForgotPassword(graphene.Mutation):
 
 class ResetPassword(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.String(required=True)
+        contest_id = graphene.Int(required=True)
         email = graphene.String(required=True)
         reset_password_otc = graphene.String(required=True)
         new_password = graphene.String(required=True)
@@ -102,13 +102,13 @@ class ResetPassword(graphene.Mutation):
 
 class AuthQuery(graphene.ObjectType):
     me = graphene.NonNull(UserType, resolver=me_resolver)
-    user = graphene.NonNull(UserType, user_id=graphene.String(
+    user = graphene.NonNull(UserType, user_id=graphene.Int(
         required=True), resolver=user_resolver)
     users = graphene.NonNull(graphene.List(
         UserType, required=True), resolver=users_resolver)
-    user_by_username = graphene.NonNull(UserType, contest_id=graphene.String(
+    user_by_username = graphene.NonNull(UserType, contest_id=graphene.Int(
         required=True), username=graphene.String(required=True), resolver=user_by_username_resolver)
-    user_by_email = graphene.NonNull(UserType, contest_id=graphene.String(
+    user_by_email = graphene.NonNull(UserType, contest_id=graphene.Int(
         required=True), email=graphene.String(required=True), resolver=user_by_email_resolver)
 
 
@@ -166,7 +166,7 @@ class ProblemModificationInput(graphene.InputObjectType):
 
 class UpdateProblem(graphene.Mutation):
     class Arguments:
-        problem_id = graphene.String(required=True)
+        problem_id = graphene.Int(required=True)
         problem = ProblemModificationInput(required=True)
     Output = ProblemType
     mutate = update_problem_mutate
@@ -174,14 +174,14 @@ class UpdateProblem(graphene.Mutation):
 
 class DeleteProblem(graphene.Mutation):
     class Arguments:
-        problem_id = graphene.String(required=True)
+        problem_id = graphene.Int(required=True)
     Output = graphene.String
     mutate = delete_problem_mutate
 
 
 class ProblemQuery(graphene.ObjectType):
     problem = graphene.NonNull(
-        ProblemType, problem_id=graphene.String(required=True), resolver=problem_resolver)
+        ProblemType, problem_id=graphene.Int(required=True), resolver=problem_resolver)
 
     problems = graphene.NonNull(graphene.List(
         ProblemType, required=True), resolver=problems_resolver)
@@ -213,7 +213,7 @@ class SubmissionType(DjangoObjectType):
 
 
 class SubmissionQuery(graphene.ObjectType):
-    submission = graphene.NonNull(SubmissionType, id=graphene.String(
+    submission = graphene.NonNull(SubmissionType, id=graphene.Int(
         required=True), resolver=submission_resolver)
     submissions = graphene.NonNull(graphene.List(
         SubmissionType, required=True), resolver=submissions_resolver)
@@ -221,8 +221,8 @@ class SubmissionQuery(graphene.ObjectType):
 
 class SubmitSolution(graphene.Mutation):
     class Arguments:
-        problem_id = graphene.String(required=True)
-        language_id = graphene.String(required=True)
+        problem_id = graphene.Int(required=True)
+        language_id = graphene.Int(required=True)
         source_code = Upload(required=True)
     Output = SubmissionType
     mutate = submit_solution_mutate
@@ -249,11 +249,11 @@ class ContestType(DjangoObjectType):
 class ContestQuery(graphene.ObjectType):
     languages = graphene.NonNull(graphene.List(
         LanguageType, required=True), resolver=languages_resolver)
-    language = graphene.NonNull(LanguageType, lang_id=graphene.String(
+    language = graphene.NonNull(LanguageType, lang_id=graphene.Int(
         required=True), resolver=language_resolver)
 
     contest = graphene.NonNull(
-        ContestType, contest_id=graphene.String(required=True), resolver=contest_resolver)
+        ContestType, contest_id=graphene.Int(required=True), resolver=contest_resolver)
     contest_by_short_id = graphene.NonNull(
         ContestType, short_id=graphene.String(required=True), resolver=contest_by_short_id_resolver)
     contests = graphene.NonNull(graphene.List(

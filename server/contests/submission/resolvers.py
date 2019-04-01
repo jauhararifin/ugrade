@@ -15,7 +15,7 @@ def submission_source_code_resolver(root: Submission, _info) -> str:
     return root.solution_source.url
 
 
-def submission_resolver(_root, info, submission_id: str) -> Submission:
+def submission_resolver(_root, info, submission_id: int) -> Submission:
     user = get_me(info.context)
     return get_submission_by_id(user, submission_id)
 
@@ -27,8 +27,8 @@ def submissions_resolver(_root, info) -> Iterable[Submission]:
 
 def submit_solution_mutate(_root,
                            info,
-                           problem_id: str,
-                           language_id: str,
+                           problem_id: int,
+                           language_id: int,
                            source_code: File) -> Submission:
     user = get_me(info.context)
     return submit_solution(user, problem_id, language_id, source_code)

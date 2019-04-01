@@ -14,7 +14,7 @@ from contests.exceptions import NoSuchContestError, \
 from contests.models import Permission, User, Contest
 
 
-def _assert_contest_exists(contest_id: str):
+def _assert_contest_exists(contest_id: int):
     if Contest.objects.filter(pk=contest_id).count() == 0:
         raise NoSuchContestError()
 
@@ -27,14 +27,14 @@ def get_all_users() -> Iterable[User]:
     return User.objects.all()
 
 
-def get_user_by_id(user_id: str) -> User:
+def get_user_by_id(user_id: int) -> User:
     try:
         return User.objects.get(pk=user_id)
     except User.DoesNotExist:
         raise NoSuchUserError()
 
 
-def get_user_by_email(contest_id: str, email: str) -> User:
+def get_user_by_email(contest_id: int, email: str) -> User:
     _assert_contest_exists(contest_id)
     user = User.objects.filter(contest__id=contest_id, email=email).first()
     if user is None:
@@ -42,7 +42,7 @@ def get_user_by_email(contest_id: str, email: str) -> User:
     return user
 
 
-def get_user_by_username(contest_id: str, username: str) -> User:
+def get_user_by_username(contest_id: int, username: str) -> User:
     _assert_contest_exists(contest_id)
     user = User.objects.filter(
         contest__id=contest_id, username=username).first()
@@ -51,12 +51,12 @@ def get_user_by_username(contest_id: str, username: str) -> User:
     return user
 
 
-def get_contest_users(contest_id: str) -> Iterable[User]:
+def get_contest_users(contest_id: int) -> Iterable[User]:
     _assert_contest_exists(contest_id)
     return User.objects.filter(contest__id=contest_id).all()
 
 
-def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
+def sign_in(contest_id: int, email: str, password: str) -> Tuple[User, str]:
     try:
         contest = Contest.objects.get(pk=contest_id)
     except Contest.DoesNotExist:
@@ -85,7 +85,7 @@ def sign_in(contest_id: str, email: str, password: str) -> Tuple[User, str]:
     return user, token
 
 
-def sign_up(contest_id: str,
+def sign_up(contest_id: int,
             email: str,
             username: str,
             name: str,
@@ -126,7 +126,7 @@ def sign_up(contest_id: str,
     return new_user, token
 
 
-def forgot_password(contest_id: str, email: str) -> User:
+def forgot_password(contest_id: int, email: str) -> User:
     try:
         contest = Contest.objects.get(pk=contest_id)
     except Contest.DoesNotExist:
@@ -148,7 +148,7 @@ def forgot_password(contest_id: str, email: str) -> User:
     return user
 
 
-def reset_password(contest_id: str, email: str, reset_password_otc: str, new_password: str) -> User:
+def reset_password(contest_id: int, email: str, reset_password_otc: str, new_password: str) -> User:
     try:
         contest = Contest.objects.get(pk=contest_id)
     except Contest.DoesNotExist:

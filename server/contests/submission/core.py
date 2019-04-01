@@ -9,7 +9,7 @@ from contests.exceptions import ForbiddenActionError, NoSuchSubmissionError, For
 from grading.grader import grade_submission
 
 
-def get_contest_submissions(user: User, contest_id: str) -> Iterable[Submission]:
+def get_contest_submissions(user: User, contest_id: int) -> Iterable[Submission]:
     my_contest = user.contest
     target_contest = get_contest_by_id(contest_id)
     if my_contest.id != target_contest.id:
@@ -23,7 +23,7 @@ def get_contest_submissions(user: User, contest_id: str) -> Iterable[Submission]
     return submissions_qs.all()
 
 
-def get_submission_by_id(user: User, submission_id: str) -> Submission:
+def get_submission_by_id(user: User, submission_id: int) -> Submission:
     try:
         submission = Submission.objects.get(pk=submission_id)
     except Submission.DoesNotExist:
@@ -38,7 +38,7 @@ def get_submission_by_id(user: User, submission_id: str) -> Submission:
     return submission
 
 
-def submit_solution(user: User, problem_id: str, language_id: str, source_code: File) -> Submission:
+def submit_solution(user: User, problem_id: int, language_id: int, source_code: File) -> Submission:
     problem = get_problem_by_id(user, problem_id)
     language = get_language_by_id(language_id)
 

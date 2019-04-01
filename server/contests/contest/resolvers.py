@@ -60,7 +60,7 @@ def contest_submissions_resolver(root: Contest, info) -> Iterable[Submission]:
     return get_contest_submissions(user, root.id)
 
 
-def language_resolver(_root, _info, lang_id: str) -> Language:
+def language_resolver(_root, _info, lang_id: int) -> Language:
     return get_language_by_id(lang_id)
 
 
@@ -68,7 +68,7 @@ def languages_resolver(_root, _info) -> Iterable[Language]:
     return get_all_languages()
 
 
-def contest_resolver(_root, _info, contest_id: str) -> Contest:
+def contest_resolver(_root, _info, contest_id: int) -> Contest:
     return get_contest_by_id(contest_id)
 
 

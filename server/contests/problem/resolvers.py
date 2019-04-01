@@ -49,7 +49,7 @@ def create_problem_mutate(_root, info, problem: ProblemInput) -> Problem:
 
 def update_problem_mutate(_root,
                           info,
-                          problem_id: str,
+                          problem_id: int,
                           problem: ProblemModificationInput) -> Problem:
     user = get_me(info.context)
     return update_problem(user,
@@ -64,12 +64,12 @@ def update_problem_mutate(_root,
                           problem.output_limit)
 
 
-def delete_problem_mutate(_root, info, problem_id: str) -> str:
+def delete_problem_mutate(_root, info, problem_id: int) -> str:
     user = get_me(info.context)
     return delete_problem(user, problem_id)
 
 
-def problem_resolver(_root, info, problem_id: str) -> Problem:
+def problem_resolver(_root, info, problem_id: int) -> Problem:
     user = get_me(info.context)
     return get_problem_by_id(user, problem_id)
 

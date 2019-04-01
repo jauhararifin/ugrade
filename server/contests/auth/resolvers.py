@@ -32,13 +32,13 @@ def user_permissions_resolver(root: User, _info) -> Iterable[str]:
     return map(lambda perm: perm.code, root.permissions.all())
 
 
-def sign_in_mutate(_self, _info, contest_id: str, email: str, password: str) -> SignInResult:
+def sign_in_mutate(_self, _info, contest_id: int, email: str, password: str) -> SignInResult:
     user, token = sign_in(contest_id, email, password)
     return SignInResult(user=user, token=token)
 
 
 def sign_up_mutate(_self, _info,
-                   contest_id: str,
+                   contest_id: int,
                    email: str,
                    user: UserInput,
                    signup_code: str) -> SignUpResult:
@@ -47,12 +47,12 @@ def sign_up_mutate(_self, _info,
     return SignUpResult(user=new_user, token=token)
 
 
-def forgot_password_mutate(_self, _info, contest_id: str, email: str) -> User:
+def forgot_password_mutate(_self, _info, contest_id: int, email: str) -> User:
     return forgot_password(contest_id, email)
 
 
 def reset_passwod_mutate(_self, _info,
-                         contest_id: str,
+                         contest_id: int,
                          email: str,
                          reset_password_otc: str,
                          new_password: str) -> User:
@@ -63,7 +63,7 @@ def me_resolver(_root, info) -> User:
     return get_me(info.context)
 
 
-def user_resolver(_root, _info, user_id: str) -> User:
+def user_resolver(_root, _info, user_id: int) -> User:
     return get_user_by_id(user_id)
 
 
@@ -71,9 +71,9 @@ def users_resolver(_root, _info) -> Iterable[User]:
     return get_all_users()
 
 
-def user_by_username_resolver(_root, _info, contest_id: str, username: str) -> User:
+def user_by_username_resolver(_root, _info, contest_id: int, username: str) -> User:
     return get_user_by_username(contest_id, username)
 
 
-def user_by_email_resolver(_root, _info, contest_id: str, email: str) -> User:
+def user_by_email_resolver(_root, _info, contest_id: int, email: str) -> User:
     return get_user_by_email(contest_id, email)

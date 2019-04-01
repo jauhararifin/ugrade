@@ -7,7 +7,7 @@ from contests.models import User, Problem
 from contests.exceptions import ForbiddenActionError, NoSuchProblemError
 
 
-def get_contest_problems(user: User, contest_id: str) -> Iterable[Problem]:
+def get_contest_problems(user: User, contest_id: int) -> Iterable[Problem]:
     if not user.has_permission('read:problems'):
         raise ForbiddenActionError(
             "You Don't Have Permission To Read Problems")
@@ -24,7 +24,7 @@ def get_contest_problems(user: User, contest_id: str) -> Iterable[Problem]:
     return problems_qs.all()
 
 
-def get_problem_by_id(user: User, problem_id: str) -> Problem:
+def get_problem_by_id(user: User, problem_id: int) -> Problem:
     if not user.has_permission('read:problems'):
         raise ForbiddenActionError(
             "You Don't Have Permission To Read Problems")
@@ -78,7 +78,7 @@ def create_problem(user: User,
 
 
 def update_problem(user: User,
-                   problem_id: str,
+                   problem_id: int,
                    short_id: Optional[str],
                    name: Optional[str],
                    statement: Optional[str],
@@ -121,7 +121,7 @@ def update_problem(user: User,
     return prob
 
 
-def delete_problem(user: User, problem_id: str) -> str:
+def delete_problem(user: User, problem_id: int) -> int:
     if not user.has_permission('delete:problems'):
         raise ForbiddenActionError(
             "You Don't Have Permission To Delete Problem")

@@ -16,7 +16,7 @@ def get_all_languages() -> Iterable[Language]:
     return Language.objects.all()
 
 
-def get_language_by_id(lang_id: str) -> Language:
+def get_language_by_id(lang_id: int) -> Language:
     try:
         return Language.objects.get(pk=lang_id)
     except Language.DoesNotExist:
@@ -27,7 +27,7 @@ def get_all_contests() -> Iterable[Contest]:
     return Contest.objects.all()
 
 
-def get_contest_by_id(contest_id: str) -> Contest:
+def get_contest_by_id(contest_id: int) -> Contest:
     try:
         return Contest.objects.get(pk=contest_id)
     except Contest.DoesNotExist:
