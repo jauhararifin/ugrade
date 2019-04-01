@@ -21,7 +21,8 @@ from .core import get_all_permissions, \
     get_contest_users, \
     sign_in, \
     sign_up, \
-    forgot_password
+    forgot_password, \
+    reset_password
 
 
 @pytest.mark.django_db
@@ -263,3 +264,62 @@ class ForgotPasswordTest(TestCase):
         forgot_password(1, 'email1@example.com')
         user = User.objects.get(pk=1)
         assert user.reset_password_otc == '00000000'
+
+
+@pytest.mark.django_db
+class ResetPasswordTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        contest1 = mixer.blend('contests.Contest', id=1)
+        mixer.blend('contests.User',
+                    name='Some Name 1',
+                    email='email1@example.com',
+                    username='username1',
+                    password=bcrypt.hashpw(
+                        b'userpass1', bcrypt.gensalt()).decode('utf-8'),
+                    contest=contest1)
+        mixer.blend('contests.User',
+                    email='email2@example.com',
+                    contest=contest1,
+                    signup_otc='12345678')
+
+    def test_wrong_contest_id(self):
+        with pytest.raises(NoSuchContestError):
+            reset_password(3, 'email1@example.com', '00000000', 'newpassword')
+        with pytest.raises(NoSuchContestError):
+            reset_password(0, 'email2@example.com', '00000000', 'newpassword')
+
+    def test_wrong_email(self):
+        with pytest.raises(NoSuchUserError):
+            reset_password(1, 'nonexistent@example.com',
+                           '00000000', 'newpassword')
+
+    def test_havent_signed_up(self):
+        with pytest.raises(UserHaventSignedUpError):
+            reset_password(1, 'email2@example.com', '00000000', 'newpassword')
+
+    def test_wrong_code(self):
+        user = User.objects.get(pk=1)
+        user.reset_password_otc = '12345678'
+        user.save()
+        with pytest.raises(AuthenticationError):
+            reset_password(1, 'email1@example.com', '00000000', 'newpassword')
+
+    def test_success(self):
+        user = User.objects.get(pk=1)
+        user.reset_password_otc = '00000000'
+        user.save()
+
+        reset_password(1, 'email1@example.com', '00000000', 'newpassword')
+        user = User.objects.get(pk=1)
+        assert bcrypt.checkpw(b'newpassword', bytes(user.password, 'utf-8'))
+
+    def test_with_forgot_password(self):
+        forgot_password(1, 'email1@example.com')
+        user = User.objects.get(pk=1)
+        assert user.reset_password_otc is not None
+
+        reset_password(1, 'email1@example.com',
+                       user.reset_password_otc, 'newpassword')
+        user = User.objects.get(pk=1)
+        assert bcrypt.checkpw(b'newpassword', bytes(user.password, 'utf-8'))
