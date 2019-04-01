@@ -14,6 +14,11 @@ from contests.exceptions import NoSuchContestError, \
 from contests.models import Permission, User, Contest
 
 
+def _assert_contest_exists(contest_id: str):
+    if Contest.objects.filter(pk=contest_id).count() == 0:
+        raise NoSuchContestError()
+
+
 def get_all_permissions() -> Iterable[Permission]:
     return Permission.objects.all()
 
@@ -30,6 +35,7 @@ def get_user_by_id(user_id: str) -> User:
 
 
 def get_user_by_email(contest_id: str, email: str) -> User:
+    _assert_contest_exists(contest_id)
     user = User.objects.filter(contest__id=contest_id, email=email).first()
     if user is None:
         raise NoSuchUserError()
@@ -37,6 +43,7 @@ def get_user_by_email(contest_id: str, email: str) -> User:
 
 
 def get_user_by_username(contest_id: str, username: str) -> User:
+    _assert_contest_exists(contest_id)
     user = User.objects.filter(
         contest__id=contest_id, username=username).first()
     if user is None:
@@ -45,6 +52,7 @@ def get_user_by_username(contest_id: str, username: str) -> User:
 
 
 def get_contest_users(contest_id: str) -> Iterable[User]:
+    _assert_contest_exists(contest_id)
     return User.objects.filter(contest__id=contest_id).all()
 
 
