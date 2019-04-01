@@ -6,6 +6,7 @@ from mixer.backend.django import mixer
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
+from ugrade import settings
 from contests.models import User
 from contests.exceptions import NoSuchUserError, \
     NoSuchContestError, \
@@ -22,7 +23,8 @@ from .core import get_all_permissions, \
     sign_in, \
     sign_up, \
     forgot_password, \
-    reset_password
+    reset_password, \
+    get_user_from_token
 
 
 @pytest.mark.django_db
@@ -323,3 +325,61 @@ class ResetPasswordTest(TestCase):
                        user.reset_password_otc, 'newpassword')
         user = User.objects.get(pk=1)
         assert bcrypt.checkpw(b'newpassword', bytes(user.password, 'utf-8'))
+
+
+@pytest.mark.django_db
+class GetUserFromTokenTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        contest1 = mixer.blend('contests.Contest', id=1)
+        mixer.blend('contests.User',
+                    name='Some Name 1',
+                    email='email1@example.com',
+                    username='username1',
+                    password=bcrypt.hashpw(
+                        b'userpass1', bcrypt.gensalt()).decode('utf-8'),
+                    contest=contest1)
+        mixer.blend('contests.User',
+                    email='email2@example.com',
+                    contest=contest1,
+                    signup_otc='12345678')
+
+    def test_authentication_error(self):
+        with pytest.raises(AuthenticationError):
+            get_user_from_token('some.invalid.token')
+        with pytest.raises(AuthenticationError):
+            get_user_from_token('')
+
+        # check wrong key
+        with pytest.raises(AuthenticationError):
+            get_user_from_token(
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.fhc3wykrAnRpcKApKhXiahxaOe8PSHatad31NuIZ0Zg')
+
+        # check none algorithm
+        with pytest.raises(AuthenticationError):
+            get_user_from_token(
+                'eyJhbGciOiAibm9uZSIsICJ0eXAiOiAiSldUIn0=.eyJpZCI6MX0.')
+        with pytest.raises(AuthenticationError):
+            get_user_from_token(
+                'eyJhbGciOiAibm9uZSIsICJ0eXAiOiAiSldUIn0=.eyJpZCI6MX0')
+
+        # invalid payload
+        with pytest.raises(AuthenticationError):
+            get_user_from_token(
+                jwt.encode({'id': 'hehe'}, settings.SECRET_KEY,
+                           algorithm='HS256')
+            )
+
+        # user not exists
+        with pytest.raises(AuthenticationError):
+            get_user_from_token(
+                jwt.encode({'id': 10}, settings.SECRET_KEY,
+                           algorithm='HS256')
+            )
+
+    def test_success(self):
+        user = get_user_from_token(
+            jwt.encode({'id': 1}, settings.SECRET_KEY,
+                       algorithm='HS256')
+        )
+        assert user.id == 1

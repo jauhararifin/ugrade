@@ -3,6 +3,7 @@ from typing import Tuple, Iterable
 
 import bcrypt
 import jwt
+from jwt.exceptions import PyJWTError
 from django.conf import settings
 from django.http import HttpRequest
 
@@ -178,12 +179,14 @@ def get_user_from_token(token: str) -> User:
     try:
         data = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
         user_id = data['id']
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            raise AuthenticationError('Invalid Token')
-    except Exception:
+        user = User.objects.get(pk=user_id)
+    except (PyJWTError, User.DoesNotExist, KeyError, ValueError):
         raise AuthenticationError('Invalid Token')
+
+    # User haven't signed up
+    if user.username is None:
+        raise AuthenticationError('Invalid Token')
+    return user
 
 
 def get_me(request: HttpRequest) -> User:
