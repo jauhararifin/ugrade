@@ -250,7 +250,16 @@ class ForgotPasswordTest(TestCase):
         with pytest.raises(UserHaventSignedUpError):
             forgot_password(1, 'email2@example.com')
 
-    def test_success(self):
+    def test_success_and_create_new_otc(self):
         forgot_password(1, 'email1@example.com')
         user = User.objects.get(pk=1)
         assert user.reset_password_otc is not None
+
+    def test_success_and_use_old_otc(self):
+        user = User.objects.get(pk=1)
+        user.reset_password_otc = '00000000'
+        user.save()
+
+        forgot_password(1, 'email1@example.com')
+        user = User.objects.get(pk=1)
+        assert user.reset_password_otc == '00000000'
