@@ -1,0 +1,17 @@
+.enter-password-panel {
+  min-width: 400px;
+  max-width: 400px;
+  .remember-me {
+    display: flex;
+    justify-content: space-between;
+  }
+  .forgot-password-button {
+    margin-top: 10px;
+  }
+  .bottom-action {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+  }
+}

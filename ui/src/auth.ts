@@ -10,6 +10,16 @@ export function getToken(): string | undefined {
   return undefined
 }
 
+export function setToken(token: string, persistent: boolean = false) {
+  sessionStorage.setItem(TOKEN_STORAGE_KEY, token)
+  if (persistent) localStorage.setItem(TOKEN_STORAGE_KEY, token)
+}
+
+export function clearToken() {
+  sessionStorage.removeItem(TOKEN_STORAGE_KEY)
+  localStorage.removeItem(TOKEN_STORAGE_KEY)
+}
+
 export const authLink = setContext((_, { headers }) => {
   const token = getToken()
   return {

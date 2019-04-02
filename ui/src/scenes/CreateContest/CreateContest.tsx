@@ -1,6 +1,6 @@
+import { usePublicOnly } from '@/auth'
 import { title } from '@/window'
 import React, { FunctionComponent } from 'react'
-import { usePublicOnly } from '../../auth'
 import { CreateContestView } from './CreateContestView'
 
 export const CreateContest: FunctionComponent = () => {

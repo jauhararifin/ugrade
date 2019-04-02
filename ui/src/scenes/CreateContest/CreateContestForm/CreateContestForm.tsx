@@ -1,10 +1,9 @@
-import { useCreateContest } from '@/contest'
 import { showError } from '@/error'
-import { useRouting } from '@/routing'
 import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
+import { useCreateContest } from './action'
 import { CreateContestFormView } from './CreateContestFormView'
 
 export interface CreateContestFormValue {
@@ -51,7 +50,6 @@ export const CreateContestForm: FunctionComponent = () => {
       .required(),
   })
 
-  const routing = useRouting()
   const createContest = useCreateContest()
   const handleSubmit = async (
     values: CreateContestFormValue,
@@ -60,7 +58,6 @@ export const CreateContestForm: FunctionComponent = () => {
     try {
       await createContest(values)
       showSuccessToast('Contest Created')
-      routing.push('/enter-contest')
     } catch (error) {
       showError(error)
     } finally {

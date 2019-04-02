@@ -1,0 +1,30 @@
+.enter-contest {
+  width: 100%;
+  .content {
+    width: 400px;
+    margin: 20px auto;
+    .enter-contest-children {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      .overlay-enter {
+        opacity: 0.01;
+      }
+
+      .overlay-enter-active {
+        opacity: 1;
+        transition: opacity 300ms ease-in;
+      }
+
+      .overlay-exit {
+        opacity: 1;
+        position: absolute;
+      }
+
+      .overlay-exit-active {
+        opacity: 0.01;
+        transition: opacity 300ms ease-in;
+      }
+    }
+  }
+}

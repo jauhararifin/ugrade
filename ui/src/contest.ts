@@ -1,55 +1,12 @@
-import gql from 'graphql-tag'
-import { useMutation } from 'react-apollo-hooks'
+import { observable } from 'mobx'
+import { createContext, useContext } from 'react'
 
-export function useCreateContest() {
-  const mutate = useMutation(
-    gql`
-      mutation CreateContest($email: String!, $shortId: String!, $name: String!, $shortDescription: String!) {
-        createContest(contest: { name: $name, shortId: $shortId, shortDescription: $shortDescription }, email: $email) {
-          admin {
-            id
-            name
-            username
-            email
-            permissions
-          }
-          contest {
-            id
-            name
-            shortId
-            shortDescription
-            description
-            startTime
-            freezed
-            finishTime
-            permittedLanguages {
-              id
-              name
-              extensions
-            }
-          }
-        }
-      }
-    `,
-    { errorPolicy: 'none' }
-  )
-  return ({
-    email,
-    shortId,
-    name,
-    shortDescription,
-  }: {
-    email: string
-    shortId: string
-    name: string
-    shortDescription: string
-  }) =>
-    mutate({
-      variables: {
-        email,
-        shortId,
-        name,
-        shortDescription,
-      },
-    })
+export const contestStore = observable({
+  contestId: undefined as number | undefined,
+  userId: undefined as number | undefined,
+  constructor() {},
+})
+export const contestContext = createContext(contestStore)
+export function useContest() {
+  return useContext(contestContext)
 }

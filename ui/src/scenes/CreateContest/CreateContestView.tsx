@@ -2,7 +2,7 @@ import logo from '@/assets/images/logo.svg'
 import { BottomLink } from '@/components/BottomLink/BottomLink'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { CreateContestForm } from './CreateContestForm'
+import { CreateContestForm } from './CreateContestForm/CreateContestForm'
 
 export const CreateContestView: FunctionComponent = () => (
   <div className='plain-page'>
