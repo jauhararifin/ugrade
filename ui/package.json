@@ -51,6 +51,9 @@
     "build:ts": "react-scripts build",
     "build:css": "node-sass-chokidar --quiet src/ -o src/ --importer=node_modules/node-sass-tilde-importer",
     "watch:css": "node-sass-chokidar --quiet src/ -o src/ --importer=node_modules/node-sass-tilde-importer --watch --recursive",
+    "graphql:introspect-schema": "apollo schema:download --endpoint=http://localhost:8000/graphql schema.json",
+    "graphql:generate-types": "apollo codegen:generate --localSchemaFile=schema.json --target=typescript --includes=src/**/*.{ts,tsx} --tagName=gql --addTypename --globalTypesFile=src/types/graphql-global-types.ts types",
+    "graphql:codegen": "npm-run-all graphql:introspect-schema graphql:generate-types",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tslint --project tsconfig.json --config tslint.json"
