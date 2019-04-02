@@ -11,6 +11,6 @@ export function useResetAccount() {
   const routingStore = useRouting()
   const [, contestId] = useMatch(/enter-contest\/([0-9]+)/)
   return () => {
-    routingStore.replace(`/enter-contest/${contestId}/enter-email`)
+    routingStore.replace(`/enter-contest/${contestId}/users/`)
   }
 }

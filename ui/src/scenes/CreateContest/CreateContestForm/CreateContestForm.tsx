@@ -56,7 +56,14 @@ export const CreateContestForm: FunctionComponent = () => {
     { setSubmitting }: FormikActions<CreateContestFormValue>
   ) => {
     try {
-      await createContest({ ...values, contest: values })
+      await createContest({
+        email: values.email,
+        contest: {
+          shortId: values.shortId,
+          name: values.name,
+          shortDescription: values.shortDescription,
+        },
+      })
       showSuccessToast('Contest Created')
     } catch (error) {
       showError(error)

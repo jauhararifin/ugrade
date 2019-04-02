@@ -24,7 +24,7 @@ export function useCreateContest() {
     const result: FetchResult<CreateContest> = await mutate({ variables: input })
     const contestId = result.data.createContest.contest.id
     const userId = result.data.createContest.admin.id
-    routing.push(`/enter-contest/${contestId}/users/${userId}/password`)
+    routing.push(`/enter-contest/${contestId}/users/${userId}/signup`)
     return result
   }
 }

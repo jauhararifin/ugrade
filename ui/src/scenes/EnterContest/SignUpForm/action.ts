@@ -27,7 +27,11 @@ export function useSignUp() {
       variables: {
         userId,
         signupCode: input.oneTimeCode,
-        user: input,
+        user: {
+          username: input.username,
+          name: input.name,
+          password: input.password,
+        },
       },
     })
     const token = result.data.signUp.token
