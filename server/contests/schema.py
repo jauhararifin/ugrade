@@ -22,6 +22,7 @@ from .contest.resolvers import language_extensions_resolver, \
     contest_resolver, \
     contest_by_short_id_resolver, \
     contests_resolver, \
+    my_contest_resolver, \
     create_contest_mutate, \
     update_contest_mutate, \
     invite_users_mutate, \
@@ -259,6 +260,7 @@ class ContestQuery(graphene.ObjectType):
         ContestType, short_id=graphene.String(required=True), resolver=contest_by_short_id_resolver)
     contests = graphene.NonNull(graphene.List(
         ContestType, required=True), resolver=contests_resolver)
+    my_contest = graphene.NonNull(ContestType, resolver=my_contest_resolver)
 
 
 class ContestInput(graphene.InputObjectType):

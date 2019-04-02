@@ -81,6 +81,11 @@ def contests_resolver(_root, _info) -> Iterable[Contest]:
     return get_all_contests()
 
 
+def my_contest_resolver(_root, info) -> Contest:
+    user = get_me(info.context)
+    return get_contest_by_id(user.contest.id)
+
+
 def create_contest_mutate(_self, _info, email: str, contest: ContestInput) -> CreateContestResult:
     new_contest, user = create_contest(email,
                                        contest.name,
