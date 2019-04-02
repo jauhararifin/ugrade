@@ -1,0 +1,12 @@
+/*
+ * Copyright 2017 Palantir Technologies, Inc. All rights reserved.
+ */
+.ugrade-markdown-edit {
+  border: solid 1px #bfccd6; }
+  .ugrade-markdown-edit .actions {
+    padding: 10px 20px;
+    border-bottom: solid 1px #bfccd6; }
+  .ugrade-markdown-edit .editor {
+    width: 100%; }
+  .ugrade-markdown-edit .preview {
+    padding: 5px 20px; }

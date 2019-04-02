@@ -1,0 +1,16 @@
+/*
+ * Copyright 2017 Palantir Technologies, Inc. All rights reserved.
+ */
+.offline-indicator {
+  text-align: center;
+  padding: 10px;
+  background-color: #5c7080;
+  color: #f5f8fa;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed; }
+  .offline-indicator.on {
+    opacity: 1;
+    visibility: visible;
+    position: static; }
