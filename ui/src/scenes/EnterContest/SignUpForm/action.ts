@@ -1,8 +1,8 @@
 import { setToken } from '@/auth'
-import { useContest } from '@/contest'
 import { useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
+import { SignUp, SignUpVariables } from './types/SignUp'
 
 export interface SignUpInput {
   username: string
@@ -11,11 +11,10 @@ export interface SignUpInput {
   password: string
 }
 
-export function useSignUp() {
-  const contestStore = useContest()
+export function useSignUp(userId: string) {
   const routingStore = useRouting()
-  const mutate = useMutation(gql`
-    mutation SignUp($userId: Int!, $signupCode: String!, $username: String!, $name: String!, $password: String!) {
+  const mutate = useMutation<SignUp, SignUpVariables>(gql`
+    mutation SignUp($userId: ID!, $signupCode: String!, $username: String!, $name: String!, $password: String!) {
       signUp(
         userId: $userId
         signupCode: $signupCode
@@ -29,7 +28,7 @@ export function useSignUp() {
   return async (input: SignUpInput, rememberMe: boolean = false) => {
     const result = await mutate({
       variables: {
-        userId: contestStore.userId,
+        userId,
         signupCode: input.oneTimeCode,
         username: input.username,
         name: input.name,

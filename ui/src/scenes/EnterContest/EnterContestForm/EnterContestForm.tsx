@@ -1,6 +1,5 @@
 import { usePublicOnly } from '@/auth'
 import { showError } from '@/error'
-import { useRouting } from '@/routing'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
@@ -28,7 +27,6 @@ export const EnterContestForm: FunctionComponent = () => {
       .required(),
   })
 
-  const routingStore = useRouting()
   const setContest = useSetContest()
   const handleSubmit = async (
     values: EnterContestFormValue,

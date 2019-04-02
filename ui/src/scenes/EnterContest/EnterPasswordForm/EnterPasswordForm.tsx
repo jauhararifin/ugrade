@@ -1,13 +1,12 @@
 import { usePublicOnly } from '@/auth'
 import { BasicError } from '@/components/BasicError/BasicError'
 import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
-import { contestStore } from '@/contest'
 import { showError } from '@/error'
 import { useMatch } from '@/routing'
 import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import gql from 'graphql-tag'
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FunctionComponent } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { useReset, useResetAccount } from '../reset'
@@ -37,7 +36,8 @@ export const EnterPasswordForm: FunctionComponent = () => {
     rememberMe: yup.boolean().required(),
   })
 
-  const signIn = useSignIn()
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/password/)
+  const signIn = useSignIn(userId)
   const handleSubmit = async (
     values: EnterPasswordFormValue,
     { setSubmitting }: FormikActions<EnterPasswordFormValue>
@@ -52,7 +52,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     }
   }
 
-  const forgotPassword = useForgotPassword()
+  const forgotPassword = useForgotPassword(contestId, userId)
   const handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
     try {
       await forgotPassword()
@@ -63,17 +63,9 @@ export const EnterPasswordForm: FunctionComponent = () => {
     }
   }
 
-  const match = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/password/)
-  const contestId = match[1]
-  const userId = match[2]
-  useEffect(() => {
-    contestStore.contestId = parseInt(contestId, 10)
-    contestStore.userId = parseInt(userId, 10)
-  }, [])
-
   const { data, loading, error } = useQuery(
     gql`
-      query CurrentContestAndUser($contestId: Int!, $userId: Int!) {
+      query CurrentContestAndUser($contestId: ID!, $userId: ID!) {
         contest(contestId: $contestId) {
           name
           shortDescription
@@ -86,7 +78,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     { variables: { contestId, userId } }
   )
   const resetContest = useReset()
-  const resetAccount = useResetAccount()
+  const resetAccount = useResetAccount(contestId)
 
   if (error) return <BasicError />
   if (loading) return <BasicLoading />

@@ -1,7 +1,6 @@
 import { usePublicOnly } from '@/auth'
 import { BasicError } from '@/components/BasicError/BasicError'
 import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
-import { useContest } from '@/contest'
 import { showError } from '@/error'
 import { useMatch } from '@/routing'
 import { Formik, FormikActions, FormikProps } from 'formik'
@@ -40,7 +39,8 @@ export const ResetPasswordForm: FunctionComponent = () => {
       .required(),
   })
 
-  const resetPassword = useResetPassword()
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/reset-password/)
+  const resetPassword = useResetPassword(contestId, userId)
   const handleSubmit = async (
     values: ResetPasswordFormValue,
     { setSubmitting }: FormikActions<ResetPasswordFormValue>
@@ -54,19 +54,9 @@ export const ResetPasswordForm: FunctionComponent = () => {
     }
   }
 
-  const match = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/reset-password/)
-  if (!match) return null
-  const contestId = match[1]
-  const userId = match[2]
-  const contestStore = useContest()
-  useEffect(() => {
-    contestStore.contestId = parseInt(contestId, 10)
-    contestStore.userId = parseInt(userId, 10)
-  }, [])
-
   const { data, loading, error } = useQuery(
     gql`
-      query CurrentContest($contestId: Int!) {
+      query CurrentContest($contestId: ID!) {
         contest(contestId: $contestId) {
           name
           shortDescription
@@ -76,7 +66,7 @@ export const ResetPasswordForm: FunctionComponent = () => {
     { variables: { contestId } }
   )
   const resetContest = useReset()
-  const resetAccount = useResetAccount()
+  const resetAccount = useResetAccount(contestId)
 
   if (error) return <BasicError />
   if (loading) return <BasicLoading />

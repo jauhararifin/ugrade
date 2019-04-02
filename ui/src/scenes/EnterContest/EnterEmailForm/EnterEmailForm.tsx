@@ -1,7 +1,6 @@
 import { usePublicOnly } from '@/auth'
 import { BasicError } from '@/components/BasicError/BasicError'
 import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
-import { useContest } from '@/contest'
 import { showError } from '@/error'
 import { useMatch } from '@/routing'
 import { Formik, FormikActions, FormikProps } from 'formik'
@@ -31,14 +30,8 @@ export const EnterEmailForm: FunctionComponent = () => {
       .required(),
   })
 
-  const match = useMatch(/enter-contest\/([0-9]+)\/users/)
-  const contestId = match[1]
-  const contestStore = useContest()
-  useEffect(() => {
-    contestStore.contestId = parseInt(contestId, 10)
-  }, [])
-
-  const setEmail = useSetEmail()
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)\/users/)
+  const setEmail = useSetEmail(contestId)
   const resetContest = useReset()
   const handleSubmit = async (values: EnterEmailFormValue, { setSubmitting }: FormikActions<EnterEmailFormValue>) => {
     try {
@@ -52,7 +45,7 @@ export const EnterEmailForm: FunctionComponent = () => {
 
   const { data, loading, error } = useQuery(
     gql`
-      query CurrentContest($contestId: Int!) {
+      query CurrentContest($contestId: ID!) {
         contest(contestId: $contestId) {
           name
           shortDescription

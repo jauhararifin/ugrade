@@ -1,13 +1,12 @@
-import { useContest } from '@/contest'
 import { useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
+import { ResetPassword, ResetPasswordVariables } from './types/ResetPassword'
 
-export function useResetPassword() {
-  const contestStore = useContest()
+export function useResetPassword(contestId: string, userId: string) {
   const routingStore = useRouting()
-  const mutate = useMutation(gql`
-    mutation ResetPassword($userId: Int!, $resetPasswordOtc: String!, $password: String!) {
+  const mutate = useMutation<ResetPassword, ResetPasswordVariables>(gql`
+    mutation ResetPassword($userId: ID!, $resetPasswordOtc: String!, $password: String!) {
       resetPassword(userId: $userId, resetPasswordOtc: $resetPasswordOtc, newPassword: $password) {
         id
       }
@@ -15,8 +14,8 @@ export function useResetPassword() {
   `)
   return async (resetPasswordOtc: string, password: string) => {
     await mutate({
-      variables: { userId: contestStore.userId, password, resetPasswordOtc },
+      variables: { userId, password, resetPasswordOtc },
     })
-    routingStore.push(`/enter-contest/${contestStore.contestId}/users/${contestStore.userId}/password`)
+    routingStore.push(`/enter-contest/${contestId}/users/${userId}/password`)
   }
 }

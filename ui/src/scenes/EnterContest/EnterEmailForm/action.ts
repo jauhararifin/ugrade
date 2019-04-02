@@ -1,30 +1,29 @@
-import { useContest } from '@/contest'
 import { useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
+import { SetEmail, SetEmailVariables } from './types/SetEmail'
 
-export function useSetEmail() {
+export function useSetEmail(contestId: string) {
   const client = useApolloClient()
-  const store = useContest()
   const routingStore = useRouting()
   return async (email: string) => {
-    const result = await client.query({
+    const result = await client.query<SetEmail, SetEmailVariables>({
       query: gql`
-        query SetEmail($contestId: Int!, $email: String!) {
+        query SetEmail($contestId: ID!, $email: String!) {
           user: userByEmail(contestId: $contestId, email: $email) {
             id
             username
           }
         }
       `,
-      variables: { contestId: store.contestId, email },
+      variables: { contestId, email },
     })
-    store.userId = result.data.user.id
+    const userId = result.data.user.id
 
     if (result.data.user.username) {
-      routingStore.push(`/enter-contest/${store.contestId}/users/${store.userId}/password`)
+      routingStore.push(`/enter-contest/${contestId}/users/${userId}/password`)
     } else {
-      routingStore.push(`/enter-contest/${store.contestId}/users/${store.userId}/signup`)
+      routingStore.push(`/enter-contest/${contestId}/users/${userId}/signup`)
     }
 
     return result

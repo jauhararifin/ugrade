@@ -1,14 +1,14 @@
 import { setToken } from '@/auth'
-import { useContest } from '@/contest'
 import { useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
+import { ForgotPassword, ForgotPasswordVariables } from './types/ForgotPassword'
+import { SignIn, SignInVariables } from './types/SignIn'
 
-export function useSignIn() {
-  const contestStore = useContest()
+export function useSignIn(userId: string) {
   const routingStore = useRouting()
-  const mutate = useMutation(gql`
-    mutation SignIn($userId: Int!, $password: String!) {
+  const mutate = useMutation<SignIn, SignInVariables>(gql`
+    mutation SignIn($userId: ID!, $password: String!) {
       signIn(userId: $userId, password: $password) {
         token
       }
@@ -16,7 +16,7 @@ export function useSignIn() {
   `)
   return async (password: string, rememberMe: boolean = false) => {
     const result = await mutate({
-      variables: { userId: contestStore.userId, password },
+      variables: { userId, password },
     })
     const token = result.data.signIn.token
     setToken(token, rememberMe)
@@ -25,18 +25,17 @@ export function useSignIn() {
   }
 }
 
-export function useForgotPassword() {
-  const contestStore = useContest()
+export function useForgotPassword(contestId: string, userId: string) {
   const routingStore = useRouting()
-  const mutate = useMutation(gql`
-    mutation ForgotPassword($userId: Int!) {
+  const mutate = useMutation<ForgotPassword, ForgotPasswordVariables>(gql`
+    mutation ForgotPassword($userId: ID!) {
       forgotPassword(userId: $userId) {
         id
       }
     }
   `)
   return async () => {
-    await mutate({ variables: { userId: contestStore.userId } })
-    routingStore.push(`/enter-contest/${contestStore.contestId}/users/${contestStore.userId}/reset-password`)
+    await mutate({ variables: { userId } })
+    routingStore.push(`/enter-contest/${contestId}/users/${userId}/reset-password`)
   }
 }
