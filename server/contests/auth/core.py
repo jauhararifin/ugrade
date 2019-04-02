@@ -58,19 +58,11 @@ def get_contest_users(contest_id: int) -> Iterable[User]:
     return User.objects.filter(contest__id=contest_id).all()
 
 
-def sign_in(contest_id: int, email: str, password: str) -> Tuple[User, str]:
+def sign_in(user_id: int, password: str) -> Tuple[User, str]:
     try:
-        contest = Contest.objects.get(pk=contest_id)
-    except Contest.DoesNotExist:
-        raise NoSuchContestError()
-
-    try:
-        user = User.objects.filter(
-            contest__id=contest.id, email=email).first()
-        if user is None:
-            raise User.DoesNotExist()
+        user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
-        raise AuthenticationError('Wrong Email Or Password')
+        raise AuthenticationError('Wrong Credential')
 
     if user.username is None:
         raise UserHaventSignedUpError(
@@ -79,7 +71,7 @@ def sign_in(contest_id: int, email: str, password: str) -> Tuple[User, str]:
     password_matched = bcrypt.checkpw(
         bytes(password, 'utf-8'), bytes(user.password, 'utf-8'))
     if not password_matched:
-        raise AuthenticationError('Wrong Email Or Password')
+        raise AuthenticationError('Wrong Credential')
 
     token = jwt.encode({'id': user.id},
                        settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
@@ -87,20 +79,14 @@ def sign_in(contest_id: int, email: str, password: str) -> Tuple[User, str]:
     return user, token
 
 
-def sign_up(contest_id: int,
-            email: str,
+def sign_up(user_id: int,
             username: str,
             name: str,
             password: str,
             signup_code: str) -> Tuple[User, str]:
     try:
-        contest = Contest.objects.get(pk=contest_id)
-    except Contest.DoesNotExist:
-        raise NoSuchContestError()
-
-    new_user = User.objects.filter(
-        contest__id=contest.id, email=email).first()
-    if new_user is None:
+        new_user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
         raise NoSuchUserError()
 
     if new_user.username is not None:
@@ -109,7 +95,7 @@ def sign_up(contest_id: int,
     if new_user.signup_otc != signup_code:
         raise AuthenticationError('Wrong Token')
 
-    if User.objects.filter(contest__id=contest.id, username=username).count() > 0:
+    if User.objects.filter(contest__id=new_user.contest.id, username=username).count() > 0:
         raise UsernameAlreadyUsedError()
 
     new_user.name = name
@@ -128,15 +114,10 @@ def sign_up(contest_id: int,
     return new_user, token
 
 
-def forgot_password(contest_id: int, email: str) -> User:
+def forgot_password(user_id: int) -> User:
     try:
-        contest = Contest.objects.get(pk=contest_id)
-    except Contest.DoesNotExist:
-        raise NoSuchContestError()
-
-    user = User.objects.filter(
-        contest__id=contest.id, email=email).first()
-    if user is None:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
         raise NoSuchUserError()
 
     if user.username is None:
@@ -150,15 +131,10 @@ def forgot_password(contest_id: int, email: str) -> User:
     return user
 
 
-def reset_password(contest_id: int, email: str, reset_password_otc: str, new_password: str) -> User:
+def reset_password(user_id: int, reset_password_otc: str, new_password: str) -> User:
     try:
-        contest = Contest.objects.get(pk=contest_id)
-    except Contest.DoesNotExist:
-        raise NoSuchContestError()
-
-    user = User.objects.filter(
-        contest__id=contest.id, email=email).first()
-    if user is None:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
         raise NoSuchUserError()
 
     if user.username is None:

@@ -56,8 +56,7 @@ class SignInResult(graphene.ObjectType):
 
 class SignIn(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.Int(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.Int(required=True)
         password = graphene.String(required=True)
     Output = SignInResult
     mutate = sign_in_mutate
@@ -76,8 +75,7 @@ class SignUpResult(graphene.ObjectType):
 
 class SignUp(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.String(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.Int(required=True)
         user = UserInput(required=True)
         signup_code = graphene.String(required=True)
     Output = SignUpResult
@@ -86,16 +84,14 @@ class SignUp(graphene.Mutation):
 
 class ForgotPassword(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.Int(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.Int(required=True)
     Output = UserType
     mutate = forgot_password_mutate
 
 
 class ResetPassword(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.Int(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.Int(required=True)
         reset_password_otc = graphene.String(required=True)
         new_password = graphene.String(required=True)
     Output = UserType

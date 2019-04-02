@@ -112,38 +112,28 @@ def test_get_contest_users():
 class SignInTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        contest1 = mixer.blend('contests.Contest', id=1)
         mixer.cycle(5).blend('contests.User',
                              name=("User %d" % n for n in range(1, 6)),
                              email=("user%d@example.com" %
                                     n for n in range(1, 6)),
                              username=("user%d" % n for n in range(1, 6)),
-                             password=bcrypt.hashpw(
-                                 b'testtest', bcrypt.gensalt()).decode('utf-8'),
-                             contest=contest1)
-        mixer.blend('contests.User', name='User 6',
-                    contest=contest1, email='user6@example.com')
+                             password=bcrypt.hashpw(b'testtest', bcrypt.gensalt()).decode('utf-8'))
+        mixer.blend('contests.User', name='User 6', email='user6@example.com')
 
-    def test_wrong_contest_id(self):
-        with pytest.raises(NoSuchContestError):
-            sign_in(3, 'someemail', 'somepass')
-        with pytest.raises(NoSuchContestError):
-            sign_in(0, 'user1@example.com', 'pass')
-
-    def test_wrong_email(self):
+    def test_wrong_user_id(self):
         with pytest.raises(AuthenticationError):
-            sign_in(1, 'nonexistent@example.com', 'pass')
+            sign_in(7, 'pass')
 
     def test_havent_signed_up(self):
         with pytest.raises(UserHaventSignedUpError):
-            sign_in(1, 'user6@example.com', 'pass')
+            sign_in(6, 'pass')
 
     def test_wrong_password(self):
         with pytest.raises(AuthenticationError):
-            sign_in(1, 'user1@example.com', 'wrongpass')
+            sign_in(1, 'wrongpass')
 
     def test_success(self):
-        user, token = sign_in(1, 'user2@example.com', 'testtest')
+        user, token = sign_in(2, 'testtest')
         assert user.id == 2
         assert token is not None and token != ''
         token_data = jwt.decode(token, verify=False)
@@ -175,42 +165,35 @@ class SignUpTest(TestCase):
                         b'userpass', bcrypt.gensalt()).decode('utf-8'),
                     contest=contest2)
 
-    def test_wrong_contest_id(self):
-        with pytest.raises(NoSuchContestError):
-            sign_up(3, 'someemail', 'username', 'name', 'somepass', '00000000')
-        with pytest.raises(NoSuchContestError):
-            sign_up(0, 'emailexample.com', 'username',
-                    'name', 'somepass', '92847118')
-
     def test_wrong_email(self):
         with pytest.raises(NoSuchUserError):
-            sign_up(1, 'someemail', 'username', 'name', 'somepass', '00000000')
+            sign_up(4, 'username', 'name', 'somepass', '00000000')
         with pytest.raises(NoSuchUserError):
-            sign_up(2, 'someemail', 'username', 'name', 'somepass', '92847118')
+            sign_up(4, 'username', 'name', 'somepass', '92847118')
 
     def test_already_signed_up(self):
         with pytest.raises(UserAlreadySignedUpError):
-            sign_up(1, 'email@example.com', 'username',
+            sign_up(1, 'username',
                     'name', 'somepass', '00000000')
 
     def test_wrong_otc(self):
         with pytest.raises(AuthenticationError):
-            sign_up(2, 'email@example.com', 'username',
+            sign_up(2, 'username',
                     'name', 'somepass', '00000000')
 
     def test_already_used_username(self):
         with pytest.raises(UsernameAlreadyUsedError):
-            sign_up(2, 'email@example.com', 'jauhararifin',
+            sign_up(2, 'jauhararifin',
                     'name', 'somepass', '12345678')
 
     def test_invalid_input(self):
         with pytest.raises(ValidationError) as error:
-            sign_up(2, 'email@example.com', 'u',
+            sign_up(2, 'u',
                     'name', 'password', '12345678')
         assert error.value.message_dict['username'] is not None
 
     def test_success(self):
-        user, token = sign_up(2, 'email@example.com',
+        user, token = sign_up(2,
                               'username', 'My Name', 'mypassword', '12345678')
 
         assert user.id == 2
@@ -226,35 +209,25 @@ class SignUpTest(TestCase):
 class ForgotPasswordTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        contest1 = mixer.blend('contests.Contest', id=1)
         mixer.blend('contests.User',
                     name='Some Name 1',
                     email='email1@example.com',
                     username='username1',
-                    password=bcrypt.hashpw(
-                        b'userpass1', bcrypt.gensalt()).decode('utf-8'),
-                    contest=contest1)
+                    password=bcrypt.hashpw(b'userpass1', bcrypt.gensalt()).decode('utf-8'))
         mixer.blend('contests.User',
                     email='email2@example.com',
-                    contest=contest1,
                     signup_otc='12345678')
-
-    def test_wrong_contest_id(self):
-        with pytest.raises(NoSuchContestError):
-            forgot_password(3, 'email1@example.com')
-        with pytest.raises(NoSuchContestError):
-            forgot_password(0, 'email2@example.com')
 
     def test_wrong_email(self):
         with pytest.raises(NoSuchUserError):
-            forgot_password(1, 'nonexistent@example.com')
+            forgot_password(3)
 
     def test_havent_signed_up(self):
         with pytest.raises(UserHaventSignedUpError):
-            forgot_password(1, 'email2@example.com')
+            forgot_password(2)
 
     def test_success_and_create_new_otc(self):
-        forgot_password(1, 'email1@example.com')
+        forgot_password(1)
         user = User.objects.get(pk=1)
         assert user.reset_password_otc is not None
 
@@ -263,7 +236,7 @@ class ForgotPasswordTest(TestCase):
         user.reset_password_otc = '00000000'
         user.save()
 
-        forgot_password(1, 'email1@example.com')
+        forgot_password(1)
         user = User.objects.get(pk=1)
         assert user.reset_password_otc == '00000000'
 
@@ -285,44 +258,36 @@ class ResetPasswordTest(TestCase):
                     contest=contest1,
                     signup_otc='12345678')
 
-    def test_wrong_contest_id(self):
-        with pytest.raises(NoSuchContestError):
-            reset_password(3, 'email1@example.com', '00000000', 'newpassword')
-        with pytest.raises(NoSuchContestError):
-            reset_password(0, 'email2@example.com', '00000000', 'newpassword')
-
-    def test_wrong_email(self):
+    def test_wrong_user_id(self):
         with pytest.raises(NoSuchUserError):
-            reset_password(1, 'nonexistent@example.com',
-                           '00000000', 'newpassword')
+            reset_password(3, '00000000', 'newpassword')
 
     def test_havent_signed_up(self):
         with pytest.raises(UserHaventSignedUpError):
-            reset_password(1, 'email2@example.com', '00000000', 'newpassword')
+            reset_password(2, '00000000', 'newpassword')
 
     def test_wrong_code(self):
         user = User.objects.get(pk=1)
         user.reset_password_otc = '12345678'
         user.save()
         with pytest.raises(AuthenticationError):
-            reset_password(1, 'email1@example.com', '00000000', 'newpassword')
+            reset_password(1, '00000000', 'newpassword')
 
     def test_success(self):
         user = User.objects.get(pk=1)
         user.reset_password_otc = '00000000'
         user.save()
 
-        reset_password(1, 'email1@example.com', '00000000', 'newpassword')
+        reset_password(1, '00000000', 'newpassword')
         user = User.objects.get(pk=1)
         assert bcrypt.checkpw(b'newpassword', bytes(user.password, 'utf-8'))
 
     def test_with_forgot_password(self):
-        forgot_password(1, 'email1@example.com')
+        forgot_password(1)
         user = User.objects.get(pk=1)
         assert user.reset_password_otc is not None
 
-        reset_password(1, 'email1@example.com',
-                       user.reset_password_otc, 'newpassword')
+        reset_password(1, user.reset_password_otc, 'newpassword')
         user = User.objects.get(pk=1)
         assert bcrypt.checkpw(b'newpassword', bytes(user.password, 'utf-8'))
 
