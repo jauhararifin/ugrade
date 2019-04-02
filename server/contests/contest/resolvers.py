@@ -12,7 +12,8 @@ from .core import get_language_by_id, \
     get_contest_by_short_id, \
     create_contest, \
     update_contest, \
-    invite_users
+    invite_users, \
+    update_permissions
 
 
 class ContestInput(NamedTuple):
@@ -110,3 +111,8 @@ def update_contest_mutate(_root, info, contest: UpdateContestInput) -> Contest:
 def invite_users_mutate(_root, info, emails: List[str], permissions: List[str]) -> Iterable[User]:
     user = get_me(info.context)
     return invite_users(user, emails, permissions)
+
+
+def update_user_permissions_mutate(_root, info, user_id: int, permissions: List[str]) -> User:
+    user = get_me(info.context)
+    return update_permissions(user, user_id, permissions)

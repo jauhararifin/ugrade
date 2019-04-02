@@ -9,7 +9,7 @@ from contests.exceptions import NoSuchContestError, \
     NoSuchLanguageError, \
     ForbiddenActionError, \
     UserAlreadyInvitedError
-from contests.auth.core import get_all_permissions
+from contests.auth.core import get_all_permissions, get_user_by_id
 
 
 def get_all_languages() -> Iterable[Language]:
@@ -154,3 +154,34 @@ def invite_users(user: User, emails: List[str], permissions: List[str]) -> Itera
         new_user.permissions.add(*permissions)
         new_users += [new_user]
     return new_users
+
+
+def update_permissions(issuer: User, user_id: int, permissions: List[str]) -> User:
+    if not issuer.has_permission('update:usersPermissions'):
+        raise ForbiddenActionError(
+            "You Dont't Have Permission To Update User's Permissions")
+
+    user = get_user_by_id(user_id)
+    if user.contest != issuer.contest:
+        raise ForbiddenActionError(
+            "You Dont't Have Permission To Update This User's Permissions")
+
+    updating_permissions: List[str] = []
+    old_permissions = user.permission_codes
+    new_permissions = permissions
+    for perm in old_permissions:
+        if perm not in new_permissions:
+            updating_permissions += [perm]
+    for perm in new_permissions:
+        if perm not in old_permissions:
+            updating_permissions += [perm]
+
+    issuer_permissions = issuer.permission_codes
+    for perm in updating_permissions:
+        if perm not in issuer_permissions:
+            raise ForbiddenActionError(
+                "You Don't Have Permission To Update User's {}".format(perm))
+
+    user.set_permissions(Permission.objects.filter(code__in=permissions))
+    user.save()
+    return user

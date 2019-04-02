@@ -24,7 +24,8 @@ from .contest.resolvers import language_extensions_resolver, \
     contests_resolver, \
     create_contest_mutate, \
     update_contest_mutate, \
-    invite_users_mutate
+    invite_users_mutate, \
+    update_user_permissions_mutate
 from .problem.resolvers import create_problem_mutate, \
     update_problem_mutate, \
     delete_problem_mutate, \
@@ -301,16 +302,28 @@ class UpdateContest(graphene.Mutation):
 
 class InviteUsers(graphene.Mutation):
     class Arguments:
-        emails = graphene.List(graphene.String)
-        permissions = graphene.List(graphene.String)
+        emails = graphene.NonNull(
+            graphene.List(graphene.String, required=True))
+        permissions = graphene.NonNull(
+            graphene.List(graphene.String, required=True))
     Output = graphene.List(UserType)
     mutate = invite_users_mutate
+
+
+class UpdateUserPermissions(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.Int(required=True)
+        permissions = graphene.NonNull(
+            graphene.List(graphene.String, required=True))
+    Output = UserType
+    mutate = update_user_permissions_mutate
 
 
 class ContestMutation(graphene.ObjectType):
     create_contest = CreateContest.Field()
     update_contest = UpdateContest.Field()
     invite_users = InviteUsers.Field()
+    update_user_permissions = UpdateUserPermissions.Field()
 
 
 class StatusQuery():
