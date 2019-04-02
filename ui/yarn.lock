@@ -6993,6 +6993,11 @@ mobx-react-lite@^1.2.0:
   resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-1.2.0.tgz#c7f512f1387b70cbcfc6d9214fbff363a1f2d70b"
   integrity sha512-L1Y0BFhdan7tkw4qT48h9XY9azWawZYIsadTp6TsoWSy8IdB+XYrgSA7XU2UNmT2v5TkulwTwqimvleTdnJyCQ==
 
+mobx-react-router@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/mobx-react-router/-/mobx-react-router-4.0.7.tgz#d248a0e0525049f0e37e94f2fb1ab09563be4c35"
+  integrity sha512-x7eza70EimFyvF0VPyj5X2MYo9jksy61UVwz5ERXWnXVE911XRTL/V2kXiX7fvVtMHzp5m2q/kxBoti9uNixEw==
+
 mobx@^5.9.4:
   version "5.9.4"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.9.4.tgz#1dee92aba33f67b7baeeb679e3bd376a12e55812"
@@ -8824,6 +8829,13 @@ react-ace@^6.4.0:
     lodash.get "^4.4.2"
     lodash.isequal "^4.5.0"
     prop-types "^15.6.2"
+
+react-apollo-hooks@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.4.4.tgz#542a4ba975ceb16daa232fe7e3271680eff8e225"
+  integrity sha512-UavpOHbqGp4r0Nsqa8ShybGb6vyGcwAaxSjO/VRmj3wcjKx+Bw6Br+wu+1rkvYRSkeDYppq/HYNzMX5oIU+5/A==
+  dependencies:
+    lodash "^4.17.11"
 
 react-app-polyfill@^0.2.2:
   version "0.2.2"

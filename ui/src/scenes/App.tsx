@@ -5,6 +5,7 @@ import React, { FunctionComponent } from 'react'
 import DocumentTitle from 'react-document-title'
 import { Route, Router, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { CreateContest } from './CreateContest/CreateContest'
 import { Home } from './Home/Home'
 import { NetworkStatus } from './NetworkStatus/NetworkStatus'
 
@@ -16,7 +17,7 @@ export const App: FunctionComponent = () => {
   const locationKey = routing.location.pathname.split('/', 2).join('/')
   return useObserver(() => {
     const title = window.title
-    const history = routing
+    const history = routing.history
     return (
       <Router history={history}>
         <DocumentTitle title={title || 'UGrade'}>
@@ -25,7 +26,7 @@ export const App: FunctionComponent = () => {
               <CSSTransition timeout={300} classNames='fade' key={locationKey}>
                 <Switch location={routing.location}>
                   <Route path='/' exact={true} component={Home} />
-                  {/* <Route path='/create-contest' component={CreateContest} /> */}
+                  <Route path='/create-contest' component={CreateContest} />
                   {/* <Route path='/enter-contest' component={EnterContest} /> */}
                   {/* <Route path='/contest' component={Dashboard} /> */}
                 </Switch>

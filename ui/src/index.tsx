@@ -1,6 +1,8 @@
 import { ErrorBoundary } from '@/error'
 import React from 'react'
+import { ApolloProvider } from 'react-apollo-hooks'
 import ReactDOM from 'react-dom'
+import { apolloClient } from './client'
 import { App } from './scenes/App'
 import * as serviceWorker from './serviceWorker'
 
@@ -10,7 +12,9 @@ import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 
 ReactDOM.render(
   <ErrorBoundary>
-    <App />
+    <ApolloProvider client={apolloClient}>
+      <App />
+    </ApolloProvider>
   </ErrorBoundary>,
   document.getElementById('root')
 )

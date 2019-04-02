@@ -1,13 +1,10 @@
 import { createBrowserHistory } from 'history'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { RouterStore, syncHistoryWithStore } from 'mobx-react-router'
 
 export const browserHistory = createBrowserHistory()
-
-export const routingContext = createContext(browserHistory)
+export const routingStore = new RouterStore()
+export const history = syncHistoryWithStore(browserHistory, routingStore)
 
 export function useRouting() {
-  const routing = useContext(routingContext)
-  const [, updateState] = useState()
-  useEffect(() => routing.listen(updateState), [routing])
-  return routing
+  return routingStore
 }
