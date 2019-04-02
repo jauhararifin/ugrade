@@ -8,6 +8,7 @@ import { Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { DashboardView } from './DashboardView'
 import { putItem } from './TopNavigationBar/Breadcrumbs/Breadcrumbs'
+import { GetMyContest } from './types/GetMyContest'
 
 export const Dashboard: FunctionComponent = () => {
   useContestOnly()
@@ -15,15 +16,18 @@ export const Dashboard: FunctionComponent = () => {
 
   title('UGrade | Dashboard')
 
-  const { data } = useQuery(gql`
-    query GetMyContest {
-      myContest {
-        name
+  const { data } = useQuery<GetMyContest>(
+    gql`
+      query GetMyContest {
+        myContest {
+          name
+          shortDescription
+        }
       }
-    }
-  `)
+    `
+  )
   useEffect(() => {
-    return putItem(`/contest`, data && data.myContest && data.myContest.name)
+    return putItem(`/contest`, data && data.myContest ? data.myContest.name : '')
   }, [data])
 
   return (

@@ -18,9 +18,10 @@ import {
 import classNames from 'classnames'
 import gql from 'graphql-tag'
 import React, { FunctionComponent } from 'react'
-import { useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs } from './Breadcrumbs/Breadcrumbs'
+import { GetMe } from './types/GetMe'
 
 export type TopNavigationBarBreadcrumb = IBreadcrumbProps
 
@@ -28,13 +29,15 @@ export const TopNavigationBar: FunctionComponent = () => {
   useContestOnly()
 
   const routingStore = useRouting()
+  const apolloClient = useApolloClient()
   const handleSignOut = async () => {
     clearToken()
     routingStore.push('/enter-contest')
     showSuccessToast('Signed Out')
+    await apolloClient.clearStore()
   }
 
-  const { data, loading, error } = useQuery(gql`
+  const { data, loading, error } = useQuery<GetMe>(gql`
     query GetMe {
       me {
         name
