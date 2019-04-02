@@ -1,10 +1,13 @@
 import { usePublicOnly } from '@/auth'
-import { title } from '@/window'
 import React, { FunctionComponent } from 'react'
+import DocumentTitle from 'react-document-title'
 import { HomeView } from './HomeView'
 
 export const Home: FunctionComponent = () => {
   usePublicOnly()
-  title('UGrade | Home')
-  return <HomeView />
+  return (
+    <DocumentTitle title='UGrade | Home'>
+      <HomeView />
+    </DocumentTitle>
+  )
 }

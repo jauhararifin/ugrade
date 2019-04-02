@@ -1,5 +1,4 @@
 import { useRouting } from '@/routing'
-import { useWindow } from '@/window'
 import { useObserver } from 'mobx-react-lite'
 import React, { FunctionComponent } from 'react'
 import DocumentTitle from 'react-document-title'
@@ -15,14 +14,12 @@ import './styles.css'
 
 export const App: FunctionComponent = () => {
   const routing = useRouting()
-  const window = useWindow()
   const locationKey = routing.location.pathname.split('/', 2).join('/')
   return useObserver(() => {
-    const title = window.title
     const history = routing.history
     return (
       <Router history={history}>
-        <DocumentTitle title={title || 'UGrade'}>
+        <DocumentTitle title={'UGrade'}>
           <NetworkStatus>
             <TransitionGroup className='eat-them-all'>
               <CSSTransition timeout={300} classNames='fade' key={locationKey}>
