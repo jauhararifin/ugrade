@@ -49,5 +49,17 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/apollo-upload-client": "^8.1.1",
+    "@types/classnames": "^2.2.7",
+    "@types/lodash": "^4.14.123",
+    "@types/react-document-title": "^2.0.3",
+    "@types/react-transition-group": "^2.0.16",
+    "@types/yup": "^0.26.12",
+    "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-config-standard": "^8.0.1",
+    "tslint-react": "^4.0.0"
+  }
 }
