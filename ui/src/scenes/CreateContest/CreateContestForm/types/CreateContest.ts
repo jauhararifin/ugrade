@@ -2,6 +2,8 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { ContestInput } from "./../../../../types/graphql-global-types";
+
 // ====================================================
 // GraphQL mutation operation: CreateContest
 // ====================================================
@@ -28,7 +30,5 @@ export interface CreateContest {
 
 export interface CreateContestVariables {
   email: string;
-  shortId: string;
-  name: string;
-  shortDescription: string;
+  contest: ContestInput;
 }

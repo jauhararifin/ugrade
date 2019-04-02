@@ -8,8 +8,8 @@ export function useCreateContest() {
   const routing = useRouting()
   const mutate = useMutation<CreateContest, CreateContestVariables>(
     gql`
-      mutation CreateContest($email: String!, $shortId: String!, $name: String!, $shortDescription: String!) {
-        createContest(contest: { name: $name, shortId: $shortId, shortDescription: $shortDescription }, email: $email) {
+      mutation CreateContest($email: String!, $contest: ContestInput!) {
+        createContest(contest: $contest, email: $email) {
           admin {
             id
           }

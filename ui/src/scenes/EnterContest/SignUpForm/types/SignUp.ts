@@ -2,6 +2,8 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { UserInput } from "./../../../../types/graphql-global-types";
+
 // ====================================================
 // GraphQL mutation operation: SignUp
 // ====================================================
@@ -18,7 +20,5 @@ export interface SignUp {
 export interface SignUpVariables {
   userId: string;
   signupCode: string;
-  username: string;
-  name: string;
-  password: string;
+  user: UserInput;
 }

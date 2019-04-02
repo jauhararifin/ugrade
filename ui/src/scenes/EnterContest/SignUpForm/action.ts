@@ -15,12 +15,8 @@ export function useSignUp() {
   const routingStore = useRouting()
   const [, , userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)/)
   const mutate = useMutation<SignUp, SignUpVariables>(gql`
-    mutation SignUp($userId: ID!, $signupCode: String!, $username: String!, $name: String!, $password: String!) {
-      signUp(
-        userId: $userId
-        signupCode: $signupCode
-        user: { username: $username, name: $name, password: $password }
-      ) {
+    mutation SignUp($userId: ID!, $signupCode: String!, $user: UserInput!) {
+      signUp(userId: $userId, signupCode: $signupCode, user: $user) {
         token
       }
     }
@@ -31,9 +27,7 @@ export function useSignUp() {
       variables: {
         userId,
         signupCode: input.oneTimeCode,
-        username: input.username,
-        name: input.name,
-        password: input.password,
+        user: input,
       },
     })
     const token = result.data.signUp.token
