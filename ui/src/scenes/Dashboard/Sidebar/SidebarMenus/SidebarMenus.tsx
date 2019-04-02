@@ -37,7 +37,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({ loading }) 
 
     const [currentMenu, setCurrentMenu] = useState(getCurrentMenu())
 
-    const canUpdateInfo = authStore.can(Permission.UpdateInfo)
+    const canUpdateContest = authStore.can(Permission.UpdateContest)
 
     const menus: IMenu[] = [
       {
@@ -65,7 +65,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({ loading }) 
         icon: 'cog',
         onClick: () => onMenuChoosed(Menu.Settings),
         active: currentMenu === Menu.Settings,
-        visible: canUpdateInfo,
+        visible: canUpdateContest,
         title: Menu.Settings,
       },
       {

@@ -15,7 +15,7 @@ export const Sidebar: FunctionComponent = () => {
   const problems = lodash.values(problemStore.problems)
   const serverStore = useServer()
   const authStore = useAuth()
-  const canUpdateInfo = authStore.can(Permission.UpdateInfo)
+  const canUpdateContest = authStore.can(Permission.UpdateContest)
   const canReadProblems = authStore.can(Permission.ReadProblems)
 
   const setContestName = async (newName: string) => {
@@ -68,7 +68,7 @@ export const Sidebar: FunctionComponent = () => {
     return (
       <SidebarView
         contest={contestInfo}
-        canUpdateInfo={canUpdateInfo}
+        canUpdateContest={canUpdateContest}
         serverClock={serverStore.serverClock}
         onUpdateName={setContestName}
         onUpdateShortDesc={setContestShortDesc}

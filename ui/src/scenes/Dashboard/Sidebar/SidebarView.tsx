@@ -20,7 +20,7 @@ export enum Menu {
 
 export interface SidebarViewProps {
   contest: ContestInfo
-  canUpdateInfo: boolean
+  canUpdateContest: boolean
   serverClock: Date
   onUpdateName: (newName: string) => any
   onUpdateShortDesc: (newShortDesc: string) => any
@@ -35,7 +35,7 @@ const durationToStr = (duration: moment.Duration | number): string => {
 export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   contest,
   serverClock,
-  canUpdateInfo,
+  canUpdateContest,
   onUpdateName,
   onUpdateShortDesc,
 }) => {
@@ -56,7 +56,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   }, [contest && contest.name, contest && contest.shortDescription])
 
   const renderName = () => {
-    if (canUpdateInfo) {
+    if (canUpdateContest) {
       return (
         <H5>
           <EditableText
@@ -75,7 +75,7 @@ export const SidebarView: FunctionComponent<SidebarViewProps> = ({
   }
 
   const renderShortDesc = () => {
-    if (canUpdateInfo) {
+    if (canUpdateContest) {
       return (
         <EditableText
           maxLength={256}

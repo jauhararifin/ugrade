@@ -21,7 +21,7 @@ export enum Permission {
   ReadClarifications = 'read:clarifications',
   ReadAnnouncement = 'read:announcement',
   CreateAnnouncement = 'create:announcement',
-  UpdateInfo = 'update:info',
+  UpdateContest = 'update:contest',
 }
 
 export const allPermissions = [
@@ -41,7 +41,7 @@ export const allPermissions = [
   Permission.ReadClarifications,
   Permission.ReadAnnouncement,
   Permission.CreateAnnouncement,
-  Permission.UpdateInfo,
+  Permission.UpdateContest,
 ]
 
 export const adminPermissions = allPermissions
