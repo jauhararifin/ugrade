@@ -8,7 +8,8 @@ from contests.models import Contest, Language, User, Permission
 from contests.exceptions import NoSuchContestError, \
     NoSuchLanguageError, \
     ForbiddenActionError, \
-    UserAlreadyInvitedError
+    UserAlreadyInvitedError, \
+    ContestError
 from contests.auth.core import get_all_permissions, get_user_by_id
 
 
@@ -55,10 +56,13 @@ def create_contest(email: str,
     if start_time is None and finish_time is None:
         start_time = datetime.datetime.now() + datetime.timedelta(days=10)
         finish_time = start_time + datetime.timedelta(hours=5)
-    if finish_time is not None:
+    elif finish_time is not None:
         start_time = finish_time - datetime.timedelta(hours=5)
-    if start_time is not None:
-        start_time = start_time + datetime.timedelta(hours=5)
+    elif start_time is not None:
+        finish_time = start_time + datetime.timedelta(hours=5)
+
+    if Contest.objects.filter(short_id=short_id).count() > 0:
+        raise ContestError('Contest ID Already Taken')
 
     new_contest = Contest(name=name,
                           short_id=short_id,
