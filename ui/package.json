@@ -36,10 +36,17 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "preinstall": "rm -f node_modules/@",
+    "postinstall": "ln -s `pwd`/src node_modules/@",
+    "start": "npm-run-all build:css --parallel watch:css start:ts",
+    "start:ts": "react-scripts start",
+    "build": "npm-run-all build:css build:ts",
+    "build:ts": "react-scripts build",
+    "build:css": "node-sass-chokidar --quiet src/ -o src/ --importer=node_modules/node-sass-tilde-importer",
+    "watch:css": "node-sass-chokidar --quiet src/ -o src/ --importer=node_modules/node-sass-tilde-importer --watch --recursive",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "tslint --project tsconfig.json --config tslint.json"
   },
   "eslintConfig": {
     "extends": "react-app"
