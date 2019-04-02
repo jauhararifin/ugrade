@@ -1,11 +1,12 @@
-import { useRouting } from '@/routing'
+import { useMatch, useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
 import { SetEmail, SetEmailVariables } from './types/SetEmail'
 
-export function useSetEmail(contestId: string) {
+export function useSetEmail() {
   const client = useApolloClient()
   const routingStore = useRouting()
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)/)
   return async (email: string) => {
     const result = await client.query<SetEmail, SetEmailVariables>({
       query: gql`

@@ -5,7 +5,7 @@ import { showError } from '@/error'
 import { useMatch } from '@/routing'
 import { Formik, FormikActions, FormikProps } from 'formik'
 import gql from 'graphql-tag'
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FunctionComponent } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { useReset, useResetAccount } from '../reset'
@@ -39,8 +39,7 @@ export const ResetPasswordForm: FunctionComponent = () => {
       .required(),
   })
 
-  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/reset-password/)
-  const resetPassword = useResetPassword(contestId, userId)
+  const resetPassword = useResetPassword()
   const handleSubmit = async (
     values: ResetPasswordFormValue,
     { setSubmitting }: FormikActions<ResetPasswordFormValue>
@@ -54,6 +53,7 @@ export const ResetPasswordForm: FunctionComponent = () => {
     }
   }
 
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/reset-password/)
   const { data, loading, error } = useQuery(
     gql`
       query CurrentContest($contestId: ID!) {
@@ -66,7 +66,7 @@ export const ResetPasswordForm: FunctionComponent = () => {
     { variables: { contestId } }
   )
   const resetContest = useReset()
-  const resetAccount = useResetAccount(contestId)
+  const resetAccount = useResetAccount()
 
   if (error) return <BasicError />
   if (loading) return <BasicLoading />

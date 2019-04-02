@@ -30,8 +30,7 @@ export const EnterEmailForm: FunctionComponent = () => {
       .required(),
   })
 
-  const [, contestId] = useMatch(/enter-contest\/([0-9]+)\/users/)
-  const setEmail = useSetEmail(contestId)
+  const setEmail = useSetEmail()
   const resetContest = useReset()
   const handleSubmit = async (values: EnterEmailFormValue, { setSubmitting }: FormikActions<EnterEmailFormValue>) => {
     try {
@@ -43,6 +42,7 @@ export const EnterEmailForm: FunctionComponent = () => {
     }
   }
 
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)\/users/)
   const { data, loading, error } = useQuery(
     gql`
       query CurrentContest($contestId: ID!) {

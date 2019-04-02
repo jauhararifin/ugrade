@@ -60,8 +60,7 @@ export const SignUpForm: FunctionComponent = () => {
     rememberMe: yup.boolean().required(),
   })
 
-  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/signup/)
-  const signUp = useSignUp(userId)
+  const signUp = useSignUp()
   const handleSubmit = async (values: SignUpFormValue, { setSubmitting }: FormikActions<SignUpFormValue>) => {
     try {
       await signUp(values, values.rememberMe)
@@ -73,6 +72,7 @@ export const SignUpForm: FunctionComponent = () => {
     }
   }
 
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/signup/)
   const { data, loading, error } = useQuery(
     gql`
       query CurrentContestAndUser($contestId: ID!, $userId: ID!) {
@@ -87,7 +87,7 @@ export const SignUpForm: FunctionComponent = () => {
     `,
     { variables: { contestId, userId } }
   )
-  const resetAccount = useResetAccount(contestId)
+  const resetAccount = useResetAccount()
   const resetContest = useReset()
 
   if (error) return <BasicError />

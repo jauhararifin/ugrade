@@ -1,12 +1,13 @@
 import { setToken } from '@/auth'
-import { useRouting } from '@/routing'
+import { useMatch, useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import { useMutation } from 'react-apollo-hooks'
 import { ForgotPassword, ForgotPasswordVariables } from './types/ForgotPassword'
 import { SignIn, SignInVariables } from './types/SignIn'
 
-export function useSignIn(userId: string) {
+export function useSignIn() {
   const routingStore = useRouting()
+  const [, , userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)/)
   const mutate = useMutation<SignIn, SignInVariables>(gql`
     mutation SignIn($userId: ID!, $password: String!) {
       signIn(userId: $userId, password: $password) {
@@ -25,8 +26,9 @@ export function useSignIn(userId: string) {
   }
 }
 
-export function useForgotPassword(contestId: string, userId: string) {
+export function useForgotPassword() {
   const routingStore = useRouting()
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)/)
   const mutate = useMutation<ForgotPassword, ForgotPasswordVariables>(gql`
     mutation ForgotPassword($userId: ID!) {
       forgotPassword(userId: $userId) {

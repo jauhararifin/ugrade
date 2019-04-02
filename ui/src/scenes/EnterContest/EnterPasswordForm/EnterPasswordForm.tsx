@@ -36,8 +36,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     rememberMe: yup.boolean().required(),
   })
 
-  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/password/)
-  const signIn = useSignIn(userId)
+  const signIn = useSignIn()
   const handleSubmit = async (
     values: EnterPasswordFormValue,
     { setSubmitting }: FormikActions<EnterPasswordFormValue>
@@ -52,7 +51,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     }
   }
 
-  const forgotPassword = useForgotPassword(contestId, userId)
+  const forgotPassword = useForgotPassword()
   const handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
     try {
       await forgotPassword()
@@ -63,6 +62,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     }
   }
 
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/password/)
   const { data, loading, error } = useQuery(
     gql`
       query CurrentContestAndUser($contestId: ID!, $userId: ID!) {
@@ -78,7 +78,7 @@ export const EnterPasswordForm: FunctionComponent = () => {
     { variables: { contestId, userId } }
   )
   const resetContest = useReset()
-  const resetAccount = useResetAccount(contestId)
+  const resetAccount = useResetAccount()
 
   if (error) return <BasicError />
   if (loading) return <BasicLoading />
