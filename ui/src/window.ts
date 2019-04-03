@@ -64,7 +64,7 @@ const pollServer = async () => {
     }
 
     // wait 10 sec
-    await new Promise(resv => setTimeout(resv, 1000))
+    await new Promise(resv => setTimeout(resv, 10000))
   }
 }
 

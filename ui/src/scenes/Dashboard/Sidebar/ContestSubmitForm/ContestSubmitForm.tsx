@@ -51,6 +51,7 @@ export const ContestSubmitForm: FunctionComponent = () => {
   const { data, loading, error } = useQuery<GetMyContest>(gql`
     query GetMyContest {
       myContest {
+        id
         problems {
           id
           name

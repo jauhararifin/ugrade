@@ -234,12 +234,16 @@ class ContestType(DjangoObjectType):
     members = graphene.NonNull(graphene.List(
         graphene.NonNull(UserType)), resolver=contest_members_resolver)
     problems = graphene.NonNull(graphene.List(graphene.NonNull(
-        ProblemType), resolver=contest_problems_resolver))
+        ProblemType)), resolver=contest_problems_resolver)
     submissions = graphene.NonNull(
         graphene.List(graphene.NonNull(SubmissionType)), resolver=contest_submissions_resolver)
     permitted_languages = graphene.NonNull(
         graphene.List(graphene.NonNull(LanguageType))
     )
+
+    @staticmethod
+    def resolve_permitted_languages(root, _info):
+        return root.permitted_languages.all()
 
     class Meta:
         model = Contest

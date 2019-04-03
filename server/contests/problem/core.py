@@ -21,6 +21,7 @@ def get_contest_problems(user: User, contest_id: int) -> Iterable[Problem]:
     if not user.has_permission('read:disabledProblems'):
         problems_qs = problems_qs.filter(disabled=False)
 
+    print(problems_qs.all())
     return problems_qs.all()
 
 
