@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
-import { observable } from 'mobx'
-import { createContext, useContext } from 'react'
+import { observable, observe, reaction, when } from 'mobx'
+import { useDisposable } from 'mobx-react-lite'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { apolloClient } from './client'
 
 export const windowStore = observable({
@@ -11,6 +12,13 @@ export const windowStore = observable({
 export const windowContext = createContext(windowStore)
 
 export const useWindow = () => useContext(windowContext)
+
+export function useServerClock() {
+  const store = useWindow()
+  const [serverClock, setServerClock] = useState(undefined as undefined | Date)
+  useDisposable(() => reaction(() => store.serverClock, () => setServerClock(store.serverClock)))
+  return serverClock
+}
 
 const pollServer = async () => {
   // wait 500ms first, then poll every 10 sec

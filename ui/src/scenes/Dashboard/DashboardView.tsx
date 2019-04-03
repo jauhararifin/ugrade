@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from 'react'
-// import { Sidebar } from './Sidebar'
+import { Sidebar } from './Sidebar/Sidebar'
 import { TopNavigationBar } from './TopNavigationBar/TopNavigationBar'
 
 import './styles.css'
@@ -13,7 +13,7 @@ export const DashboardView: FunctionComponent<DashboardViewProps> = ({ children 
     <div className='full-page'>
       <TopNavigationBar />
       <div className='contest-panel'>
-        {/* <Sidebar /> */}
+        <Sidebar />
         <div className='contest-outer-content'>
           <div className='contest-content'>{children}</div>
         </div>

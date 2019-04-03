@@ -3,14 +3,14 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetMe
+// GraphQL query operation: GetMyPermission
 // ====================================================
 
-export interface GetMe_me {
-  __typename: 'UserType'
-  name: string | null
+export interface GetMyPermission_me {
+  __typename: "UserType";
+  permissions: (string | null)[];
 }
 
-export interface GetMe {
-  me: GetMe_me
+export interface GetMyPermission {
+  me: GetMyPermission_me;
 }
