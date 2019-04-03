@@ -16,10 +16,9 @@ export function putItem(url: string, label: string) {
       return
     }
   }
-  const item = { url, label }
-  store.push(item)
+  store.push({ url, label })
   return () => {
-    store.remove(item)
+    store.replace(store.filter(it => it.url !== url))
   }
 }
 
