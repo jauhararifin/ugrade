@@ -232,11 +232,14 @@ class SubmissionMutation(graphene.ObjectType):
 
 class ContestType(DjangoObjectType):
     members = graphene.NonNull(graphene.List(
-        UserType, required=True), resolver=contest_members_resolver)
-    problems = graphene.NonNull(graphene.List(
-        ProblemType, required=True), resolver=contest_problems_resolver)
+        graphene.NonNull(UserType)), resolver=contest_members_resolver)
+    problems = graphene.NonNull(graphene.List(graphene.NonNull(
+        ProblemType), resolver=contest_problems_resolver))
     submissions = graphene.NonNull(
-        graphene.List(SubmissionType, required=True), resolver=contest_submissions_resolver)
+        graphene.List(graphene.NonNull(SubmissionType)), resolver=contest_submissions_resolver)
+    permitted_languages = graphene.NonNull(
+        graphene.List(graphene.NonNull(LanguageType))
+    )
 
     class Meta:
         model = Contest
@@ -294,7 +297,7 @@ class UpdateContestInput(graphene.InputObjectType):
 class UpdateContest(graphene.Mutation):
     class Arguments:
         contest = UpdateContestInput(required=True)
-    Output = ContestType
+    Output = graphene.NonNull(ContestType)
     mutate = update_contest_mutate
 
 
