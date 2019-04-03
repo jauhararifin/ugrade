@@ -147,7 +147,7 @@ class ProblemInput(graphene.InputObjectType):
 class CreateProblem(graphene.Mutation):
     class Arguments:
         problem = ProblemInput(required=True)
-    Output = ProblemType
+    Output = graphene.NonNull(ProblemType)
     mutate = create_problem_mutate
 
 
@@ -182,7 +182,7 @@ class ProblemQuery(graphene.ObjectType):
         ProblemType, problem_id=graphene.ID(required=True), resolver=problem_resolver)
 
     problems = graphene.NonNull(graphene.List(
-        ProblemType, required=True), resolver=problems_resolver)
+        graphene.NonNull(ProblemType)), resolver=problems_resolver)
 
 
 class ProblemMutation(graphene.ObjectType):

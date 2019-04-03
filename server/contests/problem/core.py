@@ -21,7 +21,6 @@ def get_contest_problems(user: User, contest_id: int) -> Iterable[Problem]:
     if not user.has_permission('read:disabledProblems'):
         problems_qs = problems_qs.filter(disabled=False)
 
-    print(problems_qs.all())
     return problems_qs.all()
 
 
@@ -37,8 +36,8 @@ def get_problem_by_id(user: User, problem_id: int) -> Problem:
 
     # check problem visibility
     user_cid: User = user.contest.id
-    problem_cid: Problem = problem.contest.id
-    in_same_contest: bool = problem_cid != user_cid
+    problem_cid: int = problem.contest.id
+    in_same_contest: bool = problem_cid == user_cid
     can_read: bool = not problem.disabled or user.has_permission(
         'read:disabledProblems')
     if not in_same_contest or not can_read:
