@@ -7,10 +7,10 @@
 // ====================================================
 
 export interface GetMe_me {
-  __typename: 'UserType'
-  name: string | null
+  __typename: "UserType";
+  name: string | null;
 }
 
 export interface GetMe {
-  me: GetMe_me
+  me: GetMe_me;
 }

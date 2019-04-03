@@ -15,12 +15,14 @@ export const Sidebar: FunctionComponent = () => {
   const { data, loading, error } = useQuery<GetMeAndMyContest>(gql`
     query GetMeAndMyContest {
       myContest {
+        id
         name
         shortDescription
         startTime
         finishTime
       }
       me {
+        id
         permissions
       }
     }
@@ -28,9 +30,11 @@ export const Sidebar: FunctionComponent = () => {
 
   const updateContestMutate = useMutation(gql`
     mutation UpdateContest($name: String, $shortDescription: String) {
-      id
-      name
-      shortDescription
+      updateContest(contest: { name: $name, shortDescription: $shortDescription }) {
+        id
+        name
+        shortDescription
+      }
     }
   `)
 
@@ -39,6 +43,8 @@ export const Sidebar: FunctionComponent = () => {
   if (error) return null
   if (loading) return <SidebarLoadingView />
   if (!data || !data.myContest || !data.me) return null
+  data.myContest.startTime = new Date(data.myContest.startTime)
+  data.myContest.finishTime = new Date(data.myContest.finishTime)
 
   const setContestName = async (name: string) => {
     if (name !== data.myContest.name) {

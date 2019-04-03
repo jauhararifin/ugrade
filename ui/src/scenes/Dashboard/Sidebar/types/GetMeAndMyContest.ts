@@ -8,6 +8,7 @@
 
 export interface GetMeAndMyContest_myContest {
   __typename: "ContestType";
+  id: string;
   name: string;
   shortDescription: string;
   startTime: any;
@@ -16,6 +17,7 @@ export interface GetMeAndMyContest_myContest {
 
 export interface GetMeAndMyContest_me {
   __typename: "UserType";
+  id: string;
   permissions: (string | null)[];
 }
 
