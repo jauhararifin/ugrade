@@ -1,7 +1,8 @@
+import { useRouting } from '@/routing'
 import React, { FunctionComponent } from 'react'
 import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { useRouting } from '../../../routing'
+import { useBreadcrumb } from '../TopNavigationBar/Breadcrumbs/Breadcrumbs'
 import { CreateProblem } from './CreateProblem/CreateProblem'
 import { ProblemDetail } from './ProblemDetail/ProblemDetail'
 import { ProblemList } from './ProblemList/ProblemList'
@@ -9,6 +10,7 @@ import { UpdateProblem } from './UpdateProblem/UpdateProblem'
 
 export const Problems: FunctionComponent = () => {
   const routingStore = useRouting()
+  useBreadcrumb(`/contest/problems`, 'Problems')
   return (
     <TransitionGroup className='eat-them-all'>
       <CSSTransition timeout={300} classNames='fade' key={routingStore.location.pathname}>

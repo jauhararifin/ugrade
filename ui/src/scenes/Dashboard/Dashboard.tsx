@@ -11,6 +11,7 @@ import { Members } from './Members/Members'
 import { Overview } from './Overview/Overview'
 import { Problems } from './Problems/Problems'
 import { Settings } from './Settings/Settings'
+import { Submissions } from './Submissions/Submissions'
 import { putItem } from './TopNavigationBar/Breadcrumbs/Breadcrumbs'
 import { GetMyContest } from './types/GetMyContest'
 
@@ -42,7 +43,7 @@ export const Dashboard: FunctionComponent = () => {
               <Route path='/contest/' exact={true} component={Overview} />
               <Route path='/contest/overview' exact={true} component={Overview} />
               <Route path='/contest/problems' component={Problems} />
-              {/* <Route path='/contest/submissions' exact={true} component={Submissions} /> */}
+              <Route path='/contest/submissions' exact={true} component={Submissions} />
               <Route path='/contest/settings' exact={true} component={Settings} />
               <Route path='/contest/members' component={Members} />
             </Switch>

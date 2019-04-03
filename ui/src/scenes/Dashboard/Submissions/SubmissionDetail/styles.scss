@@ -1,0 +1,19 @@
+.submission-detail {
+  .info {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    margin-top: 10px;
+    .source-code {
+      overflow-x: scroll;
+    }
+  }
+  .content {
+    .entry {
+      margin-top: 10px;
+      .grading-info {
+        display: flex;
+      }
+    }
+  }
+}
