@@ -42,7 +42,7 @@ from .status.resolvers import ping_resolver, server_clock_resolver
 
 class UserType(DjangoObjectType):
     permissions = graphene.NonNull(graphene.List(
-        graphene.String, required=True), resolver=user_permissions_resolver)
+        graphene.NonNull(graphene.String)), resolver=user_permissions_resolver)
 
     class Meta:
         model = User
@@ -311,7 +311,7 @@ class InviteUsers(graphene.Mutation):
             graphene.List(graphene.String, required=True))
         permissions = graphene.NonNull(
             graphene.List(graphene.String, required=True))
-    Output = graphene.List(UserType)
+    Output = graphene.NonNull(graphene.List(graphene.NonNull(UserType)))
     mutate = invite_users_mutate
 
 
