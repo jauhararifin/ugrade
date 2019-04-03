@@ -23,6 +23,7 @@ export interface GetMembersAndMyPermissions_myContest_members {
 
 export interface GetMembersAndMyPermissions_myContest {
   __typename: "ContestType";
+  id: string;
   members: GetMembersAndMyPermissions_myContest_members[];
 }
 

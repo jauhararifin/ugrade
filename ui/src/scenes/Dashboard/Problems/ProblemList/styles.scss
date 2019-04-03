@@ -1,0 +1,28 @@
+@import '~@blueprintjs/core/lib/scss/variables.scss';
+
+.contest-problem-list {
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .item {
+    margin-top: 10px;
+    .header {
+      display: flex;
+      margin-bottom: 0px;
+      justify-content: space-between;
+      .title {
+        text-align: left;
+      }
+      .info {
+        text-align: right;
+      }
+    }
+    &.disabled {
+      background-color: $pt-dark-text-color-disabled;
+    }
+  }
+  .item:hover {
+    cursor: pointer;
+  }
+}

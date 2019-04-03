@@ -2,7 +2,7 @@ import { useRouting } from '@/routing'
 import gql from 'graphql-tag'
 import React, { FunctionComponent, useState } from 'react'
 import { useQuery } from 'react-apollo-hooks'
-import { UpdateContestPermission } from '../../permissions'
+import { ReadProblemsPermission, UpdateContestPermission } from '../../permissions'
 import { Menu } from './Menu'
 import { SidebarMenuLoadingView } from './SidebarMenusLoadingView'
 import { IMenu, SidebarMenuView } from './SidebarMenusView'
@@ -44,6 +44,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({ loading }) 
     }
   `)
   const canUpdateContest = result.data && result.data.me && result.data.me.permissions.includes(UpdateContestPermission)
+  const canReadProblems = result.data && result.data.me && result.data.me.permissions.includes(ReadProblemsPermission)
 
   const menus: IMenu[] = [
     {
@@ -57,7 +58,7 @@ export const SidebarMenus: FunctionComponent<SidebarMenusProps> = ({ loading }) 
       icon: 'book',
       onClick: () => onMenuChoosed(Menu.Problems),
       active: currentMenu === Menu.Problems,
-      visible: true,
+      visible: !!canReadProblems,
       title: Menu.Problems,
     },
     {

@@ -17,6 +17,28 @@ export interface ContestInput {
   gradingSize?: number | null;
 }
 
+export interface ProblemInput {
+  shortId: string;
+  name: string;
+  statement: string;
+  disabled: boolean;
+  timeLimit: number;
+  tolerance: number;
+  memoryLimit: number;
+  outputLimit: number;
+}
+
+export interface ProblemModificationInput {
+  shortId?: string | null;
+  name?: string | null;
+  statement?: string | null;
+  disabled?: boolean | null;
+  timeLimit?: number | null;
+  tolerance?: number | null;
+  memoryLimit?: number | null;
+  outputLimit?: number | null;
+}
+
 export interface UpdateContestInput {
   name?: string | null;
   shortDescription?: string | null;

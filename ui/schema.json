@@ -287,9 +287,13 @@
                 "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProblemType",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ProblemType",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -1492,9 +1496,13 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "ProblemType",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ProblemType",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
