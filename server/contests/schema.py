@@ -196,14 +196,11 @@ class SubmissionType(DjangoObjectType):
         LanguageType, required=True, resolver=submission_language_resolver)
     source_code = graphene.Field(
         graphene.String, required=True, resolver=submission_source_code_resolver)
+    verdict = graphene.Field(graphene.String, required=True)
 
     @staticmethod
-    def resolve_language(root, _info):
-        return root.solution_language
-
-    @staticmethod
-    def resolve_source_code(root, _info):
-        return root.source_code.url
+    def resolve_verdict(root, _info):
+        return root.verdict
 
     class Meta:
         model = Submission
@@ -214,7 +211,7 @@ class SubmissionQuery(graphene.ObjectType):
     submission = graphene.NonNull(SubmissionType, id=graphene.Int(
         required=True), resolver=submission_resolver)
     submissions = graphene.NonNull(graphene.List(
-        SubmissionType, required=True), resolver=submissions_resolver)
+        graphene.NonNull(SubmissionType)), resolver=submissions_resolver)
 
 
 class SubmitSolution(graphene.Mutation):
