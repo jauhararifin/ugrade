@@ -21,6 +21,7 @@ export interface GetMyContest_myContest_permittedLanguages {
 
 export interface GetMyContest_myContest {
   __typename: "ContestType";
+  id: string;
   problems: GetMyContest_myContest_problems[];
   permittedLanguages: GetMyContest_myContest_permittedLanguages[];
 }

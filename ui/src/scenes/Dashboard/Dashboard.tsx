@@ -4,9 +4,10 @@ import gql from 'graphql-tag'
 import React, { FunctionComponent, useEffect } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import DocumentTitle from 'react-document-title'
-import { Switch } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { DashboardView } from './DashboardView'
+import { Overview } from './Overview/Overview'
 import { putItem } from './TopNavigationBar/Breadcrumbs/Breadcrumbs'
 import { GetMyContest } from './types/GetMyContest'
 
@@ -34,12 +35,12 @@ export const Dashboard: FunctionComponent = () => {
         <TransitionGroup className='eat-them-all'>
           <CSSTransition timeout={300} classNames='fade' key={location.pathname}>
             <Switch location={routingStore.location}>
-              {/* <Route path='/contest/' exact={true} component={Overview} />
-            <Route path='/contest/overview' exact={true} component={Overview} />
-            <Route path='/contest/problems' component={Problems} />
-            <Route path='/contest/submissions' exact={true} component={Submissions} />
-            <Route path='/contest/settings' exact={true} component={Settings} />
-            <Route path='/contest/members' component={Members} /> */}
+              <Route path='/contest/' exact={true} component={Overview} />
+              <Route path='/contest/overview' exact={true} component={Overview} />
+              {/* <Route path='/contest/problems' component={Problems} /> */}
+              {/* <Route path='/contest/submissions' exact={true} component={Submissions} /> */}
+              {/* <Route path='/contest/settings' exact={true} component={Settings} /> */}
+              {/* <Route path='/contest/members' component={Members} /> */}
             </Switch>
           </CSSTransition>
         </TransitionGroup>

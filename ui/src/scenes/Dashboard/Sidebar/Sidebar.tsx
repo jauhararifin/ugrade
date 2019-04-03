@@ -68,7 +68,7 @@ export const Sidebar: FunctionComponent = () => {
     }
   }
 
-  if (!serverClock) return null
+  if (!serverClock) return <SidebarLoadingView />
   const canUpdateContest = data.me.permissions.includes('update:contest')
   return (
     <SidebarView
