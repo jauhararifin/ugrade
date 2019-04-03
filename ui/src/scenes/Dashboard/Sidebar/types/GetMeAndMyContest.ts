@@ -18,7 +18,7 @@ export interface GetMeAndMyContest_myContest {
 export interface GetMeAndMyContest_me {
   __typename: "UserType";
   id: string;
-  permissions: (string | null)[];
+  permissions: string[];
 }
 
 export interface GetMeAndMyContest {

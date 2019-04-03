@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 export interface UserLinkProps {
   user: {
     id: string
-    name: string
-    username: string
+    name: string | null
+    username: string | null
   }
 }
 

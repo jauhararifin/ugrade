@@ -7,6 +7,7 @@ import DocumentTitle from 'react-document-title'
 import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { DashboardView } from './DashboardView'
+import { Members } from './Members/Members'
 import { Overview } from './Overview/Overview'
 import { Settings } from './Settings/Settings'
 import { putItem } from './TopNavigationBar/Breadcrumbs/Breadcrumbs'
@@ -42,7 +43,7 @@ export const Dashboard: FunctionComponent = () => {
               {/* <Route path='/contest/problems' component={Problems} /> */}
               {/* <Route path='/contest/submissions' exact={true} component={Submissions} /> */}
               <Route path='/contest/settings' exact={true} component={Settings} />
-              {/* <Route path='/contest/members' component={Members} /> */}
+              <Route path='/contest/members' component={Members} />
             </Switch>
           </CSSTransition>
         </TransitionGroup>

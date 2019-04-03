@@ -1,12 +1,14 @@
 import { Button, Card, Intent, NonIdealState } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 
+import './styles.css'
+
 export interface BasicErrorProps {
   error?: Error
 }
 
 export const BasicError: FunctionComponent<BasicErrorProps> = ({ error }) => (
-  <Card>
+  <Card className='ug-basic-error'>
     <NonIdealState
       icon='error'
       title='Something When Wrong'

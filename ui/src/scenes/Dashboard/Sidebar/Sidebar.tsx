@@ -5,6 +5,7 @@ import { useServerClock } from '@/window'
 import gql from 'graphql-tag'
 import React, { FunctionComponent } from 'react'
 import { useMutation, useQuery } from 'react-apollo-hooks'
+import { UpdateContestPermission } from '../permissions'
 import { SidebarLoadingView } from './SidebarLoadingView'
 import { SidebarView } from './SidebarView'
 import { GetMeAndMyContest } from './types/GetMeAndMyContest'
@@ -69,7 +70,7 @@ export const Sidebar: FunctionComponent = () => {
   }
 
   if (!serverClock) return <SidebarLoadingView />
-  const canUpdateContest = data.me.permissions.includes('update:contest')
+  const canUpdateContest = data.me.permissions.includes(UpdateContestPermission)
   return (
     <SidebarView
       contest={data.myContest}
