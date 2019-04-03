@@ -37,15 +37,13 @@ export const TopNavigationBar: FunctionComponent = () => {
     await apolloClient.clearStore()
   }
 
-  const { data, loading, error } = useQuery<GetMe>(gql`
+  const { data, loading } = useQuery<GetMe>(gql`
     query GetMe {
       me {
         name
       }
     }
   `)
-
-  if (error) return null
 
   return (
     <Navbar>

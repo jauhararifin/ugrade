@@ -20,6 +20,7 @@ export const Dashboard: FunctionComponent = () => {
     gql`
       query GetMyContest {
         myContest {
+          id
           name
           shortDescription
         }
@@ -28,7 +29,7 @@ export const Dashboard: FunctionComponent = () => {
   )
   useEffect(() => {
     return putItem(`/contest`, data && data.myContest ? data.myContest.name : '')
-  }, [data])
+  }, [data && data.myContest])
 
   return (
     <DocumentTitle title='UGrade | Dashboard'>

@@ -33,7 +33,7 @@ export const Breadcrumbs: FunctionComponent = () => {
     const items = store.slice().sort((a, b) => a.url.length - b.url.length)
     const breadcrumbWithRouter = items.map(item => ({
       text: item.label,
-      onclick: () => {
+      onClick: () => {
         if (item.url) routingStore.push(item.url)
       },
     }))
