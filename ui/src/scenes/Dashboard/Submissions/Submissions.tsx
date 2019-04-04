@@ -14,24 +14,29 @@ export const Submissions: FunctionComponent = () => {
   useBreadcrumb(`/contest/submissions`, 'Submissions')
   const serverClock = useServerClock()
 
-  const { data, loading, error } = useQuery<GetMySubmissions>(gql`
-    query GetMySubmissions {
-      submissions {
-        id
-        problem {
+  const { data, loading, error } = useQuery<GetMySubmissions>(
+    gql`
+      query GetMySubmissions {
+        submissions {
           id
-          name
+          problem {
+            id
+            name
+          }
+          language {
+            id
+            name
+          }
+          sourceCode
+          verdict
+          issuedTime
         }
-        language {
-          id
-          name
-        }
-        sourceCode
-        verdict
-        issuedTime
       }
+    `,
+    {
+      pollInterval: 5000,
     }
-  `)
+  )
 
   if (loading || !serverClock) return <SimpleLoading />
   if (error || !data || !data.submissions) return <BasicError />
