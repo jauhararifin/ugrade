@@ -38,20 +38,7 @@ export const Sidebar: FunctionComponent = () => {
           shortDescription
         }
       }
-    `,
-    {
-      refetchQueries: [
-        {
-          query: gql`
-            query GetMySubmissions {
-              submissions {
-                id
-              }
-            }
-          `,
-        },
-      ],
-    }
+    `
   )
 
   const serverClock = useServerClock()
