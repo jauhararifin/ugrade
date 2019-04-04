@@ -81,7 +81,7 @@ def grade_submission(submission_model):
         # create `grading_size` jobs
         for i in range(contest.grading_size):
             grading = Grading(grading_group=ggroup, contest=contest,
-                              verdict='Pending', grader_group=i)
+                              verdict='PENDING', grader_group=i)
             grading.save()
 
     except:

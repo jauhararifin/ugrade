@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 
 from contests.auth.core import get_me
+from contests.exceptions import AuthenticationError
 from .grader import get_grading_job, submit_grading_job
 
 
@@ -10,7 +11,11 @@ class JobView(View):
     # search open job
     def get(self, request):
         try:
-            my_user = get_me(request)
+            try:
+                my_user = get_me(request)
+            except AuthenticationError as err:
+                return HttpResponse(err, status=403)
+
             job_token, spec = get_grading_job(my_user)
 
             if spec is None:
@@ -30,6 +35,8 @@ class JobView(View):
         try:
             output_file = request.FILES['output']
             job_token = request.META.get('HTTP_X_JOB_TOKEN')
+            if job_token is None:
+                job_token = request.POST['jobToken']
             verdict = request.POST['verdict']
             submit_grading_job(job_token, verdict, output_file)
             return HttpResponse('OK', status=200)
