@@ -11,6 +11,10 @@ class JobView(View):
     def get(self, request):
         try:
             my_user = get_me(request)
+
+            if not my_user.has_permission('grade:submissions'):
+                return HttpResponse('Forbidden action', status=403)
+
             job_token, spec = get_grading_job(my_user)
 
             if spec is None:
