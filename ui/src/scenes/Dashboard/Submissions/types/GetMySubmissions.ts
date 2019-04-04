@@ -23,6 +23,7 @@ export interface GetMySubmissions_submissions {
   id: string;
   problem: GetMySubmissions_submissions_problem;
   language: GetMySubmissions_submissions_language;
+  sourceCode: string;
   verdict: string;
   issuedTime: any;
 }

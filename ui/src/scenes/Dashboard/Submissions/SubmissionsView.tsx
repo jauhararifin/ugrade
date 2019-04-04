@@ -12,6 +12,7 @@ import './styles.css'
 interface Submission {
   id: string
   issuedTime: Date
+  sourceCode: string
   problem: {
     id: string
     name: string

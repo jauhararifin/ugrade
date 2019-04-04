@@ -29,15 +29,30 @@ export const Sidebar: FunctionComponent = () => {
     }
   `)
 
-  const updateContestMutate = useMutation(gql`
-    mutation UpdateContest($name: String, $shortDescription: String) {
-      updateContest(contest: { name: $name, shortDescription: $shortDescription }) {
-        id
-        name
-        shortDescription
+  const updateContestMutate = useMutation(
+    gql`
+      mutation UpdateContest($name: String, $shortDescription: String) {
+        updateContest(contest: { name: $name, shortDescription: $shortDescription }) {
+          id
+          name
+          shortDescription
+        }
       }
+    `,
+    {
+      refetchQueries: [
+        {
+          query: gql`
+            query GetMySubmissions {
+              submissions {
+                id
+              }
+            }
+          `,
+        },
+      ],
     }
-  `)
+  )
 
   const serverClock = useServerClock()
 

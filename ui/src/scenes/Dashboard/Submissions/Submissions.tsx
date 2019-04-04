@@ -26,13 +26,12 @@ export const Submissions: FunctionComponent = () => {
           id
           name
         }
+        sourceCode
         verdict
         issuedTime
       }
     }
   `)
-
-  console.log(error)
 
   if (loading || !serverClock) return <SimpleLoading />
   if (error || !data || !data.submissions) return <BasicError />

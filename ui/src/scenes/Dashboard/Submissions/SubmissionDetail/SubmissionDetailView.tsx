@@ -56,6 +56,7 @@ export const SubmissionDetailView: FunctionComponent<SubmissionDetailViewProps> 
             <div className='info'>
               <H5>{`Using Language ${submission.language.name}`}</H5>
             </div>
+
             {sourceCodeContent ? (
               <div className='info'>
                 <Card className='source-code'>
@@ -65,6 +66,7 @@ export const SubmissionDetailView: FunctionComponent<SubmissionDetailViewProps> 
             ) : (
               <Card className='bp3-skeleton'>{'lorem ipsum'.repeat(100)}</Card>
             )}
+
             {/* {submission && submission.gradings && submission.gradings.length === 0 && (
               <div className='info'>
                 <H5>No Grading History</H5>
