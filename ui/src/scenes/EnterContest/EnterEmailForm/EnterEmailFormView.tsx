@@ -1,4 +1,3 @@
-import { ContestInfo } from '@/contest'
 import { Button, Card, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React from 'react'
@@ -7,7 +6,10 @@ import { EnterEmailFormValue } from './EnterEmailForm'
 import './styles.css'
 
 export interface EnterEmailFormViewOwnProps {
-  contest: ContestInfo
+  contest: {
+    name: string
+    shortDescription: string
+  }
   gotoAnotherContest: () => any
 }
 

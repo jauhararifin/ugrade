@@ -1,8 +1,9 @@
-import { useContest, useRouting } from '@/app'
-import { showErrorToast, showSuccessToast } from '@/common/toaster'
+import { showError } from '@/error'
+import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
+import { useCreateContest } from './action'
 import { CreateContestFormView } from './CreateContestFormView'
 
 export interface CreateContestFormValue {
@@ -37,31 +38,35 @@ export const CreateContestForm: FunctionComponent = () => {
       .required(),
     name: yup
       .string()
+      .min(4)
       .max(255)
       .label('Contest Name')
       .required(),
     shortDescription: yup
       .string()
+      .label('Short Description')
+      .min(4)
       .max(255)
-      .label('Short Description'),
+      .required(),
   })
 
-  const routing = useRouting()
-  const contest = useContest()
+  const createContest = useCreateContest()
   const handleSubmit = async (
     values: CreateContestFormValue,
-    { setSubmitting, setErrors }: FormikActions<CreateContestFormValue>
+    { setSubmitting }: FormikActions<CreateContestFormValue>
   ) => {
     try {
-      await contest.create(values.email, values.shortId, values.name, values.shortDescription)
+      await createContest({
+        email: values.email,
+        contest: {
+          shortId: values.shortId,
+          name: values.name,
+          shortDescription: values.shortDescription,
+        },
+      })
       showSuccessToast('Contest Created')
-      routing.push('/enter-contest')
     } catch (error) {
-      if (error instanceof yup.ValidationError) {
-        setErrors(error.value)
-      } else {
-        showErrorToast(error)
-      }
+      showError(error)
     } finally {
       setSubmitting(false)
     }

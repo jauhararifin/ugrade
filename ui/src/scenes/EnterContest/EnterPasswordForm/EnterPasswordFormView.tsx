@@ -1,4 +1,3 @@
-import { ContestInfo } from '@/contest'
 import { Button, Card, Divider, FormGroup, InputGroup, Intent, Switch } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { useState } from 'react'
@@ -7,7 +6,10 @@ import { EnterPasswordFormValue } from './EnterPasswordForm'
 import './styles.css'
 
 export interface EnterPasswordFormViewProps extends FormikProps<EnterPasswordFormValue> {
-  contest: ContestInfo
+  contest: {
+    name: string
+    shortDescription: string
+  }
   username: string
   gotoAnotherContest: () => any
   gotoAnotherAccount: () => any

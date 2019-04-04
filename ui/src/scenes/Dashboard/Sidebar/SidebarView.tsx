@@ -1,11 +1,10 @@
-import { ContestInfo } from '@/contest'
 import { EditableText, H2, H5, H6 } from '@blueprintjs/core'
 import classnames from 'classnames'
 import moment from 'moment'
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { ContestSubmitForm } from './ContestSubmitForm'
-import { SidebarMenus } from './SidebarMenus'
-import { SidebarMiniCard } from './SidebarMiniCard'
+import { ContestSubmitForm } from './ContestSubmitForm/ContestSubmitForm'
+import { SidebarMenus } from './SidebarMenus/SidebarMenus'
+import { SidebarMiniCard } from './SidebarMiniCard/SidebarMiniCard'
 
 import './styles.css'
 
@@ -19,7 +18,12 @@ export enum Menu {
 }
 
 export interface SidebarViewProps {
-  contest: ContestInfo
+  contest: {
+    startTime: Date
+    finishTime: Date
+    name: string
+    shortDescription: string
+  }
   canUpdateContest: boolean
   serverClock: Date
   onUpdateName: (newName: string) => any

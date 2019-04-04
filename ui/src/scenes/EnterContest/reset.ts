@@ -1,21 +1,16 @@
-import { useAuth, useContest, useRouting } from '@/app'
+import { useMatch, useRouting } from '@/routing'
 
 export function useReset() {
   const routingStore = useRouting()
-  const contestStore = useContest()
-  const authStore = useAuth()
   return () => {
-    routingStore.push('/enter-contest')
-    contestStore.current = undefined
-    authStore.me = undefined
+    routingStore.replace('/enter-contest')
   }
 }
 
 export function useResetAccount() {
   const routingStore = useRouting()
-  const authStore = useAuth()
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)/)
   return () => {
-    routingStore.push('/enter-contest/enter-email')
-    authStore.me = undefined
+    routingStore.replace(`/enter-contest/${contestId}/users/`)
   }
 }

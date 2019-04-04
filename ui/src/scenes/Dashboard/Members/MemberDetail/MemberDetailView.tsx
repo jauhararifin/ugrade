@@ -1,13 +1,12 @@
-import { User } from '@/auth'
 import { H4, HTMLTable, Intent, Tag } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
-import { ContentWithHeader } from '../../components/ContentWithHeader'
-import { PermissionForm } from '../PermissionForm'
+import { ContentWithHeader } from '../../components/ContentWithHeader/ContentWithHeader'
+import { PermissionForm } from '../PermissionForm/PermissionForm'
 
 import './styles.css'
 
 export interface MemberDetailViewProps {
-  user: User
+  user: { id: string; username: string | null; name: string | null; email: string; permissions: string[] }
   canUpdatePermission: boolean
 }
 

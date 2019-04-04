@@ -1,10 +1,18 @@
-import { Problem } from '@/problem'
 import React, { FunctionComponent } from 'react'
-import { ContentWithHeader } from '../../components/ContentWithHeader'
-import { ProblemEditor, ProblemFormValue } from '../ProblemEditor'
+import { ContentWithHeader } from '../../components/ContentWithHeader/ContentWithHeader'
+import { ProblemEditor, ProblemFormValue } from '../ProblemEditor/ProblemEditor'
 
 export interface UpdateProblemViewProps {
-  problem: Problem
+  problem: {
+    shortId: string
+    name: string
+    statement: string
+    disabled: boolean
+    timeLimit: number
+    tolerance: number
+    memoryLimit: number
+    outputLimit: number
+  }
   onSubmit: (value: ProblemFormValue) => any
 }
 

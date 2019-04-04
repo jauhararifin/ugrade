@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
-import { Content, ContentProps } from '../Content'
-import { Header } from '../Header'
+import { Content, ContentProps } from '../Content/Content'
+import { Header } from '../Header/Header'
 
 export interface ContentWithHeaderProps extends ContentProps {
   header: string

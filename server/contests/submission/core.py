@@ -16,7 +16,7 @@ def get_contest_submissions(user: User, contest_id: int) -> Iterable[Submission]
         raise ForbiddenActionError(
             "You Don't Have Permission To Read Submission From This Contest")
 
-    submissions_qs = Submission.objects.filter(contest__id=contest_id)
+    submissions_qs = Submission.objects.filter(problem__contest__id=contest_id)
     if not user.has_permission('read:submissions'):
         submissions_qs = submissions_qs.filter(issuer__id=user.id)
 

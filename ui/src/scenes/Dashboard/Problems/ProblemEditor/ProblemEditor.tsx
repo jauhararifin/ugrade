@@ -1,5 +1,4 @@
-import { showErrorToast } from '@/common'
-import { Problem } from '@/problem'
+import { showError } from '@/error'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
@@ -17,7 +16,16 @@ export interface ProblemFormValue {
 }
 
 export interface ProblemEditorProps {
-  problem?: Problem
+  problem?: {
+    shortId: string
+    name: string
+    statement: string
+    disabled: boolean
+    timeLimit: number
+    tolerance: number
+    memoryLimit: number
+    outputLimit: number
+  }
   onSubmit?: (values: ProblemFormValue) => any
 }
 
@@ -86,7 +94,7 @@ export const ProblemEditor: FunctionComponent<ProblemEditorProps> = ({ problem, 
         await Promise.resolve(onSubmit(values))
       }
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }

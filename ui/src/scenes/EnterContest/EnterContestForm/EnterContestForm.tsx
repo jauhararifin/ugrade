@@ -1,8 +1,9 @@
-import { useContest, useRouting } from '@/app'
-import { showErrorToast, usePublicOnly } from '@/common'
+import { usePublicOnly } from '@/auth'
+import { showError } from '@/error'
 import { Formik, FormikActions } from 'formik'
 import React, { FunctionComponent } from 'react'
 import * as yup from 'yup'
+import { useSetContest } from './action'
 import { EnterContestFormView } from './EnterContestFormView'
 
 export interface EnterContestFormValue {
@@ -26,17 +27,15 @@ export const EnterContestForm: FunctionComponent = () => {
       .required(),
   })
 
-  const routingStore = useRouting()
-  const contestStore = useContest()
+  const setContest = useSetContest()
   const handleSubmit = async (
     values: EnterContestFormValue,
     { setSubmitting }: FormikActions<EnterContestFormValue>
   ) => {
     try {
-      await contestStore.setByShortId(values.contestId)
-      routingStore.push('/enter-contest/enter-email')
+      await setContest(values.contestId)
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }

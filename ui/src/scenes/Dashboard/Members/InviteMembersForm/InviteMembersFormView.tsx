@@ -2,16 +2,15 @@ import { Button, Checkbox, FormGroup, H4, HTMLTable, Intent, TagInput } from '@b
 import { FormikProps } from 'formik'
 import lodash from 'lodash'
 import React, { FunctionComponent } from 'react'
-import { Permission } from '../../../../auth'
-import { ContentWithHeader } from '../../components/ContentWithHeader'
+import { ContentWithHeader } from '../../components/ContentWithHeader/ContentWithHeader'
 import { InviteMembersFormValue } from './InviteMembersForm'
 
 import './styles.css'
 
 export interface InviteMembersFormViewProps extends FormikProps<InviteMembersFormValue> {
-  availablePermissions: Permission[]
-  givablePermissions: Permission[]
-  predifinedPermissions: { [label: string]: Permission[] }
+  availablePermissions: string[]
+  givablePermissions: string[]
+  predifinedPermissions: { [label: string]: string[] }
 }
 
 export const InviteMembersFormView: FunctionComponent<InviteMembersFormViewProps> = ({
@@ -28,7 +27,7 @@ export const InviteMembersFormView: FunctionComponent<InviteMembersFormViewProps
 
   const chucks = lodash.chunk(availablePermissions, 4)
   const handleChangePermission: React.ChangeEventHandler<HTMLInputElement> = e => {
-    const perm = e.target.name as Permission
+    const perm = e.target.name
     let currentValue = values.permissions
     if (currentValue.includes(perm)) {
       currentValue = currentValue.filter(p => p !== perm)

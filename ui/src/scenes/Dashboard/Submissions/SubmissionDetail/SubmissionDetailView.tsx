@@ -1,12 +1,23 @@
 import { Card, Classes, Drawer, H5, Tooltip } from '@blueprintjs/core'
 import moment from 'moment'
 import React, { FunctionComponent } from 'react'
-import { ISubmission } from '../SubmissionsView'
 
 import './styles.scss'
 
 export interface SubmissionDetailViewProps {
-  submission?: ISubmission
+  submission?: {
+    id: string
+    issuedTime: Date
+    problem: {
+      id: string
+      name: string
+    }
+    language: {
+      id: string
+      name: string
+    }
+    verdict: string
+  }
   handleClose: () => any
   serverClock?: Date
   sourceCodeContent?: string
@@ -45,6 +56,7 @@ export const SubmissionDetailView: FunctionComponent<SubmissionDetailViewProps> 
             <div className='info'>
               <H5>{`Using Language ${submission.language.name}`}</H5>
             </div>
+
             {sourceCodeContent ? (
               <div className='info'>
                 <Card className='source-code'>
@@ -54,6 +66,7 @@ export const SubmissionDetailView: FunctionComponent<SubmissionDetailViewProps> 
             ) : (
               <Card className='bp3-skeleton'>{'lorem ipsum'.repeat(100)}</Card>
             )}
+
             {/* {submission && submission.gradings && submission.gradings.length === 0 && (
               <div className='info'>
                 <H5>No Grading History</H5>

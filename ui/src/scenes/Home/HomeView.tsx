@@ -1,5 +1,5 @@
+import logo from '@/assets/images/logo.svg'
 import { Button, Intent } from '@blueprintjs/core'
-import logo from 'assets/images/logo.svg'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 

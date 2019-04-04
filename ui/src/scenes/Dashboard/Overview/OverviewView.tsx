@@ -1,10 +1,11 @@
-import { Markdown } from '@/components/Markdown'
-import { ContestInfo } from '@/contest'
+import { Markdown } from '@/components/Markdown/Markdown'
 import React, { FunctionComponent } from 'react'
-import { Content } from '../components/Content'
+import { Content } from '../components/Content/Content'
 
 export interface OverviewViewProps {
-  contest: ContestInfo
+  contest: {
+    description: string
+  }
 }
 
 export const OverviewView: FunctionComponent<OverviewViewProps> = ({ contest }) => {

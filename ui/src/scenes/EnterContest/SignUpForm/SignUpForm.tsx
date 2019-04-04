@@ -1,9 +1,16 @@
-import { useAuth, useContest, useRouting } from '@/app'
-import { showErrorToast, showSuccessToast, usePublicOnly } from '@/common'
+import { usePublicOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
+import { showError } from '@/error'
+import { useMatch, useRouting } from '@/routing'
+import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions, FormikProps } from 'formik'
+import gql from 'graphql-tag'
 import React, { FunctionComponent, useEffect } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { useReset, useResetAccount } from '../reset'
+import { useSignUp } from './action'
 import { SignUpFormView } from './SignUpFormView'
 
 export interface SignUpFormValue {
@@ -53,43 +60,49 @@ export const SignUpForm: FunctionComponent = () => {
     rememberMe: yup.boolean().required(),
   })
 
-  const contestStore = useContest()
-  const authStore = useAuth()
-  const resetContest = useReset()
-  const resetAccount = useResetAccount()
-
-  useEffect(() => {
-    if (!contestStore.current) resetContest()
-  }, [])
-
-  const routingStore = useRouting()
-  const handleSubmit = async (
-    values: SignUpFormValue,
-    { setSubmitting, setErrors }: FormikActions<SignUpFormValue>
-  ) => {
+  const signUp = useSignUp()
+  const handleSubmit = async (values: SignUpFormValue, { setSubmitting }: FormikActions<SignUpFormValue>) => {
     try {
-      await authStore.signUp(values.username, values.oneTimeCode, values.password, values.name, values.rememberMe)
+      await signUp(values, values.rememberMe)
       showSuccessToast('Signed Up')
-      routingStore.push('/contest')
     } catch (error) {
-      if (error instanceof yup.ValidationError) {
-        setErrors(error.value)
-      } else {
-        showErrorToast(error)
-      }
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
-  if (!contestStore.current) return <React.Fragment />
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/signup/)
+  const { data, loading, error } = useQuery(
+    gql`
+      query CurrentContestAndUser($contestId: ID!, $userId: ID!) {
+        contest(contestId: $contestId) {
+          name
+          shortDescription
+        }
+        user(userId: $userId) {
+          username
+        }
+      }
+    `,
+    { variables: { contestId, userId } }
+  )
+  const resetAccount = useResetAccount()
+  const resetContest = useReset()
+
+  if (error) return <BasicError />
+  if (loading) return <BasicLoading />
+
+  const routingStore = useRouting()
+  if (data.user.username) {
+    routingStore.push(`/enter-contest/${contestId}/users/${userId}/password`)
+  }
 
   const renderView = (props: FormikProps<SignUpFormValue>) => {
-    if (!contestStore.current) return <React.Fragment />
     return (
       <SignUpFormView
         {...props}
-        contest={contestStore.current}
+        contest={data.contest}
         gotoAnotherContest={resetContest}
         gotoAnotherAccount={resetAccount}
       />

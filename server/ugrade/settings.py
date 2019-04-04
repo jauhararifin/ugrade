@@ -17,8 +17,9 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_URL = 'http://localhost:8000'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storages')
-MEDIA_URL = '/storages/'
+MEDIA_URL = BASE_URL + '/storages/'
 
 
 # Quick-start development settings - unsuitable for production

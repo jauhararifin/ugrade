@@ -1,9 +1,16 @@
-import { useAuth, useContest, useRouting } from '@/app'
-import { showErrorToast, showSuccessToast, usePublicOnly } from '@/common'
+import { usePublicOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
+import { showError } from '@/error'
+import { useMatch } from '@/routing'
+import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { FunctionComponent, useEffect } from 'react'
+import gql from 'graphql-tag'
+import React, { FunctionComponent } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { useReset, useResetAccount } from '../reset'
+import { useForgotPassword, useSignIn } from './action'
 import { EnterPasswordFormView } from './EnterPasswordFormView'
 
 export interface EnterPasswordFormValue {
@@ -29,54 +36,61 @@ export const EnterPasswordForm: FunctionComponent = () => {
     rememberMe: yup.boolean().required(),
   })
 
-  const authStore = useAuth()
-  const contestStore = useContest()
+  const signIn = useSignIn()
   const handleSubmit = async (
     values: EnterPasswordFormValue,
     { setSubmitting }: FormikActions<EnterPasswordFormValue>
   ) => {
     try {
-      await authStore.signIn(values.password, values.rememberMe)
+      await signIn(values.password, values.rememberMe)
       showSuccessToast('Signed In')
-      routingStore.push('/contest')
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
-  const resetContest = useReset()
-  const resetAccount = useResetAccount()
-  const me = authStore.me
-
-  useEffect(() => {
-    if (!contestStore.current) resetContest()
-    if (!me) resetAccount()
-  }, [])
-
-  const routingStore = useRouting()
+  const forgotPassword = useForgotPassword()
   const handleForgotPassword = async (setSubmitting: (val: boolean) => void) => {
     try {
-      await authStore.forgotPassword()
-      routingStore.push('/enter-contest/reset-password')
+      await forgotPassword()
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
+  const [, contestId, userId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/password/)
+  const { data, loading, error } = useQuery(
+    gql`
+      query CurrentContestAndUser($contestId: ID!, $userId: ID!) {
+        contest(contestId: $contestId) {
+          name
+          shortDescription
+        }
+        me: user(userId: $userId) {
+          username
+        }
+      }
+    `,
+    { variables: { contestId, userId } }
+  )
+  const resetContest = useReset()
+  const resetAccount = useResetAccount()
+
+  if (error) return <BasicError />
+  if (loading) return <BasicLoading />
   const renderView = (props: FormikProps<EnterPasswordFormValue>) => {
-    if (!contestStore.current || !me || !me.username) return <React.Fragment />
     return (
       <EnterPasswordFormView
         {...props}
-        contest={contestStore.current}
+        contest={data.contest}
         gotoAnotherContest={resetContest}
         gotoAnotherAccount={resetAccount}
         forgotPassword={handleForgotPassword}
-        username={me.username}
+        username={data.me.username}
       />
     )
   }

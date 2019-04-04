@@ -1,13 +1,15 @@
-import { useRouting } from '@/app'
+import { useRouting } from '@/routing'
 import React, { FunctionComponent } from 'react'
 import { Route, Switch } from 'react-router'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { InviteMembersForm } from './InviteMembersForm'
-import { MemberDetail } from './MemberDetail'
-import { MemberList } from './MemberList'
+import { useBreadcrumb } from '../TopNavigationBar/Breadcrumbs/Breadcrumbs'
+import { InviteMembersForm } from './InviteMembersForm/InviteMembersForm'
+import { MemberDetail } from './MemberDetail/MemberDetail'
+import { MemberList } from './MemberList/MemberList'
 
 export const Members: FunctionComponent = () => {
   const routingStore = useRouting()
+  useBreadcrumb(`/contest/members`, 'Members')
   return (
     <TransitionGroup className='eat-them-all'>
       <CSSTransition timeout={300} classNames='fade' key={routingStore.location.pathname}>

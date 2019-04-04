@@ -1,9 +1,15 @@
-import { useAuth, useContest, useRouting } from '@/app'
-import { showErrorToast, usePublicOnly } from '@/common'
+import { usePublicOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
+import { showError } from '@/error'
+import { useMatch } from '@/routing'
 import { Formik, FormikActions, FormikProps } from 'formik'
+import gql from 'graphql-tag'
 import React, { FunctionComponent, useEffect } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { useReset } from '../reset'
+import { useSetEmail } from './action'
 import { EnterEmailFormView } from './EnterEmailFormView'
 
 export interface EnterEmailFormValue {
@@ -13,10 +19,7 @@ export interface EnterEmailFormValue {
 export const EnterEmailForm: FunctionComponent = () => {
   usePublicOnly()
 
-  const initialValue: EnterEmailFormValue = {
-    email: '',
-  }
-
+  const initialValue: EnterEmailFormValue = { email: '' }
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -27,34 +30,36 @@ export const EnterEmailForm: FunctionComponent = () => {
       .required(),
   })
 
-  const routingStore = useRouting()
-  const contestStore = useContest()
-  const authStore = useAuth()
-
+  const setEmail = useSetEmail()
+  const resetContest = useReset()
   const handleSubmit = async (values: EnterEmailFormValue, { setSubmitting }: FormikActions<EnterEmailFormValue>) => {
     try {
-      if (!contestStore.current) throw new Error('Please Set The Contest First')
-      const user = await authStore.setMeByEmail(contestStore.current.id, values.email)
-      if (user.username) {
-        routingStore.push('/enter-contest/enter-password')
-      } else {
-        routingStore.push('/enter-contest/signup')
-      }
+      await setEmail(values.email)
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
-  const resetContest = useReset()
-  useEffect(() => {
-    if (!contestStore.current) resetContest()
-  }, [])
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)\/users/)
+  const { data, loading, error } = useQuery(
+    gql`
+      query CurrentContest($contestId: ID!) {
+        contest(contestId: $contestId) {
+          name
+          shortDescription
+        }
+      }
+    `,
+    { variables: { contestId } }
+  )
 
+  if (error) return <BasicError />
+  if (loading) return <BasicLoading />
   const renderView = (props: FormikProps<EnterEmailFormValue>) => {
-    if (!contestStore.current) return <React.Fragment />
-    return <EnterEmailFormView contest={contestStore.current} gotoAnotherContest={resetContest} {...props} />
+    if (!data) return <React.Fragment />
+    return <EnterEmailFormView contest={data.contest} gotoAnotherContest={resetContest} {...props} />
   }
   return (
     <Formik

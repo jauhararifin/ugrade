@@ -42,7 +42,7 @@ from .status.resolvers import ping_resolver, server_clock_resolver
 
 class UserType(DjangoObjectType):
     permissions = graphene.NonNull(graphene.List(
-        graphene.String, required=True), resolver=user_permissions_resolver)
+        graphene.NonNull(graphene.String)), resolver=user_permissions_resolver)
 
     class Meta:
         model = User
@@ -56,8 +56,7 @@ class SignInResult(graphene.ObjectType):
 
 class SignIn(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.Int(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.ID(required=True)
         password = graphene.String(required=True)
     Output = SignInResult
     mutate = sign_in_mutate
@@ -76,8 +75,7 @@ class SignUpResult(graphene.ObjectType):
 
 class SignUp(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.String(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.ID(required=True)
         user = UserInput(required=True)
         signup_code = graphene.String(required=True)
     Output = SignUpResult
@@ -86,16 +84,14 @@ class SignUp(graphene.Mutation):
 
 class ForgotPassword(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.Int(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.ID(required=True)
     Output = UserType
     mutate = forgot_password_mutate
 
 
 class ResetPassword(graphene.Mutation):
     class Arguments:
-        contest_id = graphene.Int(required=True)
-        email = graphene.String(required=True)
+        user_id = graphene.ID(required=True)
         reset_password_otc = graphene.String(required=True)
         new_password = graphene.String(required=True)
     Output = UserType
@@ -104,13 +100,13 @@ class ResetPassword(graphene.Mutation):
 
 class AuthQuery(graphene.ObjectType):
     me = graphene.NonNull(UserType, resolver=me_resolver)
-    user = graphene.NonNull(UserType, user_id=graphene.Int(
+    user = graphene.NonNull(UserType, user_id=graphene.ID(
         required=True), resolver=user_resolver)
     users = graphene.NonNull(graphene.List(
         UserType, required=True), resolver=users_resolver)
-    user_by_username = graphene.NonNull(UserType, contest_id=graphene.Int(
+    user_by_username = graphene.NonNull(UserType, contest_id=graphene.ID(
         required=True), username=graphene.String(required=True), resolver=user_by_username_resolver)
-    user_by_email = graphene.NonNull(UserType, contest_id=graphene.Int(
+    user_by_email = graphene.NonNull(UserType, contest_id=graphene.ID(
         required=True), email=graphene.String(required=True), resolver=user_by_email_resolver)
 
 
@@ -151,7 +147,7 @@ class ProblemInput(graphene.InputObjectType):
 class CreateProblem(graphene.Mutation):
     class Arguments:
         problem = ProblemInput(required=True)
-    Output = ProblemType
+    Output = graphene.NonNull(ProblemType)
     mutate = create_problem_mutate
 
 
@@ -168,7 +164,7 @@ class ProblemModificationInput(graphene.InputObjectType):
 
 class UpdateProblem(graphene.Mutation):
     class Arguments:
-        problem_id = graphene.Int(required=True)
+        problem_id = graphene.ID(required=True)
         problem = ProblemModificationInput(required=True)
     Output = ProblemType
     mutate = update_problem_mutate
@@ -176,17 +172,17 @@ class UpdateProblem(graphene.Mutation):
 
 class DeleteProblem(graphene.Mutation):
     class Arguments:
-        problem_id = graphene.Int(required=True)
+        problem_id = graphene.ID(required=True)
     Output = graphene.String
     mutate = delete_problem_mutate
 
 
 class ProblemQuery(graphene.ObjectType):
     problem = graphene.NonNull(
-        ProblemType, problem_id=graphene.Int(required=True), resolver=problem_resolver)
+        ProblemType, problem_id=graphene.ID(required=True), resolver=problem_resolver)
 
     problems = graphene.NonNull(graphene.List(
-        ProblemType, required=True), resolver=problems_resolver)
+        graphene.NonNull(ProblemType)), resolver=problems_resolver)
 
 
 class ProblemMutation(graphene.ObjectType):
@@ -200,14 +196,11 @@ class SubmissionType(DjangoObjectType):
         LanguageType, required=True, resolver=submission_language_resolver)
     source_code = graphene.Field(
         graphene.String, required=True, resolver=submission_source_code_resolver)
+    verdict = graphene.Field(graphene.String, required=True)
 
     @staticmethod
-    def resolve_language(root, _info):
-        return root.solution_language
-
-    @staticmethod
-    def resolve_source_code(root, _info):
-        return root.source_code.url
+    def resolve_verdict(root, _info):
+        return root.verdict
 
     class Meta:
         model = Submission
@@ -218,13 +211,13 @@ class SubmissionQuery(graphene.ObjectType):
     submission = graphene.NonNull(SubmissionType, id=graphene.Int(
         required=True), resolver=submission_resolver)
     submissions = graphene.NonNull(graphene.List(
-        SubmissionType, required=True), resolver=submissions_resolver)
+        graphene.NonNull(SubmissionType)), resolver=submissions_resolver)
 
 
 class SubmitSolution(graphene.Mutation):
     class Arguments:
-        problem_id = graphene.Int(required=True)
-        language_id = graphene.Int(required=True)
+        problem_id = graphene.ID(required=True)
+        language_id = graphene.ID(required=True)
         source_code = Upload(required=True)
     Output = SubmissionType
     mutate = submit_solution_mutate
@@ -236,11 +229,18 @@ class SubmissionMutation(graphene.ObjectType):
 
 class ContestType(DjangoObjectType):
     members = graphene.NonNull(graphene.List(
-        UserType, required=True), resolver=contest_members_resolver)
-    problems = graphene.NonNull(graphene.List(
-        ProblemType, required=True), resolver=contest_problems_resolver)
+        graphene.NonNull(UserType)), resolver=contest_members_resolver)
+    problems = graphene.NonNull(graphene.List(graphene.NonNull(
+        ProblemType)), resolver=contest_problems_resolver)
     submissions = graphene.NonNull(
-        graphene.List(SubmissionType, required=True), resolver=contest_submissions_resolver)
+        graphene.List(graphene.NonNull(SubmissionType)), resolver=contest_submissions_resolver)
+    permitted_languages = graphene.NonNull(
+        graphene.List(graphene.NonNull(LanguageType))
+    )
+
+    @staticmethod
+    def resolve_permitted_languages(root, _info):
+        return root.permitted_languages.all()
 
     class Meta:
         model = Contest
@@ -251,11 +251,11 @@ class ContestType(DjangoObjectType):
 class ContestQuery(graphene.ObjectType):
     languages = graphene.NonNull(graphene.List(
         LanguageType, required=True), resolver=languages_resolver)
-    language = graphene.NonNull(LanguageType, lang_id=graphene.Int(
+    language = graphene.NonNull(LanguageType, lang_id=graphene.ID(
         required=True), resolver=language_resolver)
 
     contest = graphene.NonNull(
-        ContestType, contest_id=graphene.Int(required=True), resolver=contest_resolver)
+        ContestType, contest_id=graphene.ID(required=True), resolver=contest_resolver)
     contest_by_short_id = graphene.NonNull(
         ContestType, short_id=graphene.String(required=True), resolver=contest_by_short_id_resolver)
     contests = graphene.NonNull(graphene.List(
@@ -298,7 +298,7 @@ class UpdateContestInput(graphene.InputObjectType):
 class UpdateContest(graphene.Mutation):
     class Arguments:
         contest = UpdateContestInput(required=True)
-    Output = ContestType
+    Output = graphene.NonNull(ContestType)
     mutate = update_contest_mutate
 
 
@@ -308,13 +308,13 @@ class InviteUsers(graphene.Mutation):
             graphene.List(graphene.String, required=True))
         permissions = graphene.NonNull(
             graphene.List(graphene.String, required=True))
-    Output = graphene.List(UserType)
+    Output = graphene.NonNull(graphene.List(graphene.NonNull(UserType)))
     mutate = invite_users_mutate
 
 
 class UpdateUserPermissions(graphene.Mutation):
     class Arguments:
-        user_id = graphene.Int(required=True)
+        user_id = graphene.ID(required=True)
         permissions = graphene.NonNull(
             graphene.List(graphene.String, required=True))
     Output = UserType

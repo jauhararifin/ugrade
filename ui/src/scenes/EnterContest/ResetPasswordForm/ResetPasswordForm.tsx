@@ -1,9 +1,15 @@
-import { useAuth, useContest, useRouting } from '@/app'
-import { showErrorToast, usePublicOnly } from '@/common'
+import { usePublicOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { BasicLoading } from '@/components/BasicLoading/BasicLoading'
+import { showError } from '@/error'
+import { useMatch } from '@/routing'
 import { Formik, FormikActions, FormikProps } from 'formik'
-import React, { FunctionComponent, useEffect } from 'react'
+import gql from 'graphql-tag'
+import React, { FunctionComponent } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
 import { useReset, useResetAccount } from '../reset'
+import { useResetPassword } from './action'
 import { ResetPasswordFormView } from './ResetPasswordFormView'
 
 export interface ResetPasswordFormValue {
@@ -33,37 +39,42 @@ export const ResetPasswordForm: FunctionComponent = () => {
       .required(),
   })
 
-  const authStore = useAuth()
-  const contestStore = useContest()
-  const routingStore = useRouting()
-
+  const resetPassword = useResetPassword()
   const handleSubmit = async (
     values: ResetPasswordFormValue,
     { setSubmitting }: FormikActions<ResetPasswordFormValue>
   ) => {
     try {
-      await authStore.resetPassword(values.password, values.oneTimeCode)
-      routingStore.push('/enter-contest/enter-password')
+      await resetPassword(values.oneTimeCode, values.password)
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
+  const [, contestId] = useMatch(/enter-contest\/([0-9]+)\/users\/([0-9]+)\/reset-password/)
+  const { data, loading, error } = useQuery(
+    gql`
+      query CurrentContest($contestId: ID!) {
+        contest(contestId: $contestId) {
+          name
+          shortDescription
+        }
+      }
+    `,
+    { variables: { contestId } }
+  )
   const resetContest = useReset()
   const resetAccount = useResetAccount()
-  useEffect(() => {
-    if (!contestStore.current) resetContest()
-  }, [])
-  if (!contestStore.current) return <React.Fragment />
 
+  if (error) return <BasicError />
+  if (loading) return <BasicLoading />
   const renderView = (props: FormikProps<ResetPasswordFormValue>) => {
-    if (!contestStore.current) return <React.Fragment />
     return (
       <ResetPasswordFormView
         {...props}
-        contest={contestStore.current}
+        contest={data.contest}
         gotoAnotherContest={resetContest}
         gotoAnotherAccount={resetAccount}
       />

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
-import { ContentWithHeader } from '../components/ContentWithHeader'
-import { ContestInfoForm } from './ContestInfoForm'
+import { ContentWithHeader } from '../components/ContentWithHeader/ContentWithHeader'
+import { ContestInfoForm } from './ContestInfoForm/ContestInfoForm'
 
 export const SettingsView: FunctionComponent = () => {
   return (

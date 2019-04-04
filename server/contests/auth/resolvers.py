@@ -32,31 +32,29 @@ def user_permissions_resolver(root: User, _info) -> Iterable[str]:
     return map(lambda perm: perm.code, root.permissions.all())
 
 
-def sign_in_mutate(_self, _info, contest_id: int, email: str, password: str) -> SignInResult:
-    user, token = sign_in(contest_id, email, password)
+def sign_in_mutate(_self, _info, user_id: int, password: str) -> SignInResult:
+    user, token = sign_in(user_id, password)
     return SignInResult(user=user, token=token)
 
 
 def sign_up_mutate(_self, _info,
-                   contest_id: int,
-                   email: str,
+                   user_id: int,
                    user: UserInput,
                    signup_code: str) -> SignUpResult:
-    new_user, token = sign_up(
-        contest_id, email, user.username, user.name, user.password, signup_code)
+    new_user, token = sign_up(user_id, user.username,
+                              user.name, user.password, signup_code)
     return SignUpResult(user=new_user, token=token)
 
 
-def forgot_password_mutate(_self, _info, contest_id: int, email: str) -> User:
-    return forgot_password(contest_id, email)
+def forgot_password_mutate(_self, _info, user_id: int) -> User:
+    return forgot_password(user_id)
 
 
 def reset_passwod_mutate(_self, _info,
-                         contest_id: int,
-                         email: str,
+                         user_id: int,
                          reset_password_otc: str,
                          new_password: str) -> User:
-    return reset_password(contest_id, email, reset_password_otc, new_password)
+    return reset_password(user_id, reset_password_otc, new_password)
 
 
 def me_resolver(_root, info) -> User:

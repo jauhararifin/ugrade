@@ -1,12 +1,14 @@
-import { Markdown } from '@/components/Markdown'
-import { Problem } from '@/problem'
+import { Markdown } from '@/components/Markdown/Markdown'
 import React, { FunctionComponent } from 'react'
-import { ContentWithHeader } from '../../components/ContentWithHeader'
+import { ContentWithHeader } from '../../components/ContentWithHeader/ContentWithHeader'
 
 import './styles.css'
 
 export interface ProblemDetailViewProps {
-  problem: Problem
+  problem: {
+    name: string
+    statement: string
+  }
 }
 
 export const ProblemDetailView: FunctionComponent<ProblemDetailViewProps> = ({ problem }) => {

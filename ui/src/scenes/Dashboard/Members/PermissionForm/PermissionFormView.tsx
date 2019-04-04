@@ -1,4 +1,3 @@
-import { Permission } from '@/auth'
 import { Button, Checkbox, HTMLTable, Intent } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import lodash from 'lodash'
@@ -8,8 +7,8 @@ import { PermissionFormValue } from './PermissionForm'
 import './styles.css'
 
 export interface PermissionFormViewProps extends FormikProps<PermissionFormValue> {
-  availablePermissions: Permission[]
-  updatablePermissions: Permission[]
+  availablePermissions: string[]
+  updatablePermissions: string[]
 }
 
 export const PermissionFormView: FunctionComponent<PermissionFormViewProps> = ({
@@ -22,7 +21,7 @@ export const PermissionFormView: FunctionComponent<PermissionFormViewProps> = ({
 }) => {
   const chucks = lodash.chunk(availablePermissions, 4)
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    const perm = e.target.name as Permission
+    const perm = e.target.name
     let currentValue = values.permissions
     if (currentValue.includes(perm)) {
       currentValue = currentValue.filter(p => p !== perm)

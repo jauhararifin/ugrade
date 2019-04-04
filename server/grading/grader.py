@@ -84,10 +84,9 @@ def grade_submission(submission_model):
                               verdict='Pending', grader_group=i)
             grading.save()
 
-    except Exception as err:
+    except:
         ggroup.verdict = 'IE'
         ggroup.save()
-        raise err
 
 
 # return job token and field file containing spec

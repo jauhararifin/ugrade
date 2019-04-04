@@ -1,14 +1,13 @@
-import { User } from '@/auth'
 import { Button, HTMLTable, Intent } from '@blueprintjs/core'
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { ContentWithHeader } from '../../components/ContentWithHeader'
+import { ContentWithHeader } from '../../components/ContentWithHeader/ContentWithHeader'
 import { UserLink } from '../../components/UserLink'
 
 import './styles.css'
 
 export interface MemberListViewProps {
-  users: User[]
+  users: Array<{ id: string; name: string | null; username: string | null; permissions: string[]; email: string }>
   canInvite: boolean
 }
 

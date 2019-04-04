@@ -1,6 +1,6 @@
 import os
 import random
-from typing import List
+from typing import List, Any
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -171,5 +171,15 @@ class Submission(models.Model):
     issuer = models.ForeignKey(User, on_delete=models.CASCADE)
     issued_time = models.DateTimeField(auto_now_add=True)
 
+    # from GradingGroup model
+    grading_groups: Any = None
+
     def __str__(self):
         return "Submission #{}".format(self.id)
+
+    @property
+    def verdict(self) -> str:
+        last_grading = self.grading_groups.last()
+        if last_grading is not None:
+            return last_grading.verdict
+        return 'PENDING'

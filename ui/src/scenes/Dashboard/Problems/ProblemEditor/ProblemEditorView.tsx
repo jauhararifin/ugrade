@@ -1,4 +1,4 @@
-import { MarkdownEdit } from '@/components/MarkdownEdit'
+import { MarkdownEdit } from '@/components/MarkdownEdit/MarkdownEdit'
 import { Button, FormGroup, InputGroup, Intent, Switch } from '@blueprintjs/core'
 import { FormikProps } from 'formik'
 import React, { FunctionComponent } from 'react'

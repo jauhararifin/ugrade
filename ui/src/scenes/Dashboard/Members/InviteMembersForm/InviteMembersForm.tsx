@@ -1,24 +1,49 @@
-import { useAuth, useContest, useRouting } from '@/app'
-import { adminPermissions, allPermissions, contestantPermissions, Permission } from '@/auth'
-import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
+import { useContestOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { showError } from '@/error'
+import { useRouting } from '@/routing'
+import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions, FormikProps } from 'formik'
-import { useObserver } from 'mobx-react-lite'
+import gql from 'graphql-tag'
 import React, { FunctionComponent } from 'react'
+import { useMutation, useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
+import { SimpleLoading } from '../../components/SimpleLoading'
+import { adminPermissions, allPermissions, contestantPermissions } from '../../permissions'
 import { InviteMembersFormView } from './InviteMembersFormView'
+import { GetMyPermissions } from './types/GetMyPermissions'
+import { InviteUsers } from './types/InviteUsers'
 
 export interface InviteMembersFormValue {
   emails: string[]
-  permissions: Permission[]
+  permissions: string[]
 }
 
 export const InviteMembersForm: FunctionComponent = () => {
   useContestOnly()
-  const authStore = useAuth()
-  const contestStore = useContest()
   const routingStore = useRouting()
-  const availablePermissions = [...allPermissions]
+  const { data, loading, error } = useQuery<GetMyPermissions>(gql`
+    query GetMyPermissions {
+      me {
+        id
+        permissions
+      }
+    }
+  `)
+  const inviteMutate = useMutation<InviteUsers>(gql`
+    mutation InviteUsers($emails: [String!]!, $permissions: [String!]!) {
+      inviteUsers(emails: $emails, permissions: $permissions) {
+        id
+        username
+        name
+      }
+    }
+  `)
 
+  if (loading) return <SimpleLoading />
+  if (error || !data || !data.me) return <BasicError />
+
+  const availablePermissions = [...allPermissions]
   const predifinedPermissions = {
     Contestant: [...contestantPermissions],
     Admin: [...adminPermissions],
@@ -60,39 +85,34 @@ export const InviteMembersForm: FunctionComponent = () => {
     { setSubmitting }: FormikActions<InviteMembersFormValue>
   ) => {
     try {
-      await contestStore.invite(values.emails, values.permissions)
+      await inviteMutate({
+        variables: values,
+      })
       showSuccessToast(`New Members Invited`)
       routingStore.push(`/contest/members`)
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
-  return useObserver(() => {
-    const me = authStore.me
-    const givablePermissions = me ? me.permissions : []
-    if (!givablePermissions) {
-      return null
-    }
+  const givablePermissions = data.me.permissions
+  const renderView = (props: FormikProps<InviteMembersFormValue>) => (
+    <InviteMembersFormView
+      availablePermissions={availablePermissions}
+      givablePermissions={givablePermissions}
+      predifinedPermissions={predifinedPermissions}
+      {...props}
+    />
+  )
 
-    const renderView = (props: FormikProps<InviteMembersFormValue>) => (
-      <InviteMembersFormView
-        availablePermissions={availablePermissions}
-        givablePermissions={givablePermissions}
-        predifinedPermissions={predifinedPermissions}
-        {...props}
-      />
-    )
-
-    return (
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        render={renderView}
-      />
-    )
-  })
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      render={renderView}
+    />
+  )
 }

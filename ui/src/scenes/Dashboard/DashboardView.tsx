@@ -1,6 +1,6 @@
 import React, { FunctionComponent, ReactNode } from 'react'
-import { Sidebar } from './Sidebar'
-import { TopNavigationBar } from './TopNavigationBar'
+import { Sidebar } from './Sidebar/Sidebar'
+import { TopNavigationBar } from './TopNavigationBar/TopNavigationBar'
 
 import './styles.css'
 

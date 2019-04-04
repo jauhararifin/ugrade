@@ -1,11 +1,15 @@
-import { useRouting } from '@/app'
-import { title, usePublicOnly } from '@/common'
+import { usePublicOnly } from '@/auth'
+import { useRouting } from '@/routing'
 import React, { FunctionComponent } from 'react'
+import DocumentTitle from 'react-document-title'
 import { EnterContestView } from './EnterContestView'
 
 export const EnterContest: FunctionComponent = () => {
   usePublicOnly()
-  title('UGrade | Enter Contest')
   const routing = useRouting()
-  return <EnterContestView location={routing.location} />
+  return (
+    <DocumentTitle title='UGrade | Enter Contest'>
+      <EnterContestView location={routing.location} />
+    </DocumentTitle>
+  )
 }

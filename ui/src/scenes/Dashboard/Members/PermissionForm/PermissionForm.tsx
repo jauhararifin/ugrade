@@ -1,26 +1,48 @@
-import { useAuth } from '@/app'
-import { allPermissions, Permission, User } from '@/auth'
-import { showErrorToast, showSuccessToast } from '@/common'
-import { TwoRowLoading } from '@/components/TwoRowLoading'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { showError } from '@/error'
+import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions, FormikProps } from 'formik'
-import { useObserver } from 'mobx-react-lite'
+import gql from 'graphql-tag'
 import React, { FunctionComponent, useState } from 'react'
+import { useMutation, useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
+import { SimpleLoading } from '../../components/SimpleLoading'
+import { allPermissions } from '../../permissions'
 import { PermissionFormView } from './PermissionFormView'
+import { GetMyPermissions } from './types/GetMyPermissions'
 
 export interface PermissionFormValue {
-  permissions: Permission[]
+  permissions: string[]
 }
 
 export interface PermissionFormProps {
-  user: User
+  user: { id: string; permissions: string[] }
 }
 
 export const PermissionForm: FunctionComponent<PermissionFormProps> = ({ user }) => {
-  const availablePermissions = [...allPermissions]
-  const authStore = useAuth()
+  const { data, loading, error } = useQuery<GetMyPermissions>(gql`
+    query GetMyPermissions {
+      me {
+        id
+        permissions
+      }
+    }
+  `)
   const [currentPermissions, setCurrentPermissions] = useState(user.permissions)
 
+  const updatePermissionMutate = useMutation(gql`
+    mutation UpdatePermission($userId: ID!, $permissions: [String!]!) {
+      updateUserPermissions(userId: $userId, permissions: $permissions) {
+        id
+        permissions
+      }
+    }
+  `)
+
+  if (loading) return <SimpleLoading />
+  if (error || !data || !data.me) return <BasicError />
+
+  const availablePermissions = [...allPermissions]
   const validationSchema = yup.object().shape({
     permissions: yup
       .array()
@@ -30,39 +52,42 @@ export const PermissionForm: FunctionComponent<PermissionFormProps> = ({ user })
 
   const handleSubmit = async (values: PermissionFormValue, { setSubmitting }: FormikActions<PermissionFormValue>) => {
     try {
-      const newPermissions = await authStore.updateUserPermission(user.id, values.permissions)
-      setCurrentPermissions(newPermissions)
+      await updatePermissionMutate({
+        variables: {
+          userId: user.id,
+          permissions: values.permissions,
+        },
+      })
+      setCurrentPermissions(values.permissions)
       showSuccessToast(`User's Permission Updated`)
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
     }
   }
 
-  return useObserver(() => {
-    const initialValue: PermissionFormValue = {
-      permissions: currentPermissions,
-    }
+  const initialValue: PermissionFormValue = {
+    permissions: currentPermissions,
+  }
 
-    const updatablePermissions = authStore.me ? authStore.me.permissions : []
-    if (!availablePermissions || !updatablePermissions) return <TwoRowLoading />
+  const updatablePermissions = data.me.permissions
+  if (!availablePermissions || !updatablePermissions) return <SimpleLoading />
 
-    const renderView = (props: FormikProps<PermissionFormValue>) => (
-      <PermissionFormView
-        availablePermissions={availablePermissions}
-        updatablePermissions={updatablePermissions}
-        {...props}
-      />
-    )
+  const renderView = (props: FormikProps<PermissionFormValue>) => (
+    <PermissionFormView
+      availablePermissions={availablePermissions}
+      updatablePermissions={updatablePermissions}
+      {...props}
+    />
+  )
 
-    return (
-      <Formik
-        initialValues={initialValue}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        render={renderView}
-      />
-    )
-  })
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      render={renderView}
+    />
+  )
 }

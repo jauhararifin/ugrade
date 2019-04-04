@@ -24,7 +24,8 @@ def spec_upload_path(instance, filename):
 
 
 class GradingGroup(models.Model):
-    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    submission = models.ForeignKey(
+        Submission, on_delete=models.CASCADE, related_name='grading_groups')
     issued_time = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(
         max_length=32, choices=VERDICT, default='PENDING')

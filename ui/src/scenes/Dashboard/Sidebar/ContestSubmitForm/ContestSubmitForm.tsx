@@ -1,12 +1,15 @@
-import { useContest, useProblem, useSubmission } from '@/app'
-import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
+import { useContestOnly } from '@/auth'
+import { showError } from '@/error'
+import { showSuccessToast } from '@/toaster'
 import { Formik, FormikActions, FormikProps } from 'formik'
-import lodash from 'lodash'
-import { useObserver } from 'mobx-react-lite'
+import gql from 'graphql-tag'
 import React, { FunctionComponent } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import * as yup from 'yup'
+import { useSubmitSolution } from './action'
 import { ContestSubmitFormLoadingView } from './ContestSubmitFormLoadingView'
 import { ContestSubmitFormView } from './ContestSubmitFormView'
+import { GetMyContest } from './types/GetMyContest'
 
 export interface ContestSubmitFormValue {
   language: string
@@ -16,9 +19,6 @@ export interface ContestSubmitFormValue {
 
 export const ContestSubmitForm: FunctionComponent = () => {
   useContestOnly()
-  const contestStore = useContest()
-  const problemStore = useProblem()
-  const submissionStore = useSubmission()
 
   const validationSchema = yup.object().shape({
     language: yup
@@ -32,68 +32,86 @@ export const ContestSubmitForm: FunctionComponent = () => {
     sourceCode: yup.mixed(),
   })
 
+  const submitSolution = useSubmitSolution()
   const handleSubmit = async (
     values: ContestSubmitFormValue,
     { setSubmitting, resetForm }: FormikActions<ContestSubmitFormValue>
   ) => {
     try {
-      await submissionStore.submit(values.problem, values.language, values.sourceCode)
+      await submitSolution(values.problem, values.language, values.sourceCode)
       showSuccessToast('Solution Submitted')
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     } finally {
       setSubmitting(false)
       resetForm()
     }
   }
 
-  return useObserver(() => {
-    const contestInfo = contestStore.current
-    const problems = lodash.values(problemStore.problems)
-    const languages = contestInfo ? contestInfo.permittedLanguages : undefined
-
-    const getInitialValue = (): ContestSubmitFormValue => {
-      return {
-        language: languages && languages.length > 0 ? languages[0].id : '',
-        problem: problems && problems.length > 0 ? problems[0].id : '',
-        sourceCode: new File([], ''),
+  const { data, loading, error } = useQuery<GetMyContest>(gql`
+    query GetMyContest {
+      myContest {
+        id
+        problems {
+          id
+          name
+        }
+        permittedLanguages {
+          id
+          name
+          extensions
+        }
       }
     }
+  `)
 
-    const getProblems = (): Array<{ label: string; value: string }> | undefined => {
-      if (!problems) return undefined
-      return problems.map(problem => ({
-        label: problem.name,
-        value: problem.id,
+  if (error) return null
+  if (loading) return <ContestSubmitFormLoadingView />
+
+  const problems = data ? data.myContest.problems : []
+  const languages = data ? data.myContest.permittedLanguages : []
+
+  const getInitialValue = (): ContestSubmitFormValue => {
+    return {
+      language: languages && languages.length > 0 ? languages[0].id : '',
+      problem: problems && problems.length > 0 ? problems[0].id : '',
+      sourceCode: new File([], ''),
+    }
+  }
+
+  const getProblems = (): Array<{ label: string; value: string }> | undefined => {
+    if (!problems) return undefined
+    return problems.map(problem => ({
+      label: problem.name,
+      value: problem.id,
+    }))
+  }
+
+  const getLanguages = (): Array<{ label: string; value: string }> | undefined => {
+    if (languages) {
+      return languages.map(lang => ({
+        label: lang.name,
+        value: lang.id,
       }))
     }
+    return undefined
+  }
 
-    const getLanguages = (): Array<{ label: string; value: string }> | undefined => {
-      if (languages) {
-        return languages.map(lang => ({
-          label: lang.name,
-          value: lang.id,
-        }))
-      }
-      return undefined
-    }
+  const availableLanguages = getLanguages()
+  const availableProblems = getProblems()
 
-    const availableLanguages = getLanguages()
-    const availableProblems = getProblems()
-
-    if (availableLanguages && availableProblems) {
-      const renderView = (props: FormikProps<ContestSubmitFormValue>) => (
-        <ContestSubmitFormView avaiableLanguages={availableLanguages} avaiableProblems={availableProblems} {...props} />
-      )
-      return (
-        <Formik
-          initialValues={getInitialValue()}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-          render={renderView}
-        />
-      )
-    }
-    return <ContestSubmitFormLoadingView />
-  })
+  if (availableLanguages && availableProblems) {
+    const renderView = (props: FormikProps<ContestSubmitFormValue>) => (
+      <ContestSubmitFormView avaiableLanguages={availableLanguages} avaiableProblems={availableProblems} {...props} />
+    )
+    return (
+      <Formik
+        initialValues={getInitialValue()}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+        render={renderView}
+      />
+    )
+  }
+  return <ContestSubmitFormLoadingView />
 }

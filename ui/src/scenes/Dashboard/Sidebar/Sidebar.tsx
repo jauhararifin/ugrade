@@ -1,78 +1,98 @@
-import { useAuth, useContest, useProblem, useServer } from '@/app'
-import { Permission } from '@/auth'
-import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
-import lodash from 'lodash'
-import { useObserver } from 'mobx-react-lite'
+import { useContestOnly } from '@/auth'
+import { showError } from '@/error'
+import { showSuccessToast } from '@/toaster'
+import { useServerClock } from '@/window'
+import gql from 'graphql-tag'
 import React, { FunctionComponent } from 'react'
+import { useMutation, useQuery } from 'react-apollo-hooks'
+import { UpdateContestPermission } from '../permissions'
 import { SidebarLoadingView } from './SidebarLoadingView'
 import { SidebarView } from './SidebarView'
+import { GetMeAndMyContest } from './types/GetMeAndMyContest'
 
 export const Sidebar: FunctionComponent = () => {
   useContestOnly()
-  const contestStore = useContest()
-  const contestInfo = contestStore.current
-  const problemStore = useProblem()
-  const problems = lodash.values(problemStore.problems)
-  const serverStore = useServer()
-  const authStore = useAuth()
-  const canUpdateContest = authStore.can(Permission.UpdateContest)
-  const canReadProblems = authStore.can(Permission.ReadProblems)
 
-  const setContestName = async (newName: string) => {
-    if (contestInfo && newName !== contestInfo.name) {
+  const { data, loading, error } = useQuery<GetMeAndMyContest>(gql`
+    query GetMeAndMyContest {
+      myContest {
+        id
+        name
+        shortDescription
+        startTime
+        finishTime
+      }
+      me {
+        id
+        permissions
+      }
+    }
+  `)
+
+  const updateContestMutate = useMutation(
+    gql`
+      mutation UpdateContest($name: String, $shortDescription: String) {
+        updateContest(contest: { name: $name, shortDescription: $shortDescription }) {
+          id
+          name
+          shortDescription
+        }
+      }
+    `,
+    {
+      refetchQueries: [
+        {
+          query: gql`
+            query GetMySubmissions {
+              submissions {
+                id
+              }
+            }
+          `,
+        },
+      ],
+    }
+  )
+
+  const serverClock = useServerClock()
+
+  if (error) return null
+  if (loading) return <SidebarLoadingView />
+  if (!data || !data.myContest || !data.me) return null
+  data.myContest.startTime = new Date(data.myContest.startTime)
+  data.myContest.finishTime = new Date(data.myContest.finishTime)
+
+  const setContestName = async (name: string) => {
+    if (name !== data.myContest.name) {
       try {
-        await contestStore.update(
-          newName,
-          contestInfo.shortDescription,
-          contestInfo.description,
-          contestInfo.startTime,
-          contestInfo.freezed,
-          contestInfo.finishTime,
-          contestInfo.permittedLanguages.map(l => l.id)
-        )
+        await updateContestMutate({ variables: { name } })
         showSuccessToast('Contest Name Updated')
       } catch (error) {
-        showErrorToast(error)
+        showError(error)
       }
     }
   }
 
-  const setContestShortDesc = async (newShortDesc: string) => {
-    if (contestInfo && newShortDesc !== contestInfo.shortDescription) {
+  const setContestShortDesc = async (shortDescription: string) => {
+    if (shortDescription !== data.myContest.shortDescription) {
       try {
-        await contestStore.update(
-          contestInfo.name,
-          newShortDesc,
-          contestInfo.description,
-          contestInfo.startTime,
-          contestInfo.freezed,
-          contestInfo.finishTime,
-          contestInfo.permittedLanguages.map(l => l.id)
-        )
+        await updateContestMutate({ variables: { shortDescription } })
         showSuccessToast('Contest Short Description Updated')
       } catch (error) {
-        showErrorToast(error)
+        showError(error)
       }
     }
   }
 
-  return useObserver(() => {
-    const loadingInfo = !contestInfo
-    const loadingProbs = !problems && canReadProblems
-    const loadingClock = !serverStore.serverClock
-    if (loadingInfo || loadingProbs || loadingClock) {
-      return <SidebarLoadingView />
-    }
-    if (!contestInfo) return null
-    if (!serverStore.serverClock) return null
-    return (
-      <SidebarView
-        contest={contestInfo}
-        canUpdateContest={canUpdateContest}
-        serverClock={serverStore.serverClock}
-        onUpdateName={setContestName}
-        onUpdateShortDesc={setContestShortDesc}
-      />
-    )
-  })
+  if (!serverClock) return <SidebarLoadingView />
+  const canUpdateContest = data.me.permissions.includes(UpdateContestPermission)
+  return (
+    <SidebarView
+      contest={data.myContest}
+      canUpdateContest={canUpdateContest}
+      serverClock={serverClock}
+      onUpdateName={setContestName}
+      onUpdateShortDesc={setContestShortDesc}
+    />
+  )
 }

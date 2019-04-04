@@ -1,40 +1,79 @@
-import { useProblem, useRouting } from '@/app'
-import { showErrorToast, showSuccessToast, useContestOnly } from '@/common'
-import { useObserver } from 'mobx-react-lite'
-import React, { FunctionComponent } from 'react'
+import { useContestOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { showError } from '@/error'
+import { useRouting } from '@/routing'
+import { showSuccessToast } from '@/toaster'
+import gql from 'graphql-tag'
+import React, { FunctionComponent, useEffect } from 'react'
+import { useMutation, useQuery } from 'react-apollo-hooks'
 import { RouteComponentProps } from 'react-router'
 import { SimpleLoading } from '../../components/SimpleLoading'
-import { ProblemFormValue } from '../ProblemEditor'
+import { putItem } from '../../TopNavigationBar/Breadcrumbs/Breadcrumbs'
+import { ProblemFormValue } from '../ProblemEditor/ProblemEditor'
+import { ProblemDetail, ProblemDetailVariables } from './types/ProblemDetail'
+import { UpdateProblem as UpdateProblemGQL, UpdateProblemVariables } from './types/UpdateProblem'
 import { UpdateProblemView } from './UpdateProblemView'
 
 export type UpdateProblemProps = RouteComponentProps<{ problemId: string }>
 
 export const UpdateProblem: FunctionComponent<UpdateProblemProps> = ({ match }) => {
   useContestOnly()
-  const problemStore = useProblem()
   const routingStore = useRouting()
+
+  const updateProblemMutate = useMutation<UpdateProblemGQL, UpdateProblemVariables>(gql`
+    mutation UpdateProblem($problemId: ID!, $problem: ProblemModificationInput!) {
+      updateProblem(problem: $problem, problemId: $problemId) {
+        id
+        shortId
+        name
+        statement
+        disabled
+        timeLimit
+        tolerance
+        memoryLimit
+        outputLimit
+      }
+    }
+  `)
+
+  const { data, loading, error } = useQuery<ProblemDetail, ProblemDetailVariables>(
+    gql`
+      query ProblemDetail($problemId: ID!) {
+        problem(problemId: $problemId) {
+          id
+          shortId
+          name
+          statement
+          disabled
+          timeLimit
+          tolerance
+          memoryLimit
+          outputLimit
+        }
+      }
+    `,
+    { variables: { problemId: match.params.problemId } }
+  )
+
+  useEffect(() => {
+    return putItem(`/contest/problems/${match.params.problemId}`, data && data.problem ? data.problem.name : '')
+  }, [data && data.problem])
 
   const handleSubmit = async (value: ProblemFormValue) => {
     try {
-      if (problemStore.problems && problemStore.problems[match.params.problemId]) {
-        const problem = problemStore.problems[match.params.problemId]
-        const newProb = await problemStore.update({
-          id: problem.id,
-          ...value,
-        })
-        showSuccessToast('Problem Updated')
-        routingStore.push(`/contest/problems/${newProb.id}`)
-      }
+      await updateProblemMutate({
+        variables: {
+          problemId: match.params.problemId,
+          problem: value,
+        },
+      })
+      showSuccessToast('Problem Updated')
     } catch (error) {
-      showErrorToast(error)
+      showError(error)
     }
   }
 
-  return useObserver(() => {
-    const problems = problemStore.problems
-    if (!problems) return <SimpleLoading />
-    const problem = problems[match.params.problemId]
-    if (!problem) return <SimpleLoading />
-    return <UpdateProblemView problem={problem} onSubmit={handleSubmit} />
-  })
+  if (loading) return <SimpleLoading />
+  if (error || !data || !data.problem) return <BasicError />
+  return <UpdateProblemView problem={data.problem} onSubmit={handleSubmit} />
 }

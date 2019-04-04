@@ -1,5 +1,4 @@
-import { MarkdownEdit } from '@/components/MarkdownEdit'
-import { Language } from '@/contest'
+import { MarkdownEdit } from '@/components/MarkdownEdit/MarkdownEdit'
 import { Button, Checkbox, FormGroup, InputGroup, Intent, Switch } from '@blueprintjs/core'
 import { DatePicker, TimePrecision } from '@blueprintjs/datetime'
 import { FormikProps } from 'formik'
@@ -9,7 +8,7 @@ import { ContestInfoFormValue } from './ContestInfoForm'
 import './styles.css'
 
 export interface ContestInfoFormViewProps extends FormikProps<ContestInfoFormValue> {
-  availableLanguages: Language[]
+  availableLanguages: Array<{ id: string; name: string }>
 }
 
 export const ContestInfoFormView: FunctionComponent<ContestInfoFormViewProps> = ({
@@ -63,6 +62,27 @@ export const ContestInfoFormView: FunctionComponent<ContestInfoFormViewProps> = 
         onChange={handleChange}
         onBlur={handleBlur}
         value={values.shortDescription}
+      />
+    </FormGroup>
+
+    <FormGroup
+      label='Grading Size'
+      labelFor='input-contest-grading-size'
+      labelInfo='(required)'
+      helperText={
+        touched.gradingSize && errors && errors.gradingSize
+          ? errors.gradingSize
+          : 'How many times each submission have to graded'
+      }
+      intent={touched.gradingSize && errors && errors.gradingSize ? Intent.DANGER : Intent.NONE}
+    >
+      <InputGroup
+        id='input-contest-short-desc'
+        name='gradingSize'
+        placeholder='Yet Another Competitive Programming Competition'
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.gradingSize.toString()}
       />
     </FormGroup>
 

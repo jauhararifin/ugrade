@@ -1,62 +1,40 @@
-import { useContest, useProblem, useServer, useSubmission } from '@/app'
-import { useContestOnly } from '@/common'
-import { Language } from '@/contest'
-import { Problem } from '@/problem'
-import { Submission } from '@/submission'
-import { useObserver } from 'mobx-react-lite'
-import React, { FunctionComponent, useEffect } from 'react'
+import { useContestOnly } from '@/auth'
+import { BasicError } from '@/components/BasicError/BasicError'
+import { useServerClock } from '@/window'
+import gql from 'graphql-tag'
+import React, { FunctionComponent } from 'react'
+import { useQuery } from 'react-apollo-hooks'
 import { SimpleLoading } from '../components/SimpleLoading'
-import { ISubmission, SubmissionsView } from './SubmissionsView'
+import { useBreadcrumb } from '../TopNavigationBar/Breadcrumbs/Breadcrumbs'
+import { SubmissionsView } from './SubmissionsView'
+import { GetMySubmissions } from './types/GetMySubmissions'
 
 export const Submissions: FunctionComponent = () => {
   useContestOnly()
+  useBreadcrumb(`/contest/submissions`, 'Submissions')
+  const serverClock = useServerClock()
 
-  const serverStore = useServer()
-  const submissionStore = useSubmission()
-  const problemStore = useProblem()
-  const contestStore = useContest()
-
-  useEffect(() => {
-    submissionStore.load()
-  }, [])
-
-  return useObserver(() => {
-    const problems = problemStore.problems
-    const serverClock = serverStore.serverClock
-    const languages = contestStore.languages
-    const mySubmissions = submissionStore.submissions || []
-
-    if (!problems || !serverClock || !languages) return <SimpleLoading />
-
-    const langMap: { [id: string]: Language } = {}
-    for (const lang of languages) langMap[lang.id] = lang
-
-    const noneProblem: Problem = {
-      id: '',
-      shortId: 'unknown',
-      name: 'Unknown',
-      statement: '',
-      timeLimit: 0,
-      tolerance: 0,
-      memoryLimit: 0,
-      outputLimit: 0,
-      disabled: true,
+  const { data, loading, error } = useQuery<GetMySubmissions>(gql`
+    query GetMySubmissions {
+      submissions {
+        id
+        problem {
+          id
+          name
+        }
+        language {
+          id
+          name
+        }
+        sourceCode
+        verdict
+        issuedTime
+      }
     }
+  `)
 
-    const noneLanguage: Language = {
-      id: '',
-      name: 'Unknown',
-      extensions: ['unk'],
-    }
+  if (loading || !serverClock) return <SimpleLoading />
+  if (error || !data || !data.submissions) return <BasicError />
 
-    const isubmissions = mySubmissions.map(
-      (submission: Submission): ISubmission => ({
-        ...submission,
-        problem: problems[submission.problemId] || noneProblem,
-        language: langMap[submission.languageId] || noneLanguage,
-      })
-    )
-
-    return <SubmissionsView submissions={isubmissions} serverClock={serverClock} />
-  })
+  return <SubmissionsView submissions={data.submissions} serverClock={serverClock} />
 }

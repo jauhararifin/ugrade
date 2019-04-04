@@ -1,34 +1,42 @@
-import { Language } from '@/contest'
-import { Problem } from '@/problem'
-import { Submission } from '@/submission'
 import { Classes, HTMLTable, Tooltip } from '@blueprintjs/core'
 import 'github-markdown-css'
 import moment from 'moment'
 import React, { FunctionComponent, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ContentWithHeader } from '../components/ContentWithHeader'
-import { SubmissionDetail } from './SubmissionDetail'
+import { ContentWithHeader } from '../components/ContentWithHeader/ContentWithHeader'
+import { SubmissionDetail } from './SubmissionDetail/SubmissionDetail'
+import { Verdict } from './Verdict/Verdict'
 
 import './styles.css'
 
-export interface ISubmission extends Submission {
-  problem: Problem
-  language: Language
+interface Submission {
+  id: string
+  issuedTime: Date
+  sourceCode: string
+  problem: {
+    id: string
+    name: string
+  }
+  language: {
+    id: string
+    name: string
+  }
+  verdict: string
 }
 
 export interface SubmissionsViewProps {
-  submissions: ISubmission[]
+  submissions: Submission[]
   serverClock: Date
 }
 
 export interface SubmissionViewState {
-  currentSubmission?: ISubmission
+  currentSubmission?: Submission
 }
 
 export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({ submissions, serverClock }) => {
-  const [currSubmission, setCurrSubmission] = useState(undefined as ISubmission | undefined)
+  const [currSubmission, setCurrSubmission] = useState(undefined as Submission | undefined)
   const genhandleClose = () => () => setCurrSubmission(undefined)
-  const genhandleClick = (submission: ISubmission) => () => setCurrSubmission(submission)
+  const genhandleClick = (submission: Submission) => () => setCurrSubmission(submission)
 
   const currentMoment = moment(serverClock)
   return (
@@ -63,10 +71,12 @@ export const SubmissionsView: FunctionComponent<SubmissionsViewProps> = ({ submi
                   </Tooltip>
                 </td>
                 <td>
-                  <Link to={`/contest/problems/${submission.problemId}`}>{submission.problem.name}</Link>
+                  <Link to={`/contest/problems/${submission.problem.id}`}>{submission.problem.name}</Link>
                 </td>
                 <td>{submission.language.name}</td>
-                <td>{/* <Verdict verdict={submission.verdict} /> */}</td>
+                <td>
+                  <Verdict verdict={submission.verdict} />
+                </td>
               </tr>
             ))}
           </tbody>
