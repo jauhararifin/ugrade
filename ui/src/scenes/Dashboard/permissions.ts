@@ -1,3 +1,4 @@
+export const GradeSubmissionsPermission = 'grade:submissions'
 export const CreateSubmissionsPermission = 'create:submissions'
 export const ReadSubmissionsPermission = 'read:submissions'
 export const ReadProfilesPermission = 'read:profiles'
@@ -34,6 +35,7 @@ export const allPermissions = [
   ReadAnnouncementPermission,
   CreateAnnouncementPermission,
   UpdateContestPermission,
+  GradeSubmissionsPermission,
 ]
 
 export const adminPermissions = allPermissions
@@ -42,4 +44,5 @@ export const contestantPermissions = [
   ReadAnnouncementPermission,
   ReadProblemsPermission,
   CreateClarificationsPermission,
+  GradeSubmissionsPermission,
 ]
