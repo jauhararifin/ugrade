@@ -181,5 +181,5 @@ class Submission(models.Model):
     def verdict(self) -> str:
         last_grading = self.grading_groups.last()
         if last_grading is not None:
-            return last_grading.grading
+            return last_grading.verdict
         return 'PENDING'
