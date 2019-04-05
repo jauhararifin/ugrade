@@ -3,8 +3,6 @@ package ugrade
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/user"
 
 	"github.com/machinebox/graphql"
 	"github.com/pkg/errors"
@@ -86,20 +84,9 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 		return errors.Wrap(err, "signing in failed")
 	}
 
-	// ger current work dir
-	user, err := user.Current()
+	f, tokenPath, err := assertWorkingFile("session.tk")
 	if err != nil {
-		return errors.WithMessage(err, "cannot get current user working directory")
-	}
-	dirPath := user.HomeDir
-
-	// save token to file
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		os.Mkdir(dirPath, 755)
-	}
-	f, err := os.Create(dirPath + "/session.tk")
-	if err != nil {
-		return errors.Wrap(err, "cannot save session token")
+		return errors.Wrap(err, "cannot create session file")
 	}
 	defer f.Close()
 	_, err = f.WriteString(signInRes.SignIn.Token)
@@ -112,7 +99,7 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 	fmt.Println("User Name:", signInRes.SignIn.User.Name)
 	fmt.Println("Contest ID:", signInRes.SignIn.User.Contest.ID)
 	fmt.Println("Contest Name:", signInRes.SignIn.User.Contest.Name)
-	fmt.Println("Token file saved to", dirPath+"/session.tk")
+	fmt.Println("Token file saved to", tokenPath)
 
 	return nil
 }

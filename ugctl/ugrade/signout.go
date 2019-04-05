@@ -8,12 +8,12 @@ import (
 )
 
 func (clt *client) SignOut(ctx context.Context) error {
-	sessionFile := "~/.ugrade/session.tk"
-	if _, err := os.Stat(sessionFile); os.IsNotExist(err) {
-		return nil
-	}
-	if err := os.Remove(sessionFile); err != nil {
-		return errors.Wrap(err, "cannot remove session file")
+	file, tokenPath, err := assertWorkingFile("session.tk")
+	if err == nil {
+		defer file.Close()
+		if err := os.Remove(tokenPath); err != nil {
+			return errors.Wrap(err, "cannot remove session file")
+		}
 	}
 	return nil
 }
