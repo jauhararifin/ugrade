@@ -2,14 +2,28 @@ package ugrade
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 
 	"github.com/jauhararifin/graphql"
 	"github.com/pkg/errors"
 )
 
-func (clt *client) SignIn(ctx context.Context, contestShordID, email, password string) error {
+// SignInRequest represent input for sign in command
+type SignInRequest struct {
+	ContestShortID string
+	Email          string
+	Password       string
+}
+
+// SignInResult represent result of sign in command
+type SignInResult struct {
+	UserID      string
+	UserName    string
+	ContestID   string
+	ContestName string
+}
+
+func (clt *client) SignIn(ctx context.Context, request SignInRequest) (*SignInResult, error) {
 	// fetching contest
 	gqlReq := graphql.NewRequest(`
 		query GetContestId($shortId: String!) {
@@ -18,7 +32,7 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 			}
 		}
 	`)
-	gqlReq.Var("shortId", contestShordID)
+	gqlReq.Var("shortId", request.ContestShortID)
 	var getContestRes struct {
 		Contest struct {
 			ID string
@@ -26,7 +40,7 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 	}
 	err := clt.gqlClient.Run(ctx, gqlReq, &getContestRes)
 	if err != nil {
-		return errors.Wrap(err, "cannot fetch contest with short id "+contestShordID)
+		return nil, errors.Wrap(err, "cannot fetch contest with short id "+request.ContestShortID)
 	}
 
 	// fetching user
@@ -38,7 +52,7 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 		}
 	`)
 	gqlReq.Var("contestId", getContestRes.Contest.ID)
-	gqlReq.Var("email", email)
+	gqlReq.Var("email", request.Email)
 	var userByEmailRes struct {
 		User struct {
 			ID string
@@ -46,7 +60,7 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 	}
 	err = clt.gqlClient.Run(ctx, gqlReq, &userByEmailRes)
 	if err != nil {
-		return errors.Wrap(err, "cannot fetch user with email "+email)
+		return nil, errors.Wrap(err, "cannot fetch user with email "+request.Email)
 	}
 
 	// signin
@@ -66,7 +80,7 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 		}
 	`)
 	gqlReq.Var("userId", userByEmailRes.User.ID)
-	gqlReq.Var("password", password)
+	gqlReq.Var("password", request.Password)
 	var signInRes struct {
 		SignIn struct {
 			Token string
@@ -82,24 +96,22 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 	}
 	err = clt.gqlClient.Run(ctx, gqlReq, &signInRes)
 	if err != nil {
-		return errors.Wrap(err, "signing in failed")
+		return nil, errors.Wrap(err, "signing in failed")
 	}
 
 	tokenPath, err := assertWorkingFile("session.tk")
 	if err != nil {
-		return errors.Wrap(err, "cannot create session file")
+		return nil, errors.Wrap(err, "cannot create session file")
 	}
 	err = ioutil.WriteFile(tokenPath, []byte(signInRes.SignIn.Token), 0744)
 	if err != nil {
-		return errors.Wrap(err, "cannot save session token")
+		return nil, errors.Wrap(err, "cannot save session token")
 	}
 
-	fmt.Println("Signin using email:", email)
-	fmt.Println("Used ID:", signInRes.SignIn.User.ID)
-	fmt.Println("User Name:", signInRes.SignIn.User.Name)
-	fmt.Println("Contest ID:", signInRes.SignIn.User.Contest.ID)
-	fmt.Println("Contest Name:", signInRes.SignIn.User.Contest.Name)
-	fmt.Println("Token file saved to", tokenPath)
-
-	return nil
+	return &SignInResult{
+		UserID:      signInRes.SignIn.User.ID,
+		UserName:    signInRes.SignIn.User.Name,
+		ContestID:   signInRes.SignIn.User.Contest.ID,
+		ContestName: signInRes.SignIn.User.Contest.Name,
+	}, nil
 }

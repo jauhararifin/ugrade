@@ -8,7 +8,7 @@ import (
 
 // Client contains ugrade functionality
 type Client interface {
-	SignIn(ctx context.Context, contestShortID, email, password string) error
+	SignIn(ctx context.Context, request SignInRequest) (*SignInResult, error)
 	SignOut(ctx context.Context) error
 	Status(ctx context.Context) error
 	Submit(ctx context.Context, languageID, problemID, sourceCode string) error
@@ -19,7 +19,7 @@ type client struct {
 }
 
 // GQLServerEndpoint contains url to ugrade graphql api
-const GQLServerEndpoint = "http://localhost:8000/graphql"
+var GQLServerEndpoint = "http://localhost:8000/graphql"
 
 // NewClient create new graphql client for ugrade server
 func NewClient() Client {

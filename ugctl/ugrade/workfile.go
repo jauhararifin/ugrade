@@ -8,6 +8,19 @@ import (
 	"github.com/pkg/errors"
 )
 
+func workingDir() (string, error) {
+	user, err := user.Current()
+	if err != nil {
+		return "", errors.Wrap(err, "cannot get current user")
+	}
+
+	homeDir := user.HomeDir
+	ugradeDir := ".ugrade"
+	result := path.Join(homeDir, ugradeDir)
+
+	return result, nil
+}
+
 func assertWorkingFile(paths ...string) (string, error) {
 	// ger current user dir
 	user, err := user.Current()

@@ -9,9 +9,11 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "ugctl",
-	Short: "UGrade command line interface",
-	Long:  `Sometimes CLI is better than GUI. So here i am.`,
+	Use:           "ugctl",
+	Short:         "UGrade command line interface",
+	Long:          `Command line interface for ugrade. Sometimes CLI is better than GUI. So here i am.`,
+	SilenceUsage:  true,
+	SilenceErrors: true,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
