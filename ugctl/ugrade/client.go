@@ -9,7 +9,8 @@ import (
 // Client contains ugrade functionality
 type Client interface {
 	SignIn(ctx context.Context, contestShortID, email, password string) error
-	SignOut(ctc context.Context) error
+	SignOut(ctx context.Context) error
+	Status(ctx context.Context) error
 }
 
 type client struct {

@@ -3,6 +3,7 @@ package ugrade
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/machinebox/graphql"
 	"github.com/pkg/errors"
@@ -84,12 +85,11 @@ func (clt *client) SignIn(ctx context.Context, contestShordID, email, password s
 		return errors.Wrap(err, "signing in failed")
 	}
 
-	f, tokenPath, err := assertWorkingFile("session.tk")
+	tokenPath, err := assertWorkingFile("session.tk")
 	if err != nil {
 		return errors.Wrap(err, "cannot create session file")
 	}
-	defer f.Close()
-	_, err = f.WriteString(signInRes.SignIn.Token)
+	err = ioutil.WriteFile(tokenPath, []byte(signInRes.SignIn.Token), 0744)
 	if err != nil {
 		return errors.Wrap(err, "cannot save session token")
 	}

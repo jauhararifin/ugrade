@@ -8,11 +8,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-func assertWorkingFile(paths ...string) (*os.File, string, error) {
+func assertWorkingFile(paths ...string) (string, error) {
 	// ger current user dir
 	user, err := user.Current()
 	if err != nil {
-		return nil, "", errors.WithMessage(err, "cannot get current user working directory")
+		return "", errors.WithMessage(err, "cannot get current user working directory")
 	}
 
 	fileName := paths[len(paths)-1]
@@ -24,12 +24,19 @@ func assertWorkingFile(paths ...string) (*os.File, string, error) {
 	pathResult := path.Join(dirPath...)
 
 	if err := os.MkdirAll(pathResult, 0774); err != nil {
-		return nil, "", errors.Wrap(err, "cannot create working directory")
+		return "", errors.Wrap(err, "cannot create working directory")
 	}
 
-	file, err := os.Create(path.Join(pathResult, fileName))
-	if err != nil {
-		return nil, "", errors.Wrap(err, "cannot create working file")
+	filePath := path.Join(pathResult, fileName)
+	_, err = os.Stat(filePath)
+	if os.IsNotExist(err) {
+		file, err := os.Create(filePath)
+		if err != nil {
+			return "", errors.Wrap(err, "cannot create working file")
+		}
+		defer file.Close()
+	} else if err != nil {
+		errors.Wrap(err, "cannot open working file")
 	}
-	return file, path.Join(pathResult, fileName), nil
+	return filePath, nil
 }
