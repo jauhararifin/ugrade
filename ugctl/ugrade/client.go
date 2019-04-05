@@ -11,7 +11,7 @@ type Client interface {
 	SignIn(ctx context.Context, request SignInRequest) (*SignInResult, error)
 	SignOut(ctx context.Context) error
 	Status(ctx context.Context) error
-	Submit(ctx context.Context, languageID, problemID, sourceCode string) error
+	Submit(ctx context.Context, request SubmitRequest) (*SubmitResult, error)
 }
 
 type client struct {

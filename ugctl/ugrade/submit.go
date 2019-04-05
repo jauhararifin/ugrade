@@ -2,7 +2,6 @@ package ugrade
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -11,23 +10,35 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (clt *client) Submit(ctx context.Context, languageID, problemID, sourceCode string) error {
+// SubmitRequest represent input for submit command
+type SubmitRequest struct {
+	LanguageID string
+	ProblemID  string
+	SourceCode string
+}
+
+// SubmitResult represent result of submit command
+type SubmitResult struct {
+	ID string
+}
+
+func (clt *client) Submit(ctx context.Context, request SubmitRequest) (*SubmitResult, error) {
 	tokenPath, err := assertWorkingFile("session.tk")
 	if err != nil {
-		return errors.Wrap(err, "cannot open session file")
+		return nil, errors.Wrap(err, "cannot open session file")
 	}
 	tokenBt, err := ioutil.ReadFile(tokenPath)
 	if err != nil {
-		return errors.Wrap(err, "cannot read session file")
+		return nil, errors.Wrap(err, "cannot read session file")
 	}
 	token := string(tokenBt)
 	if len(token) == 0 {
-		return errors.New("you havent signed in yet")
+		return nil, errors.New("you havent signed in yet")
 	}
 
-	file, err := os.Open(sourceCode)
+	file, err := os.Open(request.SourceCode)
 	if err != nil {
-		return errors.Wrap(err, "cannot open source code file")
+		return nil, errors.Wrap(err, "cannot open source code file")
 	}
 	defer file.Close()
 
@@ -50,20 +61,16 @@ func (clt *client) Submit(ctx context.Context, languageID, problemID, sourceCode
 			IssuedTime string
 		}
 	}
-	gqlRequest.Var("languageId", languageID)
-	gqlRequest.Var("problemId", problemID)
-	gqlRequest.File("sourceCode", sourceCode, file)
+	gqlRequest.Var("languageId", request.LanguageID)
+	gqlRequest.Var("problemId", request.ProblemID)
+	gqlRequest.File("sourceCode", request.SourceCode, file)
 	gqlRequest.Header.Add("Authorization", "Bearer "+token)
 	err = clt.gqlClient.Run(ctx, gqlRequest, &resp)
 	if err != nil {
-		return errors.Wrap(err, "cannot submit solution")
+		return nil, errors.Wrap(err, "cannot submit solution")
 	}
 
-	fmt.Println("Solution submitted with:")
-	fmt.Println("  ID:", resp.SubmitSolution.ID)
-	fmt.Println("  Problem:", resp.SubmitSolution.Problem.Name)
-	fmt.Println("  Language:", resp.SubmitSolution.Language.Name)
-	fmt.Println("  Issued At:", resp.SubmitSolution.IssuedTime)
-
-	return nil
+	return &SubmitResult{
+		ID: resp.SubmitSolution.ID,
+	}, nil
 }
