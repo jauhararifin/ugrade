@@ -42,6 +42,9 @@ func (clt *client) Status(ctx context.Context) error {
 				problems {
 					id shortId name
 				}
+				submissions {
+					id problem { name } issuer { name } issuedTime language { name } sourceCode verdict
+				}
 			}
 		}
 	`)
@@ -69,6 +72,21 @@ func (clt *client) Status(ctx context.Context) error {
 				ID      string
 				ShortID string
 				Name    string
+			}
+			Submissions []struct {
+				ID      string
+				Problem struct {
+					Name string
+				}
+				Issuer struct {
+					Name string
+				}
+				IssuedTime string
+				Language   struct {
+					Name string
+				}
+				SourceCode string
+				Verdict    string
 			}
 		}
 	}
@@ -107,6 +125,22 @@ func (clt *client) Status(ctx context.Context) error {
 	table.SetHeader([]string{"ID", "Short ID", "Name"})
 	for _, prob := range resp.Contest.Problems {
 		table.Append([]string{prob.ID, prob.ShortID, prob.Name})
+	}
+	table.Render()
+
+	fmt.Println()
+	fmt.Println("Submissions:")
+	table = tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"ID", "Problem", "Language", "Issued At", "Issuer", "Verdict", "Source Code"})
+	for _, submission := range resp.Contest.Submissions {
+		table.Append([]string{submission.ID,
+			submission.Problem.Name,
+			submission.Language.Name,
+			submission.IssuedTime,
+			submission.Issuer.Name,
+			submission.Verdict,
+			submission.SourceCode,
+		})
 	}
 	table.Render()
 
