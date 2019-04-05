@@ -56,7 +56,7 @@ export const Sidebar: FunctionComponent = () => {
 
   const serverClock = useServerClock()
 
-  if (error) return null
+  if (error) return <SidebarLoadingView />
   if (loading) return <SidebarLoadingView />
   if (!data || !data.myContest || !data.me) return null
   data.myContest.startTime = new Date(data.myContest.startTime)
