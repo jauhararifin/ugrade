@@ -1,2 +1,2 @@
-release: python manage.py migrate
+release: ./reset-db.sh && python manage.py migrate
 web: gunicorn ugrade.wsgi
