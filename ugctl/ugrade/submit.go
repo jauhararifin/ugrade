@@ -2,7 +2,6 @@ package ugrade
 
 import (
 	"context"
-	"io/ioutil"
 	"os"
 
 	"github.com/jauhararifin/graphql"
@@ -23,17 +22,9 @@ type SubmitResult struct {
 }
 
 func (clt *client) Submit(ctx context.Context, request SubmitRequest) (*SubmitResult, error) {
-	tokenPath, err := assertWorkingFile("session.tk")
+	token, err := getToken()
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot open session file")
-	}
-	tokenBt, err := ioutil.ReadFile(tokenPath)
-	if err != nil {
-		return nil, errors.Wrap(err, "cannot read session file")
-	}
-	token := string(tokenBt)
-	if len(token) == 0 {
-		return nil, errors.New("you havent signed in yet")
+		return nil, errors.Wrap(err, "cannot get session token")
 	}
 
 	file, err := os.Open(request.SourceCode)

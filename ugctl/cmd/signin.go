@@ -41,7 +41,7 @@ func doSignIn(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Printf(
-		"\xE2\x9C\x94 signed in as %s (id: %s) in %s (id: %s)",
+		"\xE2\x9C\x94 signed in as %s (id: %s) in %s (id: %s)\n",
 		result.UserName,
 		result.UserID,
 		result.ContestName,

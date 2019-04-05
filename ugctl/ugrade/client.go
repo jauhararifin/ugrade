@@ -10,7 +10,9 @@ import (
 type Client interface {
 	SignIn(ctx context.Context, request SignInRequest) (*SignInResult, error)
 	SignOut(ctx context.Context) error
-	Status(ctx context.Context) error
+	ProblemList(ctx context.Context) (*ProblemListResult, error)
+	LanguageList(ctx context.Context) (*LanguageListResult, error)
+	SubmissionList(ctx context.Context) (*SubmissionListResult, error)
 	Submit(ctx context.Context, request SubmitRequest) (*SubmitResult, error)
 }
 
