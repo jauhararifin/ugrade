@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/machinebox/graphql"
+	"github.com/jauhararifin/graphql"
 	"github.com/olekukonko/tablewriter"
 
 	"github.com/pkg/errors"
@@ -131,7 +131,7 @@ func (clt *client) Status(ctx context.Context) error {
 	fmt.Println()
 	fmt.Println("Submissions:")
 	table = tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"ID", "Problem", "Language", "Issued At", "Issuer", "Verdict", "Source Code"})
+	table.SetHeader([]string{"ID", "Problem", "Language", "Issued At", "Issuer", "Verdict"})
 	for _, submission := range resp.Contest.Submissions {
 		table.Append([]string{submission.ID,
 			submission.Problem.Name,
@@ -139,7 +139,6 @@ func (clt *client) Status(ctx context.Context) error {
 			submission.IssuedTime,
 			submission.Issuer.Name,
 			submission.Verdict,
-			submission.SourceCode,
 		})
 	}
 	table.Render()

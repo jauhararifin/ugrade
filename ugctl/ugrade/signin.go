@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/machinebox/graphql"
+	"github.com/jauhararifin/graphql"
 	"github.com/pkg/errors"
 )
 
