@@ -59,7 +59,10 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	client := client.New(serverURL)
-	worker := worker.New()
+	worker, err := worker.New()
+	if err != nil {
+		return err
+	}
 	ctx := context.Background()
 
 	logrus.WithField("serverURL", serverURL).Info("start listening to job")
