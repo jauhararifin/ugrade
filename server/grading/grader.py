@@ -46,10 +46,10 @@ def insert_spec(grading_group):
     fd, lang_info_path = tempfile.mkstemp()
     os.close(fd)
     language_info = {
-        'tcgen': problem.tcgen_language.id,
-        'solution': problem.solution_language.id,
-        'checker': problem.checker_language.id,
-        'submission': submission.solution_language.id,
+        'tcgen': str(problem.tcgen_language.id),
+        'solution': str(problem.solution_language.id),
+        'checker': str(problem.checker_language.id),
+        'submission': str(submission.solution_language.id),
     }
     with open(lang_info_path, 'w') as lang_info_file:
         json.dump(language_info, lang_info_file)
