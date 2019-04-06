@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 import tarfile
@@ -6,6 +5,7 @@ import tempfile
 
 import jwt
 
+from django.utils import timezone
 from django.conf import settings
 from django.core.files import File
 from django.db import transaction
@@ -115,7 +115,7 @@ def get_grading_job(user):
 
     # mark job as claimed
     grading_job.claimed_by = user
-    grading_job.claimed_at = datetime.datetime.now()
+    grading_job.claimed_at = timezone.now()
     grading_job.save()
 
     return job_token, spec
@@ -139,7 +139,7 @@ def submit_grading_job(token, verdict, output):
     if grading.finish_at is not None:
         raise ValueError('You Have Submitted This Job')
 
-    grading.finish_at = datetime.datetime.now()
+    grading.finish_at = timezone.now()
     grading.verdict = verdict
     grading.output = output
     grading.save()
@@ -160,7 +160,7 @@ def submit_grading_job(token, verdict, output):
 
     # check whether grading group is finished
     if job_finished == grading_size:
-        grading_group.finish_time = datetime.datetime.now()
+        grading_group.finish_time = timezone.now()
         if accepted_count >= (grading_size + 1) // 2:
             grading_group.verdict = 'AC'
         else:

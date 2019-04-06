@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 
 
 def ping_resolver(_root, _info) -> str:
@@ -6,4 +7,4 @@ def ping_resolver(_root, _info) -> str:
 
 
 def server_clock_resolver(_root, _info) -> datetime.datetime:
-    return datetime.datetime.now()
+    return timezone.now()
