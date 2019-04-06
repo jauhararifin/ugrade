@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 
@@ -16,7 +17,7 @@ func (clt *defaultClient) SubmitJob(ctx context.Context, token string, jobResult
 	bodyWriter := multipart.NewWriter(bodyBuf)
 	bodyWriter.WriteField("verdict", jobResult.Verdict)
 
-	outputWriter, err := bodyWriter.CreateFormField("output")
+	outputWriter, err := bodyWriter.CreateFormFile("output", "output")
 	if err != nil {
 		return errors.Wrap(err, "cannot create output writer")
 	}
@@ -27,19 +28,26 @@ func (clt *defaultClient) SubmitJob(ctx context.Context, token string, jobResult
 	jobResult.Output.Close()
 
 	bodyWriter.Close()
-	req, err := http.NewRequest("POST", clt.serverURL+"/gradings/job/", bodyBuf)
+	req, err := http.NewRequest("POST", clt.serverURL+"/gradings/jobs/", bodyBuf)
 	if err != nil {
 		return errors.Wrap(err, "cannot create post request")
 	}
-	req.Header.Add("Authorization", "Bearer "+token)
-	req.Header.Add("X-Job-Token", jobResult.Job.Token)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("X-Job-Token", jobResult.Job.Token)
+	req.Header.Set("Content-Type", bodyWriter.FormDataContentType())
 	req.WithContext(ctx)
 
 	resp, err := clt.httpClient.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "cannot send post http request")
 	}
-	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return errors.Wrapf(err, "get non 2xx status code: %d", resp.StatusCode)
+	}
+	defer func() {
+		ioutil.ReadAll(resp.Body)
+		resp.Body.Close()
+	}()
 
 	return nil
 }

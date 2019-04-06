@@ -23,10 +23,6 @@ func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, to
 	defer cancel()
 	job, err := client.GetJob(ctxGet, token)
 	if err != nil {
-		if errors.Cause(err) == grader.ErrNoSuchJob {
-			logrus.Debug("no active job")
-			return nil
-		}
 		return errors.Wrap(err, "cannot fetch job")
 	}
 	defer job.Spec.Close()
@@ -68,9 +64,10 @@ func run(cmd *cobra.Command, args []string) error {
 
 	logrus.WithField("serverURL", serverURL).Info("start listening to job")
 	for {
-		time.Sleep(5 * time.Second)
 		err := pollJob(ctx, client, worker, token)
-		if err != nil {
+		if errors.Cause(err) == grader.ErrNoSuchJob {
+			time.Sleep(5 * time.Second)
+		} else if err != nil {
 			logrus.WithError(err).Error("error when fetching, executing or submitting job")
 		}
 	}
