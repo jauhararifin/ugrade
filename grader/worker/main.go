@@ -13,11 +13,8 @@ type defaultWorker struct {
 // New create new default implementation of `grader.Worker`
 func New() (grader.Worker, error) {
 	worker := &defaultWorker{}
-	if _, err := worker.assertWorkingDir(); err != nil {
-		return nil, errors.Wrap(err, "error initializing worker")
-	}
-	if _, err := worker.assertRootFSDir(); err != nil {
-		return nil, errors.Wrap(err, "error initializing worker")
+	if err := worker.configure(); err != nil {
+		return nil, errors.Wrap(err, "error configuring worker")
 	}
 	return worker, nil
 }

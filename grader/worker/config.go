@@ -12,7 +12,18 @@ import (
 	"github.com/xi2/xz"
 )
 
+func (wk *defaultWorker) configure() error {
+	if _, err := wk.assertWorkingDir(); err != nil {
+		return errors.Wrap(err, "error initializing working directory")
+	}
+	if _, err := wk.assertRootFSDir(); err != nil {
+		return errors.Wrap(err, "error initializing sandbox directory")
+	}
+	return nil
+}
+
 func (wk *defaultWorker) getInstallDir() (string, error) {
+	// TODO: use other dir for install dir instead of `homedir`/.ugrade
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", errors.Wrap(err, "cannot get current user home directory")
@@ -119,5 +130,6 @@ func (wk *defaultWorker) assertRootFSDir() (string, error) {
 		return "", errors.Wrap(err, "cannot extract image")
 	}
 
+	wk.rootFSDir = sandboxDir
 	return sandboxDir, nil
 }

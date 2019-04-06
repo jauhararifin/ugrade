@@ -7,9 +7,18 @@ import (
 	"strings"
 
 	"github.com/jauhararifin/ugrade/grader"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grader.JobResult, error) {
+	logrus.Debug("extracting spec file")
+	specs, err := extractSpec(ctx, job.Spec)
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot extract spec file")
+	}
+	logrus.Debug("spec file extracted")
+
 	ioutil.ReadAll(job.Spec)
 	job.Spec.Close()
 
