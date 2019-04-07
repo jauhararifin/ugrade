@@ -1,35 +1,54 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/jauhararifin/ugrade/grader/worker"
+	"github.com/jauhararifin/ugrade/grader"
+
+	"github.com/jauhararifin/ugrade/grader/sandbox"
 
 	"github.com/spf13/cobra"
 )
 
 func runSandbox(cmd *cobra.Command, args []string) {
-	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "cannot determine root filesystem directory, please provide root filesystem dir in first argument")
+	if len(args) < 1 {
+		fmt.Fprintln(os.Stderr, "please provide sandbox working directory")
 		os.Exit(-1)
 	}
 
-	rootFSDir := args[0]
-	args = args[1:]
-	if err := worker.ExecuteChild(rootFSDir); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+	if len(args) < 2 {
+		fmt.Fprintln(os.Stderr, "please provide command you want to run")
 		os.Exit(-1)
 	}
+
+	executor, err := sandbox.New()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot create sandbox executor: %+v", err)
+		os.Exit(-1)
+	}
+
+	ctx := context.Background()
+	command := grader.Command{
+		Path: args[1],
+		Args: args[2:],
+		Dir:  args[0],
+	}
+	if err := executor.ExecuteChild(ctx, command); err != nil {
+		fmt.Fprintf(os.Stderr, "error executing command inside sandbox: %+v\n", err)
+		os.Exit(-1)
+	}
+
+	os.Exit(0)
 }
 
 var sandboxCmd = &cobra.Command{
-	Use:           "sandbox",
-	SilenceUsage:  true,
-	SilenceErrors: true,
-	Run:           runSandbox,
+	Use:          "sandbox",
+	SilenceUsage: true,
+	Run:          runSandbox,
 }
 
 func init() {
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(sandboxCmd)
 }
