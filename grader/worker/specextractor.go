@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -14,7 +16,7 @@ import (
 )
 
 type program struct {
-	source   io.ReadCloser
+	filename string
 	language string
 }
 
@@ -25,12 +27,12 @@ type extractedSpec struct {
 	submission program
 }
 
-func extractSpec(ctx context.Context, spec io.Reader) (res *extractedSpec, err error) {
+func extractSpec(ctx context.Context, workingDir string, spec io.Reader) (res *extractedSpec, err error) {
 	// TODO: close extractedSpec result when error occured
-	var tcgenSource io.ReadCloser
-	var solutionSource io.ReadCloser
-	var checkerSource io.ReadCloser
-	var submissionSource io.ReadCloser
+	var tcgenFilename string
+	var solutionFilename string
+	var checkerFilename string
+	var submissionFilename string
 
 	var langInfo struct {
 		Tcgen      string
@@ -39,9 +41,10 @@ func extractSpec(ctx context.Context, spec io.Reader) (res *extractedSpec, err e
 		Submission string
 	}
 
-	logrus.Trace("reading spec tar files")
+	logrus.Debug("reading spec tar files")
 	tarReader := tar.NewReader(spec)
 	for {
+		logrus.Trace("reading next file inside tar")
 		header, err := tarReader.Next()
 		if err == io.EOF {
 			break
@@ -51,38 +54,44 @@ func extractSpec(ctx context.Context, spec io.Reader) (res *extractedSpec, err e
 		logrus.WithField("filename", header.Name).Trace("found item in spec tar")
 
 		if header.Typeflag == tar.TypeReg || header.Typeflag == tar.TypeRegA {
-			// preparing temporary file
-			file, err := tempFile("", "")
+			filename := path.Join(workingDir, header.Name)
+
+			// create file
+			logrus.WithField("filename", filename).Trace("create file")
+			file, err := os.Create(filename)
 			if err != nil {
-				file.Close()
 				return nil, errors.Wrap(err, "cannot create file")
 			}
+			defer file.Close()
+
+			// fill the file
+			logrus.WithField("filename", filename).Trace("write file")
 			_, err = io.Copy(file, tarReader)
 			if err != nil {
-				file.Close()
 				return nil, errors.Wrap(err, "cannot write file")
-			}
-			_, err = file.Seek(0, 0)
-			if err != nil {
-				file.Close()
-				return nil, errors.Wrap(err, "cannot seek beginning of file")
 			}
 
 			// fill source io.Reader
 			baseName := strings.TrimSuffix(header.Name, filepath.Ext(header.Name))
 			switch baseName {
 			case "tcgen":
-				tcgenSource = file
+				tcgenFilename = header.Name
 			case "solution":
-				solutionSource = file
+				solutionFilename = header.Name
 			case "checker":
-				checkerSource = file
+				checkerFilename = header.Name
 			case "submission":
-				submissionSource = file
+				submissionFilename = header.Name
+			default:
+				os.Remove(header.Name)
 			}
 
 			// handle lang.json file
 			if header.Name == "lang.json" {
+				logrus.Debug("read language information")
+				if _, err := file.Seek(0, 0); err != nil {
+					return nil, errors.Wrap(err, "cannot seek the beginning of language info file")
+				}
 				jsonBytes, err := ioutil.ReadAll(file)
 				if err != nil {
 					return nil, errors.Wrap(err, "cannot read file")
@@ -99,16 +108,16 @@ func extractSpec(ctx context.Context, spec io.Reader) (res *extractedSpec, err e
 	}
 	logrus.Trace("reading spec tar files finished")
 
-	if tcgenSource == nil {
+	if len(tcgenFilename) == 0 {
 		return nil, errors.New("no testcase generator source found")
 	}
-	if solutionSource == nil {
+	if len(solutionFilename) == 0 {
 		return nil, errors.New("no jury solution source found")
 	}
-	if checkerSource == nil {
+	if len(checkerFilename) == 0 {
 		return nil, errors.New("no checker source found")
 	}
-	if submissionSource == nil {
+	if len(submissionFilename) == 0 {
 		return nil, errors.New("no contestant submission source found")
 	}
 	if len(langInfo.Checker) == 0 ||
@@ -120,19 +129,19 @@ func extractSpec(ctx context.Context, spec io.Reader) (res *extractedSpec, err e
 
 	return &extractedSpec{
 		tcgen: program{
-			source:   tcgenSource,
+			filename: tcgenFilename,
 			language: langInfo.Tcgen,
 		},
 		solution: program{
-			source:   solutionSource,
+			filename: solutionFilename,
 			language: langInfo.Solution,
 		},
 		checker: program{
-			source:   checkerSource,
+			filename: checkerFilename,
 			language: langInfo.Checker,
 		},
 		submission: program{
-			source:   submissionSource,
+			filename: submissionFilename,
 			language: langInfo.Submission,
 		},
 	}, nil

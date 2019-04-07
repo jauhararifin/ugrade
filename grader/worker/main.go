@@ -6,8 +6,7 @@ import (
 )
 
 type defaultWorker struct {
-	workingDir string
-	rootFSDir  string
+	executor grader.Sandbox
 }
 
 // New create new default implementation of `grader.Worker`

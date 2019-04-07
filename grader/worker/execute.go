@@ -12,12 +12,28 @@ import (
 )
 
 func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grader.JobResult, error) {
+	// prepare working directory
+	logrus.Debug("preparing working directory for executing job")
+	workDir, workDirSbox, err := worker.executor.PrepareDir()
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot create working directory inside sandbox")
+	}
+	// defer os.RemoveAll(workDir) // remove directory after job finished
+	logrus.WithField("workDir", workDir).WithField("workDirSbox", workDirSbox).Debug("working directory created")
+
 	logrus.Debug("extracting spec file")
-	specs, err := extractSpec(ctx, job.Spec)
+	specs, err := extractSpec(ctx, workDir, job.Spec)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot extract spec file")
 	}
 	logrus.Debug("spec file extracted")
+
+	logrus.Debug("compiling testcase generator")
+	tcgenCompRes, err := worker.compile(ctx, workDirSbox, specs.tcgen.language, specs.tcgen.filename, "tcgenexec")
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot compile testcase generator")
+	}
+	logrus.WithField("compileResult", tcgenCompRes).Debug("testcase generator compiled")
 
 	ioutil.ReadAll(job.Spec)
 	job.Spec.Close()
