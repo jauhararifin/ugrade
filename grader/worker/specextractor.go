@@ -25,6 +25,11 @@ type extractedSpec struct {
 	solution   program
 	checker    program
 	submission program
+
+	timeLimit   uint
+	outputLimit uint
+	memoryLimit uint
+	tolerance   float32
 }
 
 func extractSpec(ctx context.Context, workingDir string, spec io.Reader) (res *extractedSpec, err error) {
@@ -39,6 +44,13 @@ func extractSpec(ctx context.Context, workingDir string, spec io.Reader) (res *e
 		Solution   string
 		Checker    string
 		Submission string
+	}
+
+	var problemInfo struct {
+		TimeLimit   uint
+		OutputLimit uint
+		MemoryLimit uint
+		Tolerance   float32
 	}
 
 	logrus.Debug("reading spec tar files")
@@ -104,6 +116,25 @@ func extractSpec(ctx context.Context, workingDir string, spec io.Reader) (res *e
 				}
 				logrus.Trace("language info parsed")
 			}
+
+			// handle problem.json file
+			if header.Name == "problem.json" {
+				logrus.Debug("read problem information")
+				if _, err := file.Seek(0, 0); err != nil {
+					return nil, errors.Wrap(err, "cannot seek then beginning of problem info file")
+				}
+				jsonBytes, err := ioutil.ReadAll(file)
+				if err != nil {
+					return nil, errors.Wrap(err, "cannot read file")
+				}
+
+				logrus.WithField("problemJson", string(jsonBytes)).Trace("parsing problem info")
+				err = json.Unmarshal(jsonBytes, &problemInfo)
+				if err != nil {
+					return nil, errors.Wrap(err, "cannot parse problem info")
+				}
+				logrus.Trace("problem info parsed")
+			}
 		}
 	}
 	logrus.Trace("reading spec tar files finished")
@@ -144,5 +175,10 @@ func extractSpec(ctx context.Context, workingDir string, spec io.Reader) (res *e
 			filename: submissionFilename,
 			language: langInfo.Submission,
 		},
+
+		timeLimit:   problemInfo.TimeLimit,
+		outputLimit: problemInfo.OutputLimit,
+		memoryLimit: problemInfo.MemoryLimit,
+		tolerance:   problemInfo.Tolerance,
 	}, nil
 }

@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"io/ioutil"
+	"strings"
 	"time"
 
 	"github.com/jauhararifin/ugrade/grader"
@@ -32,6 +34,12 @@ func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, to
 	defer cancelExecute()
 	result, err := worker.Execute(executeCtx, *job)
 	if err != nil {
+		// submit internal error when worker gives error.
+		client.SubmitJob(ctx, token, grader.JobResult{
+			Job:     *job,
+			Verdict: "IE",
+			Output:  ioutil.NopCloser(strings.NewReader(err.Error())),
+		})
 		return errors.Wrap(err, "cannot execute job")
 	}
 	defer result.Output.Close()

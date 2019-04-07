@@ -43,6 +43,7 @@ def insert_spec(grading_group):
             spec.add(filename, arcname + ext)
             os.remove(filename)
 
+    # add language info
     fd, lang_info_path = tempfile.mkstemp()
     os.close(fd)
     language_info = {
@@ -55,6 +56,20 @@ def insert_spec(grading_group):
         json.dump(language_info, lang_info_file)
     spec.add(lang_info_path, 'lang.json')
     os.remove(lang_info_path)
+
+    # add problem info
+    fd, problem_info_path = tempfile.mkstemp()
+    os.close(fd)
+    problem_info = {
+        'timeLimit': problem.time_limit,
+        'outputLimit': problem.output_limit,
+        'memoryLimit': problem.memory_limit,
+        'tolerance': problem.tolerance,
+    }
+    with open(problem_info_path, 'w') as problem_info_file:
+        json.dump(problem_info, problem_info_file)
+    spec.add(problem_info_path, 'problem.json')
+    os.remove(problem_info_path)
 
     spec.close()
 

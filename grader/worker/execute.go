@@ -4,12 +4,32 @@ import (
 	"context"
 	"io/ioutil"
 	"math/rand"
+	"os"
 	"strings"
 
 	"github.com/jauhararifin/ugrade/grader"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
+
+func (worker *defaultWorker) generateTestcase(
+	ctx context.Context,
+	workDirSbox,
+	language,
+	filename string,
+) <-chan error {
+	retChan := make(chan error)
+	go func() {
+		logrus.Debug("compiling testcase generator")
+		tcgenCompRes, err := worker.compile(ctx, workDirSbox, language, filename, "tcgenexec")
+		if err != nil {
+			retChan <- errors.Wrap(err, "cannot compile testcase generator")
+		} else {
+			logrus.WithField("compileResult", tcgenCompRes).Debug("testcase generator compiled")
+		}
+	}()
+	return retChan
+}
 
 func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grader.JobResult, error) {
 	// prepare working directory
@@ -18,7 +38,7 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot create working directory inside sandbox")
 	}
-	// defer os.RemoveAll(workDir) // remove directory after job finished
+	defer os.RemoveAll(workDir) // remove directory after job finished
 	logrus.WithField("workDir", workDir).WithField("workDirSbox", workDirSbox).Debug("working directory created")
 
 	logrus.Debug("extracting spec file")
@@ -28,12 +48,11 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	}
 	logrus.Debug("spec file extracted")
 
-	logrus.Debug("compiling testcase generator")
-	tcgenCompRes, err := worker.compile(ctx, workDirSbox, specs.tcgen.language, specs.tcgen.filename, "tcgenexec")
-	if err != nil {
-		return nil, errors.Wrap(err, "cannot compile testcase generator")
+	genTCError := worker.generateTestcase(ctx, workDirSbox, specs.tcgen.language, specs.tcgen.filename)
+
+	if err := <-genTCError; err != nil {
+		return nil, errors.Wrap(err, "error generating testcase files")
 	}
-	logrus.WithField("compileResult", tcgenCompRes).Debug("testcase generator compiled")
 
 	ioutil.ReadAll(job.Spec)
 	job.Spec.Close()
