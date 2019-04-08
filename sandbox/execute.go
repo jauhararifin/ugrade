@@ -25,7 +25,7 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 	// initialize child process
 	osCmd := exec.CommandContext(
 		ctx,
-		"/proc/self/exe",
+		"ugsbox",
 		executeChildArgs...,
 	)
 	osCmd.Stdin = cmd.Stdin

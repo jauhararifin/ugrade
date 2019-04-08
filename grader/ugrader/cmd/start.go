@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"io/ioutil"
+	"os"
 	"strings"
 	"time"
 
@@ -60,6 +61,10 @@ func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, to
 }
 
 func runStart(cmd *cobra.Command, args []string) error {
+	if os.Getuid() != 0 {
+		return errors.New("should run as root")
+	}
+
 	token := cmd.Flag("token").Value.String()
 	if len(token) == 0 {
 		return errors.New("missing token")
@@ -79,7 +84,7 @@ func runStart(cmd *cobra.Command, args []string) error {
 			time.Sleep(5 * time.Second)
 		} else if err != nil {
 			logrus.WithError(err).Error("error when fetching, executing or submitting job")
-			time.Sleep(10 * time.Second)
+			// time.Sleep(10 * time.Second)
 		}
 	}
 }
