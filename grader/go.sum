@@ -15,10 +15,13 @@ github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6 h1:UDMh68U
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/jauhararifin/ugrade v0.0.0-20190408020359-3b59f102e2c3 h1:QTHBNKriCTSSbBdLB5eByGSN7Sis/4p4gAL4AHKQro0=
 github.com/jauhararifin/ugrade/grader v0.0.0-20190408020359-3b59f102e2c3/go.mod h1:dN+R+0cGqdPRTLISHS3HwCd0vYUyuLD5blRVl7vi2vE=
+github.com/jauhararifin/ugrade/grader v0.0.0-20190408103600-21b4b1701356/go.mod h1:dN+R+0cGqdPRTLISHS3HwCd0vYUyuLD5blRVl7vi2vE=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190408101444-5989b98197d9 h1:RJsmn35qxelTyT25S4e80rdIvY/yyuHzJSr//HyGE2E=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190408101444-5989b98197d9/go.mod h1:wJACu8B9Udh613wTulZhT0m/VnSpFDCK06YZiGsnE7E=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190408103600-21b4b1701356 h1:47tlDfqSgnH7FyMIi7uswQ/7N5EC90thk10fzRMtxeE=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190408103600-21b4b1701356/go.mod h1:b7oLI2rAwdaH+zvu7r+n/9STjgKxWvXqpG5d5Z2uuMI=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190408125706-ec651f6b51aa h1:LkZmJr1TkEtRXtRObYWBsZtkEiRM7BDmFoaLbO5Z/WY=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190408125706-ec651f6b51aa/go.mod h1:KOCvV4QI02SbsRI4ulH8gDlH934Nt8IsFfQb63XNq2E=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=

@@ -26,6 +26,8 @@ func (worker *defaultWorker) genericCompile(
 	outputFilename string,
 	cmd sandbox.Command,
 ) (compilationResult, error) {
+	cmd.TimeLimit = 10000              // limit 10 seconds for compiling
+	cmd.MemoryLimit = 64 * 1024 * 1024 // limit 64MB for compiling
 	logrus.WithField("cmd", cmd).Debug("executing compilation script")
 	startTime := time.Now()
 	if err := worker.executor.ExecuteCommand(ctx, cmd); err != nil {

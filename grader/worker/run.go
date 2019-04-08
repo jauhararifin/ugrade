@@ -24,11 +24,13 @@ func (worker *defaultWorker) run(
 	stdout io.Writer,
 ) (executionResult, error) {
 	cmd := sandbox.Command{
-		Path:   path.Join(compiled.workDir.Sandbox, compiled.executable),
-		Args:   args,
-		Dir:    compiled.workDir,
-		Stdin:  stdin,
-		Stdout: stdout,
+		Path:        path.Join(compiled.workDir.Sandbox, compiled.executable),
+		Args:        args,
+		Dir:         compiled.workDir,
+		Stdin:       stdin,
+		Stdout:      stdout,
+		TimeLimit:   10000,
+		MemoryLimit: 64 * 1024 * 1024,
 	}
 
 	logrus.WithField("cmd", cmd).Trace("run executable")

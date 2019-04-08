@@ -39,7 +39,7 @@ func runSandbox(cmd *cobra.Command, args []string) {
 	}
 
 	// get memory limit
-	_, err = cmd.Flags().GetUint32("memorylimit")
+	memoryLimit, err := cmd.Flags().GetUint32("memorylimit")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "please provide a valid memory limit")
 		os.Exit(255)
@@ -58,9 +58,11 @@ func runSandbox(cmd *cobra.Command, args []string) {
 	defer cancel()
 
 	command := sandbox.Command{
-		Path: execPath,
-		Args: args,
-		Dir:  executor.Path(workingDirectory),
+		Path:        execPath,
+		Args:        args,
+		Dir:         executor.Path(workingDirectory),
+		TimeLimit:   timeLimit,
+		MemoryLimit: memoryLimit,
 	}
 	if err := executor.ExecuteChild(ctx, command); err != nil {
 		fmt.Fprintf(os.Stderr, "error executing command inside sandbox: %+v\n", err)
