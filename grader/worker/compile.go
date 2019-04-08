@@ -16,30 +16,17 @@ type compilationResult struct {
 	duration   time.Duration
 	output     io.Reader
 	workDir    workingDirectory
+	source     string
 	executable string
 }
 
-func (worker *defaultWorker) compileC(
+func (worker *defaultWorker) genericCompile(
 	ctx context.Context,
 	workDir workingDirectory,
 	sourceFilename,
 	outputFilename string,
+	cmd grader.Command,
 ) (compilationResult, error) {
-	return compilationResult{}, nil
-}
-
-func (worker *defaultWorker) compileCpp11(
-	ctx context.Context,
-	workDir workingDirectory,
-	sourceFilename,
-	outputFilename string,
-) (compilationResult, error) {
-	cmd := grader.Command{
-		Path: "g++",
-		Args: []string{"-o", outputFilename, "-std=c++11", "-O3", sourceFilename},
-		Dir:  workDir.sandboxPath,
-	}
-
 	logrus.WithField("cmd", cmd).Debug("executing compilation script")
 	startTime := time.Now()
 	if err := worker.executor.ExecuteCommand(ctx, cmd); err != nil {
@@ -55,8 +42,43 @@ func (worker *defaultWorker) compileCpp11(
 		output:     strings.NewReader("not yet implemented"),
 		duration:   duration,
 		workDir:    workDir,
+		source:     sourceFilename,
 		executable: outputFilename,
 	}, nil
+}
+
+func (worker *defaultWorker) compileC(
+	ctx context.Context,
+	workDir workingDirectory,
+	sourceFilename,
+	outputFilename string,
+) (compilationResult, error) {
+	cmd := grader.Command{
+		Path: "gcc",
+		Args: []string{
+			"-o", outputFilename,
+			"-Wall",
+			"-std=gnu11",
+			"-O2",
+			sourceFilename,
+		},
+		Dir: workDir.sandboxPath,
+	}
+	return worker.genericCompile(ctx, workDir, sourceFilename, outputFilename, cmd)
+}
+
+func (worker *defaultWorker) compileCpp11(
+	ctx context.Context,
+	workDir workingDirectory,
+	sourceFilename,
+	outputFilename string,
+) (compilationResult, error) {
+	cmd := grader.Command{
+		Path: "g++",
+		Args: []string{"-o", outputFilename, "-std=c++11", "-O3", sourceFilename},
+		Dir:  workDir.sandboxPath,
+	}
+	return worker.genericCompile(ctx, workDir, sourceFilename, outputFilename, cmd)
 }
 
 func (worker *defaultWorker) compile(

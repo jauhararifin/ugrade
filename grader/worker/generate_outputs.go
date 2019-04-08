@@ -6,15 +6,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-type testcase struct {
-	inputfile  string
-	outputfile string
-}
-
-type testcaseSuite struct {
-	testcases []testcase
-}
-
 func (worker *defaultWorker) generateTCOutputs(
 	ctx context.Context,
 	inputs inputFiles,

@@ -60,8 +60,11 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 		return nil, errors.Wrap(err, "error executing contestant solution")
 	}
 
-	ioutil.ReadAll(job.Spec)
-	job.Spec.Close()
+	// compile checker
+	_, err = worker.compileChecker(ctx, *specs)
+	if err != nil {
+		return nil, errors.Wrap(err, "error compiling checker")
+	}
 
 	if rand.Intn(2) == 0 {
 		return &grader.JobResult{

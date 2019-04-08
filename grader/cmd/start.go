@@ -26,6 +26,7 @@ func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, to
 		return errors.Wrap(err, "cannot fetch job")
 	}
 	defer job.Spec.Close()
+	defer ioutil.ReadAll(job.Spec)
 	logrus.WithField("job", job).Info("found a job")
 
 	// execute job
