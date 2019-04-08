@@ -72,7 +72,7 @@ type inputFiles struct {
 	files   []string
 }
 
-func (worker *defaultWorker) generateTCInput(ctx context.Context, tcgen compilationResult) (*inputFiles, error) {
+func (worker *defaultWorker) generateTCInputs(ctx context.Context, tcgen compilationResult) (*inputFiles, error) {
 	// getting sample count
 	nSample, err := worker.getTCSampleCount(ctx, tcgen)
 	if err != nil {

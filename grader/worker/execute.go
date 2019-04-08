@@ -31,7 +31,7 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	}
 
 	// generate testcase input
-	tcin, err := worker.generateTCInput(ctx, tcgenExec)
+	tcin, err := worker.generateTCInputs(ctx, tcgenExec)
 	if err != nil {
 		return nil, errors.Wrap(err, "error generating testcase inputs")
 	}
@@ -42,10 +42,22 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 		return nil, errors.Wrap(err, "error compiling jury solution")
 	}
 
-	// generate testcase outputs
-	_, err = worker.executeSuite(ctx, *tcin, compiledJury)
+	// generate testcase suite
+	_, err = worker.generateTCOutputs(ctx, *tcin, compiledJury)
 	if err != nil {
 		return nil, errors.Wrap(err, "error generating testcase outputs")
+	}
+
+	// compile contestant solution
+	compiledContestant, err := worker.compileContestantSolution(ctx, *specs)
+	if err != nil {
+		return nil, errors.Wrap(err, "error compiling contestant solution")
+	}
+
+	// run contestant solution
+	_, err = worker.generateContestantOutputs(ctx, *tcin, compiledContestant)
+	if err != nil {
+		return nil, errors.Wrap(err, "error executing contestant solution")
 	}
 
 	ioutil.ReadAll(job.Spec)

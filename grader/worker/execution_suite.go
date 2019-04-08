@@ -25,10 +25,11 @@ func (worker *defaultWorker) executeSuite(
 	ctx context.Context,
 	input inputFiles,
 	compiled compilationResult,
+	outputPrefix string,
 ) (*executionSuite, error) {
 	executions := make([]execution, 0, 0)
 	for _, infile := range input.files {
-		outfile := strings.TrimSuffix(infile, filepath.Ext(infile)) + ".out"
+		outfile := outputPrefix + strings.TrimSuffix(infile, filepath.Ext(infile)) + ".out"
 		logrus.WithField("inputFile", infile).WithField("outputFile", outfile).Trace("execute suite item")
 		res, err := worker.runWithFile(ctx, compiled, []string{}, infile, outfile)
 		if err != nil {
