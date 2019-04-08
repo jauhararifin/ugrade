@@ -1,4 +1,4 @@
-package main
+package sandbox
 
 import (
 	"context"
@@ -30,4 +30,6 @@ type Sandbox interface {
 	PrepareDir() (*Path, error)
 	Path(sandboxPath string) Path
 	ExecuteCommand(ctx context.Context, cmd Command) error
+
+	ExecuteChild(ctx context.Context, cmd Command) error
 }

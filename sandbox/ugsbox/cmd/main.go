@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/spf13/cobra"
 )
 
@@ -45,13 +46,8 @@ func runSandbox(cmd *cobra.Command, args []string) {
 	}
 
 	// create new sandbox executor
-	sandbox, err := New()
+	executor, err := sandbox.New()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "cannot create sandbox executor: %+v", err)
-		os.Exit(255)
-	}
-	executor, ok := sandbox.(*defaultSandbox)
-	if !ok {
 		fmt.Fprintf(os.Stderr, "cannot create sandbox executor: %+v", err)
 		os.Exit(255)
 	}
@@ -61,12 +57,12 @@ func runSandbox(cmd *cobra.Command, args []string) {
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeLimit)*time.Millisecond)
 	defer cancel()
 
-	command := Command{
+	command := sandbox.Command{
 		Path: execPath,
 		Args: args,
 		Dir:  executor.Path(workingDirectory),
 	}
-	if err := executor.executeChild(ctx, command); err != nil {
+	if err := executor.ExecuteChild(ctx, command); err != nil {
 		fmt.Fprintf(os.Stderr, "error executing command inside sandbox: %+v\n", err)
 		os.Exit(1)
 	}
@@ -85,4 +81,8 @@ func init() {
 	sandboxCmd.Flags().Uint32P("memorylimit", "m", 64*1024*1024, "memory limit in bytes")
 	sandboxCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
 	sandboxCmd.Flags().StringP("path", "p", "", "executable path")
+}
+
+func Execute() error {
+	return sandboxCmd.Execute()
 }

@@ -1,4 +1,4 @@
-package main
+package sandbox
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (sb *defaultSandbox) executeChild(ctx context.Context, cmd Command) error {
+func (sb *defaultSandbox) ExecuteChild(ctx context.Context, cmd Command) error {
 	// mount dev filesystem
 	// logrus.WithField("rootFSDir", sb.sandboxDir).Debug("mounting dev filesystem")
 	// targetDev := path.Join(sb.sandboxDir, "/dev")

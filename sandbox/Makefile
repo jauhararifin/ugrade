@@ -1,4 +1,7 @@
-all: build
+all: build install
 
 build:
-	go build -o ugsbox
+	go build -o bin/ugsbox ./ugsbox/cmd
+
+install:
+	go install ./ugsbox
