@@ -1,4 +1,4 @@
-package sandbox
+package main
 
 import (
 	"context"
@@ -6,48 +6,11 @@ import (
 	"os/exec"
 	"syscall"
 
-	"github.com/jauhararifin/ugrade/grader"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
-func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd grader.Command) error {
-	// prepare arguments for child process
-	executeChildArgs := append([]string{
-		"sandbox",
-		cmd.Dir,
-		"--",
-		cmd.Path,
-	}, cmd.Args...)
-
-	// initialize child process
-	osCmd := exec.CommandContext(
-		ctx,
-		"/proc/self/exe",
-		executeChildArgs...,
-	)
-	osCmd.Stdin = cmd.Stdin
-	osCmd.Stdout = cmd.Stdout
-	osCmd.Stderr = cmd.Stderr
-
-	if osCmd.Stderr == nil {
-		osCmd.Stderr = os.Stderr
-	}
-
-	// clone namespaces for child process
-	osCmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
-	}
-
-	// executing child command
-	logrus.WithField("cmd", cmd).Debug("executing sandboxed command")
-	if err := osCmd.Run(); err != nil {
-		return errors.Wrap(err, "error when executing child process")
-	}
-	return nil
-}
-
-func (sb *defaultSandbox) ExecuteChild(ctx context.Context, cmd grader.Command) error {
+func (sb *defaultSandbox) executeChild(ctx context.Context, cmd Command) error {
 	// mount dev filesystem
 	// logrus.WithField("rootFSDir", sb.sandboxDir).Debug("mounting dev filesystem")
 	// targetDev := path.Join(sb.sandboxDir, "/dev")
@@ -81,7 +44,7 @@ func (sb *defaultSandbox) ExecuteChild(ctx context.Context, cmd grader.Command) 
 	osCmd.Stdin = os.Stdin
 	osCmd.Stdout = os.Stdout
 	osCmd.Stderr = os.Stderr
-	osCmd.Dir = cmd.Dir
+	osCmd.Dir = cmd.Dir.Sandbox
 	osCmd.Env = []string{
 		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/x86_64-alpine-linux-musl/bin/",
 	}

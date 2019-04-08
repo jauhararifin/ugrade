@@ -1,4 +1,4 @@
-package sandbox
+package main
 
 import (
 	"archive/tar"
@@ -12,14 +12,9 @@ import (
 	"github.com/xi2/xz"
 )
 
-func (sb *defaultSandbox) configure() error {
-	if _, err := sb.assertWorkingDir(); err != nil {
-		return errors.Wrap(err, "error initializing working directory")
-	}
-	if _, err := sb.assertSandboxDir(); err != nil {
-		return errors.Wrap(err, "error initializing sandbox directory")
-	}
-	return nil
+type defaultSandbox struct {
+	workingDir string
+	sandboxDir string
 }
 
 func (sb *defaultSandbox) getInstallDir() (string, error) {
@@ -193,4 +188,23 @@ func (sb *defaultSandbox) assertSandboxDir() (string, error) {
 
 	sb.sandboxDir = sandboxDir
 	return sandboxDir, nil
+}
+
+func (sb *defaultSandbox) configure() error {
+	if _, err := sb.assertWorkingDir(); err != nil {
+		return errors.Wrap(err, "error initializing working directory")
+	}
+	if _, err := sb.assertSandboxDir(); err != nil {
+		return errors.Wrap(err, "error initializing sandbox directory")
+	}
+	return nil
+}
+
+// New create new default implementation of `sandbox.Sandbox`
+func New() (Sandbox, error) {
+	sbox := &defaultSandbox{}
+	if err := sbox.configure(); err != nil {
+		return nil, errors.Wrap(err, "cannot initialize sandbox configuration")
+	}
+	return sbox, nil
 }
