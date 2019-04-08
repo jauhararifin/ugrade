@@ -67,12 +67,12 @@ func (worker *defaultWorker) generateTCFile(
 	return outputFilename, nil
 }
 
-type inputFile struct {
+type inputFiles struct {
 	workDir workingDirectory
 	files   []string
 }
 
-func (worker *defaultWorker) generateTCInput(ctx context.Context, tcgen compilationResult) (*inputFile, error) {
+func (worker *defaultWorker) generateTCInput(ctx context.Context, tcgen compilationResult) (*inputFiles, error) {
 	// getting sample count
 	nSample, err := worker.getTCSampleCount(ctx, tcgen)
 	if err != nil {
@@ -103,7 +103,7 @@ func (worker *defaultWorker) generateTCInput(ctx context.Context, tcgen compilat
 		testcaseFilenames = append(testcaseFilenames, filename)
 	}
 
-	return &inputFile{
+	return &inputFiles{
 		workDir: tcgen.workDir,
 		files:   testcaseFilenames,
 	}, nil

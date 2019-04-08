@@ -2,7 +2,6 @@ package worker
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"strings"
@@ -32,11 +31,22 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	}
 
 	// generate testcase input
-	inputs, err := worker.generateTCInput(ctx, tcgenExec)
+	tcin, err := worker.generateTCInput(ctx, tcgenExec)
 	if err != nil {
 		return nil, errors.Wrap(err, "error generating testcase inputs")
 	}
-	fmt.Println(inputs)
+
+	// compile jury solution
+	compiledJury, err := worker.compileJurySolution(ctx, *specs)
+	if err != nil {
+		return nil, errors.Wrap(err, "error compiling jury solution")
+	}
+
+	// generate testcase outputs
+	_, err = worker.executeSuite(ctx, *tcin, compiledJury)
+	if err != nil {
+		return nil, errors.Wrap(err, "error generating testcase outputs")
+	}
 
 	ioutil.ReadAll(job.Spec)
 	job.Spec.Close()

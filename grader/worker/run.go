@@ -3,6 +3,7 @@ package worker
 import (
 	"context"
 	"io"
+	"os"
 	"path"
 	"time"
 
@@ -44,4 +45,28 @@ func (worker *defaultWorker) run(
 	return executionResult{
 		duration: duration,
 	}, nil
+}
+
+// runWithFile run compiled executable using `inputFile` as stdin, and create new `outputFile` file as stdout.
+// `inputFile` and `outputFile` is relative to compiled directory.
+func (worker *defaultWorker) runWithFile(
+	ctx context.Context,
+	compiled compilationResult,
+	args []string,
+	inputFile string,
+	outputFile string,
+) (executionResult, error) {
+	hostInput := path.Join(compiled.workDir.hostPath, inputFile)
+	in, err := os.Open(hostInput)
+	if err != nil {
+		return executionResult{}, errors.Wrap(err, "cannot open stdin")
+	}
+
+	hostOutput := path.Join(compiled.workDir.hostPath, outputFile)
+	out, err := os.Create(hostOutput)
+	if err != nil {
+		return executionResult{}, errors.Wrap(err, "cannot create stdout")
+	}
+
+	return worker.run(ctx, compiled, args, in, out)
 }
