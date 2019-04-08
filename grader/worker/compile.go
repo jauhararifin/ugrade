@@ -13,58 +13,63 @@ import (
 )
 
 type compilationResult struct {
-	duration time.Duration
-	output   io.Reader
+	duration   time.Duration
+	output     io.Reader
+	workDir    workingDirectory
+	executable string
 }
 
-func (wk *defaultWorker) compileC(
+func (worker *defaultWorker) compileC(
 	ctx context.Context,
-	workingDirSbox,
+	workDir workingDirectory,
 	sourceFilename,
 	outputFilename string,
 ) (compilationResult, error) {
 	return compilationResult{}, nil
 }
 
-func (wk *defaultWorker) compileCpp11(
+func (worker *defaultWorker) compileCpp11(
 	ctx context.Context,
-	workingDirSbox,
+	workDir workingDirectory,
 	sourceFilename,
 	outputFilename string,
 ) (compilationResult, error) {
 	cmd := grader.Command{
 		Path: "g++",
 		Args: []string{"-o", outputFilename, "-std=c++11", "-O3", sourceFilename},
-		Dir:  workingDirSbox,
+		Dir:  workDir.sandboxPath,
 	}
 
 	logrus.WithField("cmd", cmd).Debug("executing compilation script")
 	startTime := time.Now()
-	if err := wk.executor.ExecuteCommand(ctx, cmd); err != nil {
+	if err := worker.executor.ExecuteCommand(ctx, cmd); err != nil {
 		return compilationResult{
-			output: strings.NewReader("not yet implemented"),
+			output:   strings.NewReader("not yet implemented"),
+			duration: time.Since(startTime),
 		}, errors.Wrap(err, "error when executing compile script")
 	}
 	duration := time.Since(startTime)
 	logrus.Debug("compile script successfully executed")
 
 	return compilationResult{
-		output:   strings.NewReader("not yet implemented"),
-		duration: duration,
+		output:     strings.NewReader("not yet implemented"),
+		duration:   duration,
+		workDir:    workDir,
+		executable: outputFilename,
 	}, nil
 }
 
-func (wk *defaultWorker) compile(
+func (worker *defaultWorker) compile(
 	ctx context.Context,
-	workDirSbox string,
+	workDir workingDirectory,
 	languageID string,
 	sourceFilename string,
 	outputFilename string,
 ) (compilationResult, error) {
 	if languageID == "1" { // C
-		return wk.compileC(ctx, workDirSbox, sourceFilename, outputFilename)
+		return worker.compileC(ctx, workDir, sourceFilename, outputFilename)
 	} else if languageID == "2" { // C++11
-		return wk.compileCpp11(ctx, workDirSbox, sourceFilename, outputFilename)
+		return worker.compileCpp11(ctx, workDir, sourceFilename, outputFilename)
 	}
 	return compilationResult{}, errors.Errorf("cannot compile using language with id %s", languageID)
 }

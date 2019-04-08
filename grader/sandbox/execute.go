@@ -1,10 +1,7 @@
 package sandbox
 
 import (
-	"bytes"
 	"context"
-	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"syscall"
@@ -24,13 +21,18 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd grader.Command
 	}, cmd.Args...)
 
 	// initialize child process
-	var stderr bytes.Buffer
 	osCmd := exec.CommandContext(
 		ctx,
 		"/proc/self/exe",
 		executeChildArgs...,
 	)
-	osCmd.Stderr = &stderr
+	osCmd.Stdin = cmd.Stdin
+	osCmd.Stdout = cmd.Stdout
+	osCmd.Stderr = cmd.Stderr
+
+	if osCmd.Stderr == nil {
+		osCmd.Stderr = os.Stderr
+	}
 
 	// clone namespaces for child process
 	osCmd.SysProcAttr = &syscall.SysProcAttr{
@@ -40,9 +42,6 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd grader.Command
 	// executing child command
 	logrus.WithField("cmd", cmd).Debug("executing sandboxed command")
 	if err := osCmd.Run(); err != nil {
-		b, _ := ioutil.ReadAll(&stderr)
-		fmt.Println(string(b))
-
 		return errors.Wrap(err, "error when executing child process")
 	}
 	return nil

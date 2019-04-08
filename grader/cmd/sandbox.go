@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/jauhararifin/ugrade/grader"
 
 	"github.com/jauhararifin/ugrade/grader/sandbox"
@@ -51,4 +53,5 @@ var sandboxCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(sandboxCmd)
+	logrus.SetLevel(logrus.TraceLevel)
 }

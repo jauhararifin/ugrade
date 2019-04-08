@@ -2,57 +2,41 @@ package worker
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"os"
 	"strings"
 
 	"github.com/jauhararifin/ugrade/grader"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
-
-func (worker *defaultWorker) generateTestcase(
-	ctx context.Context,
-	workDirSbox,
-	language,
-	filename string,
-) <-chan error {
-	retChan := make(chan error)
-	go func() {
-		logrus.Debug("compiling testcase generator")
-		tcgenCompRes, err := worker.compile(ctx, workDirSbox, language, filename, "tcgenexec")
-		if err != nil {
-			retChan <- errors.Wrap(err, "cannot compile testcase generator")
-		} else {
-			logrus.WithField("compileResult", tcgenCompRes).Debug("testcase generator compiled")
-		}
-	}()
-	return retChan
-}
 
 func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grader.JobResult, error) {
 	// prepare working directory
-	logrus.Debug("preparing working directory for executing job")
-	workDir, workDirSbox, err := worker.executor.PrepareDir()
+	workDir, err := worker.prepareWorkDir()
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot create working directory inside sandbox")
 	}
-	defer os.RemoveAll(workDir) // remove directory after job finished
-	logrus.WithField("workDir", workDir).WithField("workDirSbox", workDirSbox).Debug("working directory created")
+	// defer workDir.remove() // remove directory after job finished
 
-	logrus.Debug("extracting spec file")
-	specs, err := extractSpec(ctx, workDir, job.Spec)
+	// extracting spec tar file
+	specs, err := worker.extractSpec(ctx, *workDir, job.Spec)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot extract spec file")
 	}
-	logrus.Debug("spec file extracted")
 
-	genTCError := worker.generateTestcase(ctx, workDirSbox, specs.tcgen.language, specs.tcgen.filename)
-
-	if err := <-genTCError; err != nil {
-		return nil, errors.Wrap(err, "error generating testcase files")
+	// compile testcase generator
+	tcgenExec, err := worker.compileTCGen(ctx, *specs)
+	if err != nil {
+		return nil, errors.Wrap(err, "error compiling testcase generator")
 	}
+
+	// generate testcase input
+	inputs, err := worker.generateTCInput(ctx, tcgenExec)
+	if err != nil {
+		return nil, errors.Wrap(err, "error generating testcase inputs")
+	}
+	fmt.Println(inputs)
 
 	ioutil.ReadAll(job.Spec)
 	job.Spec.Close()
