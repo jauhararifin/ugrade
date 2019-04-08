@@ -2,7 +2,7 @@ package worker
 
 import (
 	"github.com/jauhararifin/ugrade/grader"
-	"github.com/jauhararifin/ugrade/sandbox"
+	"github.com/jauhararifin/ugrade/grader/sandbox"
 	"github.com/pkg/errors"
 )
 

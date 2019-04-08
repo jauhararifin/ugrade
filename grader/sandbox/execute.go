@@ -14,7 +14,7 @@ import (
 func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error {
 	// prepare arguments for child process
 	executeChildArgs := append([]string{
-		"ugsbox",
+		"sandbox",
 		"--working-directory", cmd.Dir.Sandbox,
 		"--path", cmd.Path,
 		"--timelimit", fmt.Sprintf("%d", cmd.TimeLimit),
@@ -25,7 +25,7 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 	// initialize child process
 	osCmd := exec.CommandContext(
 		ctx,
-		"ugsbox",
+		"/proc/self/exe",
 		executeChildArgs...,
 	)
 	osCmd.Stdin = cmd.Stdin

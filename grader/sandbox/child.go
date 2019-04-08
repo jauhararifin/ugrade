@@ -11,18 +11,6 @@ import (
 )
 
 func (sb *defaultSandbox) ExecuteChild(ctx context.Context, cmd Command) error {
-	// mount dev filesystem
-	// logrus.WithField("rootFSDir", sb.sandboxDir).Debug("mounting dev filesystem")
-	// targetDev := path.Join(sb.sandboxDir, "/dev")
-	// if err := os.MkdirAll(targetDev, 0700); err != nil {
-	// 	return errors.Wrap(err, "cannot create dev folder inside sandbox")
-	// }
-	// if err := syscall.Mount("/dev", targetDev, "", syscall.MS_BIND, ""); err != nil {
-	// 	return errors.Wrap(err, "cannot mount dev filesystem into sandbox")
-	// }
-	// defer syscall.Unmount(targetDev, 0) // should we unmount again?
-	// logrus.Debug("dev filesystem mounted into sandbox")
-
 	// chroot to new sandbox directory.
 	logrus.WithField("rootFSDir", sb.sandboxDir).Debug("chroot to new sandbox directory")
 	if err := syscall.Chroot(sb.sandboxDir); err != nil {
@@ -39,7 +27,7 @@ func (sb *defaultSandbox) ExecuteChild(ctx context.Context, cmd Command) error {
 	logrus.Debug("current working directory changed to root directory")
 
 	// run actual command
-	logrus.WithField("path", cmd.Path).WithField("args", cmd.Args).Debug("runing command")
+	logrus.WithField("path", cmd.Path).WithField("args", cmd.Args).Debug("running command")
 	osCmd := exec.CommandContext(ctx, cmd.Path, cmd.Args...)
 	osCmd.Stdin = os.Stdin
 	osCmd.Stdout = os.Stdout

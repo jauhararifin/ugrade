@@ -26,6 +26,7 @@ type Path struct {
 	Sandbox string
 }
 
+// Remove remove path from filesystem.
 func (p *Path) Remove() error {
 	return os.RemoveAll(p.Host)
 }
@@ -35,6 +36,5 @@ type Sandbox interface {
 	PrepareDir() (*Path, error)
 	Path(sandboxPath string) Path
 	ExecuteCommand(ctx context.Context, cmd Command) error
-
 	ExecuteChild(ctx context.Context, cmd Command) error
 }

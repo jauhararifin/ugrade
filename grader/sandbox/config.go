@@ -73,7 +73,7 @@ func (sb *defaultSandbox) assertWorkingDir() (string, error) {
 
 	// save working directory path to configuration file
 	logrus.Debug("saving working directory to configuration file")
-	if err := ioutil.WriteFile(workingDirConf, []byte(workingDir), 766); err != nil {
+	if err := ioutil.WriteFile(workingDirConf, []byte(workingDir), 0766); err != nil {
 		return "", errors.Wrap(err, "cannot save current working directory to config file")
 	}
 	logrus.WithField("workingDirConf", workingDirConf).Debug("working directory saved to configuration file")

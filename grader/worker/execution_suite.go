@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jauhararifin/ugrade/sandbox"
+	"github.com/jauhararifin/ugrade/grader/sandbox"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )

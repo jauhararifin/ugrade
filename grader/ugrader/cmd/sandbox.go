@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jauhararifin/ugrade/sandbox"
+	"github.com/jauhararifin/ugrade/grader/sandbox"
 	"github.com/spf13/cobra"
 )
 
@@ -73,18 +73,15 @@ func runSandbox(cmd *cobra.Command, args []string) {
 }
 
 var sandboxCmd = &cobra.Command{
-	Use:          "ugsbox",
+	Use:          "sandbox",
 	SilenceUsage: true,
 	Run:          runSandbox,
 }
 
 func init() {
+	rootCmd.AddCommand(sandboxCmd)
 	sandboxCmd.Flags().Uint32P("timelimit", "t", 10000, "time limit in milisecond")
 	sandboxCmd.Flags().Uint32P("memorylimit", "m", 64*1024*1024, "memory limit in bytes")
 	sandboxCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
 	sandboxCmd.Flags().StringP("path", "p", "", "executable path")
-}
-
-func Execute() error {
-	return sandboxCmd.Execute()
 }
