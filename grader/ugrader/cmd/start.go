@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"context"
@@ -17,8 +17,8 @@ import (
 var serverURL = "http://localhost:8000"
 
 func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, token string) error {
-	// fetch job from server
-	logrus.Debugf("asking for job to server")
+	// fetch job from server, maximum 10 seconds.
+	logrus.Debug("asking for job to server")
 	ctxGet, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	job, err := client.GetJob(ctxGet, token)
@@ -29,7 +29,7 @@ func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, to
 	defer ioutil.ReadAll(job.Spec)
 	logrus.WithField("job", job).Info("found a job")
 
-	// execute job
+	// execute job. every job should no more than 5 minutes.
 	logrus.WithField("job", job).Debug("executing job")
 	executeCtx, cancelExecute := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancelExecute()
@@ -46,7 +46,7 @@ func pollJob(ctx context.Context, client grader.Client, worker grader.Worker, to
 	defer result.Output.Close()
 	logrus.WithField("result", result).Info("job execute finished")
 
-	// submit job
+	// submit job. maximum 10 seconds.
 	logrus.WithField("result", result).Debug("submitting job result")
 	submitCtx, cancelSubmit := context.WithTimeout(ctx, 10*time.Second)
 	defer cancelSubmit()

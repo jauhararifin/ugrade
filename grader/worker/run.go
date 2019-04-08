@@ -7,8 +7,7 @@ import (
 	"path"
 	"time"
 
-	"github.com/jauhararifin/ugrade/grader"
-
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -24,10 +23,10 @@ func (worker *defaultWorker) run(
 	stdin io.Reader,
 	stdout io.Writer,
 ) (executionResult, error) {
-	cmd := grader.Command{
-		Path:   path.Join(compiled.workDir.sandboxPath, compiled.executable),
+	cmd := sandbox.Command{
+		Path:   path.Join(compiled.workDir.Sandbox, compiled.executable),
 		Args:   args,
-		Dir:    compiled.workDir.sandboxPath,
+		Dir:    compiled.workDir,
 		Stdin:  stdin,
 		Stdout: stdout,
 	}
@@ -56,13 +55,13 @@ func (worker *defaultWorker) runWithFile(
 	inputFile string,
 	outputFile string,
 ) (executionResult, error) {
-	hostInput := path.Join(compiled.workDir.hostPath, inputFile)
+	hostInput := path.Join(compiled.workDir.Host, inputFile)
 	in, err := os.Open(hostInput)
 	if err != nil {
 		return executionResult{}, errors.Wrap(err, "cannot open stdin")
 	}
 
-	hostOutput := path.Join(compiled.workDir.hostPath, outputFile)
+	hostOutput := path.Join(compiled.workDir.Host, outputFile)
 	out, err := os.Create(hostOutput)
 	if err != nil {
 		return executionResult{}, errors.Wrap(err, "cannot create stdout")

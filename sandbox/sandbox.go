@@ -3,6 +3,7 @@ package sandbox
 import (
 	"context"
 	"io"
+	"os"
 )
 
 // Command contain information to execute.
@@ -23,6 +24,10 @@ type Command struct {
 type Path struct {
 	Host    string
 	Sandbox string
+}
+
+func (p *Path) Remove() error {
+	return os.RemoveAll(p.Host)
 }
 
 // Sandbox execute command inside sandbox.

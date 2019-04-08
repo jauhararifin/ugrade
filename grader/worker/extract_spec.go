@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -31,12 +32,12 @@ type extractedSpec struct {
 	memoryLimit uint
 	tolerance   float32
 
-	workDir workingDirectory
+	workDir sandbox.Path
 }
 
 func (worker *defaultWorker) extractSpec(
 	ctx context.Context,
-	workDir workingDirectory,
+	workDir sandbox.Path,
 	spec io.Reader,
 ) (*extractedSpec, error) {
 	var tcgenFilename string
@@ -71,7 +72,7 @@ func (worker *defaultWorker) extractSpec(
 		logrus.WithField("filename", header.Name).Trace("found item in spec tar")
 
 		if header.Typeflag == tar.TypeReg || header.Typeflag == tar.TypeRegA {
-			filename := path.Join(workDir.hostPath, header.Name)
+			filename := path.Join(workDir.Host, header.Name)
 			baseName := strings.TrimSuffix(header.Name, filepath.Ext(header.Name))
 
 			// skip file if the file is unrecognized

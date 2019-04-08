@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -17,7 +18,7 @@ type execution struct {
 }
 
 type executionSuite struct {
-	workDir    workingDirectory
+	workDir    sandbox.Path
 	executions []execution
 }
 

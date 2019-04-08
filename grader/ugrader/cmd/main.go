@@ -1,10 +1,6 @@
-package main
+package cmd
 
 import (
-	"os"
-
-	"github.com/sirupsen/logrus"
-
 	"github.com/spf13/cobra"
 )
 
@@ -16,9 +12,7 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: false,
 }
 
-func main() {
-	logrus.SetLevel(logrus.TraceLevel)
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+// Execute run ugrader as cli.
+func Execute() error {
+	return rootCmd.Execute()
 }

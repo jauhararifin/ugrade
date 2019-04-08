@@ -2,11 +2,12 @@ package worker
 
 import (
 	"github.com/jauhararifin/ugrade/grader"
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
 )
 
 type defaultWorker struct {
-	executor grader.Sandbox
+	executor sandbox.Sandbox
 }
 
 // New create new default implementation of `grader.Worker`

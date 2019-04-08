@@ -6,8 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jauhararifin/ugrade/grader"
-
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -15,17 +14,17 @@ import (
 type compilationResult struct {
 	duration   time.Duration
 	output     io.Reader
-	workDir    workingDirectory
+	workDir    sandbox.Path
 	source     string
 	executable string
 }
 
 func (worker *defaultWorker) genericCompile(
 	ctx context.Context,
-	workDir workingDirectory,
+	workDir sandbox.Path,
 	sourceFilename,
 	outputFilename string,
-	cmd grader.Command,
+	cmd sandbox.Command,
 ) (compilationResult, error) {
 	logrus.WithField("cmd", cmd).Debug("executing compilation script")
 	startTime := time.Now()
@@ -49,11 +48,11 @@ func (worker *defaultWorker) genericCompile(
 
 func (worker *defaultWorker) compileC(
 	ctx context.Context,
-	workDir workingDirectory,
+	workDir sandbox.Path,
 	sourceFilename,
 	outputFilename string,
 ) (compilationResult, error) {
-	cmd := grader.Command{
+	cmd := sandbox.Command{
 		Path: "gcc",
 		Args: []string{
 			"-o", outputFilename,
@@ -62,28 +61,28 @@ func (worker *defaultWorker) compileC(
 			"-O2",
 			sourceFilename,
 		},
-		Dir: workDir.sandboxPath,
+		Dir: workDir,
 	}
 	return worker.genericCompile(ctx, workDir, sourceFilename, outputFilename, cmd)
 }
 
 func (worker *defaultWorker) compileCpp11(
 	ctx context.Context,
-	workDir workingDirectory,
+	workDir sandbox.Path,
 	sourceFilename,
 	outputFilename string,
 ) (compilationResult, error) {
-	cmd := grader.Command{
+	cmd := sandbox.Command{
 		Path: "g++",
 		Args: []string{"-o", outputFilename, "-std=c++11", "-O3", sourceFilename},
-		Dir:  workDir.sandboxPath,
+		Dir:  workDir,
 	}
 	return worker.genericCompile(ctx, workDir, sourceFilename, outputFilename, cmd)
 }
 
 func (worker *defaultWorker) compile(
 	ctx context.Context,
-	workDir workingDirectory,
+	workDir sandbox.Path,
 	languageID string,
 	sourceFilename string,
 	outputFilename string,

@@ -7,9 +7,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/sirupsen/logrus"
-
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 func (worker *defaultWorker) getTCSampleCount(ctx context.Context, tcgen compilationResult) (int, error) {
@@ -50,7 +50,7 @@ func (worker *defaultWorker) generateTCFile(
 	}
 	idstr := fmt.Sprintf("%d", id)
 	outputFilename := fmt.Sprintf("tc-input-%s-%d.in", typ, id)
-	outputPath := path.Join(tcgen.workDir.hostPath, outputFilename)
+	outputPath := path.Join(tcgen.workDir.Host, outputFilename)
 
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
@@ -68,7 +68,7 @@ func (worker *defaultWorker) generateTCFile(
 }
 
 type inputFiles struct {
-	workDir workingDirectory
+	workDir sandbox.Path
 	files   []string
 }
 
