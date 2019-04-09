@@ -24,8 +24,9 @@ func (worker *defaultWorker) genericCompile(
 	outputFilename string,
 	cmd sandbox.Command,
 ) (*compilationResult, error) {
-	cmd.TimeLimit = 10000              // limit 10 seconds for compiling
-	cmd.MemoryLimit = 64 * 1024 * 1024 // limit 64MB for compiling
+	cmd.TimeLimit = 10000                  // limit 10 seconds for compiling
+	cmd.MemoryLimit = 256 * 1024 * 1024    // limit 256MB for compiling
+	cmd.MemoryThrottle = 320 * 1024 * 1024 // throttle compiler into 320MB
 
 	var compileMessage bytes.Buffer
 	cmd.Stderr = &compileMessage

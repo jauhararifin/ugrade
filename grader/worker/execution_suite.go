@@ -36,7 +36,7 @@ func (worker *defaultWorker) executeSuite(
 		outfile := outputPrefix + strings.TrimSuffix(infile, filepath.Ext(infile)) + ".out"
 
 		logrus.WithField("inputFile", infile).WithField("outputFile", outfile).Trace("execute suite item")
-		res, err := worker.runWithFile(ctx, compiled, []string{}, infile, outfile, timelimit, memlimit)
+		res, err := worker.runWithFile(ctx, compiled, []string{infile}, infile, outfile, timelimit, memlimit)
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot run suite item")
 		}

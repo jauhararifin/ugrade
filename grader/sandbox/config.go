@@ -13,7 +13,11 @@ import (
 )
 
 type defaultSandbox struct {
+	// all files required to run sandboxed command will be placed here.
 	workingDir string
+
+	// path to the sandbox root directory. child process will chrooted to this directory.
+	// sandboxDir will be inside working directory
 	sandboxDir string
 }
 

@@ -5,13 +5,13 @@ import (
 	"os"
 )
 
-// AutoCloseTempFile represent `os.File` but automatically remove it when closed.
-type AutoCloseTempFile struct {
+// AutoRemoveFile represent `os.File` but automatically remove it when closed.
+type AutoRemoveFile struct {
 	*os.File
 }
 
 // Close close file and remove it.
-func (actf *AutoCloseTempFile) Close() error {
+func (actf *AutoRemoveFile) Close() error {
 	if err := actf.File.Close(); err != nil {
 		return err
 	}
@@ -19,13 +19,13 @@ func (actf *AutoCloseTempFile) Close() error {
 }
 
 // File create temporary file and remove when Close is called.
-func File(dir, pattern string) (*AutoCloseTempFile, error) {
+func File(dir, pattern string) (*AutoRemoveFile, error) {
 	file, err := ioutil.TempFile(dir, pattern)
 	if err != nil {
 		return nil, err
 	}
 
-	return &AutoCloseTempFile{
+	return &AutoRemoveFile{
 		File: file,
 	}, nil
 }

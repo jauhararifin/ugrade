@@ -26,14 +26,15 @@ func (worker *defaultWorker) run(
 	memlimit uint32,
 ) (executionResult, error) {
 	cmd := sandbox.Command{
-		Path:        path.Join(compiled.workDir.Sandbox, compiled.executable),
-		Args:        args,
-		Dir:         compiled.workDir,
-		Stdin:       stdin,
-		Stdout:      stdout,
-		Stderr:      os.Stderr,
-		TimeLimit:   timelimit,
-		MemoryLimit: memlimit,
+		Path:           path.Join(compiled.workDir.Sandbox, compiled.executable),
+		Args:           args,
+		Dir:            compiled.workDir,
+		Stdin:          stdin,
+		Stdout:         stdout,
+		Stderr:         os.Stderr,
+		TimeLimit:      timelimit,
+		MemoryLimit:    memlimit,
+		MemoryThrottle: memlimit + 64*1024*1024, // throttle memory to (memlimit + 64MB)
 	}
 
 	logrus.WithField("cmd", cmd).Trace("run executable")

@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -7,9 +8,11 @@ int main() {
     char* mem = (char*) malloc(1024 * 1024 * 32); // allocate 32 mb
     memset(mem, 0, 1024 * 1024 * 32);
     for (int i = 0; i < 1024 * 1024 * 32; i++) {
-      mem[i] = i;
+      mem[i] = rand();
     }
-    free(mem);
+    sleep(1);
+    if (rand() % 10 == 0)
+      free(mem);
   }
   return 0;
 }
