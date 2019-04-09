@@ -10,7 +10,7 @@ import (
 func (worker *defaultWorker) compileChecker(
 	ctx context.Context,
 	spec extractedSpec,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	logrus.Debug("compiling checker")
 	checkerRes, err := worker.compile(
 		ctx,
@@ -20,7 +20,7 @@ func (worker *defaultWorker) compileChecker(
 		"checkerexec",
 	)
 	if err != nil {
-		return checkerRes, errors.Wrap(err, "cannot compile checker")
+		return nil, errors.Wrap(err, "cannot compile checker")
 	}
 	logrus.WithField("compileResult", checkerRes).Debug("checker compiled")
 	return checkerRes, nil

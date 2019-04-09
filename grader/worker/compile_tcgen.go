@@ -10,7 +10,7 @@ import (
 func (worker *defaultWorker) compileTCGen(
 	ctx context.Context,
 	spec extractedSpec,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	logrus.Debug("compiling testcase generator")
 	tcgenCompRes, err := worker.compile(
 		ctx,
@@ -20,7 +20,7 @@ func (worker *defaultWorker) compileTCGen(
 		"tcgenexec",
 	)
 	if err != nil {
-		return tcgenCompRes, errors.Wrap(err, "cannot compile testcase generator")
+		return nil, errors.Wrap(err, "cannot compile testcase generator")
 	}
 	logrus.WithField("compileResult", tcgenCompRes).Debug("testcase generator compiled")
 	return tcgenCompRes, nil

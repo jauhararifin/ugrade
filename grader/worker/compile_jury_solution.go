@@ -10,7 +10,7 @@ import (
 func (worker *defaultWorker) compileJurySolution(
 	ctx context.Context,
 	spec extractedSpec,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	logrus.Debug("compiling jury solution")
 	solutionRes, err := worker.compile(
 		ctx,
@@ -20,7 +20,7 @@ func (worker *defaultWorker) compileJurySolution(
 		"solutionexec",
 	)
 	if err != nil {
-		return solutionRes, errors.Wrap(err, "cannot compile jury solution")
+		return nil, errors.Wrap(err, "cannot compile jury solution")
 	}
 	logrus.WithField("compileResult", solutionRes).Debug("jury solution compiled")
 	return solutionRes, nil

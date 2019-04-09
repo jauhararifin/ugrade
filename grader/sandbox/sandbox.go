@@ -4,6 +4,8 @@ import (
 	"context"
 	"io"
 	"os"
+
+	"github.com/jauhararifin/ugrade/grader/temporary"
 )
 
 // Command contain information to execute.
@@ -24,6 +26,11 @@ type Command struct {
 type Path struct {
 	Host    string
 	Sandbox string
+}
+
+// TempFile generate new temporary auto close file inside path.
+func (p Path) TempFile(pattern string) (*temporary.AutoCloseTempFile, error) {
+	return temporary.File(p.Host, pattern)
 }
 
 // Remove remove path from filesystem.

@@ -59,7 +59,7 @@ func runSandbox(cmd *cobra.Command, args []string) {
 		MemoryLimit: memoryLimit,
 	}
 	if err := executor.ExecuteChild(ctx, command); err != nil {
-		fmt.Fprintf(os.Stderr, "error executing command inside sandbox: %+v\n", err)
+		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
 	}
 

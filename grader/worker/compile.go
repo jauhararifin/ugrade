@@ -1,9 +1,8 @@
 package worker
 
 import (
+	"bytes"
 	"context"
-	"io"
-	"strings"
 	"time"
 
 	"github.com/jauhararifin/ugrade/grader/sandbox"
@@ -13,7 +12,6 @@ import (
 
 type compilationResult struct {
 	duration   time.Duration
-	output     io.Reader
 	workDir    sandbox.Path
 	source     string
 	executable string
@@ -25,22 +23,22 @@ func (worker *defaultWorker) genericCompile(
 	sourceFilename,
 	outputFilename string,
 	cmd sandbox.Command,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	cmd.TimeLimit = 10000              // limit 10 seconds for compiling
 	cmd.MemoryLimit = 64 * 1024 * 1024 // limit 64MB for compiling
+
+	var compileMessage bytes.Buffer
+	cmd.Stderr = &compileMessage
+
 	logrus.WithField("cmd", cmd).Debug("executing compilation script")
 	startTime := time.Now()
 	if err := worker.executor.ExecuteCommand(ctx, cmd); err != nil {
-		return compilationResult{
-			output:   strings.NewReader("not yet implemented"),
-			duration: time.Since(startTime),
-		}, errors.Wrap(err, "error when executing compile script")
+		return nil, errors.New(compileMessage.String())
 	}
 	duration := time.Since(startTime)
 	logrus.Debug("compile script successfully executed")
 
-	return compilationResult{
-		output:     strings.NewReader("not yet implemented"),
+	return &compilationResult{
 		duration:   duration,
 		workDir:    workDir,
 		source:     sourceFilename,
@@ -53,7 +51,7 @@ func (worker *defaultWorker) compileC(
 	workDir sandbox.Path,
 	sourceFilename,
 	outputFilename string,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	cmd := sandbox.Command{
 		Path: "gcc",
 		Args: []string{
@@ -73,7 +71,7 @@ func (worker *defaultWorker) compileCpp11(
 	workDir sandbox.Path,
 	sourceFilename,
 	outputFilename string,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	cmd := sandbox.Command{
 		Path: "g++",
 		Args: []string{"-o", outputFilename, "-std=c++11", "-O3", sourceFilename},
@@ -88,11 +86,11 @@ func (worker *defaultWorker) compile(
 	languageID string,
 	sourceFilename string,
 	outputFilename string,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	if languageID == "1" { // C
 		return worker.compileC(ctx, workDir, sourceFilename, outputFilename)
 	} else if languageID == "2" { // C++11
 		return worker.compileCpp11(ctx, workDir, sourceFilename, outputFilename)
 	}
-	return compilationResult{}, errors.Errorf("cannot compile using language with id %s", languageID)
+	return &compilationResult{}, errors.Errorf("cannot compile using language with id %s", languageID)
 }

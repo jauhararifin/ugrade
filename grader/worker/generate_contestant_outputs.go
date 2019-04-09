@@ -10,6 +10,7 @@ func (worker *defaultWorker) generateContestantOutputs(
 	ctx context.Context,
 	inputs inputFiles,
 	compiledContestant compilationResult,
+	spec extractedSpec,
 ) (*executionSuite, error) {
 	res, err := worker.executeSuite(ctx, inputs, compiledContestant, "contestant-")
 	if err != nil {

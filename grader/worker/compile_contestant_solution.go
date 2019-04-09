@@ -10,7 +10,7 @@ import (
 func (worker *defaultWorker) compileContestantSolution(
 	ctx context.Context,
 	spec extractedSpec,
-) (compilationResult, error) {
+) (*compilationResult, error) {
 	logrus.Debug("compiling contestant solution")
 	solutionRes, err := worker.compile(
 		ctx,
@@ -20,7 +20,7 @@ func (worker *defaultWorker) compileContestantSolution(
 		"contestantexec",
 	)
 	if err != nil {
-		return solutionRes, errors.Wrap(err, "cannot compile contestant solution")
+		return nil, errors.Wrap(err, "cannot compile contestant solution")
 	}
 	logrus.WithField("compileResult", solutionRes).Debug("contestant solution compiled")
 	return solutionRes, nil

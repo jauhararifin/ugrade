@@ -2,6 +2,7 @@ package worker
 
 import (
 	"context"
+	"fmt"
 	"path/filepath"
 	"strings"
 	"time"
@@ -11,8 +12,18 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// ErrTimeLimitExceeded indicates that contestant program running too long, exceeding maximum time limit.
+var ErrTimeLimitExceeded = fmt.Errorf("contestant program running too long")
+
+// ErrMemoryLimitExceeded indicates that contestant program takes too much memory.
+var ErrMemoryLimitExceeded = fmt.Errorf("contestant program run out of memory")
+
+// ErrRuntimeError indicates that contestant program not return zero exit code.
+var ErrRuntimeError = fmt.Errorf("contestant program return non zero exit code")
+
 type execution struct {
 	duration time.Duration
+	err      error
 	input    string
 	output   string
 }
