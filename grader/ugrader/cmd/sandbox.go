@@ -11,12 +11,6 @@ import (
 )
 
 func runSandbox(cmd *cobra.Command, args []string) {
-	uid := os.Getuid()
-	if uid != 0 {
-		fmt.Fprintln(os.Stderr, "You should run this as root")
-		os.Exit(255)
-	}
-
 	// get working directory inside sandbox path
 	workingDirectory := cmd.Flag("working-directory").Value.String()
 	if len(workingDirectory) == 0 {

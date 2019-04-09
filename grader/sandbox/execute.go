@@ -38,7 +38,12 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 
 	// clone namespaces for child process
 	osCmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
+		Cloneflags: syscall.CLONE_NEWUTS |
+			syscall.CLONE_NEWIPC |
+			syscall.CLONE_NEWPID |
+			syscall.CLONE_NEWNS |
+			// syscall.CLONE_NEWUSER |
+			syscall.CLONE_NEWNET,
 	}
 
 	// executing child command
