@@ -18,6 +18,7 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 		"--time-limit", fmt.Sprintf("%d", cmd.TimeLimit),
 		"--memory-limit", fmt.Sprintf("%d", cmd.MemoryLimit),
 		"--memory-throttle", fmt.Sprintf("%d", cmd.MemoryThrottle),
+		"--file-size", fmt.Sprintf("%d", cmd.FileSize),
 		"--",
 	}, cmd.Args...)
 

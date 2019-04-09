@@ -45,6 +45,20 @@ func runGuard(cmd *cobra.Command, args []string) {
 		os.Exit(255)
 	}
 
+	// get file size limit
+	fileSize, err := cmd.Flags().GetUint64("file-size")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "please provide a valid file size limit")
+		os.Exit(255)
+	}
+
+	// get open file limit
+	openFile, err := cmd.Flags().GetUint64("open-file")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "please provide a valid open file limit")
+		os.Exit(255)
+	}
+
 	// create new sandbox executor
 	sandbox, err := New()
 	if err != nil {
@@ -60,6 +74,8 @@ func runGuard(cmd *cobra.Command, args []string) {
 		TimeLimit:      timeLimit,
 		MemoryLimit:    memoryLimit,
 		MemoryThrottle: memoryThrottle,
+		FileSize:       fileSize,
+		OpenFile:       openFile,
 	}
 
 	ctx := context.Background()
@@ -88,6 +104,8 @@ func init() {
 	guardCmd.Flags().Uint64P("time-limit", "t", 10000, "time limit in milisecond")
 	guardCmd.Flags().Uint64P("memory-limit", "m", 64*1024*1024, "memory limit in bytes")
 	guardCmd.Flags().Uint64P("memory-throttle", "M", 256*1024*1024, "memory throttle in bytes")
+	guardCmd.Flags().Uint64P("file-size", "f", 0, "generated file size limit")
+	guardCmd.Flags().Uint64P("open-file", "o", 0, "open file limit")
 	guardCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
 	guardCmd.Flags().StringP("path", "p", "", "executable path")
 }

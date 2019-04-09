@@ -12,7 +12,7 @@ func (worker *defaultWorker) generateContestantOutputs(
 	compiledContestant compilationResult,
 	spec extractedSpec,
 ) (*executionSuite, error) {
-	res, err := worker.executeSuite(ctx, inputs, compiledContestant, "contestant-", spec.timeLimit, spec.memoryLimit)
+	res, err := worker.executeSuite(ctx, inputs, compiledContestant, "contestant-", spec.timeLimit, spec.memoryLimit, spec.outputLimit, 3)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot run execute suite")
 	}

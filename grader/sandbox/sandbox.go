@@ -18,6 +18,9 @@ var ErrMemoryLimitExceeded = fmt.Errorf("contestant program run out of memory")
 // ErrRuntimeError indicates that contestant program not return zero exit code.
 var ErrRuntimeError = fmt.Errorf("contestant program return non zero exit code")
 
+// ErrOutputLimitExceeded indicates that contestant program gives too much output.
+var ErrOutputLimitExceeded = fmt.Errorf("contestant program gives too output")
+
 // Command contain information to execute.
 type Command struct {
 	Path string
@@ -41,6 +44,12 @@ type Command struct {
 	// MemoryThrottle will cause program to use no more than this value, but not killed when using more than this.
 	// When memory allocation is too high, the program will be throttled.
 	MemoryThrottle uint64
+
+	// FileSize will cause program to exit when trying to generate file with size exceeding this value.
+	FileSize uint64
+
+	// OpenFile limit number of open file of process.
+	OpenFile uint64
 }
 
 // Path contain information about path in sandbox.

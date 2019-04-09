@@ -62,7 +62,17 @@ func (worker *defaultWorker) generateGrading(
 		juryOutput := jury.executions[i].output
 
 		var verdictBuff bytes.Buffer
-		if _, err := worker.run(ctx, checker, []string{contestantOutput, juryOutput}, nil, &verdictBuff, 10000, 128*1024*1024); err != nil {
+		if _, err := worker.run(
+			ctx,
+			checker,
+			[]string{contestantOutput, juryOutput},
+			nil,
+			&verdictBuff,
+			10000,         // limit 10 second execution time
+			128*1024*1024, // limit 128mb memory
+			1024,          // limit 1kb output
+			5,             // 5 open file, stdin, stderr, stdout, juryoutput, contestant output
+		); err != nil {
 			return nil, errors.Wrap(err, "cannot execute checker")
 		}
 

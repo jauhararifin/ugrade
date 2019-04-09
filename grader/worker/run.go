@@ -23,7 +23,9 @@ func (worker *defaultWorker) run(
 	stdin io.Reader,
 	stdout io.Writer,
 	timelimit,
-	memlimit uint64,
+	memlimit,
+	outputlimit uint64,
+	openfilelimit uint64,
 ) (executionResult, error) {
 	cmd := sandbox.Command{
 		Path:           path.Join(compiled.workDir.Sandbox, compiled.executable),
@@ -35,6 +37,8 @@ func (worker *defaultWorker) run(
 		TimeLimit:      timelimit,
 		MemoryLimit:    memlimit,
 		MemoryThrottle: memlimit + 64*1024*1024, // throttle memory to (memlimit + 64MB)
+		FileSize:       outputlimit,
+		OpenFile:       openfilelimit,
 	}
 
 	logrus.WithField("cmd", cmd).Trace("run executable")
@@ -61,7 +65,9 @@ func (worker *defaultWorker) runWithFile(
 	inputFile string,
 	outputFile string,
 	timelimit,
-	memlimit uint64,
+	memlimit,
+	outputlimit,
+	openfilelimit uint64,
 ) (executionResult, error) {
 	hostInput := path.Join(compiled.workDir.Host, inputFile)
 	in, err := os.Open(hostInput)
@@ -75,5 +81,5 @@ func (worker *defaultWorker) runWithFile(
 		return executionResult{}, errors.Wrap(err, "cannot create stdout")
 	}
 
-	return worker.run(ctx, compiled, args, in, out, timelimit, memlimit)
+	return worker.run(ctx, compiled, args, in, out, timelimit, memlimit, outputlimit, openfilelimit)
 }

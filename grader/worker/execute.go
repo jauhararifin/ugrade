@@ -56,7 +56,7 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	// generate testcase input
 	genTCInCtx, cancelGenTCInCtx := context.WithTimeout(ctx, MaxGenerateInputTC)
 	defer cancelGenTCInCtx()
-	tcin, err := worker.generateTCInputs(genTCInCtx, *tcgenExec)
+	tcin, err := worker.generateTCInputs(genTCInCtx, *tcgenExec, *specs)
 	if err != nil {
 		return nil, errors.Wrap(err, "error generating testcase inputs")
 	}
@@ -72,7 +72,7 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	// generate testcase suite
 	juryOutCtx, cancelJuryOutCtx := context.WithTimeout(ctx, MaxGenerateOutputTC)
 	defer cancelJuryOutCtx()
-	juryOutputs, err := worker.generateTCOutputs(juryOutCtx, *tcin, *compiledJury)
+	juryOutputs, err := worker.generateTCOutputs(juryOutCtx, *tcin, *compiledJury, *specs)
 	if err != nil {
 		return nil, errors.Wrap(err, "error generating testcase outputs")
 	}

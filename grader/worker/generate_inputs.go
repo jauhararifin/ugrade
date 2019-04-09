@@ -15,7 +15,7 @@ import (
 func (worker *defaultWorker) getTCSampleCount(ctx context.Context, tcgen compilationResult) (int, error) {
 	var outputBuff bytes.Buffer
 	logrus.Debug("get sample count")
-	_, err := worker.run(ctx, tcgen, []string{"sample_count"}, nil, &outputBuff, 10000, 128*1024*1024)
+	_, err := worker.run(ctx, tcgen, []string{"sample_count"}, nil, &outputBuff, 10000, 128*1024*1024, 1024, 3)
 	if err != nil {
 		return 0, errors.Wrap(err, "cannot get sample count")
 	}
@@ -28,7 +28,7 @@ func (worker *defaultWorker) getTCSampleCount(ctx context.Context, tcgen compila
 func (worker *defaultWorker) getTCCount(ctx context.Context, tcgen compilationResult) (int, error) {
 	var outputBuff bytes.Buffer
 	logrus.Debug("get testcase count")
-	_, err := worker.run(ctx, tcgen, []string{"testcase_count"}, nil, &outputBuff, 10000, 128*1024*1024)
+	_, err := worker.run(ctx, tcgen, []string{"testcase_count"}, nil, &outputBuff, 10000, 128*1024*1024, 1024, 3)
 	if err != nil {
 		return 0, errors.Wrap(err, "cannot get testcase count")
 	}
@@ -43,6 +43,7 @@ func (worker *defaultWorker) generateTCFile(
 	tcgen compilationResult,
 	sample bool,
 	id int,
+	outputlimit uint64,
 ) (string, error) {
 	typ := "testcase"
 	if sample {
@@ -59,7 +60,7 @@ func (worker *defaultWorker) generateTCFile(
 	defer outputFile.Close()
 
 	logrus.WithField("sample", sample).WithField("id", id).Debug("generate testcase input file")
-	res, err := worker.run(ctx, tcgen, []string{typ, idstr}, nil, outputFile, 10000, 128*1024*1024)
+	res, err := worker.run(ctx, tcgen, []string{typ, idstr}, nil, outputFile, 10000, 128*1024*1024, outputlimit, 3)
 	if err != nil {
 		return "", errors.Wrap(err, "cannot get testcase count")
 	}
@@ -72,7 +73,7 @@ type inputFiles struct {
 	files   []string
 }
 
-func (worker *defaultWorker) generateTCInputs(ctx context.Context, tcgen compilationResult) (*inputFiles, error) {
+func (worker *defaultWorker) generateTCInputs(ctx context.Context, tcgen compilationResult, spec extractedSpec) (*inputFiles, error) {
 	// getting sample count
 	nSample, err := worker.getTCSampleCount(ctx, tcgen)
 	if err != nil {
@@ -89,14 +90,14 @@ func (worker *defaultWorker) generateTCInputs(ctx context.Context, tcgen compila
 	logrus.WithField("sampleCount", nSample).WithField("testcaseCount", nTC).Debug("generating testcase")
 	testcaseFilenames := make([]string, 0, 0)
 	for i := 1; i <= nSample; i++ {
-		filename, err := worker.generateTCFile(ctx, tcgen, true, i)
+		filename, err := worker.generateTCFile(ctx, tcgen, true, i, spec.outputLimit)
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot generate sample input")
 		}
 		testcaseFilenames = append(testcaseFilenames, filename)
 	}
 	for i := 1; i <= nTC; i++ {
-		filename, err := worker.generateTCFile(ctx, tcgen, false, i)
+		filename, err := worker.generateTCFile(ctx, tcgen, false, i, spec.outputLimit)
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot generate testcase input")
 		}

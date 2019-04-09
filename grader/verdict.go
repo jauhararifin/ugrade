@@ -4,6 +4,9 @@ const (
 	// RTE stands for Run Time Error.
 	RTE = "RTE"
 
+	// OLE stands for Output Limit Exceeded.
+	OLE = "OLE"
+
 	// MLE stands for Memory Limit Exceeded.
 	MLE = "MLE"
 

@@ -29,14 +29,16 @@ func (worker *defaultWorker) executeSuite(
 	compiled compilationResult,
 	outputPrefix string,
 	timelimit,
-	memlimit uint64,
+	memlimit,
+	outputlimit,
+	openfilelimit uint64,
 ) (*executionSuite, error) {
 	executions := make([]execution, 0, 0)
 	for _, infile := range input.files {
 		outfile := outputPrefix + strings.TrimSuffix(infile, filepath.Ext(infile)) + ".out"
 
 		logrus.WithField("inputFile", infile).WithField("outputFile", outfile).Trace("execute suite item")
-		res, err := worker.runWithFile(ctx, compiled, []string{infile}, infile, outfile, timelimit, memlimit)
+		res, err := worker.runWithFile(ctx, compiled, []string{infile}, infile, outfile, timelimit, memlimit, outputlimit, openfilelimit)
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot run suite item")
 		}

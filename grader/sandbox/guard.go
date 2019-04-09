@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"syscall"
 
+	"github.com/jauhararifin/ugrade/grader/sandbox/blkio"
+
 	"github.com/jauhararifin/ugrade/grader/sandbox/memory"
 
 	"github.com/pkg/errors"
@@ -14,7 +16,7 @@ import (
 func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	// limit memory throttle using cgroup
 	memlimiter := memory.Limiter{
-		Name:     "ugrade-sandbox",
+		Name:     "ugrade-sandbox-memlimit",
 		Limit:    cmd.MemoryLimit,
 		Throttle: cmd.MemoryThrottle,
 	}
@@ -22,6 +24,31 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 		return errors.Wrap(err, "cannot preparing memory limiter")
 	}
 	memoryCtx := memlimiter.Context(ctx)
+
+	// limit blkio
+	blkiolimiter := blkio.Limiter{
+		Name: "ugrade-sandbox-blkio",
+	}
+	if err := blkiolimiter.Prepare(); err != nil {
+		return errors.Wrap(err, "cannot preparing block io limiter")
+	}
+	// TODO: remove hardcoded limit
+	if err := blkiolimiter.LimitWrite(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
+		return errors.Wrap(err, "cannot set blkio write speed limit")
+	}
+	if err := blkiolimiter.LimitRead(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
+		return errors.Wrap(err, "cannot set blkio read speed limit")
+	}
+	if cmd.OpenFile > 0 {
+		if err := blkiolimiter.LimitOpenFile(cmd.OpenFile); err != nil {
+			return errors.Wrap(err, "cannot set open file limit")
+		}
+	}
+	if cmd.FileSize > 0 {
+		if err := blkiolimiter.LimitSize(cmd.FileSize); err != nil { // limit generated file sisze
+			return errors.Wrap(err, "cannot set generate file limit")
+		}
+	}
 
 	// prepare jail arguments
 	executeJailArgs := append([]string{
