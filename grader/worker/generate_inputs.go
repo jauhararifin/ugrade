@@ -15,7 +15,7 @@ import (
 func (worker *defaultWorker) getTCSampleCount(ctx context.Context, tcgen compilationResult) (int, error) {
 	var outputBuff bytes.Buffer
 	logrus.Debug("get sample count")
-	_, err := worker.run(ctx, tcgen, []string{"sample_count"}, nil, &outputBuff)
+	_, err := worker.run(ctx, tcgen, []string{"sample_count"}, nil, &outputBuff, 10000, 128*1024*1024)
 	if err != nil {
 		return 0, errors.Wrap(err, "cannot get sample count")
 	}
@@ -28,7 +28,7 @@ func (worker *defaultWorker) getTCSampleCount(ctx context.Context, tcgen compila
 func (worker *defaultWorker) getTCCount(ctx context.Context, tcgen compilationResult) (int, error) {
 	var outputBuff bytes.Buffer
 	logrus.Debug("get testcase count")
-	_, err := worker.run(ctx, tcgen, []string{"testcase_count"}, nil, &outputBuff)
+	_, err := worker.run(ctx, tcgen, []string{"testcase_count"}, nil, &outputBuff, 10000, 128*1024*1024)
 	if err != nil {
 		return 0, errors.Wrap(err, "cannot get testcase count")
 	}
@@ -59,7 +59,7 @@ func (worker *defaultWorker) generateTCFile(
 	defer outputFile.Close()
 
 	logrus.WithField("sample", sample).WithField("id", id).Debug("generate testcase input file")
-	res, err := worker.run(ctx, tcgen, []string{typ, idstr}, nil, outputFile)
+	res, err := worker.run(ctx, tcgen, []string{typ, idstr}, nil, outputFile, 10000, 128*1024*1024)
 	if err != nil {
 		return "", errors.Wrap(err, "cannot get testcase count")
 	}

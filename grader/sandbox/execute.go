@@ -6,8 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+	"time"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -22,9 +22,12 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 		"--",
 	}, cmd.Args...)
 
+	timelimitCtx, cancelTimelimitCtx := context.WithTimeout(ctx, time.Duration(cmd.TimeLimit)*time.Millisecond)
+	defer cancelTimelimitCtx()
+
 	// initialize child process
 	osCmd := exec.CommandContext(
-		ctx,
+		timelimitCtx,
 		"/proc/self/exe",
 		executeChildArgs...,
 	)
@@ -49,7 +52,10 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 	// executing child command
 	logrus.WithField("cmd", cmd).Debug("executing sandboxed command")
 	if err := osCmd.Run(); err != nil {
-		return errors.Wrap(err, "error when executing child process")
+		if timelimitCtx.Err() != nil {
+			return ErrTimeLimitExceeded
+		}
+		return ErrRuntimeError
 	}
 	return nil
 }

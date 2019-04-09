@@ -11,7 +11,7 @@ func (worker *defaultWorker) generateTCOutputs(
 	inputs inputFiles,
 	compiledJury compilationResult,
 ) (*executionSuite, error) {
-	res, err := worker.executeSuite(ctx, inputs, compiledJury, "jury-")
+	res, err := worker.executeSuite(ctx, inputs, compiledJury, "jury-", 10000, 128*1024*1024)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot run execute suite")
 	}

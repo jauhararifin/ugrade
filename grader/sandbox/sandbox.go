@@ -2,11 +2,21 @@ package sandbox
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"os"
 
 	"github.com/jauhararifin/ugrade/grader/temporary"
 )
+
+// ErrTimeLimitExceeded indicates that contestant program running too long, exceeding maximum time limit.
+var ErrTimeLimitExceeded = fmt.Errorf("contestant program running too long")
+
+// ErrMemoryLimitExceeded indicates that contestant program takes too much memory.
+var ErrMemoryLimitExceeded = fmt.Errorf("contestant program run out of memory")
+
+// ErrRuntimeError indicates that contestant program not return zero exit code.
+var ErrRuntimeError = fmt.Errorf("contestant program return non zero exit code")
 
 // Command contain information to execute.
 type Command struct {

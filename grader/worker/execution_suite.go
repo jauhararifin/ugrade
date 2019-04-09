@@ -2,7 +2,6 @@ package worker
 
 import (
 	"context"
-	"fmt"
 	"path/filepath"
 	"strings"
 	"time"
@@ -11,15 +10,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
-
-// ErrTimeLimitExceeded indicates that contestant program running too long, exceeding maximum time limit.
-var ErrTimeLimitExceeded = fmt.Errorf("contestant program running too long")
-
-// ErrMemoryLimitExceeded indicates that contestant program takes too much memory.
-var ErrMemoryLimitExceeded = fmt.Errorf("contestant program run out of memory")
-
-// ErrRuntimeError indicates that contestant program not return zero exit code.
-var ErrRuntimeError = fmt.Errorf("contestant program return non zero exit code")
 
 type execution struct {
 	duration time.Duration
@@ -38,12 +28,15 @@ func (worker *defaultWorker) executeSuite(
 	input inputFiles,
 	compiled compilationResult,
 	outputPrefix string,
+	timelimit,
+	memlimit uint32,
 ) (*executionSuite, error) {
 	executions := make([]execution, 0, 0)
 	for _, infile := range input.files {
 		outfile := outputPrefix + strings.TrimSuffix(infile, filepath.Ext(infile)) + ".out"
+
 		logrus.WithField("inputFile", infile).WithField("outputFile", outfile).Trace("execute suite item")
-		res, err := worker.runWithFile(ctx, compiled, []string{}, infile, outfile)
+		res, err := worker.runWithFile(ctx, compiled, []string{}, infile, outfile, timelimit, memlimit)
 		if err != nil {
 			return nil, errors.Wrap(err, "cannot run suite item")
 		}

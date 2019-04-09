@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jauhararifin/ugrade/grader/sandbox"
+
 	"github.com/jauhararifin/ugrade/grader"
 	"github.com/pkg/errors"
 )
@@ -40,6 +42,8 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot extract spec file")
 	}
+	ioutil.ReadAll(job.Spec)
+	job.Spec.Close()
 
 	// compile testcase generator
 	tcgenCompCtx, canceltcgenCompCtx := context.WithTimeout(ctx, MaxCompileTime)
@@ -90,6 +94,25 @@ func (worker *defaultWorker) Execute(ctx context.Context, job grader.Job) (*grad
 	defer cancelContestantRun()
 	contestantOutputs, err := worker.generateContestantOutputs(contestantRunCtx, *tcin, *compiledContestant, *specs)
 	if err != nil {
+		if errors.Cause(err) == sandbox.ErrTimeLimitExceeded {
+			return &grader.JobResult{
+				Job:     job,
+				Verdict: grader.TLE,
+				Output:  ioutil.NopCloser(strings.NewReader("")),
+			}, nil
+		} else if errors.Cause(err) == sandbox.ErrMemoryLimitExceeded {
+			return &grader.JobResult{
+				Job:     job,
+				Verdict: grader.MLE,
+				Output:  ioutil.NopCloser(strings.NewReader("")),
+			}, nil
+		} else if errors.Cause(err) == sandbox.ErrRuntimeError {
+			return &grader.JobResult{
+				Job:     job,
+				Verdict: grader.RTE,
+				Output:  ioutil.NopCloser(strings.NewReader(err.Error())),
+			}, nil
+		}
 		return nil, errors.Wrap(err, "error executing contestant solution")
 	}
 
