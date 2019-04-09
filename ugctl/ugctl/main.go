@@ -1,6 +1,6 @@
 package main
 
-import "github.com/jauhararifin/ugrade/cli/ugctl/cmd"
+import "github.com/jauhararifin/ugrade/ugctl/ugctl/cmd"
 
 func main() {
 	cmd.Execute()

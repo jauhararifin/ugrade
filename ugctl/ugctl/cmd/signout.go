@@ -16,7 +16,7 @@ func doSignOut(cmd *cobra.Command, args []string) error {
 	if err := client.SignOut(ctx); err != nil {
 		return err
 	}
-	fmt.Println("\xE2\x9C\x94 signed out\n")
+	fmt.Println("\xE2\x9C\x94 signed out")
 	return nil
 }
 
