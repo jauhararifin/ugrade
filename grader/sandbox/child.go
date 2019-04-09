@@ -2,8 +2,11 @@ package sandbox
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"syscall"
 
 	"github.com/pkg/errors"
@@ -11,6 +14,32 @@ import (
 )
 
 func (sb *defaultSandbox) ExecuteChild(ctx context.Context, cmd Command) error {
+	// limit memory using cgroup
+	cgroupPath := "/sys/fs/cgroup/"
+	cgroupMemPath := path.Join(cgroupPath, "memory", "ugrade-sandbox")
+	logrus.WithField("path", cgroupMemPath).Debug("creating cgroup")
+	if err := os.MkdirAll(cgroupMemPath, 0755); err != nil {
+		return errors.Wrap(err, "cannot create ugrade-sandbox memory cgroup")
+	}
+	if err := ioutil.WriteFile(
+		path.Join(cgroupMemPath, "memory.limit_in_bytes"),
+		[]byte(fmt.Sprintf("%d", cmd.MemoryLimit)),
+		0700,
+	); err != nil {
+		return errors.Wrap(err, "cannot write memory limit to cgroup")
+	}
+	if err := ioutil.WriteFile(path.Join(cgroupMemPath, "notify_on_release"), []byte("1"), 0700); err != nil {
+		return errors.Wrap(err, "cannot write to notify_on_release")
+	}
+	mypid := os.Getpid()
+	if err := ioutil.WriteFile(
+		path.Join(cgroupMemPath, "cgroup.procs"),
+		[]byte(fmt.Sprintf("%d", mypid)),
+		0700,
+	); err != nil {
+		return errors.Wrap(err, "cannot put process to cgroup")
+	}
+
 	// chroot to new sandbox directory.
 	logrus.WithField("rootFSDir", sb.sandboxDir).Debug("chroot to new sandbox directory")
 	if err := syscall.Chroot(sb.sandboxDir); err != nil {

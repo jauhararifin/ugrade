@@ -31,6 +31,7 @@ func (worker *defaultWorker) run(
 		Dir:         compiled.workDir,
 		Stdin:       stdin,
 		Stdout:      stdout,
+		Stderr:      os.Stderr,
 		TimeLimit:   timelimit,
 		MemoryLimit: memlimit,
 	}
