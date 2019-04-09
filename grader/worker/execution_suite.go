@@ -29,7 +29,7 @@ func (worker *defaultWorker) executeSuite(
 	compiled compilationResult,
 	outputPrefix string,
 	timelimit,
-	memlimit uint32,
+	memlimit uint64,
 ) (*executionSuite, error) {
 	executions := make([]execution, 0, 0)
 	for _, infile := range input.files {

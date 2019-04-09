@@ -27,9 +27,9 @@ type extractedSpec struct {
 	checker    program
 	submission program
 
-	timeLimit   uint32
-	outputLimit uint32
-	memoryLimit uint32
+	timeLimit   uint64
+	outputLimit uint64
+	memoryLimit uint64
 	tolerance   float32
 
 	workDir sandbox.Path
@@ -53,9 +53,9 @@ func (worker *defaultWorker) extractSpec(
 	}
 
 	var problemInfo struct {
-		TimeLimit   uint32
-		OutputLimit uint32
-		MemoryLimit uint32
+		TimeLimit   uint64
+		OutputLimit uint64
+		MemoryLimit uint64
 		Tolerance   float32
 	}
 

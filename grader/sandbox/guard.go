@@ -6,14 +6,22 @@ import (
 	"os/exec"
 	"syscall"
 
+	"github.com/jauhararifin/ugrade/grader/sandbox/memory"
+
 	"github.com/pkg/errors"
 )
 
 func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	// limit memory throttle using cgroup
-	sb.prepareMemoryCgroup(ctx, cmd)
-	memoryCtx := sb.monitorMemoryLimit(ctx, cmd)
-	ctx = memoryCtx
+	memlimiter := memory.Limiter{
+		Name:     "ugrade-sandbox",
+		Limit:    cmd.MemoryLimit,
+		Throttle: cmd.MemoryThrottle,
+	}
+	if err := memlimiter.Prepare(); err != nil {
+		return errors.Wrap(err, "cannot preparing memory limiter")
+	}
+	memoryCtx := memlimiter.Context(ctx)
 
 	// prepare jail arguments
 	executeJailArgs := append([]string{
@@ -25,13 +33,7 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	}, cmd.Args...)
 
 	// initialize jail process
-	osCmd := exec.CommandContext(
-		ctx,
-		"/proc/self/exe",
-		executeJailArgs...,
-	)
-
-	// fill stdin, stdout and stderr of jail process.
+	osCmd := exec.CommandContext(memoryCtx, "/proc/self/exe", executeJailArgs...)
 	osCmd.Stdin = os.Stdin
 	osCmd.Stdout = os.Stdout
 	osCmd.Stderr = os.Stderr
@@ -52,8 +54,8 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	}
 
 	// assign jail pid to memory subsystem
-	if err := sb.assignProcessToMemory(osCmd.Process.Pid); err != nil {
-		return errors.Wrap(err, "cannot assign jail process to memory subsystem")
+	if err := memlimiter.Put(osCmd.Process); err != nil {
+		return errors.Wrap(err, "cannot assign jail process to memory limiter")
 	}
 
 	// wait program to exit

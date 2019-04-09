@@ -25,21 +25,21 @@ func runGuard(cmd *cobra.Command, args []string) {
 	}
 
 	// get time limit
-	timeLimit, err := cmd.Flags().GetUint32("time-limit")
+	timeLimit, err := cmd.Flags().GetUint64("time-limit")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "please provide a valid time limit")
 		os.Exit(255)
 	}
 
 	// get memory limit
-	memoryLimit, err := cmd.Flags().GetUint32("memory-limit")
+	memoryLimit, err := cmd.Flags().GetUint64("memory-limit")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "please provide a valid memory limit")
 		os.Exit(255)
 	}
 
 	// get memory limit
-	memoryThrottle, err := cmd.Flags().GetUint32("memory-throttle")
+	memoryThrottle, err := cmd.Flags().GetUint64("memory-throttle")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "please provide a valid memory throttle")
 		os.Exit(255)
@@ -85,9 +85,9 @@ var guardCmd = &cobra.Command{
 }
 
 func init() {
-	guardCmd.Flags().Uint32P("time-limit", "t", 10000, "time limit in milisecond")
-	guardCmd.Flags().Uint32P("memory-limit", "m", 64*1024*1024, "memory limit in bytes")
-	guardCmd.Flags().Uint32P("memory-throttle", "M", 256*1024*1024, "memory throttle in bytes")
+	guardCmd.Flags().Uint64P("time-limit", "t", 10000, "time limit in milisecond")
+	guardCmd.Flags().Uint64P("memory-limit", "m", 64*1024*1024, "memory limit in bytes")
+	guardCmd.Flags().Uint64P("memory-throttle", "M", 256*1024*1024, "memory throttle in bytes")
 	guardCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
 	guardCmd.Flags().StringP("path", "p", "", "executable path")
 }

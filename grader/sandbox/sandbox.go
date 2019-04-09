@@ -32,15 +32,15 @@ type Command struct {
 
 	// TimeLimit indicates maximum allowed cpu + io time in milisecond of program to use.
 	// Program will killed when running longer than this limit.
-	TimeLimit uint32
+	TimeLimit uint64
 
 	// MemoryLimit indicates maximum allowed memory in bytes allocation to be used by program.
 	// Program will killed when allocating memory more than this limit.
-	MemoryLimit uint32
+	MemoryLimit uint64
 
 	// MemoryThrottle will cause program to use no more than this value, but not killed when using more than this.
 	// When memory allocation is too high, the program will be throttled.
-	MemoryThrottle uint32
+	MemoryThrottle uint64
 }
 
 // Path contain information about path in sandbox.

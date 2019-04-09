@@ -23,7 +23,7 @@ func (worker *defaultWorker) run(
 	stdin io.Reader,
 	stdout io.Writer,
 	timelimit,
-	memlimit uint32,
+	memlimit uint64,
 ) (executionResult, error) {
 	cmd := sandbox.Command{
 		Path:           path.Join(compiled.workDir.Sandbox, compiled.executable),
@@ -61,7 +61,7 @@ func (worker *defaultWorker) runWithFile(
 	inputFile string,
 	outputFile string,
 	timelimit,
-	memlimit uint32,
+	memlimit uint64,
 ) (executionResult, error) {
 	hostInput := path.Join(compiled.workDir.Host, inputFile)
 	in, err := os.Open(hostInput)
