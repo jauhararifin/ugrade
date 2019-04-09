@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jauhararifin/ugrade/ugctl/ugrade"
+	"github.com/jauhararifin/ugrade/ugctl"
 	"github.com/spf13/cobra"
 )
 
@@ -14,11 +14,11 @@ func doSubmit(cmd *cobra.Command, args []string) error {
 	problem := cmd.Flag("problem").Value.String()
 	solution := cmd.Flag("solution").Value.String()
 
-	client := ugrade.NewClient()
+	client := ugctl.NewClient()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	result, err := client.Submit(ctx, ugrade.SubmitRequest{
+	result, err := client.Submit(ctx, ugctl.SubmitRequest{
 		LanguageID: language,
 		ProblemID:  problem,
 		SourceCode: solution,

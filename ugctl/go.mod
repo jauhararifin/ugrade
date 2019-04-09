@@ -1,10 +1,10 @@
 module github.com/jauhararifin/ugrade/ugctl
 
+go 1.12
+
 require (
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jauhararifin/graphql v0.2.3
-	github.com/matryer/is v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/pkg/errors v0.8.1

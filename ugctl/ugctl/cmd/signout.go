@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jauhararifin/ugrade/ugctl/ugrade"
+	"github.com/jauhararifin/ugrade/ugctl"
 	"github.com/spf13/cobra"
 )
 
 func doSignOut(cmd *cobra.Command, args []string) error {
-	client := ugrade.NewClient()
+	client := ugctl.NewClient()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := client.SignOut(ctx); err != nil {

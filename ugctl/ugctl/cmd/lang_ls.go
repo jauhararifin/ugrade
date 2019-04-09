@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jauhararifin/ugrade/ugctl/ugrade"
+	"github.com/jauhararifin/ugrade/ugctl"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
@@ -14,7 +14,7 @@ var langLsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "List permitted languages in current contest",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client := ugrade.NewClient()
+		client := ugctl.NewClient()
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		result, err := client.LanguageList(ctx)

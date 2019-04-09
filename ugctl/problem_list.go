@@ -1,4 +1,4 @@
-package ugrade
+package ugctl
 
 import (
 	"context"
