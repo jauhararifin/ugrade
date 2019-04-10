@@ -6,14 +6,16 @@ import (
 	"os/exec"
 	"syscall"
 
-	"github.com/jauhararifin/ugrade/grader/sandbox/blkio"
 	"github.com/jauhararifin/ugrade/grader/sandbox/cpu"
+	"github.com/jauhararifin/ugrade/grader/sandbox/rlimit"
 
 	"github.com/jauhararifin/ugrade/grader/sandbox/memory"
 
 	"github.com/pkg/errors"
 )
 
+// TODO: use rlimit to limit memory,stack size,memlock,core,nproc
+// TODO: limit blkio device
 func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	// limit memory throttle using cgroup
 	memlimiter := memory.Limiter{
@@ -37,12 +39,12 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	cpuCtx := cpulimiter.Context(memoryCtx)
 
 	// limit blkio
-	blkiolimiter := blkio.Limiter{
-		Name: "ugrade-sandbox-blkio",
-	}
-	if err := blkiolimiter.Prepare(); err != nil {
-		return errors.Wrap(err, "cannot preparing block io limiter")
-	}
+	// blkiolimiter := blkio.Limiter{
+	// 	Name: "ugrade-sandbox-blkio",
+	// }
+	// if err := blkiolimiter.Prepare(); err != nil {
+	// 	return errors.Wrap(err, "cannot preparing block io limiter")
+	// }
 	// TODO: remove hardcoded limit
 	// TODO: implement this. Actually this block io limiter is not working.
 	// if err := blkiolimiter.LimitWrite(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
@@ -52,12 +54,12 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	// 	return errors.Wrap(err, "cannot set blkio read speed limit")
 	// }
 	if cmd.OpenFile > 0 {
-		if err := blkiolimiter.LimitOpenFile(cmd.OpenFile); err != nil {
+		if err := rlimit.LimitOpenFile(cmd.OpenFile); err != nil {
 			return errors.Wrap(err, "cannot set open file limit")
 		}
 	}
 	if cmd.FileSize > 0 {
-		if err := blkiolimiter.LimitSize(cmd.FileSize); err != nil { // limit generated file sisze
+		if err := rlimit.LimitFSize(cmd.FileSize); err != nil { // limit generated file sisze
 			return errors.Wrap(err, "cannot set generate file limit")
 		}
 	}
@@ -83,7 +85,6 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 			syscall.CLONE_NEWIPC |
 			syscall.CLONE_NEWPID |
 			syscall.CLONE_NEWNS |
-			// syscall.CLONE_NEWUSER |
 			syscall.CLONE_NEWNET,
 	}
 
