@@ -1,8 +1,11 @@
 package memory
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
-const memoryPollingDelay = 100 // how fast we poll the memory usage, in milisecond
+const pollingDelay = 100 * time.Millisecond // how fast we poll the memory usage
 
 // ErrMemoryLimitExceeded indicates that memory limit is exceeded by processes.
 var ErrMemoryLimitExceeded = errors.New("memory limit exceeded")

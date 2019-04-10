@@ -194,6 +194,16 @@ func (sb *defaultSandbox) assertSandboxDir() (string, error) {
 	return sandboxDir, nil
 }
 
+func (sb *defaultSandbox) assertRoot() error {
+	if uid := os.Geteuid(); uid != 0 {
+		return errors.New("should run as root user")
+	}
+	if gid := os.Getegid(); gid != 0 {
+		return errors.New("should run as root group")
+	}
+	return nil
+}
+
 func (sb *defaultSandbox) configure() error {
 	if _, err := sb.assertWorkingDir(); err != nil {
 		return errors.Wrap(err, "error initializing working directory")
@@ -201,7 +211,7 @@ func (sb *defaultSandbox) configure() error {
 	if _, err := sb.assertSandboxDir(); err != nil {
 		return errors.Wrap(err, "error initializing sandbox directory")
 	}
-	return nil
+	return sb.assertRoot()
 }
 
 // New create new default implementation of `sandbox.Sandbox`

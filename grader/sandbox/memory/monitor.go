@@ -40,7 +40,7 @@ func (limiter *Limiter) ensure() error {
 func (limiter *Limiter) Context(ctx context.Context) context.Context {
 	memctx, cancel := context.WithCancel(ctx)
 
-	pollTicker := time.NewTicker(time.Duration(memoryPollingDelay) * time.Millisecond)
+	pollTicker := time.NewTicker(pollingDelay)
 	go func() {
 		for {
 			select {

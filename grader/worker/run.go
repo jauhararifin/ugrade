@@ -34,7 +34,7 @@ func (worker *defaultWorker) run(
 		Stdin:          stdin,
 		Stdout:         stdout,
 		Stderr:         os.Stderr,
-		TimeLimit:      timelimit,
+		TimeLimit:      time.Duration(timelimit) * time.Millisecond,
 		MemoryLimit:    memlimit,
 		MemoryThrottle: memlimit + 64*1024*1024, // throttle memory to (memlimit + 64MB)
 		FileSize:       outputlimit,

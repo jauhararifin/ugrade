@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -71,7 +72,7 @@ func runGuard(cmd *cobra.Command, args []string) {
 		Path:           execPath,
 		Args:           args,
 		Dir:            executor.Path(workingDirectory),
-		TimeLimit:      timeLimit,
+		TimeLimit:      time.Duration(timeLimit) * time.Millisecond,
 		MemoryLimit:    memoryLimit,
 		MemoryThrottle: memoryThrottle,
 		FileSize:       fileSize,

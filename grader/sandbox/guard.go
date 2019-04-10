@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/jauhararifin/ugrade/grader/sandbox/blkio"
+	"github.com/jauhararifin/ugrade/grader/sandbox/cpu"
 
 	"github.com/jauhararifin/ugrade/grader/sandbox/memory"
 
@@ -25,6 +26,16 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	}
 	memoryCtx := memlimiter.Context(ctx)
 
+	// limit cpu throttle using cgroup
+	cpulimiter := cpu.Limiter{
+		Name:  "ugrade-sandbox-cpulimit",
+		Limit: cmd.TimeLimit,
+	}
+	if err := cpulimiter.Prepare(); err != nil {
+		return errors.Wrap(err, "cannot preparing cpu limiter")
+	}
+	cpuCtx := cpulimiter.Context(memoryCtx)
+
 	// limit blkio
 	blkiolimiter := blkio.Limiter{
 		Name: "ugrade-sandbox-blkio",
@@ -33,12 +44,13 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 		return errors.Wrap(err, "cannot preparing block io limiter")
 	}
 	// TODO: remove hardcoded limit
-	if err := blkiolimiter.LimitWrite(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
-		return errors.Wrap(err, "cannot set blkio write speed limit")
-	}
-	if err := blkiolimiter.LimitRead(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
-		return errors.Wrap(err, "cannot set blkio read speed limit")
-	}
+	// TODO: implement this. Actually this block io limiter is not working.
+	// if err := blkiolimiter.LimitWrite(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
+	// 	return errors.Wrap(err, "cannot set blkio write speed limit")
+	// }
+	// if err := blkiolimiter.LimitRead(sb.workingDir, 25*1025*1024); err != nil { // hardcoded limit to 25MB
+	// 	return errors.Wrap(err, "cannot set blkio read speed limit")
+	// }
 	if cmd.OpenFile > 0 {
 		if err := blkiolimiter.LimitOpenFile(cmd.OpenFile); err != nil {
 			return errors.Wrap(err, "cannot set open file limit")
@@ -60,7 +72,7 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	}, cmd.Args...)
 
 	// initialize jail process
-	osCmd := exec.CommandContext(memoryCtx, "/proc/self/exe", executeJailArgs...)
+	osCmd := exec.CommandContext(cpuCtx, "/proc/self/exe", executeJailArgs...)
 	osCmd.Stdin = os.Stdin
 	osCmd.Stdout = os.Stdout
 	osCmd.Stderr = os.Stderr
@@ -80,13 +92,21 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 		return errors.Wrap(err, "cannot start jail process")
 	}
 
-	// assign jail pid to memory subsystem
+	// assign jail pid to memory limiter
 	if err := memlimiter.Put(osCmd.Process); err != nil {
 		return errors.Wrap(err, "cannot assign jail process to memory limiter")
 	}
 
+	// assign jail pid to cpu limiter
+	if err := cpulimiter.Put(osCmd.Process); err != nil {
+		return errors.Wrap(err, "cannot assign jail process to cpu limiter")
+	}
+
 	// wait program to exit
 	if err := osCmd.Wait(); err != nil {
+		if cpuCtx.Err() != nil {
+			return ErrTimeLimitExceeded
+		}
 		if memoryCtx.Err() != nil {
 			return ErrMemoryLimitExceeded
 		}

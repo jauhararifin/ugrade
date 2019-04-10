@@ -15,7 +15,7 @@ func (sb *defaultSandbox) ExecuteCommand(ctx context.Context, cmd Command) error
 		"guard",
 		"--working-directory", cmd.Dir.Sandbox,
 		"--path", cmd.Path,
-		"--time-limit", fmt.Sprintf("%d", cmd.TimeLimit),
+		"--time-limit", fmt.Sprintf("%d", cmd.TimeLimit.Nanoseconds()/1000000),
 		"--memory-limit", fmt.Sprintf("%d", cmd.MemoryLimit),
 		"--memory-throttle", fmt.Sprintf("%d", cmd.MemoryThrottle),
 		"--file-size", fmt.Sprintf("%d", cmd.FileSize),

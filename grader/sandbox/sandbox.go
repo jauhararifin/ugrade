@@ -5,21 +5,22 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/jauhararifin/ugrade/grader/temporary"
 )
 
 // ErrTimeLimitExceeded indicates that contestant program running too long, exceeding maximum time limit.
-var ErrTimeLimitExceeded = fmt.Errorf("contestant program running too long")
+var ErrTimeLimitExceeded = fmt.Errorf("program running too long")
 
 // ErrMemoryLimitExceeded indicates that contestant program takes too much memory.
-var ErrMemoryLimitExceeded = fmt.Errorf("contestant program run out of memory")
+var ErrMemoryLimitExceeded = fmt.Errorf("program run out of memory")
 
 // ErrRuntimeError indicates that contestant program not return zero exit code.
-var ErrRuntimeError = fmt.Errorf("contestant program return non zero exit code")
+var ErrRuntimeError = fmt.Errorf("program return non zero exit code")
 
 // ErrOutputLimitExceeded indicates that contestant program gives too much output.
-var ErrOutputLimitExceeded = fmt.Errorf("contestant program gives too output")
+var ErrOutputLimitExceeded = fmt.Errorf("program gives too output")
 
 // Command contain information to execute.
 type Command struct {
@@ -33,19 +34,19 @@ type Command struct {
 
 	Dir Path
 
-	// TimeLimit indicates maximum allowed cpu + io time in milisecond of program to use.
-	// Program will killed when running longer than this limit.
-	TimeLimit uint64
+	// TimeLimit indicates maximum allowed cpu time of process to use.
+	// Proces will killed when running longer than this limit.
+	TimeLimit time.Duration
 
-	// MemoryLimit indicates maximum allowed memory in bytes allocation to be used by program.
-	// Program will killed when allocating memory more than this limit.
+	// MemoryLimit indicates maximum allowed memory in bytes allocation to be used by process.
+	// Process will killed when allocating memory more than this limit.
 	MemoryLimit uint64
 
-	// MemoryThrottle will cause program to use no more than this value, but not killed when using more than this.
-	// When memory allocation is too high, the program will be throttled.
+	// MemoryThrottle will cause process to use no more than this value, but not killed when using more than this.
+	// When memory allocation is too high, the process will be throttled.
 	MemoryThrottle uint64
 
-	// FileSize will cause program to exit when trying to generate file with size exceeding this value.
+	// FileSize will cause process to exit when trying to generate file with size exceeding this value.
 	FileSize uint64
 
 	// OpenFile limit number of open file of process.
