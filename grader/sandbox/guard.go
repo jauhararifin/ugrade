@@ -16,6 +16,9 @@ import (
 
 // TODO: use rlimit to limit memory,stack size,memlock,core,nproc
 // TODO: limit blkio device
+// TODO: set userid to nonroot when execute process
+// TODO: chown all files in sandboxed dir
+// TODO: add capability to isolate folder, so contestant binary cannot use other program like g++
 func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 	// limit memory throttle using cgroup
 	memlimiter := memory.Limiter{

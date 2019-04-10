@@ -26,6 +26,15 @@ func (sb *defaultSandbox) executeJail(ctx context.Context, cmd Command) error {
 	}
 	logrus.Debug("current working directory changed to root directory")
 
+	// change user to non root user inside chrooted environement.
+	// this vulnerability: http://pentestmonkey.net/blog/chroot-breakout-perl requires root
+	// permission to be done.
+	// someRandomNumber := 60610
+	// syscall.Setresgid(someRandomNumber, someRandomNumber, someRandomNumber)
+	// syscall.Setgroups([]int{someRandomNumber})
+	// syscall.Setresuid(someRandomNumber, someRandomNumber, someRandomNumber)
+	// syscall.Setpgid(os.Getpid(), someRandomNumber)
+
 	// run actual command
 	logrus.WithField("path", cmd.Path).WithField("args", cmd.Args).Debug("running command")
 	osCmd := exec.CommandContext(ctx, cmd.Path, cmd.Args...)
