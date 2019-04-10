@@ -108,11 +108,11 @@ func (sb *defaultSandbox) executeGuard(ctx context.Context, cmd Command) error {
 
 	// wait program to exit
 	if err := osCmd.Wait(); err != nil {
-		if cpuCtx.Err() != nil {
-			return ErrTimeLimitExceeded
-		}
 		if memoryCtx.Err() != nil {
 			return ErrMemoryLimitExceeded
+		}
+		if cpuCtx.Err() != nil {
+			return ErrTimeLimitExceeded
 		}
 		return errors.Wrap(err, "program exited with error")
 	}
