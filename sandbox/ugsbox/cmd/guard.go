@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 	"os/exec"
-	"syscall"
 	"time"
 
 	"github.com/jauhararifin/ugrade/sandbox/fs"
@@ -76,15 +75,6 @@ func executeGuard(cmd sandbox.Command) error {
 	osCmd.Stdin = os.Stdin
 	osCmd.Stdout = os.Stdout
 	osCmd.Stderr = os.Stderr
-
-	// clone namespaces for guard process
-	osCmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS |
-			syscall.CLONE_NEWIPC |
-			syscall.CLONE_NEWPID |
-			syscall.CLONE_NEWNS |
-			syscall.CLONE_NEWNET,
-	}
 
 	// starting jail process to get its pid
 	if err := osCmd.Start(); err != nil {

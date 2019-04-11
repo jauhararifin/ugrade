@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 	"os/exec"
+	"syscall"
 
 	"github.com/jauhararifin/ugrade/sandbox/fs"
 	"github.com/pkg/errors"
@@ -22,6 +23,17 @@ func executeJail(imagePath, workingDirectory, commandPath string, args []string)
 	proc.Stdin = os.Stdin
 	proc.Stdout = os.Stdout
 	proc.Stderr = os.Stderr
+
+	// clone namespaces for guard process
+	proc.SysProcAttr = &syscall.SysProcAttr{
+		Cloneflags: syscall.CLONE_NEWUTS |
+			syscall.CLONE_NEWIPC |
+			syscall.CLONE_NEWPID |
+			syscall.CLONE_NEWNS |
+			syscall.CLONE_NEWNET,
+		Credential: &syscall.Credential{Uid: randomUID, Gid: randomUID},
+	}
+
 	if err := proc.Run(); err != nil {
 		return errors.Wrap(err, "cannot run program")
 	}
