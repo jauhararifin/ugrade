@@ -2,7 +2,9 @@ package fs
 
 import (
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
@@ -54,9 +56,28 @@ func PrepareFS(imagePath string, uid int, gid int) (*sandbox.Path, error) {
 	logrus.WithField("uid", uid).WithField("gid", gid).Debug("change file owner of files in sandboxed directory")
 	filepath.Walk(outPath, func(name string, info os.FileInfo, err error) error {
 		if err == nil {
+			if (info.Mode() & os.ModeSymlink) != 0 {
+				newname, err := os.Readlink(name)
+				if err != nil {
+					logrus.WithField("name", name).Warn("error chowning file")
+				}
+
+				if strings.HasPrefix(newname, "/") {
+					name = path.Join(outPath, newname)
+				} else {
+					name = path.Join(filepath.Dir(name), newname)
+				}
+			}
+
 			err := os.Chown(name, uid, gid)
-			return errors.Wrap(err, "cannot set owner of sandboxed directory")
+			if err != nil {
+				logrus.Warn(errors.Wrap(err, "error when chowning file"))
+			}
+
+			// skip file even if error
+			return nil
 		}
+		logrus.Error(err)
 		return err
 	})
 
