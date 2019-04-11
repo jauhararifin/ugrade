@@ -1,6 +1,7 @@
 package cpu
 
 import (
+	"os"
 	"time"
 )
 
@@ -10,6 +11,8 @@ type Limiter struct {
 	cgroupName   string
 	limit        time.Duration
 	PollingDelay time.Duration
+
+	processes []*os.Process
 }
 
 // Limit set cpu limit in this cgroup.

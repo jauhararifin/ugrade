@@ -7,6 +7,7 @@ import (
 	"path"
 	"time"
 
+	"github.com/jauhararifin/ugrade/sandbox/cgroup/killer"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -48,6 +49,9 @@ func (limiter *Limiter) Context() context.Context {
 			<-pollTicker.C
 			err := limiter.ensure()
 			if errors.Cause(err) == ErrMemLimit {
+				if err := killer.KillGroup(limiter.processes); err != nil {
+					logrus.Error(err) // dont know how to handle, just log it
+				}
 				cancel()
 				return
 			}

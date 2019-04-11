@@ -3,6 +3,7 @@ package memory
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 	"time"
 
@@ -16,6 +17,8 @@ type Limiter struct {
 	cgroupName   string
 	limit        uint64
 	PollingDelay time.Duration
+
+	processes []*os.Process
 }
 
 // Limit limit maximum memory usage of processes inside cgroup.

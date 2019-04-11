@@ -32,5 +32,7 @@ func (limiter *Limiter) Put(process *os.Process) error {
 		WithField("pid", process.Pid).
 		Debug("process assgined to cgroup")
 
+	limiter.processes = append(limiter.processes, process)
+
 	return nil
 }
