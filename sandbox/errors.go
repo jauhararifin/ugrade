@@ -11,3 +11,15 @@ type TimeLimitExceeded interface {
 	error
 	TimeLimitExceeded() bool
 }
+
+// InternalError indicates that the error is because of internal server problem.
+type InternalError interface {
+	error
+	InternalError() bool
+}
+
+// RuntimeError indicates that the error is because of executable gives non zero exit code.
+type RuntimeError interface {
+	error
+	RuntimeError() bool
+}

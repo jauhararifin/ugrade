@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	logrus.SetLevel(logrus.InfoLevel)
+	logrus.SetLevel(logrus.TraceLevel)
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)
 	}

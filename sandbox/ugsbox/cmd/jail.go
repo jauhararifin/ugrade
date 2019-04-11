@@ -34,11 +34,16 @@ func executeJail(imagePath, workingDirectory, commandPath string, args []string)
 		Credential: &syscall.Credential{Uid: randomUID, Gid: randomUID},
 	}
 
-	if err := proc.Run(); err != nil {
-		return errors.Wrap(err, "cannot run program")
+	// TODO: remove harcoded env var, use image file instead
+	proc.Env = []string{
+		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/x86_64-alpine-linux-musl/bin/:/usr/libexec/gcc/x86_64-alpine-linux-musl/8.2.0",
 	}
 
-	return nil
+	if err := proc.Start(); err != nil {
+		return errors.Wrap(err, "cannot start program")
+	}
+
+	return proc.Wait()
 }
 
 func runJail(cmd *cobra.Command, args []string) error {
