@@ -1,50 +1,12 @@
 package cmd
 
 import (
-	"os"
-	"os/exec"
-	"syscall"
+	"github.com/jauhararifin/ugrade/sandbox/jail"
+	"github.com/jauhararifin/ugrade/sandbox/uid"
 
-	"github.com/jauhararifin/ugrade/sandbox/fs"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
-
-func executeJail(imagePath, workingDirectory, commandPath string, args []string) error {
-	if err := fs.Chroot(imagePath, randomUID, randomUID); err != nil {
-		return errors.Wrap(err, "cannot chroot")
-	}
-
-	if err := os.Chdir(workingDirectory); err != nil {
-		return errors.Wrap(err, "cannot change dir to working directory")
-	}
-
-	proc := exec.Command(commandPath, args...)
-	proc.Stdin = os.Stdin
-	proc.Stdout = os.Stdout
-	proc.Stderr = os.Stderr
-
-	// clone namespaces for guard process
-	proc.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS |
-			syscall.CLONE_NEWIPC |
-			syscall.CLONE_NEWPID |
-			syscall.CLONE_NEWNS |
-			syscall.CLONE_NEWNET,
-		Credential: &syscall.Credential{Uid: randomUID, Gid: randomUID},
-	}
-
-	// TODO: remove harcoded env var, use image file instead
-	proc.Env = []string{
-		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/x86_64-alpine-linux-musl/bin/:/usr/libexec/gcc/x86_64-alpine-linux-musl/8.2.0",
-	}
-
-	if err := proc.Start(); err != nil {
-		return errors.Wrap(err, "cannot start program")
-	}
-
-	return proc.Wait()
-}
 
 func runJail(cmd *cobra.Command, args []string) error {
 	// get image path
@@ -65,7 +27,8 @@ func runJail(cmd *cobra.Command, args []string) error {
 	}
 	execPath := args[0]
 
-	if err := executeJail(imagePath, workingDirectory, execPath, args[1:]); err != nil {
+	thejail := jail.New()
+	if err := thejail.Run(imagePath, workingDirectory, uid.AnonymousUID, uid.AnonymousUID, execPath, args[1:]); err != nil {
 		return errors.Wrap(err, "cannot execute jail")
 	}
 

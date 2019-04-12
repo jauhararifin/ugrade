@@ -1,0 +1,10 @@
+- limit memory swap usage
+- limit blkio bytes read per second
+- limit blkio bytes write per second
+- add install script
+- add directory rules, read only dir, write only dir, mount dir, dir mapping
+- handle signals
+- limit stack size
+- limit memory using rlimit
+- limit memory lock
+- limit number of process

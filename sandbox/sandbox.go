@@ -1,23 +1,9 @@
 package sandbox
 
 import (
-	"context"
-	"fmt"
 	"io"
 	"time"
 )
-
-// ErrTimeLimitExceeded indicates that contestant program running too long, exceeding maximum time limit.
-var ErrTimeLimitExceeded = fmt.Errorf("program running too long")
-
-// ErrMemoryLimitExceeded indicates that contestant program takes too much memory.
-var ErrMemoryLimitExceeded = fmt.Errorf("program run out of memory")
-
-// ErrRuntimeError indicates that contestant program not return zero exit code.
-var ErrRuntimeError = fmt.Errorf("program return non zero exit code")
-
-// ErrOutputLimitExceeded indicates that contestant program gives too much output.
-var ErrOutputLimitExceeded = fmt.Errorf("program gives too output")
 
 // Command contain information to execute.
 type Command struct {
@@ -50,6 +36,12 @@ type Command struct {
 
 	// OpenFile limit number of open file of process.
 	OpenFile uint64
+
+	// NProc limit number of process that process can create.
+	NProc uint64
+
+	// Limit stack size of process.
+	StackSize uint64
 }
 
 // Path contain information about path in sandbox.
@@ -59,11 +51,4 @@ type Path struct {
 
 	// Sandbox contain absolute path to sandboxed filesystem.
 	Sandbox string
-}
-
-// Sandbox execute command inside sandbox.
-type Sandbox interface {
-	PrepareDir() (*Path, error)
-	Path(sandboxPath string) Path
-	ExecuteCommand(ctx context.Context, cmd Command) error
 }

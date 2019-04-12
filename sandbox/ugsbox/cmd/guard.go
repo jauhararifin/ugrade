@@ -3,107 +3,25 @@ package cmd
 import (
 	"context"
 	"os"
-	"os/exec"
-	"syscall"
 	"time"
 
-	"github.com/jauhararifin/ugrade/sandbox/fs"
+	"github.com/jauhararifin/ugrade/sandbox/guard"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/jauhararifin/ugrade/sandbox"
-	"github.com/jauhararifin/ugrade/sandbox/cgroup"
 
-	"github.com/jauhararifin/ugrade/sandbox/rlimit"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
-const randomUID = 61238
-
-func executeGuard(cmd sandbox.Command) error {
-	// extract image
-	_, err := fs.PrepareFS(cmd.ImagePath, randomUID, randomUID)
-	if err != nil {
-		return errors.Wrap(err, "cannot prepare sandboxed directory")
-	}
-
-	// init cgroup
-	cgrp, err := cgroup.New("ugrade-sandbox")
-	if err != nil {
-		return errors.Wrap(err, "cannot create/initialize cgroup")
-	}
-
-	// limit memory
-	if err := cgrp.LimitMemory(cmd.MemoryLimit); err != nil {
-		return errors.Wrap(err, "cannot set memory limit of cgroup")
-	}
-
-	// throttle memory
-	if err := cgrp.ThrottleMemory(cmd.MemoryThrottle); err != nil {
-		return errors.Wrap(err, "cannot set memory throttle")
-	}
-
-	// limit cpu time
-	if err := cgrp.LimitCPU(cmd.TimeLimit); err != nil {
-		return errors.Wrap(err, "cannot set cpu time limit")
-	}
-
-	// limit open file
-	if cmd.OpenFile > 0 {
-		if err := rlimit.LimitOpenFile(cmd.OpenFile); err != nil {
-			return errors.Wrap(err, "cannot set open file limit")
-		}
-	}
-
-	// limit fsize
-	if cmd.FileSize > 0 {
-		if err := rlimit.LimitFSize(cmd.FileSize); err != nil { // limit generated file sisze
-			return errors.Wrap(err, "cannot set generate file limit")
-		}
-	}
-
-	// create arguments for running jail
-	jailArgs := append([]string{
-		"jail",
-		"--image", cmd.ImagePath,
-		"--working-directory", cmd.Dir,
-		"--",
-		cmd.Path,
-	}, cmd.Args...)
-
-	// initialize jail process
-	ctx := cgrp.Monitor(context.Background())
-	osCmd := exec.CommandContext(ctx, "/proc/self/exe", jailArgs...)
-	osCmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-	osCmd.Stdin = os.Stdin
-	osCmd.Stdout = os.Stdout
-	osCmd.Stderr = os.Stderr
-
-	// starting jail process to get its pid
-	if err := osCmd.Start(); err != nil {
-		return errors.Wrap(err, "cannot start jail process")
-	}
-
-	// put process to cgroup monitor
-	if err := cgrp.Put(osCmd.Process); err != nil {
-		return errors.Wrap(err, "cannot put process to cgroup monitor")
-	}
-
-	// wait program to exit
-	if err := osCmd.Wait(); err != nil {
-		if _, ok := errors.Cause(cgrp.Error()).(sandbox.MemoryLimitExceeded); ok {
-			return errors.Cause(cgrp.Error())
-		}
-		if _, ok := errors.Cause(cgrp.Error()).(sandbox.TimeLimitExceeded); ok {
-			return errors.Cause(cgrp.Error())
-		}
-		return errors.Wrap(err, "program exited with error")
-	}
-
-	return nil
-}
-
 func runGuard(cmd *cobra.Command, args []string) error {
+	// create guard instance
+	guard, err := guard.New()
+	if err != nil {
+		return errors.Wrap(err, "cannot initialize guard process")
+	}
+
 	// get image path
 	imagePath := cmd.Flag("image").Value.String()
 	if len(imagePath) == 0 {
@@ -152,6 +70,18 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		return errors.New("please provide a valid open file limit")
 	}
 
+	// get open file limit
+	nproc, err := cmd.Flags().GetUint64("nproc")
+	if err != nil {
+		return errors.New("please provide a valid number of process")
+	}
+
+	// get open file limit
+	stackSize, err := cmd.Flags().GetUint64("stack-size")
+	if err != nil {
+		return errors.New("please provide a valid stack size")
+	}
+
 	command := sandbox.Command{
 		ImagePath:      imagePath,
 		Path:           execPath,
@@ -162,15 +92,23 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		MemoryThrottle: memoryThrottle,
 		FileSize:       fileSize,
 		OpenFile:       openFile,
+		NProc:          nproc,
+		StackSize:      stackSize,
 	}
 
-	if err := executeGuard(command); err != nil {
+	if err := guard.Run(context.Background(), command); err != nil {
 		if _, ok := errors.Cause(err).(sandbox.MemoryLimitExceeded); ok {
 			logrus.Info("Memory Limit Exceeded")
 			os.Exit(sandbox.ExitCodeMemoryLimitExceeded)
 		} else if _, ok := errors.Cause(err).(sandbox.TimeLimitExceeded); ok {
 			logrus.Info("Time Limit Exceeded")
 			os.Exit(sandbox.ExitCodeTimeLimitExceeded)
+		} else if _, ok := errors.Cause(err).(sandbox.RuntimeError); ok {
+			logrus.Info("Runtime Error")
+			os.Exit(sandbox.ExitCodeRuntimeError)
+		} else if _, ok := errors.Cause(err).(sandbox.InternalError); ok {
+			logrus.Info("Internal Error")
+			os.Exit(sandbox.ExitCodeInternalError)
 		}
 
 		logrus.Error(err)
@@ -193,6 +131,8 @@ func init() {
 	guardCmd.Flags().Uint64P("memory-throttle", "M", 256*1024*1024, "memory throttle in bytes")
 	guardCmd.Flags().Uint64P("file-size", "f", 0, "generated file size limit")
 	guardCmd.Flags().Uint64P("open-file", "o", 0, "open file limit")
+	guardCmd.Flags().Uint64P("nproc", "n", 0, "limit process creation e.g.: fork/exec")
+	guardCmd.Flags().Uint64P("stack-size", "s", 0, "limit stack size in bytes")
 	guardCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
 	guardCmd.Flags().StringP("image", "i", "", "compressed sandbox image (in .tar.xz) path")
 

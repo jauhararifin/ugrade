@@ -9,7 +9,7 @@ import (
 
 // Chroot change root into new directory, set uid and gid and working directory.
 // `imagePath` contain path to the image file (the compressed image file, not the output)
-func Chroot(imagePath string, uid int, gid int) error {
+func (fs *defaultFS) Chroot(imagePath string) error {
 	sandboxPath, err := imageSandboxPath(imagePath)
 	if err != nil {
 		return errors.Wrap(err, "cannot determine image sandbox path")
