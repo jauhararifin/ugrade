@@ -6,13 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jauhararifin/ugrade/sandbox/guard"
-
-	"github.com/sirupsen/logrus"
-
 	"github.com/jauhararifin/ugrade/sandbox"
-
+	"github.com/jauhararifin/ugrade/sandbox/guard"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -100,6 +97,10 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		})
 	}
 
+	stdin := cmd.Flag("stdin").Value.String()
+	stderr := cmd.Flag("stderr").Value.String()
+	stdout := cmd.Flag("stdout").Value.String()
+
 	command := sandbox.Command{
 		ImagePath:      imagePath,
 		Path:           execPath,
@@ -113,6 +114,9 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		NProc:          nproc,
 		StackSize:      stackSize,
 		Binds:          binds,
+		Stdin:          stdin,
+		Stderr:         stderr,
+		Stdout:         stdout,
 	}
 
 	if err := guard.Run(context.Background(), command); err != nil {
@@ -153,8 +157,11 @@ func init() {
 	guardCmd.Flags().Uint64P("nproc", "n", 0, "limit process creation e.g.: fork/exec")
 	guardCmd.Flags().Uint64P("stack-size", "s", 0, "limit stack size in bytes")
 	guardCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
+	guardCmd.Flags().StringP("stdin", "I", "", "path (relative to sandbox) to file to be used as stdin")
+	guardCmd.Flags().StringP("stderr", "E", "", "path (relative to sandbox) to file to be used as stderr")
+	guardCmd.Flags().StringP("stdout", "O", "", "path (relative to sandbox) to file to be used as stdout")
 	guardCmd.Flags().StringP("image", "i", "", "compressed sandbox image (in .tar.xz) path")
-	guardCmd.Flags().StringSliceP("bind", "b", []string{}, "bind host directory to sandbox directory with format <hostdir>:<sandboxdir>")
+	guardCmd.Flags().StringSliceP("bind", "b", []string{}, "bind host directory to sandbox directory with format <hostdir>:<sandboxdir>. Warning: file owner of binded directory will be changed")
 
 	rootCmd.AddCommand(guardCmd)
 }

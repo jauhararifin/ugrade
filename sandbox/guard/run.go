@@ -62,7 +62,7 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) error {
 
 	// bind some filesystem
 	for _, bind := range cmd.Binds {
-		unbind, err := guard.fs.Bind(cmd.ImagePath, bind)
+		unbind, err := guard.fs.Bind(cmd.ImagePath, bind, uid.AnonymousUID, uid.AnonymousUID)
 		if err != nil {
 			return errors.Wrapf(err, "cannot bind %s:%s", bind.Host, bind.Sandbox)
 		}
@@ -74,6 +74,9 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) error {
 		"jail",
 		"--image", cmd.ImagePath,
 		"--working-directory", cmd.Dir,
+		"--stdin", cmd.Stdin,
+		"--stdout", cmd.Stdout,
+		"--stderr", cmd.Stderr,
 		"--",
 		cmd.Path,
 	}, cmd.Args...)

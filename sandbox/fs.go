@@ -13,5 +13,5 @@ type FSUnbind func() error
 type FS interface {
 	Load(imagePath string, uid, gid int) error
 	Chroot(imagePath string) error
-	Bind(imagePath string, bind FSBind) (FSUnbind, error)
+	Bind(imagePath string, bind FSBind, uid, gid int) (FSUnbind, error)
 }

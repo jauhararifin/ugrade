@@ -1,7 +1,6 @@
 package sandbox
 
 import (
-	"io"
 	"time"
 )
 
@@ -15,11 +14,13 @@ type Command struct {
 	// Bind mounts
 	Binds []FSBind
 
-	// Stdin of calling process. The child process will use stdin, stdout, and stderr from OS.
-	Stdin  io.Reader
-	Stdout io.Writer
-	Stderr io.Writer
+	// Path to file to be used as stdin for sandboxed process.
+	// If empty, stdin will derived from parent standard input.
+	Stdin  string
+	Stdout string
+	Stderr string
 
+	// Working directory of process inside sandbox.
 	Dir string
 
 	// TimeLimit indicates maximum allowed cpu time of process to use.

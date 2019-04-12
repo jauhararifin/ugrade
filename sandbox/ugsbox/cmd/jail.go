@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/jauhararifin/ugrade/sandbox/jail"
 	"github.com/jauhararifin/ugrade/sandbox/uid"
-
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -27,8 +26,23 @@ func runJail(cmd *cobra.Command, args []string) error {
 	}
 	execPath := args[0]
 
+	// get stdin, stdout, stderr parameter
+	stdin := cmd.Flag("stdin").Value.String()
+	stderr := cmd.Flag("stderr").Value.String()
+	stdout := cmd.Flag("stdout").Value.String()
+
 	thejail := jail.New()
-	if err := thejail.Run(imagePath, workingDirectory, uid.AnonymousUID, uid.AnonymousUID, execPath, args[1:]); err != nil {
+	if err := thejail.Run(
+		imagePath,
+		workingDirectory,
+		uid.AnonymousUID,
+		uid.AnonymousUID,
+		stdin,
+		stdout,
+		stderr,
+		execPath,
+		args[1:],
+	); err != nil {
 		return errors.Wrap(err, "cannot execute jail")
 	}
 
@@ -43,6 +57,9 @@ var jailCmd = &cobra.Command{
 
 func init() {
 	jailCmd.Flags().StringP("working-directory", "w", "/home", "working directory inside sandbox of process")
+	jailCmd.Flags().StringP("stdin", "x", "", "path (relative to sandbox) to file to be used as stdin")
+	jailCmd.Flags().StringP("stderr", "e", "", "path (relative to sandbox) to file to be used as stderr")
+	jailCmd.Flags().StringP("stdout", "o", "", "path (relative to sandbox) to file to be used as stdout")
 	jailCmd.Flags().StringP("image", "i", "", "compressed sandbox image (in .tar.xz) path")
 
 	rootCmd.AddCommand(jailCmd)

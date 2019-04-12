@@ -1,26 +1,73 @@
 package jail
 
 import (
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"strings"
 	"syscall"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
 )
 
-func (jl *defaultJail) Run(imagePath, workingDirectory string, uid, gid uint32, commandPath string, args []string) error {
+func (jl *defaultJail) Run(
+	imagePath,
+	workingDirectory string,
+	uid,
+	gid uint32,
+	stdin,
+	stdout,
+	stderr,
+	commandPath string,
+	args []string,
+) error {
+	logrus.WithField("imagePath", imagePath).Debug("chrooting to sandboxed directory")
 	if err := jl.fs.Chroot(imagePath); err != nil {
 		return errors.Wrap(err, "cannot chroot")
 	}
 
+	logrus.WithField("workingDirectory", workingDirectory).Debug("change dir to working directory")
 	if err := os.Chdir(workingDirectory); err != nil {
 		return errors.Wrap(err, "cannot change dir to working directory")
 	}
 
+	logrus.WithField("commandPath", commandPath).WithField("args", args).Debug("set child command")
 	proc := exec.Command(commandPath, args...)
-	proc.Stdin = os.Stdin
-	proc.Stdout = os.Stdout
-	proc.Stderr = os.Stderr
+	proc.Stdin = ioutil.NopCloser(strings.NewReader(""))
+	proc.Stdout = ioutil.Discard
+	proc.Stderr = ioutil.Discard
+
+	logrus.WithField("stdin", stdin).Debug("preparing stdin file")
+	if len(stdin) > 0 {
+		file, err := os.OpenFile(stdin, os.O_RDONLY|os.O_SYNC, 0660)
+		if err != nil {
+			return errors.Wrap(err, "cannot open standard input file")
+		}
+		proc.Stdin = file
+		defer file.Close()
+	}
+
+	logrus.WithField("stdout", stdout).Debug("preparing stdout file")
+	if len(stdout) > 0 {
+		file, err := os.OpenFile(stdout, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0660)
+		if err != nil {
+			return errors.Wrap(err, "cannot open standard output file")
+		}
+		proc.Stdout = file
+		defer file.Close()
+	}
+
+	logrus.WithField("stderr", stderr).Debug("preparing stderr file")
+	if len(stderr) > 0 {
+		file, err := os.OpenFile(stderr, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0660)
+		if err != nil {
+			return errors.Wrap(err, "cannot open standard error file")
+		}
+		proc.Stderr = file
+		defer file.Close()
+	}
 
 	// clone namespaces for guard process
 	proc.SysProcAttr = &syscall.SysProcAttr{

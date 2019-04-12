@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (fs *defaultFS) Bind(imagePath string, bind sandbox.FSBind) (sandbox.FSUnbind, error) {
+func (fs *defaultFS) Bind(imagePath string, bind sandbox.FSBind, uid, gid int) (sandbox.FSUnbind, error) {
 	// get extracted image path
 	imgRealPath, err := imageSandboxPath(imagePath)
 	if err != nil {
@@ -36,6 +36,11 @@ func (fs *defaultFS) Bind(imagePath string, bind sandbox.FSBind) (sandbox.FSUnbi
 	// mount it
 	if err := syscall.Mount(bind.Host, targetPath, "", syscall.MS_BIND, ""); err != nil {
 		return nil, errors.Wrap(err, "cannot call mount syscall")
+	}
+
+	// change mounted dir owner
+	if err := fs.chownDir(targetPath, uid, gid); err != nil {
+		return nil, errors.Wrap(err, "cannot change owner of mounted directory")
 	}
 
 	return func() error {
