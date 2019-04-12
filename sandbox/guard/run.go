@@ -101,12 +101,24 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) error {
 
 	// wait program to exit
 	if err := osCmd.Wait(); err != nil {
+		// check memory limit exceeded
 		if _, ok := errors.Cause(guard.cgrp.Error()).(sandbox.MemoryLimitExceeded); ok {
 			return errors.Cause(guard.cgrp.Error())
 		}
+
+		// check time limit exceeded
 		if _, ok := errors.Cause(guard.cgrp.Error()).(sandbox.TimeLimitExceeded); ok {
 			return errors.Cause(guard.cgrp.Error())
 		}
+
+		// check runtime error
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok && status == sandbox.ExitCodeRuntimeError {
+				return errRTE
+			}
+			return errors.Wrap(err, "cannot determine process exit code")
+		}
+
 		return errors.Wrap(err, "program exited with error")
 	}
 

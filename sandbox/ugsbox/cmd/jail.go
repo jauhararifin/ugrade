@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"os"
+
+	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/jauhararifin/ugrade/sandbox/jail"
 	"github.com/jauhararifin/ugrade/sandbox/uid"
 	"github.com/pkg/errors"
@@ -43,6 +46,9 @@ func runJail(cmd *cobra.Command, args []string) error {
 		execPath,
 		args[1:],
 	); err != nil {
+		if _, ok := errors.Cause(err).(RuntimeError); ok {
+			os.Exit(sandbox.ExitCodeRuntimeError)
+		}
 		return errors.Wrap(err, "cannot execute jail")
 	}
 

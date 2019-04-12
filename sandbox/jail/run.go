@@ -84,9 +84,20 @@ func (jl *defaultJail) Run(
 		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/x86_64-alpine-linux-musl/bin/:/usr/libexec/gcc/x86_64-alpine-linux-musl/8.2.0",
 	}
 
+	// start process
 	if err := proc.Start(); err != nil {
 		return errors.Wrap(err, "cannot start program")
 	}
 
-	return proc.Wait()
+	if err := proc.Wait(); err != nil {
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				return rte(status)
+			}
+			return errors.Wrap(err, "cannot determine process exit code")
+		}
+		return errors.Wrap(err, "error when executing program")
+	}
+
+	return nil
 }
