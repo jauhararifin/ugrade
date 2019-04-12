@@ -6,24 +6,23 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
-func (fs *defaultFS) Load(imagePath string, uid, gid int) (*sandbox.Path, error) {
+func (fs *defaultFS) Load(imagePath string, uid, gid int) error {
 	// open image file
 	logrus.WithField("image", imagePath).Debug("open image file")
 	imFile, err := os.Open(imagePath)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot open image file")
+		return errors.Wrap(err, "cannot open image file")
 	}
 	defer imFile.Close()
 
 	// get output image path
 	outPath, err := imageSandboxPath(imagePath)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot determine sandbox directory")
+		return errors.Wrap(err, "cannot determine sandbox directory")
 	}
 	logrus.WithField("image", imagePath).WithField("sandbox", outPath).Debug("use sandbox directory")
 
@@ -31,24 +30,21 @@ func (fs *defaultFS) Load(imagePath string, uid, gid int) (*sandbox.Path, error)
 	logrus.WithField("sandbox", outPath).Debug("check sandbox directory")
 	if stat, err := os.Stat(outPath); err == nil {
 		if stat.IsDir() {
-			return &sandbox.Path{
-				Host:    outPath,
-				Sandbox: "/",
-			}, nil
+			return nil
 		}
-		return nil, errors.Errorf("image sandbox already exists but is not a directory %s", outPath)
+		return errors.Errorf("image sandbox already exists but is not a directory %s", outPath)
 	}
 
 	// make image sandbox dir
 	logrus.WithField("sandbox", outPath).Debug("create directory for sandboxed image")
 	if err := os.MkdirAll(outPath, 0700); err != nil {
-		return nil, errors.Wrap(err, "cannot create directory for sandboxed image")
+		return errors.Wrap(err, "cannot create directory for sandboxed image")
 	}
 
 	// extract image
 	logrus.WithField("sandbox", outPath).WithField("image", imagePath).Debug("extract image to sandbox directory")
 	if err := extractImage(imagePath, outPath); err != nil {
-		return nil, errors.Wrap(err, "cannot extract image to sandboxed directory")
+		return errors.Wrap(err, "cannot extract image to sandboxed directory")
 	}
 
 	// change sandbox dir owner
@@ -80,8 +76,5 @@ func (fs *defaultFS) Load(imagePath string, uid, gid int) (*sandbox.Path, error)
 		return err
 	})
 
-	return &sandbox.Path{
-		Host:    outPath,
-		Sandbox: "/",
-	}, nil
+	return nil
 }

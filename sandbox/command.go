@@ -12,6 +12,9 @@ type Command struct {
 	Path string
 	Args []string
 
+	// Bind mounts
+	Binds []FSBind
+
 	// Stdin of calling process. The child process will use stdin, stdout, and stderr from OS.
 	Stdin  io.Reader
 	Stdout io.Writer
@@ -42,13 +45,4 @@ type Command struct {
 
 	// Limit stack size of process.
 	StackSize uint64
-}
-
-// Path contain information about path in sandbox.
-type Path struct {
-	// Host contain absolute path to host filesystem.
-	Host string
-
-	// Sandbox contain absolute path to sandboxed filesystem.
-	Sandbox string
 }

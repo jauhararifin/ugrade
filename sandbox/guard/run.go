@@ -13,8 +13,7 @@ import (
 
 func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) error {
 	// extract image
-	_, err := guard.fs.Load(cmd.ImagePath, uid.AnonymousUID, uid.AnonymousUID)
-	if err != nil {
+	if err := guard.fs.Load(cmd.ImagePath, uid.AnonymousUID, uid.AnonymousUID); err != nil {
 		return errors.Wrap(err, "cannot prepare sandboxed directory")
 	}
 
@@ -59,6 +58,15 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) error {
 		if err := guard.rlim.LimitStack(cmd.StackSize); err != nil {
 			return errors.Wrap(err, "cannot limit stack size")
 		}
+	}
+
+	// bind some filesystem
+	for _, bind := range cmd.Binds {
+		unbind, err := guard.fs.Bind(cmd.ImagePath, bind)
+		if err != nil {
+			return errors.Wrapf(err, "cannot bind %s:%s", bind.Host, bind.Sandbox)
+		}
+		defer unbind()
 	}
 
 	// create arguments for running jail

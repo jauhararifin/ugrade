@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/jauhararifin/ugrade/sandbox/guard"
@@ -82,6 +83,23 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		return errors.New("please provide a valid stack size")
 	}
 
+	bindsstr, err := cmd.Flags().GetStringSlice("bind")
+	if err != nil {
+		return errors.New("please provide a valid binds")
+	}
+	binds := make([]sandbox.FSBind, 0, 0)
+	for _, bnd := range bindsstr {
+		// TODO: make better parser, still not working for many cases
+		parts := strings.Split(bnd, ":")
+		if len(parts) != 2 || len(parts[0]) == 0 || len(parts[1]) == 0 {
+			return errors.New("please provide a valid bind")
+		}
+		binds = append(binds, sandbox.FSBind{
+			Host:    parts[0],
+			Sandbox: parts[1],
+		})
+	}
+
 	command := sandbox.Command{
 		ImagePath:      imagePath,
 		Path:           execPath,
@@ -94,6 +112,7 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		OpenFile:       openFile,
 		NProc:          nproc,
 		StackSize:      stackSize,
+		Binds:          binds,
 	}
 
 	if err := guard.Run(context.Background(), command); err != nil {
@@ -135,6 +154,7 @@ func init() {
 	guardCmd.Flags().Uint64P("stack-size", "s", 0, "limit stack size in bytes")
 	guardCmd.Flags().StringP("working-directory", "w", "/home", "working directory of process")
 	guardCmd.Flags().StringP("image", "i", "", "compressed sandbox image (in .tar.xz) path")
+	guardCmd.Flags().StringSliceP("bind", "b", []string{}, "bind host directory to sandbox directory with format <hostdir>:<sandboxdir>")
 
 	rootCmd.AddCommand(guardCmd)
 }
