@@ -3,7 +3,7 @@ module github.com/jauhararifin/ugrade/worker
 go 1.12
 
 require (
-	github.com/jauhararifin/ugrade/sandbox v0.0.0-20190413114719-9b38fde01950
+	github.com/jauhararifin/ugrade/sandbox v0.0.0-20190413144834-963f464b202d
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.1
 	github.com/spf13/cobra v0.0.3

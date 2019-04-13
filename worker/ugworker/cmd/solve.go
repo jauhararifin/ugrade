@@ -68,6 +68,8 @@ func runSolve(cmd *cobra.Command, args []string) error {
 			Path:     submissionSource,
 			Language: submissionLang,
 		},
+
+		OutputLimit: 256 * 1024 * 1024,
 	}
 
 	solv, err := solver.New()

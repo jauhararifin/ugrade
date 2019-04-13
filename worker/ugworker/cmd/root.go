@@ -8,12 +8,12 @@ import (
 var rootCmd = &cobra.Command{
 	Use: "ugworker",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		if ok, _ := cmd.PersistentFlags().GetBool("debug"); ok {
-			logrus.SetLevel(logrus.DebugLevel)
-		}
-		if ok, _ := cmd.PersistentFlags().GetBool("trace"); ok {
-			logrus.SetLevel(logrus.TraceLevel)
-		}
+		// if ok, _ := cmd.PersistentFlags().GetBool("debug"); ok {
+		// logrus.SetLevel(logrus.DebugLevel)
+		// }
+		// if ok, _ := cmd.PersistentFlags().GetBool("trace"); ok {
+		logrus.SetLevel(logrus.TraceLevel)
+		// }
 	},
 }
 

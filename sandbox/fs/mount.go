@@ -33,6 +33,9 @@ func (fs *defaultFS) Bind(imagePath string, bind sandbox.FSBind, uid, gid int) (
 		return nil, errors.New("mount target already exists but not a directory")
 	}
 
+	// maybe, unmount it first? in case already mounted. Just ignore the error right?
+	syscall.Unmount(targetPath, 0)
+
 	// mount it
 	if err := syscall.Mount(bind.Host, targetPath, "", syscall.MS_BIND, ""); err != nil {
 		return nil, errors.Wrap(err, "cannot call mount syscall")

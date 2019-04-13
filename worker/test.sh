@@ -1,6 +1,7 @@
 #!/bin/bash
 
 bin/ugworker solve \
+	--trace \
 	--tcgen-lang 2 \
 	--tcgen-source ~/Documents/test/tcgen.cpp \
 	--jury-lang 2 \

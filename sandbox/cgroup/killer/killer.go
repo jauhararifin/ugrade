@@ -31,5 +31,6 @@ func KillPids(pids []int) error {
 	for _, pid := range pids {
 		syscall.Kill(pid, syscall.SIGKILL)
 	}
+	// TODO: ensure the process is killed
 	return nil
 }

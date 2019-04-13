@@ -70,16 +70,23 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) (sandbo
 	}
 
 	// create arguments for running jail
-	jailArgs := append([]string{
+	jailArgs := []string{
 		"jail",
 		"--image", cmd.ImagePath,
 		"--working-directory", cmd.Dir,
-		"--stdin", cmd.Stdin,
-		"--stdout", cmd.Stdout,
-		"--stderr", cmd.Stderr,
-		"--",
-		cmd.Path,
-	}, cmd.Args...)
+	}
+
+	if len(cmd.Stdin) > 0 {
+		jailArgs = append(jailArgs, "--stdin", cmd.Stdin)
+	}
+	if len(cmd.Stdout) > 0 {
+		jailArgs = append(jailArgs, "--stdout", cmd.Stdout)
+	}
+	if len(cmd.Stderr) > 0 {
+		jailArgs = append(jailArgs, "--stderr", cmd.Stderr)
+	}
+	jailArgs = append(jailArgs, "--", cmd.Path)
+	jailArgs = append(jailArgs, cmd.Args...)
 
 	// initialize jail process
 	monitorCtx := guard.cgrp.Monitor(ctx)
