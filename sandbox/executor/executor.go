@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"os"
 	"os/exec"
 	"syscall"
 
@@ -86,8 +85,6 @@ func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) (s
 	args = append(args, command.Args...)
 
 	exe := exec.CommandContext(ctx, "ugsbox", args...)
-	// TODO: remove this
-	exe.Stderr = os.Stderr
 
 	var stdout bytes.Buffer
 	exe.Stdout = &stdout

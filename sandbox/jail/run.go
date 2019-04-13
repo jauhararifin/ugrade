@@ -41,7 +41,7 @@ func (jl *defaultJail) Run(
 
 	logrus.WithField("stdin", stdin).Debug("preparing stdin file")
 	if len(stdin) > 0 {
-		file, err := os.OpenFile(stdin, os.O_RDONLY|os.O_SYNC, 0660)
+		file, err := os.OpenFile(stdin, os.O_RDONLY|os.O_SYNC, 0774)
 		if err != nil {
 			return errors.Wrap(err, "cannot open standard input file")
 		}
@@ -51,7 +51,7 @@ func (jl *defaultJail) Run(
 
 	logrus.WithField("stdout", stdout).Debug("preparing stdout file")
 	if len(stdout) > 0 {
-		file, err := os.OpenFile(stdout, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0660)
+		file, err := os.OpenFile(stdout, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0664)
 		if err != nil {
 			return errors.Wrap(err, "cannot open standard output file")
 		}
@@ -61,7 +61,7 @@ func (jl *defaultJail) Run(
 
 	logrus.WithField("stderr", stderr).Debug("preparing stderr file")
 	if len(stderr) > 0 {
-		file, err := os.OpenFile(stderr, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0660)
+		file, err := os.OpenFile(stderr, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0664)
 		if err != nil {
 			return errors.Wrap(err, "cannot open standard error file")
 		}

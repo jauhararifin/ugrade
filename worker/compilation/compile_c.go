@@ -4,7 +4,6 @@ import (
 	"context"
 	"io/ioutil"
 	"path"
-	"time"
 
 	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/jauhararifin/ugrade/worker/file"
@@ -21,6 +20,11 @@ func (compiler *defaultCompiler) compileC(
 		return nil, errors.Wrap(err, "cannot find gxx-compiler image")
 	}
 
+	runtimePath, err := image.Path("static-runtime")
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot find static-runtime image")
+	}
+
 	workDir, err := ioutil.TempDir("", "ugrade-compilation")
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot create temporary working directory")
@@ -31,15 +35,15 @@ func (compiler *defaultCompiler) compileC(
 	}
 
 	cmd := sandbox.Command{
-		TimeLimit:      10 * time.Second,  // limit 10 seconds for compiling
-		MemoryLimit:    256 * 1024 * 1024, // limit 256MB for compiling
-		MemoryThrottle: 320 * 1024 * 1024, // throttle compiler into 320MB
-		Stderr:         path.Join(workDir, "stderr"),
-		FileSize:       128 * 1024 * 1024, // maximum 128MB generated file
-		OpenFile:       64,                // maximum 64 open files
-		NProc:          64,                // maximum 64 forks
+		TimeLimit:      CompileTimeLimit,
+		MemoryLimit:    CompileMemoryLimit,
+		MemoryThrottle: CompileMemoryThrottle,
+		FileSize:       CompileFileSize,
+		OpenFile:       CompileOpenFile,
+		NProc:          CompileNProc,
 		ImagePath:      imagePath,
 		Path:           "gcc",
+		Stderr:         "/wd/stderr",
 		Args: []string{
 			"-o",
 			"/wd/exec",
@@ -56,14 +60,15 @@ func (compiler *defaultCompiler) compileC(
 		},
 	}
 
-	startTime := time.Now()
-	if err := compiler.executor.Execute(ctx, cmd); err != nil {
+	usage, err := compiler.executor.Execute(ctx, cmd)
+	if err != nil {
 		return nil, errors.Wrap(err, "cannot execute compiler program")
 	}
-	duration := time.Since(startTime)
 
 	return &Result{
-		Duration: duration,
-		ExecPath: path.Join(workDir, "exec"),
+		Usage:        usage,
+		ExecDir:      workDir,
+		ExecName:     "exec",
+		RuntimeImage: runtimePath,
 	}, nil
 }

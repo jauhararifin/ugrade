@@ -2,9 +2,9 @@ package memory
 
 import (
 	"io/ioutil"
-	"os"
 	"path"
 
+	"github.com/jauhararifin/ugrade/sandbox/cgroup/preparation"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -17,25 +17,9 @@ const cgroupPath = "/sys/fs/cgroup/"
 func (limiter *Limiter) Prepare() error {
 	// remove old chroot if already exists
 	cgroupMemPath := path.Join(limiter.cgroupPath, "memory", limiter.cgroupName)
-	logrus.WithField("path", cgroupMemPath).Debug("check old cgroup of memory subsystem")
-	_, err := os.Stat(cgroupMemPath)
-	if err == nil {
-		logrus.WithField("path", cgroupMemPath).Debug("removing old cgroup of memory subsystem")
-		if err := os.RemoveAll(cgroupMemPath); err != nil {
-			return errors.Wrap(err, "cannot remove the old cgroup")
-		}
-		logrus.WithField("path", cgroupMemPath).Debug("old cgroup of memory subsystem removed")
+	if err := preparation.Prepare(cgroupMemPath); err != nil {
+		return errors.Wrap(err, "cannot prepare cgroup folder for memory subsystem")
 	}
-	if err != nil && !os.IsNotExist(err) {
-		return errors.Wrap(err, "cannot get info of cgroup memory path")
-	}
-
-	// creating cgroup folder inside memory subsystem
-	logrus.WithField("path", cgroupMemPath).Debug("creating cgroup for memory subsystem")
-	if err := os.MkdirAll(cgroupMemPath, 0755); err != nil {
-		return errors.Wrapf(err, "cannot create %s memory subsystem cgroup", limiter.cgroupName)
-	}
-	logrus.WithField("path", cgroupMemPath).Debug("cgroup for memory subsystem created")
 
 	// reset max usage to zero
 	logrus.WithField("path", cgroupMemPath).Debug("set memory max usage to zero")

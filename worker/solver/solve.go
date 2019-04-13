@@ -9,12 +9,12 @@ import (
 )
 
 func (s *defaultSolver) Solve(ctx context.Context, spec worker.JobSpec) (*worker.JobResult, error) {
-	tcgen := spec.TCGen
-	compiledTcgen, err := s.compiler.Compile(ctx, tcgen)
+	tcsuite, err := s.tcgenerator.Generate(ctx, spec)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot compile testcase generator")
+		return nil, errors.Wrap(err, "cannot generate testcase suite")
 	}
-	fmt.Println("wow", compiledTcgen)
+
+	fmt.Println(*tcsuite)
 
 	return nil, nil
 }

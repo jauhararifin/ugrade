@@ -44,9 +44,10 @@ func (limiter *Limiter) ensure() error {
 func (limiter *Limiter) Context() context.Context {
 	memctx, cancel := context.WithCancel(context.Background())
 
-	// TODO: optimize by sleep `limiter.limit` first before monitoring
-	pollTicker := time.NewTicker(limiter.PollingDelay)
+	waitfirst := time.After(limiter.limit)
 	go func() {
+		<-waitfirst
+		pollTicker := time.NewTicker(limiter.PollingDelay)
 		for {
 			<-pollTicker.C
 			err := limiter.ensure()

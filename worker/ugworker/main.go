@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/jauhararifin/ugrade/worker/cmd"
+	"github.com/jauhararifin/ugrade/worker/ugworker/cmd"
 )
 
 func main() {

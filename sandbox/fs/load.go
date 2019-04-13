@@ -34,7 +34,7 @@ func (fs *defaultFS) Load(imagePath string, uid, gid int) error {
 
 	// make image sandbox dir
 	logrus.WithField("sandbox", outPath).Debug("create directory for sandboxed image")
-	if err := os.MkdirAll(outPath, 0700); err != nil {
+	if err := os.MkdirAll(outPath, 0744); err != nil {
 		return errors.Wrap(err, "cannot create directory for sandboxed image")
 	}
 

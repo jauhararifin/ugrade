@@ -1,3 +1,4 @@
+- kill everything before started
 - rlimit should be placed in child process instead of guard
 - add option to redirect stderr to stdout
 - add clean method

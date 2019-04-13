@@ -1,4 +1,4 @@
-package executor
+package runner
 
 import (
 	"context"
@@ -10,19 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Executor execute ugsbox
-type Executor interface {
-	Execute(ctx context.Context, command sandbox.Command) error
-}
-
-type defaultExecutor struct{}
-
-// New create default implementation of `Executor`
-func New() Executor {
-	return &defaultExecutor{}
-}
-
-func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) error {
+// RunContext run ugsbox guard
+func RunContext(ctx context.Context, command sandbox.Command) error {
 	args := []string{
 		"guard",
 		"--time-limit", fmt.Sprintf("%d", command.TimeLimit),
@@ -65,4 +54,9 @@ func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) er
 	}
 
 	return nil
+}
+
+// Run run sandbox command using background context
+func Run(cmd sandbox.Command) error {
+	return RunContext(context.Background(), cmd)
 }

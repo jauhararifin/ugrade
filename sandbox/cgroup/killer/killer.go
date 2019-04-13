@@ -25,3 +25,11 @@ func KillGroup(processes []*os.Process) error {
 	}
 	return nil
 }
+
+// KillPids kill all processes in `pids`
+func KillPids(pids []int) error {
+	for _, pid := range pids {
+		syscall.Kill(pid, syscall.SIGKILL)
+	}
+	return nil
+}

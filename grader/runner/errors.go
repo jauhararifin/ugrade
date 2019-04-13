@@ -1,6 +1,6 @@
-package executor
+package runner
 
-import "github.com/pkg/errors"
+import "errors"
 
 type runtimeError struct{ error }
 

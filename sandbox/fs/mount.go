@@ -21,7 +21,7 @@ func (fs *defaultFS) Bind(imagePath string, bind sandbox.FSBind, uid, gid int) (
 	targetPath := path.Join(imgRealPath, bind.Sandbox)
 	info, err := os.Stat(targetPath)
 	if os.IsNotExist(err) {
-		if err := os.MkdirAll(targetPath, 700); err != nil {
+		if err := os.MkdirAll(targetPath, 744); err != nil {
 			return nil, errors.Wrap(err, "cannot create mount directory")
 		}
 		info, err = os.Stat(targetPath)

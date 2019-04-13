@@ -14,7 +14,7 @@ func Path(imageName string) (string, error) {
 	}
 
 	for _, dir := range lookupPaths {
-		imagePath := path.Join(dir, imageName)
+		imagePath := path.Join(dir, imageName+".tar.xz")
 		info, err := os.Stat(imagePath)
 		if err != nil || info.IsDir() {
 			continue

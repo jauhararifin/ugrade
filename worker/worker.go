@@ -1,6 +1,9 @@
 package worker
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 // SourceCode represent program's source code.
 type SourceCode struct {
@@ -15,7 +18,7 @@ type JobSpec struct {
 	Checker    SourceCode
 	Submission SourceCode
 
-	TimeLimit   uint64
+	TimeLimit   time.Duration
 	OutputLimit uint64
 	MemoryLimit uint64
 	Tolerance   float64
