@@ -16,5 +16,6 @@ type CGroup interface {
 
 	Monitor(ctx context.Context) context.Context
 
+	Usage() Usage
 	Error() error
 }

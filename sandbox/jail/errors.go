@@ -4,12 +4,12 @@ import (
 	"fmt"
 )
 
-type runtimeError error
+type runtimeError struct{ error }
 
 func (runtimeError) RuntimeError() bool {
 	return true
 }
 
 func rte(code int) runtimeError {
-	return fmt.Errorf("runtime error with exit code: %d", code)
+	return runtimeError{fmt.Errorf("runtime error with exit code: %d", code)}
 }

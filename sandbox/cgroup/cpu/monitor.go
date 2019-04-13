@@ -31,7 +31,8 @@ func (limiter *Limiter) ensure() error {
 		WithField("limit", limiter.Limit).
 		Trace("cpu usage read")
 
-	if time.Duration(usage)*time.Nanosecond > limiter.limit {
+	limiter.usage = time.Duration(usage) * time.Nanosecond
+	if limiter.usage > limiter.limit {
 		return ErrTimeLimit
 	}
 

@@ -29,7 +29,7 @@ func (limiter *Limiter) Put(process *os.Process) error {
 	logrus.
 		WithField("path", cgroupCPUPath).
 		WithField("pid", process.Pid).
-		Debug("process assgined to cgroup")
+		Debug("process assigned to cgroup")
 
 	limiter.processes = append(limiter.processes, process)
 

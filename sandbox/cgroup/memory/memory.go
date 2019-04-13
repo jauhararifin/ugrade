@@ -17,6 +17,7 @@ type Limiter struct {
 	cgroupName   string
 	limit        uint64
 	PollingDelay time.Duration
+	usage        uint64
 
 	processes []*os.Process
 }
@@ -25,6 +26,11 @@ type Limiter struct {
 func (limiter *Limiter) Limit(bytes uint64) error {
 	limiter.limit = bytes
 	return nil
+}
+
+// Usage returns maximum memory usage.
+func (limiter *Limiter) Usage() uint64 {
+	return limiter.usage
 }
 
 // Throttle throttle memory usage of processes inside cgroup.

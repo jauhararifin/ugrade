@@ -92,7 +92,7 @@ func (jl *defaultJail) Run(
 	if err := proc.Wait(); err != nil {
 		if exiterr, ok := err.(*exec.ExitError); ok {
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				return rte(status)
+				return rte(status.ExitStatus())
 			}
 			return errors.Wrap(err, "cannot determine process exit code")
 		}

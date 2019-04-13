@@ -1,8 +1,10 @@
 package executor
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 	"syscall"
 
@@ -11,8 +13,9 @@ import (
 )
 
 // Executor execute ugsbox
+// TODO: move this into root sandbox module
 type Executor interface {
-	Execute(ctx context.Context, command sandbox.Command) error
+	Execute(ctx context.Context, command sandbox.Command) (sandbox.Usage, error)
 }
 
 type defaultExecutor struct{}
@@ -22,22 +25,60 @@ func New() Executor {
 	return &defaultExecutor{}
 }
 
-func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) error {
+func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) (sandbox.Usage, error) {
+	if len(command.Dir) == 0 {
+		command.Dir = "/"
+	}
+
 	args := []string{
 		"guard",
-		"--time-limit", fmt.Sprintf("%d", command.TimeLimit),
-		"--memory-limit", fmt.Sprintf("%d", command.MemoryLimit),
-		"--memory-throttle", fmt.Sprintf("%d", command.MemoryThrottle),
-		"--file-size", fmt.Sprintf("%d", command.FileSize),
-		"--open-file", fmt.Sprintf("%d", command.OpenFile),
-		"--nproc", fmt.Sprintf("%d", command.NProc),
-		"--stack-size", fmt.Sprintf("%d", command.StackSize),
-		"--working-directory", command.Dir,
-		"--stdin", command.Stdin,
-		"--stdout", command.Stdout,
-		"--stderr", command.Stderr,
 		"--image", command.ImagePath,
 	}
+
+	if command.TimeLimit > 0 {
+		args = append(args, "--time-limit", fmt.Sprintf("%d", command.TimeLimit))
+	}
+
+	if command.MemoryLimit > 0 {
+		args = append(args, "--memory-limit", fmt.Sprintf("%d", command.MemoryLimit))
+	}
+
+	if command.MemoryThrottle > 0 {
+		args = append(args, "--memory-throttle", fmt.Sprintf("%d", command.MemoryThrottle))
+	}
+
+	if command.FileSize > 0 {
+		args = append(args, "--file-size", fmt.Sprintf("%d", command.FileSize))
+	}
+
+	if command.OpenFile > 0 {
+		args = append(args, "--open-file", fmt.Sprintf("%d", command.OpenFile))
+	}
+
+	if command.NProc > 0 {
+		args = append(args, "--nproc", fmt.Sprintf("%d", command.NProc))
+	}
+
+	if command.StackSize > 0 {
+		args = append(args, "--stack-size", fmt.Sprintf("%d", command.StackSize))
+	}
+
+	if len(command.Dir) > 0 {
+		args = append(args, "--working-directory", command.Dir)
+	}
+
+	if len(command.Stdin) > 0 {
+		args = append(args, "--stdin", command.Stdin)
+	}
+
+	if len(command.Stdout) > 0 {
+		args = append(args, "--stdout", command.Stdout)
+	}
+
+	if len(command.Stderr) > 0 {
+		args = append(args, "--stderr", command.Stderr)
+	}
+
 	for _, bnd := range command.Binds {
 		args = append(args, "--bind", bnd.Host+":"+bnd.Sandbox)
 	}
@@ -45,24 +86,34 @@ func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) er
 	args = append(args, command.Args...)
 
 	exe := exec.CommandContext(ctx, "ugsbox", args...)
+	// TODO: remove this
+	exe.Stderr = os.Stderr
 
-	if err := exe.Run(); err != nil {
+	var stdout bytes.Buffer
+	exe.Stdout = &stdout
+
+	err := exe.Run()
+
+	usage := sandbox.Usage{}
+	fmt.Fscanf(&stdout, "cpu: %d\n", &usage.CPU)
+	fmt.Fscanf(&stdout, "memory: %d\n", &usage.Memory)
+	if err != nil {
 		if exiterr, ok := err.(*exec.ExitError); ok {
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				switch status {
 				case sandbox.ExitCodeMemoryLimitExceeded:
-					return errMLE
+					return usage, errMLE
 				case sandbox.ExitCodeTimeLimitExceeded:
-					return errTLE
+					return usage, errTLE
 				case sandbox.ExitCodeRuntimeError:
-					return errRTE
+					return usage, errRTE
 				case sandbox.ExitCodeInternalError:
-					return errIE
+					return usage, errIE
 				}
 			}
-			return errors.Wrap(err, "cannot determine process exit code")
+			return usage, errors.Wrap(err, "cannot determine process exit code")
 		}
 	}
 
-	return nil
+	return usage, nil
 }

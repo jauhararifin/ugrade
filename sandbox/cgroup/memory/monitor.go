@@ -24,14 +24,13 @@ func (limiter *Limiter) ensure() error {
 		return errors.Wrap(err, "cannot read memory.max_usage_in_bytes file from cgroup directory")
 	}
 
-	var maxUsage uint64
-	fmt.Sscanf(string(maxUsageBytes), "%d", &maxUsage)
+	fmt.Sscanf(string(maxUsageBytes), "%d", &limiter.usage)
 	logrus.
-		WithField("maxUsage", maxUsage).
+		WithField("maxUsage", limiter.usage).
 		WithField("memoryLimit", limiter.limit).
 		Trace("maximum memory usage read")
 
-	if maxUsage > limiter.limit {
+	if limiter.usage > limiter.limit {
 		return ErrMemLimit
 	}
 

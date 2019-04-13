@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -119,7 +120,11 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		Stdout:         stdout,
 	}
 
-	if err := guard.Run(context.Background(), command); err != nil {
+	usage, err := guard.Run(context.Background(), command)
+	fmt.Fprintf(os.Stdout, "cpu: %d\n", usage.CPU)
+	fmt.Fprintf(os.Stdout, "memory: %d\n", usage.Memory)
+
+	if err != nil {
 		if _, ok := errors.Cause(err).(sandbox.MemoryLimitExceeded); ok {
 			logrus.Info("Memory Limit Exceeded")
 			os.Exit(sandbox.ExitCodeMemoryLimitExceeded)

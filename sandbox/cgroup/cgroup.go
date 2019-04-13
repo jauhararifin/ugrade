@@ -27,6 +27,7 @@ type Limiter interface {
 type CPU interface {
 	Limiter
 	Limit(duration time.Duration) error
+	Usage() time.Duration
 }
 
 // Memory limit memory usage of processes inside sandbox. This will monitor memory usage, and kill
@@ -36,6 +37,7 @@ type Memory interface {
 	Limiter
 	Limit(bytes uint64) error
 	Throttle(bytes uint64) error
+	Usage() uint64
 }
 
 type defaultCgroup struct {
@@ -82,6 +84,13 @@ func (dc *defaultCgroup) Monitor(ctx context.Context) context.Context {
 	}()
 
 	return cgctx
+}
+
+func (dc *defaultCgroup) Usage() sandbox.Usage {
+	return sandbox.Usage{
+		Memory: dc.memory.Usage(),
+		CPU:    dc.cpu.Usage(),
+	}
 }
 
 func (dc *defaultCgroup) Error() error {

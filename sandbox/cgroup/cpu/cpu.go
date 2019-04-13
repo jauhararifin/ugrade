@@ -11,6 +11,7 @@ type Limiter struct {
 	cgroupName   string
 	limit        time.Duration
 	PollingDelay time.Duration
+	usage        time.Duration
 
 	processes []*os.Process
 }
@@ -19,6 +20,11 @@ type Limiter struct {
 func (limiter *Limiter) Limit(duration time.Duration) error {
 	limiter.limit = duration
 	return nil
+}
+
+// Usage return current cpu usage.
+func (limiter *Limiter) Usage() time.Duration {
+	return limiter.usage
 }
 
 // New create new CPULimiter
