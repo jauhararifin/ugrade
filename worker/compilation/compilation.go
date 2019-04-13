@@ -2,6 +2,8 @@ package compilation
 
 import (
 	"context"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/jauhararifin/ugrade/worker/executor"
@@ -15,6 +17,12 @@ type Result struct {
 	ExecPath string
 }
 
+// Remove remove compilation result.
+func (r *Result) Remove() error {
+	dir := filepath.Dir(r.ExecPath)
+	return os.RemoveAll(dir)
+}
+
 // Compiler compile source code.
 type Compiler interface {
 	Compile(ctx context.Context, source worker.SourceCode) (*Result, error)
@@ -26,5 +34,7 @@ type defaultCompiler struct {
 
 // New create default implementation of `Compiler`
 func New() Compiler {
-	return &defaultCompiler{}
+	return &defaultCompiler{
+		executor: executor.New(),
+	}
 }
