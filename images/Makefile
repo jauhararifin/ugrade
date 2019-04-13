@@ -1,6 +1,6 @@
 archive: clean gxx-compiler/ static-runtime/
-	tar -cf - gxx-compiler/ | xz -9 -c - > gxx-compiler.tar.xz
-	tar -cf - static-runtime/ | xz -9 -c - > static-runtime.tar.xz
+	cd gxx-compiler && tar -cf - * | xz -9 -c - > ../gxx-compiler.tar.xz
+	cd static-runtime && tar -cf - * | xz -9 -c - > ../static-runtime.tar.xz
 
 clean:
 	rm -f gxx-compiler.tar.xz
