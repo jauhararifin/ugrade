@@ -24,7 +24,11 @@ func (limiter *Limiter) Limit(duration time.Duration) error {
 
 // Usage return current cpu usage.
 func (limiter *Limiter) Usage() time.Duration {
-	return limiter.usage
+	usage, err := limiter.readUsage()
+	if err != nil {
+		return limiter.usage
+	}
+	return time.Duration(usage) * time.Nanosecond
 }
 
 // New create new CPULimiter

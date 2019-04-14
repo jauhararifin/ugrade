@@ -15,13 +15,13 @@ import (
 // ErrTimeLimit indicates that process's cpu usage exceeding time limit.
 var ErrTimeLimit = errors.New("process's time limit exceeded")
 
-func (limiter *Limiter) ensure() error {
+func (limiter *Limiter) readUsage() (uint64, error) {
 	cgroupUsagePath := path.Join(limiter.cgroupPath, "cpuacct", limiter.cgroupName, "cpuacct.usage")
 	logrus.WithField("path", cgroupUsagePath).Trace("read cpu usage from cgroup directory")
 	usageBytes, err := ioutil.ReadFile(cgroupUsagePath)
 	if err != nil {
 		logrus.Debug(err)
-		return errors.Wrap(err, "cannot read cpuacct.usage file from cgroup directory")
+		return 0, errors.Wrap(err, "cannot read cpuacct.usage file from cgroup directory")
 	}
 
 	var usage uint64
@@ -30,6 +30,15 @@ func (limiter *Limiter) ensure() error {
 		WithField("usage", time.Duration(usage)*time.Nanosecond).
 		WithField("limit", limiter.Limit).
 		Trace("cpu usage read")
+
+	return usage, nil
+}
+
+func (limiter *Limiter) ensure() error {
+	usage, err := limiter.readUsage()
+	if err != nil {
+		return errors.Wrap(err, "cannot read cpu usage")
+	}
 
 	limiter.usage = time.Duration(usage) * time.Nanosecond
 	if limiter.usage > limiter.limit {
