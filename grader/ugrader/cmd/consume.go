@@ -8,12 +8,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var serverURL = "http://localhost:8000"
-
 func runConsume(cmd *cobra.Command, args []string) error {
 	token := cmd.Flag("token").Value.String()
 	if len(token) == 0 {
 		return errors.New("missing token")
+	}
+
+	serverURL := cmd.Flag("server-url").Value.String()
+	if len(serverURL) == 0 {
+		serverURL = "http://localhost:8000"
 	}
 
 	ctx := context.Background()
@@ -37,5 +40,6 @@ var consumeCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(consumeCmd)
 	consumeCmd.Flags().StringP("token", "t", "", "Your session token")
+	consumeCmd.Flags().StringP("server-url", "h", "http://localhost:8000", "Server url")
 	consumeCmd.MarkPersistentFlagRequired("token")
 }
