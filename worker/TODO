@@ -1,0 +1,4 @@
+- encrypt directories
+- add configuration for encrypt directories
+- use viper for manage image configuration
+- store environment variables in image configuration
