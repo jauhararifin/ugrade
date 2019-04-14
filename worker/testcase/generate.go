@@ -97,8 +97,15 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec worker.JobSpec) 
 		if !stat.IsDir() {
 			return nil, errors.Wrap(err, "testcases directory found but its not a directory")
 		}
-		return gen.loadConfig(dir)
+		res, err := gen.loadConfig(dir)
+		if err == nil {
+			return res, nil
+		}
+		logrus.WithField("error", err).Warn("cannot load testcase from directory")
 	}
+
+	// if we cannot load testcase from cache, remove cache, and build cache
+	os.RemoveAll(dir)
 
 	// compile testcase generator
 	logrus.WithField("source", spec.TCGen).Debug("compile testcase generator")

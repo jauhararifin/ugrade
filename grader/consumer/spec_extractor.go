@@ -1,4 +1,4 @@
-package worker
+package consumer
 
 import (
 	"archive/tar"
@@ -10,36 +10,18 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
-	"github.com/jauhararifin/ugrade/grader/sandbox"
+	"github.com/jauhararifin/ugrade/worker"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
-type program struct {
-	filename string
-	language string
-}
-
-type extractedSpec struct {
-	tcgen      program
-	solution   program
-	checker    program
-	submission program
-
-	timeLimit   uint64
-	outputLimit uint64
-	memoryLimit uint64
-	tolerance   float32
-
-	workDir sandbox.Path
-}
-
-func (worker *defaultWorker) extractSpec(
+func (c *defaultConsumer) extractSpec(
 	ctx context.Context,
-	workDir sandbox.Path,
+	workDir string,
 	spec io.Reader,
-) (*extractedSpec, error) {
+) (*worker.JobSpec, error) {
 	var tcgenFilename string
 	var solutionFilename string
 	var checkerFilename string
@@ -56,12 +38,13 @@ func (worker *defaultWorker) extractSpec(
 		TimeLimit   uint64
 		OutputLimit uint64
 		MemoryLimit uint64
-		Tolerance   float32
+		Tolerance   float64
 	}
 
 	logrus.Debug("reading spec tar files")
 	tarReader := tar.NewReader(spec)
 	for {
+		// read next file in tar
 		logrus.Trace("reading next file inside tar")
 		header, err := tarReader.Next()
 		if err == io.EOF {
@@ -71,8 +54,9 @@ func (worker *defaultWorker) extractSpec(
 		}
 		logrus.WithField("filename", header.Name).Trace("found item in spec tar")
 
+		// check regular file
 		if header.Typeflag == tar.TypeReg || header.Typeflag == tar.TypeRegA {
-			filename := path.Join(workDir.Host, header.Name)
+			filename := path.Join(workDir, header.Name)
 			baseName := strings.TrimSuffix(header.Name, filepath.Ext(header.Name))
 
 			// skip file if the file is unrecognized
@@ -82,7 +66,7 @@ func (worker *defaultWorker) extractSpec(
 				baseName != "submission" &&
 				header.Name != "lang.json" &&
 				header.Name != "problem.json" {
-				logrus.WithField("headerName", header.Name).Trace("skip unrecognize file")
+				logrus.WithField("headerName", header.Name).Warn("skip unrecognize file")
 				continue
 			}
 
@@ -105,13 +89,13 @@ func (worker *defaultWorker) extractSpec(
 			// fill variables for return value
 			switch baseName {
 			case "tcgen":
-				tcgenFilename = header.Name
+				tcgenFilename = filename
 			case "solution":
-				solutionFilename = header.Name
+				solutionFilename = filename
 			case "checker":
-				checkerFilename = header.Name
+				checkerFilename = filename
 			case "submission":
-				submissionFilename = header.Name
+				submissionFilename = filename
 			}
 
 			// handle lang.json file
@@ -181,29 +165,27 @@ func (worker *defaultWorker) extractSpec(
 		return nil, errors.New("invalid problem information")
 	}
 
-	return &extractedSpec{
-		tcgen: program{
-			filename: tcgenFilename,
-			language: langInfo.Tcgen,
+	return &worker.JobSpec{
+		TCGen: worker.SourceCode{
+			Path:     tcgenFilename,
+			Language: langInfo.Tcgen,
 		},
-		solution: program{
-			filename: solutionFilename,
-			language: langInfo.Solution,
+		Solution: worker.SourceCode{
+			Path:     solutionFilename,
+			Language: langInfo.Solution,
 		},
-		checker: program{
-			filename: checkerFilename,
-			language: langInfo.Checker,
+		Checker: worker.SourceCode{
+			Path:     checkerFilename,
+			Language: langInfo.Checker,
 		},
-		submission: program{
-			filename: submissionFilename,
-			language: langInfo.Submission,
+		Submission: worker.SourceCode{
+			Path:     submissionFilename,
+			Language: langInfo.Submission,
 		},
 
-		timeLimit:   problemInfo.TimeLimit,
-		outputLimit: problemInfo.OutputLimit,
-		memoryLimit: problemInfo.MemoryLimit,
-		tolerance:   problemInfo.Tolerance,
-
-		workDir: workDir,
+		TimeLimit:   time.Duration(problemInfo.TimeLimit) * time.Millisecond,
+		OutputLimit: problemInfo.OutputLimit,
+		MemoryLimit: problemInfo.MemoryLimit,
+		Tolerance:   problemInfo.Tolerance,
 	}, nil
 }

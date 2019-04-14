@@ -25,7 +25,6 @@ func (clt *defaultClient) SubmitJob(ctx context.Context, token string, jobResult
 	if _, err := io.Copy(outputWriter, jobResult.Output); err != nil {
 		return errors.Wrap(err, "cannot write output to http request")
 	}
-	jobResult.Output.Close()
 
 	bodyWriter.Close()
 	req, err := http.NewRequest("POST", clt.serverURL+"/gradings/jobs/", bodyBuf)

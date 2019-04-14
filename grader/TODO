@@ -1,1 +1,2 @@
-- use linux capabilities instead of running as root
+- put log in file (/var/log/ugrader)
+- add command for polling jobs

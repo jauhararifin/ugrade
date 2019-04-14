@@ -3,10 +3,29 @@ package grader
 import (
 	"context"
 	"fmt"
+	"io"
 )
+
+// Consumer consume job from server and send result
+type Consumer interface {
+	Consume(ctx context.Context, token string) error
+}
 
 // ErrNoSuchJob indicating that currently no active job to be done.
 var ErrNoSuchJob = fmt.Errorf("no such job")
+
+// Job represent grading job in ugrade.
+type Job struct {
+	Token string
+	Spec  io.ReadCloser
+}
+
+// JobResult respresent of result after job finished.
+type JobResult struct {
+	Job     *Job
+	Output  io.ReadCloser
+	Verdict string
+}
 
 // Client is used for interacting with ugrade server API.
 type Client interface {
