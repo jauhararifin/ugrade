@@ -45,7 +45,7 @@ func (ex *defaultExecutor) Execute(
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot create temporary directory for contestant output")
 	}
-	logrus.WithField("dir", outputDir).Debug("creating temporary directory for contestant output")
+	logrus.WithField("dir", outputDir).Debug("temporary directory for contestant output created")
 
 	// run submission using every testcase in testcase suite.
 	execItems := make([]ExecutionItem, 0, 0)
@@ -89,7 +89,7 @@ func (ex *defaultExecutor) Execute(
 			InputName:  tcitem.Input,
 			OutputName: tcitem.Output,
 			Usage:      usage,
-			err:        err,
+			Err:        err,
 		}
 		execItems = append(execItems, execItem)
 	}

@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/jauhararifin/ugrade/worker"
 	"github.com/jauhararifin/ugrade/worker/solver"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -99,8 +99,7 @@ func runSolve(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return errors.Wrap(err, "cannot solve job specification")
 	}
-
-	fmt.Println(result)
+	logrus.WithField("verdict", result.Verdict).Info("job solved")
 
 	return nil
 }

@@ -1,3 +1,4 @@
+- fix bug when add nproc, nopenfile
 - move executor interface to root package
 - kill everything before started
 - rlimit should be placed in child process instead of guard

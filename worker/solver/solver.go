@@ -2,6 +2,7 @@ package solver
 
 import (
 	"github.com/jauhararifin/ugrade/worker"
+	"github.com/jauhararifin/ugrade/worker/checker"
 	"github.com/jauhararifin/ugrade/worker/compilation"
 	"github.com/jauhararifin/ugrade/worker/submission"
 	"github.com/jauhararifin/ugrade/worker/testcase"
@@ -11,6 +12,7 @@ type defaultSolver struct {
 	compiler           compilation.Compiler
 	tcgenerator        testcase.Generator
 	submissionExecutor submission.Executor
+	checker            checker.Checker
 }
 
 // New creates default implementation of `worker.Solver`.
@@ -19,5 +21,6 @@ func New() (worker.Solver, error) {
 		compiler:           compilation.New(),
 		tcgenerator:        testcase.NewGenerator(),
 		submissionExecutor: submission.New(),
+		checker:            checker.New(),
 	}, nil
 }

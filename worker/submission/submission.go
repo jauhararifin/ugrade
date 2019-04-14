@@ -18,7 +18,7 @@ type ExecutionItem struct {
 	InputName  string
 	OutputName string
 	Usage      sandbox.Usage
-	err        error
+	Err        error
 }
 
 // ExecutionResult represent execution of contestant submission given testcase suite.

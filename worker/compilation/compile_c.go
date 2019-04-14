@@ -62,7 +62,7 @@ func (compiler *defaultCompiler) compileC(
 
 	usage, err := compiler.executor.Execute(ctx, cmd)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot execute compiler program")
+		return nil, genCompileError(err)
 	}
 
 	return &Result{

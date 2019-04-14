@@ -2,7 +2,6 @@ package solver
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/jauhararifin/ugrade/worker"
 	"github.com/pkg/errors"
@@ -14,14 +13,22 @@ func (s *defaultSolver) Solve(ctx context.Context, spec worker.JobSpec) (*worker
 		return nil, errors.Wrap(err, "cannot generate testcase suite")
 	}
 
-	fmt.Println(*tcsuite)
-
 	execRes, err := s.submissionExecutor.Execute(ctx, spec, *tcsuite)
 	if err != nil {
+		if _, ok := errors.Cause(err).(worker.CompilationError); ok {
+			return &worker.JobResult{
+				Verdict: worker.CE,
+			}, nil
+		}
 		return nil, errors.Wrap(err, "cannot execute contestant solution")
 	}
 
-	fmt.Println(*execRes)
+	checkSuite, err := s.checker.CheckSuite(ctx, spec, *tcsuite, *execRes)
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot check contestant outputs")
+	}
 
-	return nil, nil
+	return &worker.JobResult{
+		Verdict: checkSuite.Verdict,
+	}, nil
 }
