@@ -16,5 +16,12 @@ func (s *defaultSolver) Solve(ctx context.Context, spec worker.JobSpec) (*worker
 
 	fmt.Println(*tcsuite)
 
+	execRes, err := s.submissionExecutor.Execute(ctx, spec, *tcsuite)
+	if err != nil {
+		return nil, errors.Wrap(err, "cannot execute contestant solution")
+	}
+
+	fmt.Println(*execRes)
+
 	return nil, nil
 }

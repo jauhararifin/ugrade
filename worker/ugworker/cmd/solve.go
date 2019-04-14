@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/jauhararifin/ugrade/worker"
 	"github.com/jauhararifin/ugrade/worker/solver"
@@ -51,6 +52,21 @@ func runSolve(cmd *cobra.Command, args []string) error {
 		return errors.New("please provide a valid submission language")
 	}
 
+	timeLimit, err := cmd.Flags().GetUint64("time-limit")
+	if err != nil {
+		return errors.Wrap(err, "cannot parse time limit arguments")
+	}
+
+	memoryLimit, err := cmd.Flags().GetUint64("memory-limit")
+	if err != nil {
+		return errors.Wrap(err, "cannot parse memory limit arguments")
+	}
+
+	outputLimit, err := cmd.Flags().GetUint64("output-limit")
+	if err != nil {
+		return errors.Wrap(err, "cannot parse output limit arguments")
+	}
+
 	spec := worker.JobSpec{
 		TCGen: worker.SourceCode{
 			Path:     tcgenSource,
@@ -69,7 +85,9 @@ func runSolve(cmd *cobra.Command, args []string) error {
 			Language: submissionLang,
 		},
 
-		OutputLimit: 256 * 1024 * 1024,
+		MemoryLimit: memoryLimit,
+		TimeLimit:   time.Duration(timeLimit) * time.Millisecond,
+		OutputLimit: outputLimit,
 	}
 
 	solv, err := solver.New()
@@ -102,6 +120,10 @@ func init() {
 	solveCmd.Flags().StringP("checker-lang", "c", "", "checker language")
 	solveCmd.Flags().StringP("submission-source", "S", "", "submission source code")
 	solveCmd.Flags().StringP("submission-lang", "s", "", "submission language")
+
+	solveCmd.Flags().Uint64P("memory-limit", "m", 256*1024*1024, "maximum memory usage")
+	solveCmd.Flags().Uint64P("output-limit", "o", 256*1024*1024, "maximum output generated")
+	solveCmd.Flags().Uint64P("time-limit", "x", 10000, "maximum time used by cpu")
 
 	rootCmd.AddCommand(solveCmd)
 }

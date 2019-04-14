@@ -1,21 +1,29 @@
 package file
 
 import (
-	"io/ioutil"
+	"io"
+	"os"
 
 	"github.com/pkg/errors"
 )
 
-// Copy copy file from input path to outputpath
+// Copy copy file from input path to outputpath.
 func Copy(inputPath, outputPath string) error {
-	input, err := ioutil.ReadFile(inputPath)
+
+	input, err := os.OpenFile(inputPath, os.O_RDONLY, 0700)
 	if err != nil {
 		return errors.Wrap(err, "cannot read input file")
 	}
+	defer input.Close()
 
-	err = ioutil.WriteFile(outputPath, input, 0700)
+	output, err := os.OpenFile(outputPath, os.O_CREATE|os.O_WRONLY, 0700)
 	if err != nil {
-		return errors.Wrap(err, "cannot write output file")
+		return errors.Wrap(err, "cannot open target file")
+	}
+	defer output.Close()
+
+	if _, err := io.Copy(output, input); err != nil {
+		return errors.Wrap(err, "cannot copy input file to target file")
 	}
 
 	return nil
