@@ -19,7 +19,7 @@ func (*tleError) TimeLimitExceeded() bool {
 type mleError struct{ error }
 
 // MemoryLimitExceeded implement `sandbox.MemoryLimitExceeded`
-func (*tleError) MemoryLimitExceeded() bool {
+func (*mleError) MemoryLimitExceeded() bool {
 	return true
 }
 
