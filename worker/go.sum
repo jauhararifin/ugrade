@@ -13,6 +13,8 @@ github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415151541-fa2538088da6 h1:bBt
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415151541-fa2538088da6/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415154913-abf4903aa2af h1:vQIKetGh5fk+EgjRSUNrmK1n87EWNHmrg/d12seUp7s=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415154913-abf4903aa2af/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415155847-60ef060e67bd h1:Z9YO8qNCSFhqxUu2zyHdFQ1Bp+HAob4jjPY0YZ/dsjw=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415155847-60ef060e67bd/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3enTrPXyIXCl+2iCXH/aMAp9s=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
