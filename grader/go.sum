@@ -8,10 +8,20 @@ github.com/jauhararifin/ugrade/sandbox v0.0.0-20190414100250-a5cc468924e5 h1:RPD
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190414100250-a5cc468924e5/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190414152855-1a88f71e28e6 h1:Q0zHx8eMXk4LmF3UFukgNJhI5mZc2skk0a12BRScu0U=
 github.com/jauhararifin/ugrade/sandbox v0.0.0-20190414152855-1a88f71e28e6/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415023602-11d808f4f7e6 h1:0poAdmOiL9AiUZaBzFgUB7abVbBvKlcH8XYxwdFPPRw=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415023602-11d808f4f7e6/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415154610-be05f394e4a4 h1:i9eF6CskjFEwZPV8gTkbhX0Tmaqh+fD6MPGg0yaIofw=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415154610-be05f394e4a4/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415154913-abf4903aa2af h1:vQIKetGh5fk+EgjRSUNrmK1n87EWNHmrg/d12seUp7s=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415154913-abf4903aa2af/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415155133-66ae4466383e h1:bk7YapbxTICFPJXiM2Q3spVUw2etxKvAus4WAeeGaS0=
+github.com/jauhararifin/ugrade/sandbox v0.0.0-20190415155133-66ae4466383e/go.mod h1:oFUKipECS7R9V4mlZtrH5jIuJ5WMP9BS/QaSPKJ2abE=
 github.com/jauhararifin/ugrade/worker v0.0.0-20190414100250-a5cc468924e5 h1:YTUgfTEdDLNcnlogxOR48fC4w5uxB64MTlxNOOuepXc=
 github.com/jauhararifin/ugrade/worker v0.0.0-20190414100250-a5cc468924e5/go.mod h1:/DnPivwLr8+9NRre9YH2F/OoTwYYczAwTGM1vpDK9qs=
 github.com/jauhararifin/ugrade/worker v0.0.0-20190414152855-1a88f71e28e6 h1:r4MeMF5qqAoXOHpdhLudZL8UkFCKoFgluQPzLgzm+t8=
 github.com/jauhararifin/ugrade/worker v0.0.0-20190414152855-1a88f71e28e6/go.mod h1:/DnPivwLr8+9NRre9YH2F/OoTwYYczAwTGM1vpDK9qs=
+github.com/jauhararifin/ugrade/worker v0.0.0-20190415023602-11d808f4f7e6 h1:/iSYYORF0OeOcXB/nI3e/zyHbMbz8v2FlO9gWoWSBgE=
+github.com/jauhararifin/ugrade/worker v0.0.0-20190415023602-11d808f4f7e6/go.mod h1:/DnPivwLr8+9NRre9YH2F/OoTwYYczAwTGM1vpDK9qs=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3enTrPXyIXCl+2iCXH/aMAp9s=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
@@ -37,3 +47,5 @@ golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190405154228-4b34438f7a67/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190412213103-97732733099d h1:+R4KGOnez64A81RvjARKc4UT5/tI9ujCIVX+P5KiHuI=
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20190415145633-3fd5a3612ccd h1:MNN7PRW7zYXd8upVO5qfKeOnQG74ivRNv7sz4k4cQMs=
+golang.org/x/sys v0.0.0-20190415145633-3fd5a3612ccd/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

@@ -29,17 +29,16 @@ func runConsume(cmd *cobra.Command, args []string) error {
 }
 
 var consumeCmd = &cobra.Command{
-	Use:           "consume",
-	Short:         "Fetch and executing job from server",
-	Long:          `This program fetch job from server, execute it and send the result back to server.`,
-	SilenceUsage:  true,
-	SilenceErrors: false,
-	RunE:          runConsume,
+	Use:          "consume",
+	Short:        "Fetch and executing job from server",
+	Long:         `This program fetch job from server, execute it and send the result back to server.`,
+	SilenceUsage: true,
+	RunE:         runConsume,
 }
 
 func init() {
 	rootCmd.AddCommand(consumeCmd)
 	consumeCmd.Flags().StringP("token", "t", "", "Your session token")
-	consumeCmd.Flags().StringP("server-url", "h", "http://localhost:8000", "Server url")
+	consumeCmd.Flags().StringP("server-url", "u", "http://localhost:8000", "Server url")
 	consumeCmd.MarkPersistentFlagRequired("token")
 }

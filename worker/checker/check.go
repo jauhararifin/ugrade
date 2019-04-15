@@ -94,6 +94,7 @@ func (ck *defaultChecker) CheckSuite(
 				Trace("submission contain error")
 
 			cause := errors.Cause(submissionExec.Items[i].Err)
+			verdict = worker.IE
 			switch cause.(type) {
 			case sandbox.TimeLimitExceeded:
 				verdict = worker.TLE
@@ -104,7 +105,6 @@ func (ck *defaultChecker) CheckSuite(
 			case worker.CompilationError:
 				verdict = worker.CE
 			}
-			verdict = worker.IE
 		} else {
 			logrus.
 				WithField("i", i).
