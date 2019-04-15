@@ -31,6 +31,6 @@ func (*ieError) InternalError() bool {
 }
 
 var errRTE = &runtimeError{errors.New("runtime error")}
-var errMLE = &runtimeError{errors.New("memory limit exceeded")}
-var errTLE = &runtimeError{errors.New("time limit exceeded")}
-var errIE = &runtimeError{errors.New("internal error")}
+var errMLE = &mleError{errors.New("memory limit exceeded")}
+var errTLE = &tleError{errors.New("time limit exceeded")}
+var errIE = &ieError{errors.New("internal error")}
