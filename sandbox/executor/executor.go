@@ -108,8 +108,9 @@ func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) (s
 				case sandbox.ExitCodeInternalError:
 					return usage, errIE
 				}
+				return usage, errors.Wrap(err, "cannot determine process exit code")
 			}
-			return usage, errors.Wrap(err, "cannot determine process exit code")
+			return usage, errors.Wrap(err, "cannot cast error to `syscall.WaitStatus`")
 		}
 	}
 

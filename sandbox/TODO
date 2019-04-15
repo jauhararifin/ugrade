@@ -1,3 +1,4 @@
+- fix huge io memory limit exceeded.
 - fix bug when add nproc, nopenfile
 - move executor interface to root package
 - kill everything before started
