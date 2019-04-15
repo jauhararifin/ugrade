@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path"
+	"time"
 
 	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/jauhararifin/ugrade/worker"
@@ -19,6 +20,7 @@ func (gen *defaultGenerator) getTCSampleCount(
 ) (int, error) {
 	cmd := sandbox.Command{
 		TimeLimit:      spec.TimeLimit,
+		WallTimeLimit:  spec.TimeLimit + 2*time.Second,
 		MemoryLimit:    spec.MemoryLimit,
 		MemoryThrottle: spec.MemoryLimit + 16*1024*1024,
 		FileSize:       spec.OutputLimit,
@@ -57,6 +59,7 @@ func (gen *defaultGenerator) getTCCount(
 ) (int, error) {
 	cmd := sandbox.Command{
 		TimeLimit:      spec.TimeLimit,
+		WallTimeLimit:  spec.TimeLimit + 2*time.Second,
 		MemoryLimit:    spec.MemoryLimit,
 		MemoryThrottle: spec.MemoryLimit + 16*1024*1024,
 		FileSize:       spec.OutputLimit,

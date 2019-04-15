@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/jauhararifin/ugrade/worker"
@@ -114,8 +115,9 @@ func (ck *defaultChecker) CheckSuite(
 				Trace("run checker")
 
 			cmd := sandbox.Command{
-				TimeLimit:   spec.TimeLimit,
-				MemoryLimit: spec.MemoryLimit,
+				TimeLimit:     spec.TimeLimit,
+				WallTimeLimit: spec.TimeLimit + 2*time.Second,
+				MemoryLimit:   spec.MemoryLimit,
 
 				// add 8MB for throttling?
 				MemoryThrottle: spec.MemoryLimit + 8*1024*1024,

@@ -50,6 +50,10 @@ func (ex *defaultExecutor) Execute(
 	// run submission using every testcase in testcase suite.
 	execItems := make([]ExecutionItem, 0, 0)
 	cpulimit := time.Duration(uint64(cpuULimit)) * time.Nanosecond
+	walllimit := spec.TimeLimit + 1*time.Second
+	if cpulimit > walllimit {
+		walllimit = cpulimit + 1*time.Second
+	}
 	memlimit := uint64(memULimit)
 	logrus.WithField("cpulimit", cpulimit).WithField("memlimit", memlimit).Debug("running contestant solution")
 	for _, tcitem := range tcSuite.Items {
@@ -57,6 +61,7 @@ func (ex *defaultExecutor) Execute(
 
 		cmd := sandbox.Command{
 			TimeLimit:      cpulimit,
+			WallTimeLimit:  walllimit,
 			MemoryLimit:    memlimit,
 			MemoryThrottle: memlimit + 8*1024*1024, // give 8MB to throttle memory?
 			FileSize:       spec.OutputLimit,
