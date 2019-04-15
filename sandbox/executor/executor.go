@@ -98,7 +98,7 @@ func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) (s
 	if err != nil {
 		if exiterr, ok := err.(*exec.ExitError); ok {
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				switch status {
+				switch status.ExitStatus() {
 				case sandbox.ExitCodeMemoryLimitExceeded:
 					return usage, errMLE
 				case sandbox.ExitCodeTimeLimitExceeded:
