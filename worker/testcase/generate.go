@@ -102,10 +102,10 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec worker.JobSpec) 
 			return res, nil
 		}
 		logrus.WithField("error", err).Warn("cannot load testcase from directory")
-	}
 
-	// if we cannot load testcase from cache, remove cache, and build cache
-	os.RemoveAll(dir)
+		// if we cannot load testcase from cache, remove cache, and build cache
+		os.RemoveAll(dir)
+	}
 
 	// compile testcase generator
 	logrus.WithField("source", spec.TCGen).Debug("compile testcase generator")
