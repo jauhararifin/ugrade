@@ -94,6 +94,7 @@ func (*defaultExecutor) Execute(ctx context.Context, command sandbox.Command) (s
 	usage := sandbox.Usage{}
 	fmt.Fscanf(&stdout, "cpu: %d\n", &usage.CPU)
 	fmt.Fscanf(&stdout, "memory: %d\n", &usage.Memory)
+	fmt.Fscanf(&stdout, "wallClock: %d\n", &usage.WallTime)
 	if err != nil {
 		if exiterr, ok := err.(*exec.ExitError); ok {
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/jauhararifin/ugrade/sandbox"
@@ -10,22 +11,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func runJail(cmd *cobra.Command, args []string) error {
+func runJail(cmd *cobra.Command, args []string) {
 	// get image path
 	imagePath := cmd.Flag("image").Value.String()
 	if len(imagePath) == 0 {
-		return errors.New("missing image path")
+		fmt.Fprintln(os.Stderr, "missing image path")
+		os.Exit(sandbox.ExitCodeInternalError)
 	}
 
 	// get working directory inside sandbox path
 	workingDirectory := cmd.Flag("working-directory").Value.String()
 	if len(workingDirectory) == 0 {
-		return errors.New("please provide sandbox working directory")
+		fmt.Fprintln(os.Stderr, "please provide sandbox working directory")
+		os.Exit(sandbox.ExitCodeInternalError)
 	}
 
 	// get command to run
 	if len(args) < 1 {
-		return errors.New("missing path to be executed")
+		fmt.Fprintln(os.Stderr, "missing path to be executed")
+		os.Exit(sandbox.ExitCodeInternalError)
 	}
 	execPath := args[0]
 
@@ -49,16 +53,16 @@ func runJail(cmd *cobra.Command, args []string) error {
 		if _, ok := errors.Cause(err).(sandbox.RuntimeError); ok {
 			os.Exit(sandbox.ExitCodeRuntimeError)
 		}
-		return errors.Wrap(err, "cannot execute jail")
+		err = errors.Wrap(err, "cannot execute jail")
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(sandbox.ExitCodeInternalError)
 	}
-
-	return nil
 }
 
 var jailCmd = &cobra.Command{
 	Use:          "jail",
 	SilenceUsage: true,
-	RunE:         runJail,
+	Run:          runJail,
 }
 
 func init() {

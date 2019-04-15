@@ -86,8 +86,8 @@ func (dc *defaultCgroup) Monitor(ctx context.Context) context.Context {
 	return cgctx
 }
 
-func (dc *defaultCgroup) Usage() sandbox.Usage {
-	return sandbox.Usage{
+func (dc *defaultCgroup) Usage() sandbox.CGroupUsage {
+	return sandbox.CGroupUsage{
 		Memory: dc.memory.Usage(),
 		CPU:    dc.cpu.Usage(),
 	}

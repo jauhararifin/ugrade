@@ -45,6 +45,12 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		return errors.New("please provide a valid time limit")
 	}
 
+	// get wall time limit
+	wtLimit, err := cmd.Flags().GetUint64("walltime-limit")
+	if err != nil {
+		return errors.New("please provide a valid stack size")
+	}
+
 	// get memory limit
 	memoryLimit, err := cmd.Flags().GetUint64("memory-limit")
 	if err != nil {
@@ -69,13 +75,13 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		return errors.New("please provide a valid open file limit")
 	}
 
-	// get open file limit
+	// get process limit
 	nproc, err := cmd.Flags().GetUint64("nproc")
 	if err != nil {
 		return errors.New("please provide a valid number of process")
 	}
 
-	// get open file limit
+	// get stack size limit
 	stackSize, err := cmd.Flags().GetUint64("stack-size")
 	if err != nil {
 		return errors.New("please provide a valid stack size")
@@ -108,6 +114,7 @@ func runGuard(cmd *cobra.Command, args []string) error {
 		Args:           args[1:],
 		Dir:            workingDirectory,
 		TimeLimit:      time.Duration(timeLimit) * time.Millisecond,
+		WallTimeLimit:  time.Duration(wtLimit) * time.Millisecond,
 		MemoryLimit:    memoryLimit,
 		MemoryThrottle: memoryThrottle,
 		FileSize:       fileSize,
@@ -123,6 +130,7 @@ func runGuard(cmd *cobra.Command, args []string) error {
 	usage, err := guard.Run(context.Background(), command)
 	fmt.Fprintf(os.Stdout, "cpu: %d\n", usage.CPU)
 	fmt.Fprintf(os.Stdout, "memory: %d\n", usage.Memory)
+	fmt.Fprintf(os.Stdout, "wallClock: %d\n", usage.WallTime)
 
 	if err != nil {
 		if _, ok := errors.Cause(err).(sandbox.MemoryLimitExceeded); ok {
@@ -155,6 +163,7 @@ var guardCmd = &cobra.Command{
 
 func init() {
 	guardCmd.Flags().Uint64P("time-limit", "t", 10000, "time limit in milisecond")
+	guardCmd.Flags().Uint64P("walltime-limit", "T", 10000, "wall clock time limit in milisecond")
 	guardCmd.Flags().Uint64P("memory-limit", "m", 64*1024*1024, "memory limit in bytes")
 	guardCmd.Flags().Uint64P("memory-throttle", "M", 256*1024*1024, "memory throttle in bytes")
 	guardCmd.Flags().Uint64P("file-size", "f", 0, "generated file size limit")

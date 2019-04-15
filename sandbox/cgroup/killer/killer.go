@@ -1,8 +1,10 @@
 package killer
 
 import (
+	"fmt"
 	"os"
 	"syscall"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -27,10 +29,31 @@ func KillGroup(processes []*os.Process) error {
 }
 
 // KillPids kill all processes in `pids`
+// TODO: ensure the process is killed. Just sleep for now.
 func KillPids(pids []int) error {
-	for _, pid := range pids {
-		syscall.Kill(pid, syscall.SIGKILL)
+	killed := false
+	for i := 0; i < 10; i++ {
+		for _, pid := range pids {
+			syscall.Kill(pid, syscall.SIGKILL)
+		}
+		time.Sleep(100 * time.Millisecond)
+
+		killed = true
+		for _, pid := range pids {
+			_, err := os.Stat(fmt.Sprintf("/proc/%d/stat", pid))
+			if err == nil {
+				killed = false
+				break
+			}
+		}
+
+		if killed {
+			break
+		}
 	}
-	// TODO: ensure the process is killed
+	if !killed {
+		return errors.New("cannot kill pids after 10 times trying")
+	}
+
 	return nil
 }

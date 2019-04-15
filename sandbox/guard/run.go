@@ -5,11 +5,18 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+	"time"
 
 	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/jauhararifin/ugrade/sandbox/uid"
 	"github.com/pkg/errors"
 )
+
+type errTLE struct{ error }
+
+func (*errTLE) TimeLimitExceeded() bool {
+	return true
+}
 
 func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) (sandbox.Usage, error) {
 	// extract image
@@ -88,8 +95,17 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) (sandbo
 	jailArgs = append(jailArgs, "--", cmd.Path)
 	jailArgs = append(jailArgs, cmd.Args...)
 
+	// limit wall time
+	wallTimeCtx := ctx
+	startTime := time.Now()
+	if cmd.WallTimeLimit > 0 {
+		var cancel context.CancelFunc
+		wallTimeCtx, cancel = context.WithTimeout(wallTimeCtx, cmd.WallTimeLimit)
+		defer cancel()
+	}
+
 	// initialize jail process
-	monitorCtx := guard.cgrp.Monitor(ctx)
+	monitorCtx := guard.cgrp.Monitor(wallTimeCtx)
 	osCmd := exec.CommandContext(monitorCtx, "/proc/self/exe", jailArgs...)
 	osCmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	osCmd.Stdin = os.Stdin
@@ -106,28 +122,42 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) (sandbo
 		return sandbox.Usage{}, errors.Wrap(err, "cannot put process to cgroup monitor")
 	}
 
-	// wait program to exit
-	if err := osCmd.Wait(); err != nil {
+	// wait process to exit
+	err := osCmd.Wait()
+	wallDuration := time.Since(startTime)
+	usage := sandbox.Usage{
+		Memory:   guard.cgrp.Usage().Memory,
+		CPU:      guard.cgrp.Usage().CPU,
+		WallTime: wallDuration,
+	}
+
+	// check process errors
+	if err != nil {
+		// check wall time limit exceeded
+		if wallTimeCtx.Err() != nil {
+			return usage, &errTLE{errors.New("wall time limit exceeded")}
+		}
+
 		// check memory limit exceeded
 		if _, ok := errors.Cause(guard.cgrp.Error()).(sandbox.MemoryLimitExceeded); ok {
-			return guard.cgrp.Usage(), errors.Cause(guard.cgrp.Error())
+			return usage, errors.Cause(guard.cgrp.Error())
 		}
 
 		// check time limit exceeded
 		if _, ok := errors.Cause(guard.cgrp.Error()).(sandbox.TimeLimitExceeded); ok {
-			return guard.cgrp.Usage(), errors.Cause(guard.cgrp.Error())
+			return usage, errors.Cause(guard.cgrp.Error())
 		}
 
 		// check runtime error
 		if exiterr, ok := err.(*exec.ExitError); ok {
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok && status == sandbox.ExitCodeRuntimeError {
-				return guard.cgrp.Usage(), errRTE
+				return usage, errRTE
 			}
-			return guard.cgrp.Usage(), errors.Wrap(err, "cannot determine process exit code")
+			return usage, errors.Wrap(err, "cannot determine process exit code")
 		}
 
-		return guard.cgrp.Usage(), errors.Wrap(err, "program exited with error")
+		return usage, errors.Wrap(err, "program exited with error")
 	}
 
-	return guard.cgrp.Usage(), nil
+	return usage, nil
 }

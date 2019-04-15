@@ -27,6 +27,9 @@ type Command struct {
 	// Proces will killed when running longer than this limit.
 	TimeLimit time.Duration
 
+	// WallTimeLimit indicates maximum allowed time of process including CPU and IO.
+	WallTimeLimit time.Duration
+
 	// MemoryLimit indicates maximum allowed memory in bytes allocation to be used by process.
 	// Process will killed when allocating memory more than this limit.
 	MemoryLimit uint64
