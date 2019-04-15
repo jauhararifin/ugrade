@@ -94,16 +94,16 @@ func (ck *defaultChecker) CheckSuite(
 				Trace("submission contain error")
 
 			cause := errors.Cause(submissionExec.Items[i].Err)
-			verdict = worker.IE
-			switch cause.(type) {
-			case sandbox.TimeLimitExceeded:
+			if _, ok := cause.(sandbox.TimeLimitExceeded); ok {
 				verdict = worker.TLE
-			case sandbox.RuntimeError:
+			} else if _, ok := cause.(sandbox.RuntimeError); ok {
 				verdict = worker.RTE
-			case sandbox.MemoryLimitExceeded:
+			} else if _, ok := cause.(sandbox.MemoryLimitExceeded); ok {
 				verdict = worker.MLE
-			case worker.CompilationError:
+			} else if _, ok := cause.(worker.CompilationError); ok {
 				verdict = worker.CE
+			} else {
+				verdict = worker.IE
 			}
 		} else {
 			logrus.
