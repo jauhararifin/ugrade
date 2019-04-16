@@ -7,7 +7,6 @@ import (
 
 	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver"
-	"github.com/jauhararifin/ugrade/sandbox"
 	"golang.org/x/xerrors"
 )
 
@@ -19,7 +18,7 @@ func (gen *defaultGenerator) generateItem(
 	spec ugrade.JobSpec,
 	id int,
 	sample bool,
-) (*Item, *ugrade.Usage, error) {
+) (*jobsolver.TCItem, *ugrade.Usage, error) {
 	// determine type and id
 	typ := "testcase"
 	if sample {
@@ -52,7 +51,7 @@ func (gen *defaultGenerator) generateItem(
 		},
 	}
 
-	if _, err := gen.executor.Execute(ctx, cmd); err != nil {
+	if _, err := gen.sandbox.Execute(ctx, cmd); err != nil {
 		return nil, nil, xerrors.Errorf("cannot generate %s input with id: %s: %w", typ, idstr, err)
 	}
 
@@ -68,12 +67,12 @@ func (gen *defaultGenerator) generateItem(
 		Path:           path.Join("/program", solution.ExecName),
 		Stdin:          path.Join("/testcases", tcinFName),
 		Stdout:         path.Join("/testcases", tcoutFName),
-		Binds: []sandbox.FSBind{
-			sandbox.FSBind{
+		Binds: []ugrade.FSBind{
+			ugrade.FSBind{
 				Host:    solution.ExecDir,
 				Sandbox: "/program",
 			},
-			sandbox.FSBind{
+			ugrade.FSBind{
 				Host:    dir,
 				Sandbox: "/testcases",
 			},
@@ -85,7 +84,7 @@ func (gen *defaultGenerator) generateItem(
 		return nil, nil, xerrors.Errorf("cannot generate %s input with id: %s: %w", typ, idstr, err)
 	}
 
-	return &Item{
+	return &jobsolver.TCItem{
 		Input:  tcinFName,
 		Output: tcoutFName,
 	}, &usage, nil

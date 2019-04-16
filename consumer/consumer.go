@@ -7,19 +7,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jauhararifin/ugrade/grader"
-	"github.com/jauhararifin/ugrade/grader/client"
-	"github.com/jauhararifin/ugrade/worker/solver"
+	"github.com/jauhararifin/ugrade"
+	"github.com/jauhararifin/ugrade/consumer/client"
+	"github.com/jauhararifin/ugrade/jobsolver/solver"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
 type defaultConsumer struct {
-	client grader.Client
+	client client.Client
 }
 
-// New create default implementation of `grader.Consumer`
-func New(serverURL string) grader.Consumer {
+// New create default implementation of `ugrade.Consumer`
+func New(serverURL string) ugrade.Consumer {
 	return &defaultConsumer{
 		client: client.New(serverURL),
 	}
@@ -43,7 +43,7 @@ func (c *defaultConsumer) Consume(ctx context.Context, token string) error {
 	if err != nil {
 		err = errors.Wrap(err, "cannot create job directory")
 		logrus.WithField("error", err).Error("cannot finish job")
-		c.client.SubmitJob(ctx, token, grader.JobResult{
+		c.client.SubmitJob(ctx, token, client.JobResult{
 			Job:     job,
 			Verdict: "IE",
 			Output:  ioutil.NopCloser(strings.NewReader(err.Error())),
@@ -59,7 +59,7 @@ func (c *defaultConsumer) Consume(ctx context.Context, token string) error {
 	if err != nil {
 		err = errors.Wrap(err, "cannot extract job")
 		logrus.WithField("error", err).Error("cannot finish job")
-		c.client.SubmitJob(ctx, token, grader.JobResult{
+		c.client.SubmitJob(ctx, token, client.JobResult{
 			Job:     job,
 			Verdict: "IE",
 			Output:  ioutil.NopCloser(strings.NewReader(err.Error())),
@@ -73,7 +73,7 @@ func (c *defaultConsumer) Consume(ctx context.Context, token string) error {
 	if err != nil {
 		err = errors.Wrap(err, "cannot create job solver")
 		logrus.WithField("error", err).Error("cannot finish job")
-		c.client.SubmitJob(ctx, token, grader.JobResult{
+		c.client.SubmitJob(ctx, token, client.JobResult{
 			Job:     job,
 			Verdict: "IE",
 			Output:  ioutil.NopCloser(strings.NewReader(err.Error())),
@@ -87,7 +87,7 @@ func (c *defaultConsumer) Consume(ctx context.Context, token string) error {
 	result, err := workerSolver.Solve(solverCtx, *workerJobSpec)
 	if err != nil {
 		logrus.WithField("error", err).Error("cannot finish job")
-		c.client.SubmitJob(ctx, token, grader.JobResult{
+		c.client.SubmitJob(ctx, token, client.JobResult{
 			Job:     job,
 			Verdict: "IE",
 			Output:  ioutil.NopCloser(strings.NewReader(err.Error())),
@@ -97,7 +97,7 @@ func (c *defaultConsumer) Consume(ctx context.Context, token string) error {
 	logrus.WithField("result", result).Info("job finished")
 
 	// submit job
-	c.client.SubmitJob(ctx, token, grader.JobResult{
+	c.client.SubmitJob(ctx, token, client.JobResult{
 		Job:     job,
 		Verdict: result.Verdict,
 		Output:  ioutil.NopCloser(strings.NewReader("job finished successfully")),

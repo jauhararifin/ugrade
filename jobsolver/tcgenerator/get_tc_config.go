@@ -14,7 +14,7 @@ import (
 
 func (gen *defaultGenerator) getTCSampleCount(
 	ctx context.Context,
-	tcgen job.TCGenerator,
+	tcgen jobsolver.CompilationResult,
 	spec ugrade.JobSpec,
 ) (int, error) {
 	cmd := ugrade.Command{
@@ -37,7 +37,7 @@ func (gen *defaultGenerator) getTCSampleCount(
 		},
 	}
 
-	if _, err := gen.executor.Execute(ctx, cmd); err != nil {
+	if _, err := gen.sandbox.Execute(ctx, cmd); err != nil {
 		return 0, xerrors.Errorf("cannot get sample count: %w", err)
 	}
 
@@ -76,7 +76,7 @@ func (gen *defaultGenerator) getTCCount(
 		},
 	}
 
-	if _, err := gen.executor.Execute(ctx, cmd); err != nil {
+	if _, err := gen.sandbox.Execute(ctx, cmd); err != nil {
 		return 0, xerrors.Errorf("cannot get testcase count: %w", err)
 	}
 

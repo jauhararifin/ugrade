@@ -8,7 +8,7 @@ import (
 )
 
 type defaultExecutor struct {
-	compiler compiler.Compiler
+	compiler jobsolver.Compiler
 	sandbox  ugrade.Sandbox
 }
 

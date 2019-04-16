@@ -6,12 +6,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 	"time"
 
 	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver"
-	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 )
@@ -35,7 +33,7 @@ func (ck *defaultChecker) CheckSuite(
 	spec ugrade.JobSpec,
 	tcSuite jobsolver.TCSuite,
 	submissionExec jobsolver.ExecutionResult,
-) (*CheckSuite, error) {
+) (*jobsolver.CheckSuite, error) {
 	// compile checker
 	logrus.
 		WithField("source", spec.Checker).
@@ -72,7 +70,7 @@ func (ck *defaultChecker) CheckSuite(
 	logrus.WithField("dir", outputDir).Debug("use directory for storing verdicts")
 
 	logrus.Debug("checking submission and testcase using checker")
-	items := make([]CheckItem, 0, 0)
+	items := make([]jobsolver.CheckItem, 0, 0)
 	for i := 0; i < len(tcSuite.Items); i++ {
 		input := tcSuite.Items[i].Input
 		expected := tcSuite.Items[i].Output
@@ -92,13 +90,13 @@ func (ck *defaultChecker) CheckSuite(
 				WithField("error", submissionExec.Items[i].Err).
 				Trace("submission contain error")
 
-			if xerrors.Is(submissionExec.Items[i], ugrade.TimeLimitExceeded) {
+			if xerrors.Is(submissionExec.Items[i].Err, ugrade.ErrTimeLimitExceeded) {
 				verdict = ugrade.VerdictTLE
-			} else if xerrors.Is(submissionExec.Items[i], ugrade.RuntimeError) {
+			} else if xerrors.Is(submissionExec.Items[i].Err, ugrade.ErrRuntimeError) {
 				verdict = ugrade.VerdictRTE
-			} else if xerrors.Is(submissionExec.Items[i], ugrade.MemoryLimitExceeded) {
+			} else if xerrors.Is(submissionExec.Items[i].Err, ugrade.ErrMemoryLimitExceeded) {
 				verdict = ugrade.VerdictMLE
-			} else if xerrors.Is(submissionExec.Items[i], ugrade.CompilationError) {
+			} else if xerrors.Is(submissionExec.Items[i].Err, ugrade.ErrCompilationError) {
 				verdict = ugrade.VerdictCE
 			} else {
 				verdict = ugrade.VerdictIE
@@ -106,13 +104,13 @@ func (ck *defaultChecker) CheckSuite(
 		} else {
 			logrus.
 				WithField("i", i).
-				WithField("checkerDir", compiledChworkerecker.ExecDir).
+				WithField("checkerDir", compiledChecker.ExecDir).
 				WithField("tcSuiteDir", tcSuite.Dir).
 				WithField("submissionDir", submissionExec.Dir).
 				WithField("verdictsDir", outputDir).
 				Trace("run checker")
 
-			cmd := sandbox.Command{
+			cmd := ugrade.Command{
 				TimeLimit:     spec.TimeLimit,
 				WallTimeLimit: spec.TimeLimit + 2*time.Second,
 				MemoryLimit:   spec.MemoryLimit,
@@ -132,27 +130,27 @@ func (ck *defaultChecker) CheckSuite(
 					path.Join("/testcases", input),
 				},
 				Stdout: path.Join("/verdicts", output),
-				Binds: []sandbox.FSBind{
-					sandbox.FSBind{
+				Binds: []ugrade.FSBind{
+					ugrade.FSBind{
 						Host:    compiledChecker.ExecDir,
 						Sandbox: "/program",
 					},
-					sandbox.FSBind{
+					ugrade.FSBind{
 						Host:    tcSuite.Dir,
 						Sandbox: "/testcases",
 					},
-					sandbox.FSBind{
+					ugrade.FSBind{
 						Host:    submissionExec.Dir,
 						Sandbox: "/outputs",
 					},
-					sandbox.FSBind{
+					ugrade.FSBind{
 						Host:    outputDir,
 						Sandbox: "/verdicts",
 					},
 				},
 			}
 
-			_, err = ck.executor.Execute(ctx, cmd)
+			_, err = ck.sandbox.Execute(ctx, cmd)
 			if err != nil {
 				err = xerrors.Errorf("cannot run checker: %w", err)
 				verdict = ugrade.VerdictIE
@@ -166,15 +164,6 @@ func (ck *defaultChecker) CheckSuite(
 				_, err = fmt.Fscan(verdictFile, &verdict)
 				if err != nil {
 					verdict = ugrade.VerdictIE
-				} else {
-					if strings.ToLower(verdict) == "ac" {
-						verdict = ugrade.VerdictAC
-					} else if strings.ToLower(verdict) == "wa" {
-						verdict = ugrade.VerdictWA
-					} else {
-						err = xerrors.Errorf("unrecognize verdict %s", verdict)
-						verdict = ugrade.VerdictIE
-					}
 				}
 			}
 		}
@@ -184,7 +173,7 @@ func (ck *defaultChecker) CheckSuite(
 			WithField("error", err).
 			Trace("submission checked")
 
-		items = append(items, CheckItem{
+		items = append(items, jobsolver.CheckItem{
 			InputPath:     input,
 			OutputPath:    output,
 			ExcpectedPath: expected,
@@ -201,7 +190,7 @@ func (ck *defaultChecker) CheckSuite(
 		}
 	}
 
-	return &CheckSuite{
+	return &jobsolver.CheckSuite{
 		Items:   items,
 		Verdict: currentVerdict,
 	}, nil

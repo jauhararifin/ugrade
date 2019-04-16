@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jauhararifin/ugrade/worker"
+	"github.com/jauhararifin/ugrade"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
@@ -21,7 +21,7 @@ func (c *defaultConsumer) extractSpec(
 	ctx context.Context,
 	workDir string,
 	spec io.Reader,
-) (*worker.JobSpec, error) {
+) (*ugrade.JobSpec, error) {
 	var tcgenFilename string
 	var solutionFilename string
 	var checkerFilename string
@@ -165,20 +165,20 @@ func (c *defaultConsumer) extractSpec(
 		return nil, errors.New("invalid problem information")
 	}
 
-	return &worker.JobSpec{
-		TCGen: worker.SourceCode{
+	return &ugrade.JobSpec{
+		TCGen: ugrade.SourceCode{
 			Path:     tcgenFilename,
 			Language: langInfo.Tcgen,
 		},
-		Solution: worker.SourceCode{
+		Solution: ugrade.SourceCode{
 			Path:     solutionFilename,
 			Language: langInfo.Solution,
 		},
-		Checker: worker.SourceCode{
+		Checker: ugrade.SourceCode{
 			Path:     checkerFilename,
 			Language: langInfo.Checker,
 		},
-		Submission: worker.SourceCode{
+		Submission: ugrade.SourceCode{
 			Path:     submissionFilename,
 			Language: langInfo.Submission,
 		},

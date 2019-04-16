@@ -5,16 +5,16 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/jauhararifin/ugrade/grader"
-	"github.com/pkg/errors"
+	"github.com/jauhararifin/ugrade"
+	"golang.org/x/xerrors"
 )
 
-func (clt *defaultClient) GetJob(ctx context.Context, token string) (*grader.Job, error) {
+func (clt *defaultClient) GetJob(ctx context.Context, token string) (*Job, error) {
 	// prepare http request
 	jobURL := clt.serverURL + "/gradings/jobs/"
 	req, err := http.NewRequest("GET", jobURL, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot create get request")
+		return nil, xerrors.Errorf("cannot create get request: %w", err)
 	}
 	req.Header.Add("Authorization", "Bearer "+token)
 	req.WithContext(ctx)
@@ -22,22 +22,22 @@ func (clt *defaultClient) GetJob(ctx context.Context, token string) (*grader.Job
 	// send http request
 	resp, err := clt.httpClient.Do(req)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot send http request")
+		return nil, xerrors.Errorf("cannot send http request: %w", err)
 	}
 
 	// check for error response
 	if resp.StatusCode == 404 {
 		ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
-		return nil, grader.ErrNoSuchJob
+		return nil, ugrade.ErrNoSuchJob
 	} else if resp.StatusCode == 403 {
 		ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
-		return nil, errors.New("wrong token")
+		return nil, xerrors.New("wrong token")
 	} else if resp.StatusCode != 200 {
 		ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
-		return nil, errors.Errorf("http response gives weird status code: %d", resp.StatusCode)
+		return nil, xerrors.Errorf("http response gives weird status code: %d", resp.StatusCode)
 	}
 
 	// take job token
@@ -45,11 +45,11 @@ func (clt *defaultClient) GetJob(ctx context.Context, token string) (*grader.Job
 	if len(jobToken) == 0 {
 		ioutil.ReadAll(resp.Body)
 		resp.Body.Close()
-		return nil, errors.New("http response gives empty job token")
+		return nil, xerrors.New("http response gives empty job token")
 	}
 
 	// create job instance
-	job := &grader.Job{
+	job := &Job{
 		Token: jobToken,
 		Spec:  resp.Body,
 	}

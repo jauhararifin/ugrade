@@ -1,20 +1,21 @@
 package checker
 
 import (
+	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver"
 	"github.com/jauhararifin/ugrade/jobsolver/compiler"
-	"github.com/jauhararifin/ugrade/sandbox/executor"
+	"github.com/jauhararifin/ugrade/sandbox"
 )
 
 type defaultChecker struct {
 	compiler jobsolver.Compiler
-	executor jobsolver.Executor
+	sandbox  ugrade.Sandbox
 }
 
 // New creates new implementation of `Checker`.
-func New() Checker {
+func New() jobsolver.Checker {
 	return &defaultChecker{
 		compiler: compiler.New(),
-		executor: executor.New(),
+		sandbox:  sandbox.New(),
 	}
 }

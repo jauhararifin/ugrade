@@ -2,6 +2,7 @@ package tcgenerator
 
 import (
 	"github.com/jauhararifin/ugrade"
+	"github.com/jauhararifin/ugrade/jobsolver"
 	"github.com/jauhararifin/ugrade/jobsolver/compiler"
 	"github.com/jauhararifin/ugrade/sandbox"
 )
@@ -14,11 +15,11 @@ const TCGenNProc = 64
 
 type defaultGenerator struct {
 	sandbox  ugrade.Sandbox
-	compiler job.Compiler
+	compiler jobsolver.Compiler
 }
 
-// NewGenerator create default implementation of `Generator`
-func NewGenerator() Generator {
+// NewGenerator create default implementation of `jobsolver.TCGenerator`
+func NewGenerator() jobsolver.TCGenerator {
 	return &defaultGenerator{
 		sandbox:  sandbox.New(),
 		compiler: compiler.New(),

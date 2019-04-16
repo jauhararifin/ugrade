@@ -6,65 +6,65 @@ import (
 
 	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver/solver"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"golang.org/x/xerrors"
 )
 
 func runSolve(cmd *cobra.Command, args []string) error {
 	tcgenSource := cmd.Flag("tcgen-source").Value.String()
 	if len(tcgenSource) == 0 {
-		return errors.New("please provide a valid testcase generator source")
+		return xerrors.New("please provide a valid testcase generator source")
 	}
 
 	tcgenLang := cmd.Flag("tcgen-lang").Value.String()
 	if len(tcgenLang) == 0 {
-		return errors.New("please provide a valid testcase generator language")
+		return xerrors.New("please provide a valid testcase generator language")
 	}
 
 	jurySource := cmd.Flag("jury-source").Value.String()
 	if len(jurySource) == 0 {
-		return errors.New("please provide a valid jury solution source")
+		return xerrors.New("please provide a valid jury solution source")
 	}
 
 	juryLang := cmd.Flag("jury-lang").Value.String()
 	if len(juryLang) == 0 {
-		return errors.New("please provide a valid jury solution language")
+		return xerrors.New("please provide a valid jury solution language")
 	}
 
 	checkerSource := cmd.Flag("checker-source").Value.String()
 	if len(checkerSource) == 0 {
-		return errors.New("please provide a valid checker source")
+		return xerrors.New("please provide a valid checker source")
 	}
 
 	checkerLang := cmd.Flag("checker-lang").Value.String()
 	if len(checkerLang) == 0 {
-		return errors.New("please provide a valid checker language")
+		return xerrors.New("please provide a valid checker language")
 	}
 
 	submissionSource := cmd.Flag("submission-source").Value.String()
 	if len(submissionSource) == 0 {
-		return errors.New("please provide a valid submission source")
+		return xerrors.New("please provide a valid submission source")
 	}
 
 	submissionLang := cmd.Flag("submission-lang").Value.String()
 	if len(submissionLang) == 0 {
-		return errors.New("please provide a valid submission language")
+		return xerrors.New("please provide a valid submission language")
 	}
 
 	timeLimit, err := cmd.Flags().GetUint64("time-limit")
 	if err != nil {
-		return errors.Wrap(err, "cannot parse time limit arguments")
+		return xerrors.Errorf("cannot parse time limit arguments: %w", err)
 	}
 
 	memoryLimit, err := cmd.Flags().GetUint64("memory-limit")
 	if err != nil {
-		return errors.Wrap(err, "cannot parse memory limit arguments")
+		return xerrors.Errorf("cannot parse memory limit arguments: %w", err)
 	}
 
 	outputLimit, err := cmd.Flags().GetUint64("output-limit")
 	if err != nil {
-		return errors.Wrap(err, "cannot parse output limit arguments")
+		return xerrors.Errorf("cannot parse output limit arguments: %w", err)
 	}
 
 	spec := ugrade.JobSpec{
@@ -92,12 +92,12 @@ func runSolve(cmd *cobra.Command, args []string) error {
 
 	solv, err := solver.New()
 	if err != nil {
-		return errors.Wrap(err, "cannot create solver")
+		return xerrors.Errorf("cannot create solver: %w", err)
 	}
 
 	result, err := solv.Solve(context.Background(), spec)
 	if err != nil {
-		return errors.Wrap(err, "cannot solve job specification")
+		return xerrors.Errorf("cannot solve job specification: %w", err)
 	}
 	logrus.WithField("verdict", result.Verdict).Info("job solved")
 

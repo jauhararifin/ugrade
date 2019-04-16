@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"github.com/jauhararifin/ugrade"
-	"github.com/jauhararifin/ugrade/sandbox"
+	"github.com/jauhararifin/ugrade/jobsolver"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 )
 
-func (gen *defaultGenerator) saveConfig(suite Suite) error {
+func (gen *defaultGenerator) saveConfig(suite jobsolver.TCSuite) error {
 	saveFile, err := os.Create(path.Join(suite.Dir, "config"))
 	if err != nil {
 		return xerrors.Errorf("cannot create testcase config file: %w", err)
@@ -29,7 +29,7 @@ func (gen *defaultGenerator) saveConfig(suite Suite) error {
 	return nil
 }
 
-func (gen *defaultGenerator) loadConfig(dir string) (*Suite, error) {
+func (gen *defaultGenerator) loadConfig(dir string) (*jobsolver.TCSuite, error) {
 	// open configuration file
 	configFile, err := os.Open(path.Join(dir, "config"))
 	if err != nil {
@@ -49,7 +49,7 @@ func (gen *defaultGenerator) loadConfig(dir string) (*Suite, error) {
 	fmt.Fscan(configFile, &tolerance)
 
 	// read testcase items
-	items := make([]Item, 0, 0)
+	items := make([]jobsolver.TCItem, 0, 0)
 	reader := bufio.NewReader(configFile)
 	for {
 		input, _, _ := reader.ReadLine()
@@ -57,13 +57,13 @@ func (gen *defaultGenerator) loadConfig(dir string) (*Suite, error) {
 		if err == io.EOF {
 			break
 		}
-		items = append(items, Item{
+		items = append(items, jobsolver.TCItem{
 			Input:  string(input),
 			Output: string(output),
 		})
 	}
 
-	return &Suite{
+	return &jobsolver.TCSuite{
 		MaxMemory: memory,
 		MaxCPU:    cpu,
 		Tolerance: tolerance,
@@ -72,7 +72,7 @@ func (gen *defaultGenerator) loadConfig(dir string) (*Suite, error) {
 	}, nil
 }
 
-func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) (*Suite, error) {
+func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) (*jobsolver.TCSuite, error) {
 	// determine directory location for storing testcases
 	dir, err := gen.hashSpecTestcase(spec)
 	if err != nil {
@@ -139,8 +139,8 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) 
 	logrus.WithField("nTC", ntc).Debug("use real testcase count")
 
 	// initialize items and max usage
-	maxUsage := sandbox.Usage{}
-	items := make([]Item, 0, 0)
+	maxUsage := ugrade.Usage{}
+	items := make([]jobsolver.TCItem, 0, 0)
 
 	// generata sample testcase
 	logrus.WithField("count", nsamp).Debug("generate sample testcase")
@@ -186,7 +186,7 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) 
 			Trace("real testcase item generated")
 	}
 
-	result := &Suite{
+	result := &jobsolver.TCSuite{
 		MaxMemory: maxUsage.Memory,
 		MaxCPU:    maxUsage.CPU,
 		Tolerance: spec.Tolerance,

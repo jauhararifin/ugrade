@@ -3,8 +3,6 @@ package client
 import (
 	"net/http"
 	"time"
-
-	"github.com/jauhararifin/ugrade/grader"
 )
 
 type defaultClient struct {
@@ -12,8 +10,8 @@ type defaultClient struct {
 	httpClient http.Client
 }
 
-// New create new default implementation of `grader.Client`.
-func New(serverURL string) grader.Client {
+// New create new default implementation of `Client`.
+func New(serverURL string) Client {
 	httpClient := http.Client{
 		Timeout: 10 * time.Second,
 	}

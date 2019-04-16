@@ -1,6 +1,8 @@
 package solver
 
 import (
+	"github.com/jauhararifin/ugrade"
+	"github.com/jauhararifin/ugrade/jobsolver"
 	"github.com/jauhararifin/ugrade/jobsolver/checker"
 	"github.com/jauhararifin/ugrade/jobsolver/compiler"
 	"github.com/jauhararifin/ugrade/jobsolver/executor"
@@ -15,7 +17,7 @@ type defaultSolver struct {
 }
 
 // New creates default implementation of `ugrade.Solver`.
-func New() (ugrade.Solver, error) {
+func New() (ugrade.JobSolver, error) {
 	return &defaultSolver{
 		compiler:           compiler.New(),
 		tcgenerator:        tcgenerator.NewGenerator(),

@@ -10,7 +10,6 @@ import (
 	"github.com/jauhararifin/ugrade/sandbox"
 	"github.com/jauhararifin/ugrade/sandbox/jail"
 	"github.com/jauhararifin/ugrade/sandbox/uid"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -57,7 +56,7 @@ func runJail(cmd *cobra.Command, args []string) {
 			os.Exit(sandbox.ExitCodeRuntimeError)
 			return
 		}
-		err = errors.Wrap(err, "cannot execute jail")
+		err = xerrors.Errorf("cannot execute jail: %w", err)
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(sandbox.ExitCodeInternalError)
 	}
