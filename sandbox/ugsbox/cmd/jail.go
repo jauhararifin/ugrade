@@ -52,6 +52,7 @@ func runJail(cmd *cobra.Command, args []string) {
 	); err != nil {
 		if _, ok := errors.Cause(err).(sandbox.RuntimeError); ok {
 			os.Exit(sandbox.ExitCodeRuntimeError)
+			return
 		}
 		err = errors.Wrap(err, "cannot execute jail")
 		fmt.Fprintln(os.Stderr, err)

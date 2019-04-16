@@ -150,7 +150,8 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd sandbox.Command) (sandbo
 
 		// check runtime error
 		if exiterr, ok := err.(*exec.ExitError); ok {
-			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok && status == sandbox.ExitCodeRuntimeError {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok &&
+				status.ExitStatus() == sandbox.ExitCodeRuntimeError {
 				return usage, errRTE
 			}
 			return usage, errors.Wrap(err, "cannot determine process exit code")
