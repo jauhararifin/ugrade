@@ -80,6 +80,7 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd ugrade.Command) (ugrade.
 	// create arguments for running jail
 	jailArgs := []string{
 		"jail",
+		"--trace",
 		"--image", cmd.ImagePath,
 		"--working-directory", cmd.Dir,
 	}
@@ -155,7 +156,7 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd ugrade.Command) (ugrade.
 				status.ExitStatus() == sandbox.ExitCodeRuntimeError {
 				return usage, ugrade.ErrRuntimeError
 			}
-			return usage, xerrors.Errorf("cannot determine process exit code: %w", err)
+			return usage, xerrors.Errorf("cannot determine jailed process exit code: %w", err)
 		}
 
 		return usage, xerrors.Errorf("program exited with error: %w", err)

@@ -1,3 +1,4 @@
+- use rlimit address space to limit memory, use cgroup only for throttling.
 - fix huge io memory limit exceeded.
 - fix bug when add nproc, nopenfile
 - move executor interface to root package

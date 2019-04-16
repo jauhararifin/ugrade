@@ -101,7 +101,7 @@ func (jl *defaultJail) Run(
 			if _, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				return ugrade.ErrRuntimeError
 			}
-			return xerrors.Errorf("cannot determine process exit code: %w", err)
+			return xerrors.Errorf("cannot determine sandboxed process exit code: %w", err)
 		}
 		return xerrors.Errorf("error when executing program: %w", err)
 	}

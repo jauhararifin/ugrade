@@ -144,7 +144,7 @@ func runGuard(cmd *cobra.Command, args []string) error {
 			logrus.Info("Runtime Error")
 			os.Exit(sandbox.ExitCodeRuntimeError)
 		}
-		logrus.Info("Internal Error")
+		logrus.WithError(err).Info("Internal Error")
 		os.Exit(sandbox.ExitCodeInternalError)
 	}
 

@@ -30,6 +30,7 @@ func (limiter *Limiter) Limit(bytes uint64) error {
 
 // Usage returns maximum memory usage.
 func (limiter *Limiter) Usage() uint64 {
+	limiter.ensure()
 	return limiter.usage
 }
 
