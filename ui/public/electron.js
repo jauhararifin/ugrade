@@ -39,8 +39,8 @@ async function runWorker() {
   if (token && token.length > 0) {
     console.log("consume work")
     const process = new Promise((resolve, reject) => {
-        console.log(`ugrader consume --trace -t "${token}"`)
-        exec(`ugrader consume --trace -t "${token}"`, (err, stderr) => {
+        console.log(`ugjob consume --trace -t "${token}"`)
+        exec(`ugjob consume --trace -t "${token}"`, (err, stderr) => {
           console.log(stderr)
           if (err) reject(err)
           else resolve(stderr)
