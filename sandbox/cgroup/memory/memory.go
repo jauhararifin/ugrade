@@ -7,8 +7,8 @@ import (
 	"path"
 	"time"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/xerrors"
 )
 
 // Limiter represent memory limiter.
@@ -16,7 +16,7 @@ type Limiter struct {
 	cgroupPath   string
 	cgroupName   string
 	limit        uint64
-	PollingDelay time.Duration
+	pollingDelay time.Duration
 	usage        uint64
 
 	processes []*os.Process
@@ -35,6 +35,7 @@ func (limiter *Limiter) Usage() uint64 {
 
 // Throttle throttle memory usage of processes inside cgroup.
 // Process will not killed when exceeding this limit.
+// TODO: also throttle swap memory
 func (limiter *Limiter) Throttle(throttle uint64) error {
 	// write memory throttle limit to `memory.limit_in_bytes` inside cgroup
 	cgroupMemPath := path.Join(limiter.cgroupPath, "memory", limiter.cgroupName)
@@ -44,7 +45,7 @@ func (limiter *Limiter) Throttle(throttle uint64) error {
 		[]byte(fmt.Sprintf("%d", throttle)),
 		0700,
 	); err != nil {
-		return errors.Wrap(err, "cannot write memory throttle to cgroup")
+		return xerrors.Errorf("cannot write memory throttle to cgroup: %w", err)
 	}
 	logrus.WithField("path", cgroupMemPath).WithField("memoryThrottle", throttle).Debug("memory throttle set")
 
@@ -56,7 +57,7 @@ func New(cgroupPath, cgroupName string) *Limiter {
 	instance := &Limiter{
 		cgroupPath:   cgroupPath,
 		cgroupName:   cgroupName,
-		PollingDelay: 100 * time.Millisecond,
+		pollingDelay: 100 * time.Millisecond,
 	}
 	return instance
 }

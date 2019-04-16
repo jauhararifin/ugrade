@@ -7,22 +7,30 @@ import (
 	"path"
 
 	"github.com/jauhararifin/ugrade/sandbox/cgroup/killer"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/xerrors"
 )
 
 // Prepare prepare cgroup directory to be ready for used by kills every process in it,
 // and recreating the directory.
 func Prepare(dir string) error {
+
 	logrus.WithField("path", dir).Debug("check old cgroup")
 	_, err := os.Stat(dir)
+	if err != nil && !os.IsNotExist(err) {
+		return xerrors.Errorf("cannot get info of cgroup path: %w", err)
+	}
+
+	// remove cgroup if already exists
 	if err == nil {
-		// kill remaining processes
+		// get remaining processes in cgroups, by open cgroup.procs file.
 		pfile, err := os.Open(path.Join(dir, "cgroup.procs"))
 		if err != nil {
-			return errors.Wrap(err, "cannot open cgroup monitored processes")
+			return xerrors.Errorf("cannot open cgroup monitored processes: %w", err)
 		}
 		defer pfile.Close()
+
+		// read process ids from cgroup.procs
 		runningProcesses := make([]int, 0, 0)
 		for {
 			var proc int
@@ -32,30 +40,29 @@ func Prepare(dir string) error {
 			}
 			runningProcesses = append(runningProcesses, proc)
 		}
+
+		// kill processes.
 		if len(runningProcesses) > 0 {
 			logrus.WithField("pids", runningProcesses).Debug("killing dangling processes")
 		}
 		if err := killer.KillPids(runningProcesses); err != nil {
-			return errors.Wrap(err, "cannot kill processes")
+			return xerrors.Errorf("cannot kill processes: %w", err)
 		}
 
 		// removing directories
 		logrus.WithField("path", dir).Debug("removing old cgroup")
 		if err := os.RemoveAll(dir); err != nil {
-			return errors.Wrap(err, "cannot remove the old cgroup")
+			return xerrors.Errorf("cannot remove the old cgroup: %w", err)
 		}
 		logrus.WithField("path", dir).Debug("old cgroup removed")
 	}
-	if err != nil && !os.IsNotExist(err) {
-		return errors.Wrap(err, "cannot get info of cgroup path")
-	}
 
 	// creating cgroup folder inside subsystem
-	logrus.WithField("path", dir).Debug("creating cgroup")
+	logrus.WithField("path", dir).Debug("creating cgroup directory")
 	if err := os.MkdirAll(dir, 0755); err != nil {
-		return errors.Wrapf(err, "cannot create cgroup")
+		return xerrors.Errorf("cannot create cgroup directory: %w", err)
 	}
-	logrus.WithField("path", dir).Debug("cgroup created")
+	logrus.WithField("path", dir).Debug("cgroup directory created")
 
 	return nil
 }

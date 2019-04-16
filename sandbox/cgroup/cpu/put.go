@@ -6,8 +6,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/xerrors"
 )
 
 // Put will put `process` inside cgroup in cpu subsystem. This basically declare that
@@ -24,7 +24,7 @@ func (limiter *Limiter) Put(process *os.Process) error {
 		[]byte(fmt.Sprintf("%d", process.Pid)),
 		0700,
 	); err != nil {
-		return errors.Wrap(err, "cannot put process to cgroup")
+		return xerrors.Errorf("cannot put process to cgroup: %w", err)
 	}
 	logrus.
 		WithField("path", cgroupCPUPath).

@@ -3,8 +3,8 @@ package fs
 import (
 	"os"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/xerrors"
 )
 
 func (fs *defaultFS) Load(imagePath string, uid, gid int) error {
@@ -12,14 +12,14 @@ func (fs *defaultFS) Load(imagePath string, uid, gid int) error {
 	logrus.WithField("image", imagePath).Debug("open image file")
 	imFile, err := os.Open(imagePath)
 	if err != nil {
-		return errors.Wrap(err, "cannot open image file")
+		return xerrors.Errorf("cannot open image file: %w", err)
 	}
 	defer imFile.Close()
 
 	// get output image path
 	outPath, err := imageSandboxPath(imagePath)
 	if err != nil {
-		return errors.Wrap(err, "cannot determine sandbox directory")
+		return xerrors.Errorf("cannot determine sandbox directory: %w", err)
 	}
 	logrus.WithField("image", imagePath).WithField("sandbox", outPath).Debug("use sandbox directory")
 
@@ -29,25 +29,25 @@ func (fs *defaultFS) Load(imagePath string, uid, gid int) error {
 		if stat.IsDir() {
 			return nil
 		}
-		return errors.Errorf("image sandbox already exists but is not a directory %s", outPath)
+		return xerrors.Errorf("image sandbox already exists but is not a directory %s", outPath)
 	}
 
 	// make image sandbox dir
 	logrus.WithField("sandbox", outPath).Debug("create directory for sandboxed image")
 	if err := os.MkdirAll(outPath, 0744); err != nil {
-		return errors.Wrap(err, "cannot create directory for sandboxed image")
+		return xerrors.Errorf("cannot create directory for sandboxed image: %w", err)
 	}
 
 	// extract image
 	logrus.WithField("sandbox", outPath).WithField("image", imagePath).Debug("extract image to sandbox directory")
 	if err := extractImage(imagePath, outPath); err != nil {
-		return errors.Wrap(err, "cannot extract image to sandboxed directory")
+		return xerrors.Errorf("cannot extract image to sandboxed directory: %w", err)
 	}
 
 	// change sandbox dir owner
 	logrus.WithField("uid", uid).WithField("gid", gid).Debug("change file owner of files in sandboxed directory")
 	if err := fs.chownDir(outPath, uid, gid); err != nil {
-		return errors.Wrap(err, "cannot change owner of sandboxed directory")
+		return xerrors.Errorf("cannot change owner of sandboxed directory: %w", err)
 	}
 
 	return nil

@@ -7,9 +7,10 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/sirupsen/logrus"
+	"github.com/jauhararifin/ugrade"
 
-	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+	"golang.org/x/xerrors"
 )
 
 func (jl *defaultJail) Run(
@@ -23,56 +24,59 @@ func (jl *defaultJail) Run(
 	commandPath string,
 	args []string,
 ) error {
+	// change proces root to sandboxed directory.
 	logrus.WithField("imagePath", imagePath).Debug("chrooting to sandboxed directory")
 	if err := jl.fs.Chroot(imagePath); err != nil {
-		return errors.Wrap(err, "cannot chroot")
+		return xerrors.Errorf("cannot chroot: %w", err)
 	}
 
+	// change working directory.
 	logrus.WithField("workingDirectory", workingDirectory).Debug("change dir to working directory")
 	if err := os.Chdir(workingDirectory); err != nil {
-		return errors.Wrap(err, "cannot change dir to working directory")
+		return xerrors.Errorf("cannot change dir to working directory: %w", err)
 	}
 
+	// initialize child command.
 	logrus.WithField("commandPath", commandPath).WithField("args", args).Debug("set child command")
 	proc := exec.Command(commandPath, args...)
 	proc.Stdin = ioutil.NopCloser(strings.NewReader(""))
 	proc.Stdout = ioutil.Discard
 	proc.Stderr = ioutil.Discard
 
+	// open stdin file.
 	logrus.WithField("stdin", stdin).Debug("preparing stdin file")
 	if len(stdin) > 0 {
-		// file, err := os.OpenFile(stdin, os.O_RDONLY|os.O_SYNC, 0774)
 		file, err := os.OpenFile(stdin, os.O_RDONLY, 0774)
 		if err != nil {
-			return errors.Wrap(err, "cannot open standard input file")
+			return xerrors.Errorf("cannot open standard input file: %w", err)
 		}
-		proc.Stdin = file
 		defer file.Close()
+		proc.Stdin = file
 	}
 
+	// open stdout file.
 	logrus.WithField("stdout", stdout).Debug("preparing stdout file")
 	if len(stdout) > 0 {
-		// file, err := os.OpenFile(stdout, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0664)
 		file, err := os.OpenFile(stdout, os.O_WRONLY|os.O_CREATE, 0664)
 		if err != nil {
-			return errors.Wrap(err, "cannot open standard output file")
+			return xerrors.Errorf("cannot open standard output file: %w", err)
 		}
-		proc.Stdout = file
 		defer file.Close()
+		proc.Stdout = file
 	}
 
+	// open stderr file.
 	logrus.WithField("stderr", stderr).Debug("preparing stderr file")
 	if len(stderr) > 0 {
-		// file, err := os.OpenFile(stderr, os.O_WRONLY|os.O_CREATE|os.O_SYNC, 0664)
 		file, err := os.OpenFile(stderr, os.O_WRONLY|os.O_CREATE, 0664)
 		if err != nil {
-			return errors.Wrap(err, "cannot open standard error file")
+			return xerrors.Errorf("cannot open standard error file: %w", err)
 		}
 		proc.Stderr = file
 		defer file.Close()
 	}
 
-	// clone namespaces for guard process
+	// clone namespaces for guard process.
 	proc.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWUTS |
 			syscall.CLONE_NEWIPC |
@@ -89,17 +93,17 @@ func (jl *defaultJail) Run(
 
 	// start process
 	if err := proc.Start(); err != nil {
-		return errors.Wrap(err, "cannot start program")
+		return xerrors.Errorf("cannot start program: %w", err)
 	}
 
 	if err := proc.Wait(); err != nil {
 		if exiterr, ok := err.(*exec.ExitError); ok {
-			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				return rte(status.ExitStatus())
+			if _, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				return ugrade.ErrRuntimeError
 			}
-			return errors.Wrap(err, "cannot determine process exit code")
+			return xerrors.Errorf("cannot determine process exit code: %w", err)
 		}
-		return errors.Wrap(err, "error when executing program")
+		return xerrors.Errorf("error when executing program: %w", err)
 	}
 
 	return nil

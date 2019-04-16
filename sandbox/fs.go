@@ -1,10 +1,6 @@
 package sandbox
 
-// FSBind implies binding from `Host` to `Sandbox`
-type FSBind struct {
-	Host    string
-	Sandbox string
-}
+import "github.com/jauhararifin/ugrade"
 
 // FSUnbind unmount the mounted filesystem using bind
 type FSUnbind func() error
@@ -13,5 +9,5 @@ type FSUnbind func() error
 type FS interface {
 	Load(imagePath string, uid, gid int) error
 	Chroot(imagePath string) error
-	Bind(imagePath string, bind FSBind, uid, gid int) (FSUnbind, error)
+	Bind(imagePath string, bind ugrade.FSBind, uid, gid int) (FSUnbind, error)
 }

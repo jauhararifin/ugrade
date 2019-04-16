@@ -6,9 +6,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/xi2/xz"
+	"golang.org/x/xerrors"
 )
 
 func extractImage(imagePath string, sandboxDir string) error {
@@ -18,7 +18,7 @@ func extractImage(imagePath string, sandboxDir string) error {
 	logrus.Debug("open image file")
 	imageFile, err := os.Open(imagePath)
 	if err != nil {
-		return errors.Wrap(err, "cannot read image file")
+		return xerrors.Errorf("cannot read image file: %w", err)
 	}
 	defer imageFile.Close()
 
@@ -26,7 +26,7 @@ func extractImage(imagePath string, sandboxDir string) error {
 	logrus.Debug("read compressed image file")
 	xzReader, err := xz.NewReader(imageFile, 0)
 	if err != nil {
-		return errors.Wrap(err, "cannot read compressed image file")
+		return xerrors.Errorf("cannot read compressed image file: %w", err)
 	}
 
 	// extract tar
@@ -37,38 +37,36 @@ func extractImage(imagePath string, sandboxDir string) error {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return errors.Wrap(err, "cannot read next file in image tar")
+			return xerrors.Errorf("cannot read next file in image tar: %w", err)
 		}
 
 		spath := path.Join(sandboxDir, header.Name)
 		switch header.Typeflag {
 		case tar.TypeDir:
-			err = os.MkdirAll(spath, 0700)
-			if err != nil {
-				return errors.Wrap(err, "cannot create directory")
+			if err := os.MkdirAll(spath, 0700); err != nil {
+				return xerrors.Errorf("cannot create directory: %w", err)
 			}
 		case tar.TypeReg, tar.TypeRegA:
 			w, err := os.Create(spath)
 			if err != nil {
-				return errors.Wrap(err, "cannot create file")
+				return xerrors.Errorf("cannot create file: %w", err)
 			}
-			_, err = io.Copy(w, tarReader)
-			if err != nil {
-				return errors.Wrap(err, "cannot write file")
+			if _, err := io.Copy(w, tarReader); err != nil {
+				return xerrors.Errorf("cannot write file: %w", err)
 			}
 			w.Close()
 
 			if err := os.Chmod(spath, 0700); err != nil {
-				return errors.Wrap(err, "cannot change file permission")
+				return xerrors.Errorf("cannot change file permission: %w", err)
 			}
 		case tar.TypeSymlink:
 			if err := os.Symlink(header.Linkname, spath); err != nil {
-				return errors.Wrap(err, "cannot create symbolic link")
+				return xerrors.Errorf("cannot create symbolic link: %w", err)
 			}
 		case tar.TypeLink:
 			targetPath := path.Join(sandboxDir, header.Linkname)
 			if err := os.Link(targetPath, spath); err != nil {
-				return errors.Wrap(err, "cannot create hard link")
+				return xerrors.Errorf("cannot create hard link: %w", err)
 			}
 		}
 	}

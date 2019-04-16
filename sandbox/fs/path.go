@@ -5,13 +5,13 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 )
 
 func imageSandboxPath(imagePath string) (string, error) {
 	absImgPath, err := filepath.Abs(imagePath)
 	if err != nil {
-		return "", errors.Wrap(err, "cannot get image sandbox path")
+		return "", xerrors.Errorf("cannot get image sandbox path: %w", err)
 	}
 	outPath := path.Join(os.TempDir(), "ugsbox", absImgPath)
 	return outPath, nil

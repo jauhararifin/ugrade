@@ -5,12 +5,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/jauhararifin/ugrade/sandbox/cgroup/memory"
-
-	"github.com/jauhararifin/ugrade/sandbox/cgroup/cpu"
-	"github.com/pkg/errors"
-
+	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/sandbox"
+	"github.com/jauhararifin/ugrade/sandbox/cgroup/cpu"
+	"github.com/jauhararifin/ugrade/sandbox/cgroup/memory"
+	"golang.org/x/xerrors"
 )
 
 // Limiter limit process resource using linux cgroup. Limiter gives context that will be cancelled when
@@ -74,9 +73,9 @@ func (dc *defaultCgroup) Monitor(ctx context.Context) context.Context {
 	go func() {
 		select {
 		case <-cpuContext.Done():
-			dc.err = ErrTimeLimitExceeded
+			dc.err = ugrade.ErrTimeLimitExceeded
 		case <-memContext.Done():
-			dc.err = ErrMemoryLimitExceeded
+			dc.err = ugrade.ErrMemoryLimitExceeded
 		case <-ctx.Done():
 			dc.err = nil
 		}
@@ -98,6 +97,7 @@ func (dc *defaultCgroup) Error() error {
 }
 
 // New create and initialize new default implementation of `sandbox.Cgroup`.
+// TODO: search cgroup filesystem path.
 func New(name string) (sandbox.CGroup, error) {
 	instance := &defaultCgroup{
 		path: "/sys/fs/cgroup",
@@ -106,12 +106,12 @@ func New(name string) (sandbox.CGroup, error) {
 
 	instance.cpu = cpu.New(instance.path, instance.name)
 	if err := instance.cpu.Prepare(); err != nil {
-		return nil, errors.Wrap(err, "cannot initialize cpu limiter")
+		return nil, xerrors.Errorf("cannot initialize cpu limiter: %w", err)
 	}
 
 	instance.memory = memory.New(instance.path, instance.name)
 	if err := instance.memory.Prepare(); err != nil {
-		return nil, errors.Wrap(err, "cannot initialize memory limiter")
+		return nil, xerrors.Errorf("cannot initialize memory limiter: %w", err)
 	}
 
 	return instance, nil

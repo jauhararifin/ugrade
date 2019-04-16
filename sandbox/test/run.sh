@@ -17,6 +17,7 @@ run() {
 
     ugsbox guard \
         --memory-limit 268435456 \
+	--trace \
         --memory-throttle 368435456 \
         --time-limit 3000 \
         --file-size 134217728 \

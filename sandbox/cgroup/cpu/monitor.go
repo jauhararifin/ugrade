@@ -7,21 +7,19 @@ import (
 	"path"
 	"time"
 
-	"github.com/jauhararifin/ugrade/sandbox/cgroup/killer"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
-)
+	"github.com/jauhararifin/ugrade"
 
-// ErrTimeLimit indicates that process's cpu usage exceeding time limit.
-var ErrTimeLimit = errors.New("process's time limit exceeded")
+	"github.com/jauhararifin/ugrade/sandbox/cgroup/killer"
+	"github.com/sirupsen/logrus"
+	"golang.org/x/xerrors"
+)
 
 func (limiter *Limiter) readUsage() (uint64, error) {
 	cgroupUsagePath := path.Join(limiter.cgroupPath, "cpuacct", limiter.cgroupName, "cpuacct.usage")
 	logrus.WithField("path", cgroupUsagePath).Trace("read cpu usage from cgroup directory")
 	usageBytes, err := ioutil.ReadFile(cgroupUsagePath)
 	if err != nil {
-		logrus.Debug(err)
-		return 0, errors.Wrap(err, "cannot read cpuacct.usage file from cgroup directory")
+		return 0, xerrors.Errorf("cannot read cpuacct.usage file from cgroup directory: %w", err)
 	}
 
 	var usage uint64
@@ -37,19 +35,18 @@ func (limiter *Limiter) readUsage() (uint64, error) {
 func (limiter *Limiter) ensure() error {
 	usage, err := limiter.readUsage()
 	if err != nil {
-		return errors.Wrap(err, "cannot read cpu usage")
+		return xerrors.Errorf("cannot read cpu usage: %w", err)
 	}
 
 	limiter.usage = time.Duration(usage) * time.Nanosecond
 	if limiter.usage > limiter.limit {
-		return ErrTimeLimit
+		return ugrade.ErrTimeLimitExceeded
 	}
 
 	return nil
 }
 
-// Context takes a context and return new context that cancelled when the cpu usage of
-// processes exceeding the limit.
+// Context return new context that cancelled when the cpu usage of processes exceeding the limit.
 func (limiter *Limiter) Context() context.Context {
 	memctx, cancel := context.WithCancel(context.Background())
 
@@ -60,9 +57,10 @@ func (limiter *Limiter) Context() context.Context {
 		for {
 			<-pollTicker.C
 			err := limiter.ensure()
-			if errors.Cause(err) == ErrTimeLimit {
+			if xerrors.Is(err, ugrade.ErrTimeLimitExceeded) {
 				if err := killer.KillGroup(limiter.processes); err != nil {
-					logrus.Error(err) // dont know how to handle, just log it
+					// dont know how to handle, just log it
+					logrus.WithField("error", err).Error("cannot clean process by killing")
 				}
 				cancel()
 				return

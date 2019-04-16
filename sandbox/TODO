@@ -11,6 +11,6 @@
 - limit blkio bytes write per second
 - add install script
 - add directory rules, read only dir, write only dir, dir mapping
-- handle signals
+- handle signals, kill childs when i terminated
 - limit memory using rlimit
 - limit memory lock

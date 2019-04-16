@@ -10,6 +10,7 @@ import (
 )
 
 // KillGroup kills processes that belong to `processes`'s group
+// TODO: ensure process is killed.
 func KillGroup(processes []*os.Process) error {
 	killed := make(map[int]bool)
 	for _, proc := range processes {
