@@ -93,9 +93,7 @@ WSGI_APPLICATION = 'ugrade.wsgi.application'
 
 RQ_QUEUES = {
     'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
+        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
         'DEFAULT_TIMEOUT': 360,
     }
 }
