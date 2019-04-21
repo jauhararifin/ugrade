@@ -1,2 +1,3 @@
 release: ./reset-db.sh && python manage.py migrate
 web: gunicorn ugrade.wsgi
+worker: python manage.py rqworker
