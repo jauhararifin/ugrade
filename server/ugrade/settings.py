@@ -37,7 +37,7 @@ SECRET_KEY = os.environ.get(
     'SECRET_KEY', 'ud(=9k%ll8s$1z@i*&^te9slcea_^q^6sg($9#r+20c+^@$o!o')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "true").lower() == 'true'
 
 ALLOWED_HOSTS: typing.List[str] = []
 
