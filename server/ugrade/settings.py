@@ -166,3 +166,6 @@ CORS_ORIGIN_WHITELIST = [
     'localhost:3000',
     'localhost:8100'
 ]
+
+if 'CORS_ORIGIN_WHITELIST' in os.environ:
+    CORS_ORIGIN_WHITELIST += [os.environ.get('CORS_ORIGIN_WHITELIST', '*')]
