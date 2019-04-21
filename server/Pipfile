@@ -27,6 +27,8 @@ pytest = "*"
 pytest-django = "*"
 pytest-cov = "*"
 mixer = "*"
+boto3 = "*"
+django-storages = "*"
 
 [requires]
 python_version = "3.6"

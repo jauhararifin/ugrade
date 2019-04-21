@@ -6,3 +6,4 @@ storages
 .mypy_cache
 .coverage
 htmlcov
+.env
