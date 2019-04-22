@@ -21,13 +21,6 @@ from sentry_sdk.integrations.django import DjangoIntegration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_URL = 'http://localhost:8000'
 
-if 'AWS_ACCESS_KEY_ID' in os.environ:
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-    AWS_DEFAULT_ACL = None
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storages')
 MEDIA_URL = BASE_URL + '/storages/'
 
@@ -177,3 +170,15 @@ CORS_ORIGIN_WHITELIST = [
 
 if 'CORS_ORIGIN_WHITELIST' in os.environ:
     CORS_ORIGIN_WHITELIST += [os.environ.get('CORS_ORIGIN_WHITELIST', '*')]
+
+if 'AWS_ACCESS_KEY_ID' in os.environ:
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_DEFAULT_ACL = None
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_S3_CUSTOM_DOMAIN = os.environ.get(
+        'AWS_S3_CUSTOM_DOMAIN', '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME)
+    STATIC_URL = 'https://%s/' % AWS_S3_CUSTOM_DOMAIN
