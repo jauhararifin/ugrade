@@ -14,7 +14,11 @@ func doSubmit(cmd *cobra.Command, args []string) error {
 	problem := cmd.Flag("problem").Value.String()
 	solution := cmd.Flag("solution").Value.String()
 
-	client := ugctl.NewClient()
+	gqlURL, err := rootCmd.PersistentFlags().GetString("server-url")
+	if err != nil {
+		return err
+	}
+	client := ugctl.NewClient(gqlURL)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

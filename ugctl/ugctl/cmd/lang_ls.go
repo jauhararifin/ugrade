@@ -14,7 +14,11 @@ var langLsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "List permitted languages in current contest",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client := ugctl.NewClient()
+		gqlURL, err := rootCmd.PersistentFlags().GetString("server-url")
+		if err != nil {
+			return err
+		}
+		client := ugctl.NewClient(gqlURL)
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		result, err := client.LanguageList(ctx)

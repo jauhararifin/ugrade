@@ -20,12 +20,9 @@ type client struct {
 	gqlClient *graphql.Client
 }
 
-// GQLServerEndpoint contains url to ugrade graphql api
-var GQLServerEndpoint = "http://localhost:8000/graphql"
-
 // NewClient create new graphql client for ugrade server
-func NewClient() Client {
-	gqlClient := graphql.NewClient(GQLServerEndpoint, graphql.UseMultipartForm())
+func NewClient(serverURL string) Client {
+	gqlClient := graphql.NewClient(serverURL+"/graphql", graphql.UseMultipartForm())
 	return &client{
 		gqlClient: gqlClient,
 	}
