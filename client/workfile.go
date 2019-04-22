@@ -1,17 +1,17 @@
-package ugctl
+package client
 
 import (
 	"os"
 	"os/user"
 	"path"
 
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 )
 
 func workingDir() (string, error) {
 	user, err := user.Current()
 	if err != nil {
-		return "", errors.Wrap(err, "cannot get current user")
+		return "", xerrors.Errorf("cannot get current user: %w", err)
 	}
 
 	homeDir := user.HomeDir
@@ -25,7 +25,7 @@ func assertWorkingFile(paths ...string) (string, error) {
 	// ger current user dir
 	user, err := user.Current()
 	if err != nil {
-		return "", errors.WithMessage(err, "cannot get current user working directory")
+		return "", xerrors.Errorf("cannot get current user working directory: %w", err)
 	}
 
 	fileName := paths[len(paths)-1]
@@ -37,7 +37,7 @@ func assertWorkingFile(paths ...string) (string, error) {
 	pathResult := path.Join(dirPath...)
 
 	if err := os.MkdirAll(pathResult, 0774); err != nil {
-		return "", errors.Wrap(err, "cannot create working directory")
+		return "", xerrors.Errorf("cannot create working directory: %w", err)
 	}
 
 	filePath := path.Join(pathResult, fileName)
@@ -45,11 +45,11 @@ func assertWorkingFile(paths ...string) (string, error) {
 	if os.IsNotExist(err) {
 		file, err := os.Create(filePath)
 		if err != nil {
-			return "", errors.Wrap(err, "cannot create working file")
+			return "", xerrors.Errorf("cannot create working file: %w", err)
 		}
 		defer file.Close()
 	} else if err != nil {
-		errors.Wrap(err, "cannot open working file")
+		xerrors.Errorf("cannot open working file: %w", err)
 	}
 	return filePath, nil
 }

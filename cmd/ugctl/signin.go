@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"context"
@@ -6,7 +6,8 @@ import (
 	"time"
 
 	"github.com/howeyc/gopass"
-	"github.com/jauhararifin/ugrade/ugctl"
+	"github.com/jauhararifin/ugrade"
+	"github.com/jauhararifin/ugrade/client"
 	"github.com/spf13/cobra"
 )
 
@@ -32,10 +33,10 @@ func doSignIn(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	client := ugctl.NewClient(gqlURL)
+	client := client.NewClient(gqlURL)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	result, err := client.SignIn(ctx, ugctl.SignInRequest{
+	result, err := client.SignIn(ctx, ugrade.SignInRequest{
 		ContestShortID: contestSID,
 		Email:          email,
 		Password:       password,

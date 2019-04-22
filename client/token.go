@@ -1,23 +1,23 @@
-package ugctl
+package client
 
 import (
 	"io/ioutil"
 
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 )
 
 func getToken() (string, error) {
 	tokenPath, err := assertWorkingFile("session.tk")
 	if err != nil {
-		return "", errors.Wrap(err, "cannot open session file")
+		return "", xerrors.Errorf("cannot open session file: %w", err)
 	}
 	tokenBt, err := ioutil.ReadFile(tokenPath)
 	if err != nil {
-		return "", errors.Wrap(err, "cannot read session file")
+		return "", xerrors.Errorf("cannot read session file: %w", err)
 	}
 	token := string(tokenBt)
 	if len(token) == 0 {
-		return "", errors.New("you havent signed in yet")
+		return "", xerrors.New("you havent signed in yet")
 	}
 	return token, nil
 }

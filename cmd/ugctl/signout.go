@@ -1,11 +1,11 @@
-package cmd
+package main
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/jauhararifin/ugrade/ugctl"
+	"github.com/jauhararifin/ugrade/client"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +14,7 @@ func doSignOut(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	client := ugctl.NewClient(gqlURL)
+	client := client.NewClient(gqlURL)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := client.SignOut(ctx); err != nil {

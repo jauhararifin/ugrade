@@ -1,35 +1,23 @@
-package ugctl
+package client
 
 import (
 	"context"
 	"os"
 
 	"github.com/jauhararifin/graphql"
-
-	"github.com/pkg/errors"
+	"github.com/jauhararifin/ugrade"
+	"golang.org/x/xerrors"
 )
 
-// SubmitRequest represent input for submit command
-type SubmitRequest struct {
-	LanguageID string
-	ProblemID  string
-	SourceCode string
-}
-
-// SubmitResult represent result of submit command
-type SubmitResult struct {
-	ID string
-}
-
-func (clt *client) Submit(ctx context.Context, request SubmitRequest) (*SubmitResult, error) {
+func (clt *client) Submit(ctx context.Context, request ugrade.SubmitRequest) (*ugrade.SubmitResult, error) {
 	token, err := getToken()
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot get session token")
+		return nil, xerrors.Errorf("cannot get session token: %w", err)
 	}
 
 	file, err := os.Open(request.SourceCode)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot open source code file")
+		return nil, xerrors.Errorf("cannot open source code file: %w", err)
 	}
 	defer file.Close()
 
@@ -58,10 +46,10 @@ func (clt *client) Submit(ctx context.Context, request SubmitRequest) (*SubmitRe
 	gqlRequest.Header.Add("Authorization", "Bearer "+token)
 	err = clt.gqlClient.Run(ctx, gqlRequest, &resp)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot submit solution")
+		return nil, xerrors.Errorf("cannot submit solution: %w", err)
 	}
 
-	return &SubmitResult{
+	return &ugrade.SubmitResult{
 		ID: resp.SubmitSolution.ID,
 	}, nil
 }

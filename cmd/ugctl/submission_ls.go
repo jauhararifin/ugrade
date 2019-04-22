@@ -1,11 +1,11 @@
-package cmd
+package main
 
 import (
 	"context"
 	"os"
 	"time"
 
-	"github.com/jauhararifin/ugrade/ugctl"
+	"github.com/jauhararifin/ugrade/client"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
@@ -18,10 +18,10 @@ var submissionLsCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		client := ugctl.NewClient(gqlURL)
+		client := client.NewClient(gqlURL)
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		result, err := client.SubmissionList(ctx)
+		result, err := client.Submissions(ctx)
 		if err != nil {
 			return err
 		}

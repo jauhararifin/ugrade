@@ -1,29 +1,15 @@
-package ugctl
+package client
 
 import (
 	"context"
 	"io/ioutil"
 
 	"github.com/jauhararifin/graphql"
-	"github.com/pkg/errors"
+	"github.com/jauhararifin/ugrade"
+	"golang.org/x/xerrors"
 )
 
-// SignInRequest represent input for sign in command
-type SignInRequest struct {
-	ContestShortID string
-	Email          string
-	Password       string
-}
-
-// SignInResult represent result of sign in command
-type SignInResult struct {
-	UserID      string
-	UserName    string
-	ContestID   string
-	ContestName string
-}
-
-func (clt *client) SignIn(ctx context.Context, request SignInRequest) (*SignInResult, error) {
+func (clt *client) SignIn(ctx context.Context, request ugrade.SignInRequest) (*ugrade.SignInResult, error) {
 	// fetching contest
 	gqlReq := graphql.NewRequest(`
 		query GetContestId($shortId: String!) {
@@ -40,7 +26,7 @@ func (clt *client) SignIn(ctx context.Context, request SignInRequest) (*SignInRe
 	}
 	err := clt.gqlClient.Run(ctx, gqlReq, &getContestRes)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot fetch contest with short id "+request.ContestShortID)
+		return nil, xerrors.Errorf("cannot fetch contest with short id "+request.ContestShortID+": %w", err)
 	}
 
 	// fetching user
@@ -60,7 +46,7 @@ func (clt *client) SignIn(ctx context.Context, request SignInRequest) (*SignInRe
 	}
 	err = clt.gqlClient.Run(ctx, gqlReq, &userByEmailRes)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot fetch user with email "+request.Email)
+		return nil, xerrors.Errorf("cannot fetch user with email "+request.Email+": %w", err)
 	}
 
 	// signin
@@ -96,19 +82,19 @@ func (clt *client) SignIn(ctx context.Context, request SignInRequest) (*SignInRe
 	}
 	err = clt.gqlClient.Run(ctx, gqlReq, &signInRes)
 	if err != nil {
-		return nil, errors.Wrap(err, "signing in failed")
+		return nil, xerrors.Errorf("signing in failed: %w", err)
 	}
 
 	tokenPath, err := assertWorkingFile("session.tk")
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot create session file")
+		return nil, xerrors.Errorf("cannot create session file: %w", err)
 	}
 	err = ioutil.WriteFile(tokenPath, []byte(signInRes.SignIn.Token), 0744)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot save session token")
+		return nil, xerrors.Errorf("cannot save session token: %w", err)
 	}
 
-	return &SignInResult{
+	return &ugrade.SignInResult{
 		UserID:      signInRes.SignIn.User.ID,
 		UserName:    signInRes.SignIn.User.Name,
 		ContestID:   signInRes.SignIn.User.Contest.ID,

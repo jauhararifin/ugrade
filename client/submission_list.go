@@ -1,31 +1,17 @@
-package ugctl
+package client
 
 import (
 	"context"
 
 	"github.com/jauhararifin/graphql"
-	"github.com/pkg/errors"
+	"github.com/jauhararifin/ugrade"
+	"golang.org/x/xerrors"
 )
 
-// SubmissionListItem represent single submission when running `submission ls` command.
-type SubmissionListItem struct {
-	ID           string
-	ProblemName  string
-	LanguageName string
-	IssuerName   string
-	Verdict      string
-	IssuedAt     string
-}
-
-// SubmissionListResult represent result of calling `submission ls` command.
-type SubmissionListResult struct {
-	Submissions []SubmissionListItem
-}
-
-func (clt *client) SubmissionList(ctx context.Context) (*SubmissionListResult, error) {
+func (clt *client) Submissions(ctx context.Context) (*ugrade.SubmissionListResult, error) {
 	token, err := getToken()
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot get session token")
+		return nil, xerrors.Errorf("cannot get session token: %w", err)
 	}
 
 	gqlRequest := graphql.NewRequest(`
@@ -48,13 +34,13 @@ func (clt *client) SubmissionList(ctx context.Context) (*SubmissionListResult, e
 	}
 	err = clt.gqlClient.Run(ctx, gqlRequest, &resp)
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot fetch problems from server")
+		return nil, xerrors.Errorf("cannot fetch problems from server: %w", err)
 	}
 
 	nSub := len(resp.Submissions)
-	submissions := make([]SubmissionListItem, nSub, nSub)
+	submissions := make([]ugrade.SubmissionListItem, nSub, nSub)
 	for i, sub := range resp.Submissions {
-		submissions[i] = SubmissionListItem{
+		submissions[i] = ugrade.SubmissionListItem{
 			ID:           sub.ID,
 			ProblemName:  sub.Problem.Name,
 			LanguageName: sub.Language.Name,
@@ -63,7 +49,7 @@ func (clt *client) SubmissionList(ctx context.Context) (*SubmissionListResult, e
 			IssuedAt:     sub.IssuedTime,
 		}
 	}
-	return &SubmissionListResult{
+	return &ugrade.SubmissionListResult{
 		Submissions: submissions,
 	}, nil
 }

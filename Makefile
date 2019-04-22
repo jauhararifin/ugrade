@@ -1,4 +1,4 @@
-all: build-ugsbox install-ugsbox build-ugjob install-ugjob
+all: build-ugsbox install-ugsbox build-ugjob install-ugjob build-ugctl install-ugctl
 
 build-ugsbox:
 	go build -o bin/ugsbox github.com/jauhararifin/ugrade/cmd/ugsbox
@@ -19,3 +19,9 @@ install-ugjob:
 	go install github.com/jauhararifin/ugrade/cmd/ugjob
 	sudo chown root:root `which ugjob`
 	sudo chmod ug+s `which ugjob`
+
+build-ugctl:
+	go build -o bin/ugctl github.com/jauhararifin/ugrade/cmd/ugctl
+
+install-ugctl:
+	go install github.com/jauhararifin/ugrade/cmd/ugctl
