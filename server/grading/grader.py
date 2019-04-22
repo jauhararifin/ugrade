@@ -73,7 +73,7 @@ def insert_spec(grading_group):
 
     spec.close()
 
-    with open(tar_path, 'r') as tar_file:
+    with open(tar_path, 'rb') as tar_file:
         grading_group.spec.save('spec.tar', File(tar_file))
     os.remove(tar_path)
 
