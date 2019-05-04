@@ -78,7 +78,8 @@ def create_contest(email: str,
     languages = get_all_languages()
     new_contest.permitted_languages.add(*languages)
 
-    signup_otc = "".join([random.choice("0123456789") for _ in range(8)])
+    # signup_otc = "".join([random.choice("0123456789") for _ in range(8)])
+    signup_otc = "00000000"
     new_user = User(email=email,
                     contest=new_contest,
                     signup_otc=signup_otc)
