@@ -14,4 +14,4 @@ rm -rf storages
 cp -r storages-fixtures storages
 
 echo "Starting server..."
-pipenv run python manage.py runserver
+pipenv run python manage.py runserver $1
