@@ -14,6 +14,7 @@ unsigned int testcase_count()
 
 void sample(unsigned int sample_id)
 {
+  cout << "1" << endl;
   cout << "5" << endl;
   cout << "1 6 2 3 4" << endl;
   cout << "8 2 4 5 7" << endl;

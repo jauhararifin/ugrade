@@ -54,6 +54,7 @@ def submit_solution(user: User, problem_id: int, language_id: int, source_code: 
                      solution_language=language,
                      issuer=user)
     sub.save()
-    grade_submission.delay(sub)
+    # grade_submission.delay(sub)
+    grade_submission(sub)
 
     return sub
