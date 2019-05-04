@@ -9,6 +9,7 @@ import (
 	"github.com/jauhararifin/ugrade/jobsolver"
 	"github.com/jauhararifin/ugrade/jobsolver/file"
 	"github.com/jauhararifin/ugrade/jobsolver/image"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 )
 
@@ -61,6 +62,7 @@ func (compiler *defaultCompiler) compileCPP11(
 		},
 	}
 
+	logrus.WithField("cmd", cmd).Trace("compiling")
 	usage, err := compiler.sandbox.Execute(ctx, cmd)
 	if err != nil {
 		return nil, ugrade.ErrCompilationError

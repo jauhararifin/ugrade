@@ -29,7 +29,11 @@ func (*defaultSandbox) Execute(ctx context.Context, command ugrade.Command) (ugr
 	}
 
 	if command.TimeLimit > 0 {
-		args = append(args, "--time-limit", fmt.Sprintf("%d", command.TimeLimit))
+		args = append(args, "--time-limit", fmt.Sprintf("%d", command.TimeLimit.Nanoseconds()/1000000))
+	}
+
+	if command.WallTimeLimit > 0 {
+		args = append(args, "--walltime-limit", fmt.Sprintf("%d", command.WallTimeLimit.Nanoseconds()/1000000))
 	}
 
 	if command.MemoryLimit > 0 {
