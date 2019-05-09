@@ -78,7 +78,8 @@ def create_contest(email: str,
     languages = get_all_languages()
     new_contest.permitted_languages.add(*languages)
 
-    # signup_otc = "".join([random.choice("0123456789") for _ in range(8)])
+    signup_otc = "".join([random.choice("0123456789") for _ in range(8)])
+    # use constant otc for now
     signup_otc = "00000000"
     new_user = User(email=email,
                     contest=new_contest,
@@ -149,8 +150,9 @@ def invite_users(user: User, emails: List[str], permissions: List[str]) -> Itera
     permissions = Permission.objects.filter(code__in=permissions)
     new_users: List[User] = []
     for email in emails:
-        # signup_otc = "".join([random.choice("0123456789")
-        #                       for _ in range(8)])
+        signup_otc = "".join([random.choice("0123456789")
+                              for _ in range(8)])
+        # use constant otc for now
         signup_otc = "00000000"
         new_user = User(email=email,
                         contest=user.contest,
