@@ -142,6 +142,13 @@ class ProblemInput(graphene.InputObjectType):
     tolerance = graphene.Float(required=True)
     memory_limit = graphene.Int(required=True)
     output_limit = graphene.Int(required=True)
+    tcgen_language_id = graphene.ID()
+    tcgen_source_code = Upload()
+    solution_language_id = graphene.ID()
+    solution_source_code = Upload()
+    checker_language_id = graphene.ID()
+    checker_source_code = Upload()
+
 
 
 class CreateProblem(graphene.Mutation):
@@ -160,6 +167,12 @@ class ProblemModificationInput(graphene.InputObjectType):
     tolerance = graphene.Float()
     memory_limit = graphene.Int()
     output_limit = graphene.Int()
+    tcgen_language_id = graphene.ID()
+    tcgen_source_code = Upload()
+    solution_language_id = graphene.ID()
+    solution_source_code = Upload()
+    checker_language_id = graphene.ID()
+    checker_source_code = Upload()
 
 
 class UpdateProblem(graphene.Mutation):

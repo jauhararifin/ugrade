@@ -1,5 +1,6 @@
 from typing import Iterable, NamedTuple, Optional
 
+from django.core.files import File
 from django.db import transaction
 
 from contests.models import Problem
@@ -20,6 +21,12 @@ class ProblemInput(NamedTuple):
     tolerance: float
     memory_limit: int
     output_limit: int
+    tcgen_language_id: Optional[int]
+    tcgen_source_code: Optional[File]
+    solution_language_id: Optional[int]
+    solution_source_code: Optional[File]
+    checker_language_id: Optional[int]
+    checker_source_code: Optional[File]
 
 
 class ProblemModificationInput(NamedTuple):
@@ -31,6 +38,12 @@ class ProblemModificationInput(NamedTuple):
     tolerance: Optional[float]
     memory_limit: Optional[int]
     output_limit: Optional[int]
+    tcgen_language_id: Optional[int]
+    tcgen_source_code: Optional[File]
+    solution_language_id: Optional[int]
+    solution_source_code: Optional[File]
+    checker_language_id: Optional[int]
+    checker_source_code: Optional[File]
 
 
 @transaction.atomic
@@ -44,7 +57,13 @@ def create_problem_mutate(_root, info, problem: ProblemInput) -> Problem:
                           problem.time_limit,
                           problem.tolerance,
                           problem.memory_limit,
-                          problem.output_limit)
+                          problem.output_limit,
+                          problem.tcgen_language_id,
+                          problem.tcgen_source_code,
+                          problem.solution_language_id,
+                          problem.solution_source_code,
+                          problem.checker_language_id,
+                          problem.checker_source_code,)
 
 
 def update_problem_mutate(_root,
@@ -61,7 +80,13 @@ def update_problem_mutate(_root,
                           problem.time_limit,
                           problem.tolerance,
                           problem.memory_limit,
-                          problem.output_limit)
+                          problem.output_limit,
+                          problem.tcgen_language_id,
+                          problem.tcgen_source_code,
+                          problem.solution_language_id,
+                          problem.solution_source_code,
+                          problem.checker_language_id,
+                          problem.checker_source_code,)
 
 
 def delete_problem_mutate(_root, info, problem_id: int) -> str:

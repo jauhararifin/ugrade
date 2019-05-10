@@ -1,10 +1,12 @@
 from typing import Optional, Iterable
 
+from django.core.files import File
 from django.db import transaction
 from django.db.models import Max
 
+from contests.contest.core import get_language_by_id
 from contests.models import User, Problem
-from contests.exceptions import ForbiddenActionError, NoSuchProblemError
+from contests.exceptions import ForbiddenActionError, NoSuchProblemError, ForbiddenLanguageError
 
 
 def get_contest_problems(user: User, contest_id: int) -> Iterable[Problem]:
@@ -46,6 +48,49 @@ def get_problem_by_id(user: User, problem_id: int) -> Problem:
     return problem
 
 
+def check_files(user: User,
+                tcgen_language_id: Optional[int],
+                tcgen_source_code: Optional[File],
+                solution_language_id: Optional[int],
+                solution_source_code: Optional[File],
+                checker_language_id: Optional[int],
+                checker_source_code: Optional[File]):
+    contest = user.contest
+    permitted_langs = list(
+        map(lambda lang: lang.id, contest.permitted_languages.all()))
+
+    if tcgen_language_id is None or tcgen_source_code is None:
+        tcgen_source = None
+        tcgen_language = None
+    else:
+        if tcgen_language_id not in permitted_langs:
+            raise ForbiddenLanguageError()
+        tcgen_language = get_language_by_id(tcgen_language_id)
+        tcgen_source = tcgen_source_code
+
+    if solution_language_id is None or solution_source_code is None:
+        solution_source = None
+        solution_language = None
+    else:
+        if solution_language_id not in permitted_langs:
+            raise ForbiddenLanguageError()
+        solution_language = get_language_by_id(solution_language_id)
+        solution_source = solution_source_code
+
+    if checker_language_id is None or checker_source_code is None:
+        checker_source = None
+        checker_language = None
+    else:
+        if checker_language_id not in permitted_langs:
+            raise ForbiddenLanguageError()
+        checker_language = get_language_by_id(checker_language_id)
+        checker_source = checker_source_code
+
+    return tcgen_language, tcgen_source, \
+           solution_language, solution_source, \
+           checker_language, checker_source
+
+
 @transaction.atomic
 def create_problem(user: User,
                    short_id: str,
@@ -56,7 +101,22 @@ def create_problem(user: User,
                    tolerance: float,
                    memory_limit: int,
                    output_limit: int,
-                   ) -> Problem:
+                   tcgen_language_id: Optional[int],
+                   tcgen_source_code: Optional[File],
+                   solution_language_id: Optional[int],
+                   solution_source_code: Optional[File],
+                   checker_language_id: Optional[int],
+                   checker_source_code: Optional[File]) -> Problem:
+    tcgen_language, tcgen_source, \
+    solution_language, solution_source, \
+    checker_language, checker_source = check_files(user,
+                                                   tcgen_language_id,
+                                                   tcgen_source_code,
+                                                   solution_language_id,
+                                                   solution_source_code,
+                                                   checker_language_id,
+                                                   checker_source_code)
+
     if not user.has_permission('create:problems'):
         raise ForbiddenActionError(
             "You Don't Have Permission To Create Problem")
@@ -72,7 +132,13 @@ def create_problem(user: User,
                        memory_limit=memory_limit,
                        output_limit=output_limit,
                        order=last_order['order__max'] + 1,
-                       contest=user.contest)
+                       contest=user.contest,
+                       tcgen_language=tcgen_language,
+                       tcgen_source=tcgen_source,
+                       solution_language=solution_language,
+                       solution_source=solution_source,
+                       checker_language=checker_language,
+                       checker_source=checker_source)
     new_prob.save()
     return new_prob
 
@@ -86,7 +152,23 @@ def update_problem(user: User,
                    time_limit: Optional[int],
                    tolerance: Optional[float],
                    memory_limit: Optional[int],
-                   output_limit: Optional[int]) -> Problem:
+                   output_limit: Optional[int],
+                   tcgen_language_id: Optional[int],
+                   tcgen_source_code: Optional[File],
+                   solution_language_id: Optional[int],
+                   solution_source_code: Optional[File],
+                   checker_language_id: Optional[int],
+                   checker_source_code: Optional[File]) -> Problem:
+    tcgen_language, tcgen_source, \
+    solution_language, solution_source, \
+    checker_language, checker_source = check_files(user,
+                                                   tcgen_language_id,
+                                                   tcgen_source_code,
+                                                   solution_language_id,
+                                                   solution_source_code,
+                                                   checker_language_id,
+                                                   checker_source_code)
+
     if not user.has_permission('update:problems'):
         raise ForbiddenActionError(
             "You Don't Have Permission To Update Problem")
@@ -116,6 +198,18 @@ def update_problem(user: User,
         prob.memory_limit = memory_limit
     if output_limit is not None:
         prob.output_limit = output_limit
+    if tcgen_language is not None:
+        prob.tcgen_language = tcgen_language
+    if tcgen_source is not None:
+        prob.tcgen_source = tcgen_source
+    if solution_language is not None:
+        prob.solution_language = solution_language
+    if solution_source is not None:
+        prob.solution_source = solution_source
+    if checker_language is not None:
+        prob.checker_language = checker_language
+    if checker_source is not None:
+        prob.checker_source = checker_source
 
     prob.save()
     return prob
