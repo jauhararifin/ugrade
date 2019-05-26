@@ -18,7 +18,7 @@ type defaultGuard struct {
 func New() (sandbox.Guard, error) {
 	cgrp, err := cgroup.New("ugsbox")
 	if err != nil {
-		return nil, errors.Wrap(err, "cannot initialize cgroup")
+		return nil, errors.Errorf("cannot initialize cgroup: %v", err)
 	}
 
 	return &defaultGuard{

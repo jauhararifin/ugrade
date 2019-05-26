@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/jauhararifin/ugrade"
 	"golang.org/x/xerrors"
@@ -40,12 +41,31 @@ func runJail(cmd *cobra.Command, args []string) {
 	stderr := cmd.Flag("stderr").Value.String()
 	stdout := cmd.Flag("stdout").Value.String()
 
+	// get binds
+	bindsstr, err := cmd.Flags().GetStringSlice("bind")
+	if err != nil {
+		os.Exit(sandbox.ExitCodeInternalError)
+	}
+	binds := make([]ugrade.FSBind, 0, 0)
+	for _, bnd := range bindsstr {
+		// TODO: make better parser, still not working for many cases
+		parts := strings.Split(bnd, ":")
+		if len(parts) != 2 || len(parts[0]) == 0 || len(parts[1]) == 0 {
+			os.Exit(sandbox.ExitCodeInternalError)
+		}
+		binds = append(binds, ugrade.FSBind{
+			Host:    parts[0],
+			Sandbox: parts[1],
+		})
+	}
+
 	thejail := jail.New()
 	if err := thejail.Run(
 		imagePath,
 		workingDirectory,
 		uid.AnonymousUID,
 		uid.AnonymousUID,
+		binds,
 		stdin,
 		stdout,
 		stderr,
@@ -74,6 +94,7 @@ func init() {
 	jailCmd.Flags().StringP("stderr", "e", "", "path (relative to sandbox) to file to be used as stderr")
 	jailCmd.Flags().StringP("stdout", "o", "", "path (relative to sandbox) to file to be used as stdout")
 	jailCmd.Flags().StringP("image", "i", "", "compressed sandbox image (in .tar.xz) path")
+	jailCmd.Flags().StringSliceP("bind", "b", []string{}, "bind host directory to sandbox directory with format <hostdir>:<sandboxdir>. Warning: file owner of binded directory will be changed")
 
 	rootCmd.AddCommand(jailCmd)
 }

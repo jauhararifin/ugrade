@@ -18,12 +18,23 @@ func (jl *defaultJail) Run(
 	workingDirectory string,
 	uid,
 	gid uint32,
+	binds []ugrade.FSBind,
 	stdin,
 	stdout,
 	stderr,
 	commandPath string,
 	args []string,
 ) error {
+
+	// bind some filesystem
+	for _, bind := range binds {
+		unbind, err := jl.fs.Bind(imagePath, bind, int(uid), int(uid))
+		if err != nil {
+			return xerrors.Errorf("cannot bind %s:%s: %w", bind.Host, bind.Sandbox, err)
+		}
+		defer unbind()
+	}
+
 	// change proces root to sandboxed directory.
 	logrus.WithField("imagePath", imagePath).Debug("chrooting to sandboxed directory")
 	if err := jl.fs.Chroot(imagePath); err != nil {

@@ -2,6 +2,7 @@ package guard
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"syscall"
@@ -68,21 +69,26 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd ugrade.Command) (ugrade.
 		}
 	}
 
-	// bind some filesystem
-	for _, bind := range cmd.Binds {
-		unbind, err := guard.fs.Bind(cmd.ImagePath, bind, uid.AnonymousUID, uid.AnonymousUID)
-		if err != nil {
-			return ugrade.Usage{}, xerrors.Errorf("cannot bind %s:%s: %w", bind.Host, bind.Sandbox, err)
-		}
-		defer unbind()
-	}
-
 	// create arguments for running jail
 	jailArgs := []string{
 		"jail",
 		"--trace",
 		"--image", cmd.ImagePath,
 		"--working-directory", cmd.Dir,
+	}
+
+	// bind some filesystem
+	// for _, bind := range cmd.Binds {
+	// 	unbind, err := guard.fs.Bind(cmd.ImagePath, bind, uid.AnonymousUID, uid.AnonymousUID)
+	// 	if err != nil {
+	// 		return ugrade.Usage{}, xerrors.Errorf("cannot bind %s:%s: %w", bind.Host, bind.Sandbox, err)
+	// 	}
+	// 	defer unbind()
+	// }
+
+	// append bind arguments
+	for _, bind := range cmd.Binds {
+		jailArgs = append(jailArgs, "--bind", fmt.Sprintf("%s:%s", bind.Host, bind.Sandbox))
 	}
 
 	if len(cmd.Stdin) > 0 {
@@ -109,7 +115,10 @@ func (guard *defaultGuard) Run(ctx context.Context, cmd ugrade.Command) (ugrade.
 	// initialize jail process
 	monitorCtx := guard.cgrp.Monitor(wallTimeCtx)
 	osCmd := exec.CommandContext(monitorCtx, "/proc/self/exe", jailArgs...)
-	osCmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	osCmd.SysProcAttr = &syscall.SysProcAttr{
+		Cloneflags: syscall.CLONE_NEWNS,
+		Setpgid:    true,
+	}
 	osCmd.Stdin = os.Stdin
 	osCmd.Stdout = os.Stdout
 	osCmd.Stderr = os.Stderr
