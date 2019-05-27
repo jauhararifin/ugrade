@@ -3,6 +3,7 @@ package executor
 import (
 	"context"
 	"io/ioutil"
+	"os"
 	"path"
 	"time"
 
@@ -29,6 +30,10 @@ func (ex *defaultExecutor) Execute(
 		return nil, xerrors.Errorf("cannot compile contestant solution: %w", err)
 	}
 	logrus.WithField("result", compiledSubmission).Debug("contestant solution compiled")
+
+	// remove compiled contestant solution after finish
+	// TODO: check for error
+	defer os.RemoveAll(compiledSubmission.ExecDir)
 
 	// determine memory limit and cpu limit
 	cpuULimit := float64(tcSuite.MaxCPU.Nanoseconds()) * (1.0 + spec.Tolerance)

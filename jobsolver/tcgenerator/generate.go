@@ -80,7 +80,7 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) 
 	}
 	dir = path.Join(os.TempDir(), "ugrade-testcase-"+dir)
 
-	// checks directory existency. if directory exists, load testcase from that directory
+	// checks directory existence. if directory exists, load testcase from that directory
 	// create new directory if directory could not be found.
 	stat, err := os.Stat(dir)
 	if err != nil {
@@ -114,6 +114,10 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) 
 	}
 	logrus.WithField("result", compiledTCGen).Debug("testcase generator compiled")
 
+	// remove compilation directory after finish
+	// TODO: check for error
+	defer os.RemoveAll(compiledTCGen.ExecDir)
+
 	// compile jury solution
 	logrus.WithField("source", spec.Solution).Debug("compile jury solution")
 	compiledSol, err := gen.compiler.Compile(ctx, spec.Solution)
@@ -121,6 +125,10 @@ func (gen *defaultGenerator) Generate(ctx context.Context, spec ugrade.JobSpec) 
 		return nil, xerrors.Errorf("cannot compile jury solution: %w", err)
 	}
 	logrus.WithField("result", compiledTCGen).Debug("jury solution compiled")
+
+	// remove jury solution binary directory after finish
+	// TODO: check for error
+	defer os.RemoveAll(compiledSol.ExecDir)
 
 	// get sample testcase count
 	logrus.Debug("get testcase sample count")

@@ -47,6 +47,10 @@ func (ck *defaultChecker) CheckSuite(
 	}
 	logrus.WithField("result", compiledChecker).Debug("checker compiled")
 
+	// remove compiled checker after finish
+	// TODO: check for error
+	defer os.RemoveAll(compiledChecker.ExecDir)
+
 	// check validity of `tcSuite.Items` and `submissionExec.Items`
 	logrus.Debug("validate items inside submission and testcase")
 	if len(tcSuite.Items) != len(submissionExec.Items) {
@@ -68,6 +72,10 @@ func (ck *defaultChecker) CheckSuite(
 		return nil, xerrors.Errorf("cannot create temporary directory for checker outputs: %w", err)
 	}
 	logrus.WithField("dir", outputDir).Debug("use directory for storing verdicts")
+
+	// remove output directory when done
+	// TODO: check for error
+	defer os.RemoveAll(outputDir)
 
 	logrus.Debug("checking submission and testcase using checker")
 	items := make([]jobsolver.CheckItem, 0, 0)

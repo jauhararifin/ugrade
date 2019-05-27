@@ -2,6 +2,7 @@ package solver
 
 import (
 	"context"
+	"os"
 
 	"github.com/jauhararifin/ugrade"
 	"golang.org/x/xerrors"
@@ -24,6 +25,10 @@ func (s *defaultSolver) Solve(ctx context.Context, spec ugrade.JobSpec) (*ugrade
 		}
 		return nil, xerrors.Errorf("cannot execute contestant solution: %w", err)
 	}
+
+	// remove contestant output after finish
+	// TODO: check for error
+	defer os.RemoveAll(execRes.Dir)
 
 	// check contestant output correctness.
 	checkSuite, err := s.checker.CheckSuite(ctx, spec, *tcsuite, *execRes)
