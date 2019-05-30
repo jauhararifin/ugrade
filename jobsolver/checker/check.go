@@ -10,6 +10,7 @@ import (
 
 	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver"
+	"github.com/jauhararifin/ugrade/jobsolver/secreter"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 )
@@ -89,6 +90,12 @@ func (ck *defaultChecker) CheckSuite(
 			WithField("output", output).
 			WithField("i", i).
 			Trace("checking submission execution")
+
+		// decrypt expected output
+		inFile := path.Join(tcSuite.Dir, tcSuite.Items[i].Output)
+		if err := secreter.DecryptFile(inFile); err == nil {
+			defer secreter.EncryptFile(inFile)
+		}
 
 		verdict := ugrade.VerdictPENDING
 		var err error

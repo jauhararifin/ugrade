@@ -7,6 +7,7 @@ import (
 
 	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver"
+	"github.com/jauhararifin/ugrade/jobsolver/secreter"
 	"golang.org/x/xerrors"
 )
 
@@ -82,6 +83,16 @@ func (gen *defaultGenerator) generateItem(
 	usage, err := gen.sandbox.Execute(ctx, cmd)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("cannot generate %s input with id: %s: %w", typ, idstr, err)
+	}
+
+	// encrypt
+	inFile := path.Join(dir, tcinFName)
+	if err := secreter.EncryptFile(inFile); err != nil {
+		return nil, nil, xerrors.Errorf("cannot encrypt testcase input: %v", err)
+	}
+	outFile := path.Join(dir, tcoutFName)
+	if err := secreter.EncryptFile(outFile); err != nil {
+		return nil, nil, xerrors.Errorf("cannot encrypt testcase output: %v", err)
 	}
 
 	return &jobsolver.TCItem{

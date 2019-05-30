@@ -167,7 +167,7 @@
         "start_time": "2019-05-04T05:28:03.515Z",
         "freezed": false,
         "finish_time": "2019-05-04T10:28:03.515Z",
-        "grading_size": 5,
+        "grading_size": 1,
         "permitted_languages": [
             1,
             2,

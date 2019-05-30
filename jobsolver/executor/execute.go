@@ -9,6 +9,7 @@ import (
 
 	"github.com/jauhararifin/ugrade"
 	"github.com/jauhararifin/ugrade/jobsolver"
+	"github.com/jauhararifin/ugrade/jobsolver/secreter"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 )
@@ -66,6 +67,12 @@ func (ex *defaultExecutor) Execute(
 		Debug("running contestant solution")
 	for _, tcitem := range tcSuite.Items {
 		logrus.WithField("input", tcitem.Input).WithField("tcitem", tcitem.Output).Trace("run contestant solution")
+
+		// decrypt tcitem
+		inFile := path.Join(tcSuite.Dir, tcitem.Input)
+		if err := secreter.DecryptFile(inFile); err == nil {
+			defer secreter.EncryptFile(inFile)
+		}
 
 		cmd := ugrade.Command{
 			TimeLimit:      cpulimit,
