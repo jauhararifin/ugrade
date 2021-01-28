@@ -99,7 +99,7 @@
     "@types/react-transition-group": "^2.0.16",
     "@types/yup": "^0.26.12",
     "concurrently": "^4.1.0",
-    "electron": "^4.1.4",
+    "electron": "^9.4.0",
     "electron-builder": "^20.39.0",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
